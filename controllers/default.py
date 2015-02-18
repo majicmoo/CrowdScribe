@@ -18,7 +18,7 @@ def index():
     return auth.wiki()
     """
     response.flash = T("Welcome to web2py!")
-    return dict(message=T('Hello World'))
+    return dict(message=T('Testing my branch'))
 
 
 def user():
