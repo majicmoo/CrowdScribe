@@ -1,3 +1,6 @@
+import database_transactions as database
+from gluon import *
+
 # -*- coding: utf-8 -*-
 # this file is released under public domain and you can use without limitations
 
@@ -17,8 +20,9 @@ def index():
     if you need a simple wiki simply replace the two lines below with:
     return auth.wiki()
     """
-    response.flash = T("Welcome to web2py!")
-    return dict(message=T('Testing my branch'))
+
+    test = database.get_user("Bobby123")
+    return dict(message=T('Testing my branch'), test=test)
 
 
 def user():
@@ -69,3 +73,4 @@ def api():
         '<tablename>': {'GET':{},'POST':{},'PUT':{},'DELETE':{}},
         }
     return Collection(db).process(request,response,rules)
+

@@ -9,6 +9,8 @@
 ## be redirected to HTTPS, uncomment the line below:
 # request.requires_https()
 
+from gluon.custom_import import track_changes; track_changes(True)
+
 if not request.env.web2py_runtime_gae:
     ## if NOT running on Google App Engine use SQLite or other DB
     db = DAL('sqlite://crowdscribe.db', pool_size=1, check_reserved=['all'], lazy_tables=True)
@@ -65,6 +67,9 @@ plugins = PluginManager()
 
 ## create all tables needed by auth if not custom tables
 auth.define_tables(username=True, signature=False)
+
+from gluon import current
+current.db = db
 
 ## configure email
 mail = auth.settings.mailer
