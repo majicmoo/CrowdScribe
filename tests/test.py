@@ -2,7 +2,7 @@ import unittest
 import database_transactions as database
 
 from gluon.globals import Request
-db = test_db
+#db = test_db
 
 #execfile("applications/api/controllers/10.py", globals())
 
@@ -11,6 +11,19 @@ db = test_db
 class TestDatabaseTransactions(unittest.TestCase):
     def setUp(self):
         #request = Request()  # Use a clean Request object
+        test_db.project.truncate()
+        test_db.document_image.truncate()
+        test_db.data_field.truncate()
+        test_db.transcription.truncate()
+        test_db.transcribed_field.truncate()
+        test_db.auth_user.truncate()
+        test_db.auth_group.truncate()
+        test_db.auth_membership.truncate()
+        test_db.auth_permission.truncate()
+        test_db.auth_event.truncate()
+        test_db.auth_cas.truncate()
+        test_db.commit()
+
         pass
 
     def get_user_test(self):
