@@ -27,16 +27,16 @@ class TestDatabaseTransactions(unittest.TestCase):
         # Create User
         self.user_one_id = test_db.auth_user.insert(username='test1')
         self.user_two_id = test_db.auth_user.insert(username='test2')
-
         # Create Project
-        self.project_id = test_db.project.insert(name='test', author_id = self.user_one_id, status='Open',
+        self.project_open_id = test_db.project.insert(name='testproject1', author_id=self.user_one_id, status='Open',
                                                  description='test', tag='History')
-
+        self.project_closed_id = test_db.project.insert(name='testproject2', author_id=self.user_two_id, status='Closed',
+                                                 description='test', tag='History')
         # Create Document Image
-        self.document_image_id = test_db.document_image.insert(description='test', project_id=self.project_id,
+        self.document_image_id = test_db.document_image.insert(description='test', project_id=self.project_open_id,
                                                                status='Accepted')
         # Create Data Field
-        self.data_field_id = test_db.data_field.insert(project_id = self.project_id, name = 'test',
+        self.data_field_id = test_db.data_field.insert(project_id = self.project_open_id, name = 'test',
                                                    short_description = 'test')
         # Create transcription
         self.transcription_id = test_db.transcription.insert(document_id = self.document_image_id,
@@ -45,7 +45,6 @@ class TestDatabaseTransactions(unittest.TestCase):
         self.transcription_field_id = test_db.transcribed_field.insert(data_field_id = self.data_field_id,
                                                                        transcription_id= self.transcription_id,
                                                                        information='test')
-
         test_db.commit()
 
     def test_get_user(self):
@@ -55,16 +54,22 @@ class TestDatabaseTransactions(unittest.TestCase):
         self.assertEquals(self.user_one_id, user.id)
 
     def test_get_all_projects(self):
-        #database.get_all_projects(db)
-        pass
+        test = database.get_all_projects(db)
+        project = test.first()
+        db.commit()
+        self.assertEquals(self.project_open_id, project)
 
     def test_get_projects_by_user(self):
-        #database.get_project_by_user(db, user_id)
-        pass
-
+        test = database.get_projects_by_user(db, self.user_one_id)
+        project = test.first()
+        db.commit()
+        self.assertEquals(self.project_open_id, project)
 
     def test_get_open_projects_by_user(self):
-        #database.get_open_projects_by_user(db, user_id)
+        test = database.get_open_projects_by_user(db, self.user_one_id)
+        project = test.first()
+        db.commit()
+        self.assertEquals(self.project_open_id, project)
         pass
 
 
