@@ -31,7 +31,7 @@ def get_closed_projects_by_user(db, user_id):
 
 
 def get_project_documents(db, project_id):
-    result = db(db.document_image.id == project_id).select()
+    result = db(db.document_image.project_id == project_id).select()
     return result
 
 

@@ -29,73 +29,108 @@ class TestDatabaseTransactions(unittest.TestCase):
         self.user_two_id = test_db.auth_user.insert(username='test2')
         # Create Project
         self.project_open_id = test_db.project.insert(name='testproject1', author_id=self.user_one_id, status='Open',
-                                                 description='test', tag='History')
-        self.project_closed_id = test_db.project.insert(name='testproject2', author_id=self.user_two_id, status='Closed',
-                                                 description='test', tag='History')
+                                                      description='test', tag='History')
+        self.project_closed_id = test_db.project.insert(name='testproject2', author_id=self.user_two_id,
+                                                        status='Closed', description='test', tag='History')
         # Create Document Image
-        self.document_image_id = test_db.document_image.insert(description='test', project_id=self.project_open_id,
-                                                               status='Accepted')
+        self.document_image_open_id = test_db.document_image.insert(description='test',
+                                                                    project_id=self.project_open_id, status='Open')
+        self.document_image_closed_id = test_db.document_image.insert(description='test',
+                                                                      project_id=self.project_open_id, status='Closed')
         # Create Data Field
-        self.data_field_id = test_db.data_field.insert(project_id = self.project_open_id, name = 'test',
-                                                   short_description = 'test')
+        self.data_field_id = test_db.data_field.insert(project_id=self.project_open_id, name='test',
+                                                       short_description='test')
         # Create transcription
-        self.transcription_id = test_db.transcription.insert(document_id = self.document_image_id,
-                                                              author_id = self.user_two_id, status = 'Open')
+        self.transcription_open_id = test_db.transcription.insert(document_id=self.document_image_open_id,
+                                                                  author_id=self.user_two_id, status='Open')
+        self.transcription_closed_id = test_db.transcription.insert(document_id=self.document_image_open_id,
+                                                                    author_id=self.user_two_id, status='Closed')
         # Create transcription field
-        self.transcription_field_id = test_db.transcribed_field.insert(data_field_id = self.data_field_id,
-                                                                       transcription_id= self.transcription_id,
+        self.transcription_field_id = test_db.transcribed_field.insert(data_field_id=self.data_field_id,
+                                                                       transcription_id=self.transcription_open_id,
                                                                        information='test')
         test_db.commit()
 
     def test_get_user(self):
         test = database.get_user(db, self.user_one_id)
         user = test.first()
-        db.commit()
         self.assertEquals(self.user_one_id, user.id)
 
     def test_get_all_projects(self):
-        test = database.get_all_projects(db)
-        project = test.first()
-        db.commit()
-        self.assertEquals(self.project_open_id, project)
+        target_no_of_projects = 2
+        projects = database.get_all_projects(db)
+        no_of_projects = len(projects)
+        self.assertEquals(target_no_of_projects, no_of_projects)
 
     def test_get_projects_by_user(self):
-        test = database.get_projects_by_user(db, self.user_one_id)
-        project = test.first()
-        db.commit()
-        self.assertEquals(self.project_open_id, project)
+        target_no_of_projects = 1
+        target_username = 'test1'
+        projects = database.get_projects_by_user(db, self.user_one_id)
+        for i in projects:
+            # Check all projects returned have correct username
+            self.assertEquals(i.author_id.username, target_username)
+        # Check that correct number of projects are returned
+        self.assertEquals(target_no_of_projects, len(projects))
 
     def test_get_open_projects_by_user(self):
-        test = database.get_open_projects_by_user(db, self.user_one_id)
-        project = test.first()
-        db.commit()
-        self.assertEquals(self.project_open_id, project)
-        pass
-
+        target_no_of_projects = 1
+        target_username = 'test1'
+        projects = database.get_open_projects_by_user(db, self.user_one_id)
+        for i in projects:
+            # Check all projects returned have correct username
+            self.assertEquals(i.author_id.username, target_username)
+            # Check all projects are open
+            self.assertEquals(i.status, 'Open')
+        # Check that correct number of projects are returned
+        self.assertEquals(target_no_of_projects, len(projects))
 
     def test_get_closed_projects_by_user(self):
-        #database.get_closed_projects_by_user(db, user_id)
-        pass
-
+        target_no_of_projects = 1
+        target_username = 'test2'
+        projects = database.get_closed_projects_by_user(db, self.user_two_id)
+        for i in projects:
+            # Check all projects returned have correct username
+            self.assertEquals(i.author_id.username, target_username)
+            # Check all projects are closed
+            self.assertEquals(i.status, 'Closed')
+        # Check that correct number of projects are returned
+        self.assertEquals(target_no_of_projects, len(projects))
 
     def test_get_project_documents(self):
-        #database.get_project_documents(db, user_id)
-        pass
-
+        target_number_of_project_documents = 2
+        project_documents = database.get_project_documents(db, self.project_open_id)
+        self.assertEquals(target_number_of_project_documents, len(project_documents))
 
     def test_get_project_open_documents(self):
-        # database.get_project_open_documents(db, project_id)
-        pass
+        target_number_of_documents = 1
+        open_documents = database.get_project_open_documents(db, self.project_open_id)
+        for i in open_documents:
+            # Check right project
+            self.assertEquals(i.project_id, self.project_open_id)
+            # Check open
+            self.assertEquals(i.status, 'Open')
+        # Check that correct number of projects are returned
+        self.assertEquals(target_number_of_documents, len(open_documents))
 
 
     def test_get_project_closed_documents(self):
-        #database.get_project_closed_documents(db, project_id)
-        pass
-
+        target_number_of_documents = 1
+        closed_documents = database.get_project_closed_documents(db, self.project_open_id)
+        for i in closed_documents:
+            # Check right project
+            self.assertEquals(i.project_id, self.project_open_id)
+            # Check open
+            self.assertEquals(i.status, 'Closed')
+        # Check that correct number of projects are returned
+        self.assertEquals(target_number_of_documents, len(closed_documents))
 
     def test_get_projects_by_tag(self):
-        #database.get_projects_by_tag(db, tag)
-        pass
+        target_number_of_documents = 2
+        tag = 'History'
+        projects = database.get_projects_by_tag(db, tag)
+        for i in projects:
+            self.assertEquals(i.tag, tag)
+        self.assertEquals(len(projects), target_number_of_documents)
 
 
     def test_get_projects_by_keyword(self):
