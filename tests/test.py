@@ -13,7 +13,7 @@ class TestDatabaseTransactions(unittest.TestCase):
         #request = Request()  # Use a clean Request object
         pass
 
-    def testListActiveGames(self):
+    def get_user_test(self):
         # Set variables for the test function
         # request.post_vars["game_id"] = 1
         # request.post_vars["username"] = "spiffytech"
@@ -24,6 +24,90 @@ class TestDatabaseTransactions(unittest.TestCase):
         #resp = list_active_games()
         db.commit()
         self.assertEquals(1, len(test))
+
+    def get_all_projects_test(self):
+        #database.get_all_projects(db)
+        pass
+
+    def get_projects_by_user_test(self):
+        #database.get_project_by_user(db, user_id)
+        pass
+
+
+    def get_open_projects_by_user_test(self):
+        #database.get_open_projects_by_user(db, user_id)
+        pass
+
+
+    def get_closed_projects_by_user_test(self):
+        #database.get_closed_projects_by_user(db, user_id)
+        pass
+
+
+    def get_project_documents_test(self):
+        #database.get_project_documents(db, user_id)
+        pass
+
+
+    def get_project_open_documents_test(self):
+        # database.get_project_open_documents(db, project_id)
+        pass
+
+
+    def get_project_closed_documents_test(self):
+        #database.get_project_closed_documents(db, project_id)
+        pass
+
+
+    def get_projects_by_tag(self):
+        #database.get_projects_by_tag(db, tag)
+        pass
+
+
+    def get_projects_by_keyword_test(self):
+        #database.get_projects_by_keyword(db, keyword)
+        pass
+
+
+    def get_transcriptions_by_user_test(self):
+        #database.get_transcriptions_by_user(db, user_id)
+        pass
+
+
+    def get_transcribed_fields_for_transcription(self):
+        #database.get_transcribed_fields_for_transcription(db, transcription_id)
+        pass
+
+
+    def get_data_fields_for_project(self):
+        #database.get_data_fields_for_project(db, project_id)
+        pass
+
+
+    def get_transcriptions_for_document(self):
+        #database.get_transcriptions_for_document(db, document_id)
+        pass
+
+
+    def get_done_documents_for_user(self):
+        #database.get_done_documents_for_user(db, user_id)
+        pass
+
+
+    def get_done_documents_for_project_test(self):
+        #database.get_done_documents_for_project(db, project_id)
+        pass
+
+
+    def get_documents_for_a_user_that_have_transcription_test(self):
+        #database.get_documents_for_a_user_that_have_transcription(db, user_id)
+        pass
+
+
+    def get_documents_for_a_project_that_have_transcription_test(self):
+        #database.get_documents_for_a_project_that_have_transcription(db, project_id)
+        pass
+
 
 
 suite = unittest.TestSuite()
