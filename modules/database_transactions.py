@@ -74,7 +74,7 @@ def get_data_fields_for_project(db, project_id):
 
 
 def get_transcriptions_for_document(db, document_id):
-    result = db(db.document_image.id == document_id).select()
+    result = db((db.document_image.id == document_id) & (db.document_image.status == "Open")).select()
     return result
 
 

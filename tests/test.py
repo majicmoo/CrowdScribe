@@ -2,7 +2,7 @@ import unittest
 import database_transactions as database
 
 from gluon.globals import Request
-#db = test_db
+db = test_db
 
 #execfile("applications/api/controllers/10.py", globals())
 
@@ -10,7 +10,7 @@ from gluon.globals import Request
 
 class TestDatabaseTransactions(unittest.TestCase):
     def setUp(self):
-        #request = Request()  # Use a clean Request object
+        # Clear test_db
         test_db.project.truncate()
         test_db.document_image.truncate()
         test_db.data_field.truncate()
@@ -24,100 +24,116 @@ class TestDatabaseTransactions(unittest.TestCase):
         test_db.auth_cas.truncate()
         test_db.commit()
 
-        pass
+        # Create User
+        self.user_one_id = test_db.auth_user.insert(username='test1')
+        self.user_two_id = test_db.auth_user.insert(username='test2')
 
-    def get_user_test(self):
-        # Set variables for the test function
-        # request.post_vars["game_id"] = 1
-        # request.post_vars["username"] = "spiffytech"
-        # bob = request.post_vars["game_id"]
-        print "Here"
-        test = database.get_user(db,1)
-        print "2ndHere"
-        #resp = list_active_games()
+        # Create Project
+        self.project_id = test_db.project.insert(name='test', author_id = self.user_one_id, status='Open',
+                                                 description='test', tag='History')
+
+        # Create Document Image
+        self.document_image_id = test_db.document_image.insert(description='test', project_id=self.project_id,
+                                                               status='Accepted')
+        # Create Data Field
+        self.data_field_id = test_db.data_field.insert(project_id = self.project_id, name = 'test',
+                                                   short_description = 'test')
+        # Create transcription
+        self.transcription_id = test_db.transcription.insert(document_id = self.document_image_id,
+                                                              author_id = self.user_two_id, status = 'Open')
+        # Create transcription field
+        self.transcription_field_id = test_db.transcribed_field.insert(data_field_id = self.data_field_id,
+                                                                       transcription_id= self.transcription_id,
+                                                                       information='test')
+
+        test_db.commit()
+
+    def test_get_user(self):
+        test = database.get_user(db, self.user_one_id)
+        user = test.first()
         db.commit()
-        self.assertEquals(1, len(test))
+        self.assertEquals(self.user_one_id, user.id)
 
-    def get_all_projects_test(self):
+    def test_get_all_projects(self):
         #database.get_all_projects(db)
         pass
 
-    def get_projects_by_user_test(self):
+    def test_get_projects_by_user(self):
         #database.get_project_by_user(db, user_id)
         pass
 
 
-    def get_open_projects_by_user_test(self):
+    def test_get_open_projects_by_user(self):
         #database.get_open_projects_by_user(db, user_id)
         pass
 
 
-    def get_closed_projects_by_user_test(self):
+    def test_get_closed_projects_by_user(self):
         #database.get_closed_projects_by_user(db, user_id)
         pass
 
 
-    def get_project_documents_test(self):
+    def test_get_project_documents(self):
         #database.get_project_documents(db, user_id)
         pass
 
 
-    def get_project_open_documents_test(self):
+    def test_get_project_open_documents(self):
         # database.get_project_open_documents(db, project_id)
         pass
 
 
-    def get_project_closed_documents_test(self):
+    def test_get_project_closed_documents(self):
         #database.get_project_closed_documents(db, project_id)
         pass
 
 
-    def get_projects_by_tag(self):
+    def test_get_projects_by_tag(self):
         #database.get_projects_by_tag(db, tag)
         pass
 
 
-    def get_projects_by_keyword_test(self):
+    def test_get_projects_by_keyword(self):
         #database.get_projects_by_keyword(db, keyword)
         pass
 
 
-    def get_transcriptions_by_user_test(self):
+    def test_get_transcriptions_by_user(self):
         #database.get_transcriptions_by_user(db, user_id)
         pass
 
 
-    def get_transcribed_fields_for_transcription(self):
+    def test_get_transcribed_fields_for_transcription(self):
         #database.get_transcribed_fields_for_transcription(db, transcription_id)
         pass
 
 
-    def get_data_fields_for_project(self):
+    def test_get_data_fields_for_project(self):
         #database.get_data_fields_for_project(db, project_id)
         pass
 
 
-    def get_transcriptions_for_document(self):
+    def test_get_transcriptions_for_document(self):
         #database.get_transcriptions_for_document(db, document_id)
         pass
 
 
-    def get_done_documents_for_user(self):
+    def test_get_done_documents_for_user(self):
         #database.get_done_documents_for_user(db, user_id)
         pass
 
 
-    def get_done_documents_for_project_test(self):
+    def test_get_done_documents_for_project(self):
         #database.get_done_documents_for_project(db, project_id)
         pass
 
 
-    def get_documents_for_a_user_that_have_transcription_test(self):
+    def test_get_documents_for_a_user_that_have_transcription(self):
         #database.get_documents_for_a_user_that_have_transcription(db, user_id)
         pass
 
 
-    def get_documents_for_a_project_that_have_transcription_test(self):
+    def test_get_documents_for_a_project_that_have_transcription(self):
         #database.get_documents_for_a_project_that_have_transcription(db, project_id)
         pass
 
