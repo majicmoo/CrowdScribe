@@ -71,6 +71,7 @@ auth.define_tables(username=True, signature=False)
 from gluon import current
 current.db = db
 
+
 ## configure email
 mail = auth.settings.mailer
 mail.settings.server = 'logging' if request.is_local else 'smtp.gmail.com:587'
@@ -86,6 +87,15 @@ auth.settings.reset_password_requires_verification = True
 ## register with janrain.com, write your domain:api_key in private/janrain.key
 from gluon.contrib.login_methods.janrain_account import use_janrain
 use_janrain(auth, filename='private/janrain.key')
+
+# Create a test database that's laid out just like the "real" database
+import copy
+test_db = DAL('sqlite://testing.db', pool_size=1, check_reserved=['all'], lazy_tables=True)  # Name and location of the test DB file
+for tablename in db.tables:  # Copy tables!
+    table_copy = [copy.copy(f) for f in db[tablename]]
+    test_db.define_table(tablename, *table_copy)
+
+current.test_db = test_db
 
 #########################################################################
 ## Define your tables below (or better in another model file) for example

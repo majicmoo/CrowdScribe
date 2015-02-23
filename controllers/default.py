@@ -21,7 +21,8 @@ def index():
     return auth.wiki()
     """
 
-    test = database.get_user("Bobby123")
+    test = database.get_user(db,1)
+    #test = ""
     return dict(message=T('Testing my branch'), test=test)
 
 
