@@ -1,0 +1,115 @@
+.bg{
+	background-color:#e6e6e6;
+	height:100%;
+}
+
+.project{
+
+	$boxheight: 230px;
+	$boxwidth : 470px;
+
+	.box{
+		width:100%;
+		height:200px;
+		background-color:#FF0000;
+
+		border: 1px solid #DBDBDB;
+		border-radius: 10px;
+		overflow: hidden;
+
+		position:relative;
+
+		.innerContent {
+
+	    	$innerheight: $boxheight/2-40px;
+	 
+			position: absolute;
+			left: 0;
+			right: 0;
+			top:$innerheight;
+			bottom: 0;
+			background-color:rgba(0,0,0,0.7);
+			//padding: 10px;
+			margin: 0 0 0 0;
+
+			$leftmargin: 13px;
+
+			h1{
+				position: absolute;
+				font-size: 20px;
+				margin:$leftmargin $leftmargin 0 $leftmargin;
+				clear:none;
+				padding-top:0px;
+				color:white;
+			}
+
+			p{
+				position: absolute;
+				font-size: 14px;
+				margin:43px $leftmargin 0 $leftmargin;
+				width:450px;
+				height:40px;
+				word-wrap:normal;
+				color:white;
+			}
+
+			.stats{
+				margin-top: 82px;
+				margin-left: $leftmargin;
+				position: absolute;
+				overflow:hidden;
+
+				height:40px;
+				
+				width:300px;
+				//background-color: #FF0000;
+
+				.stat{
+					text-align: left;
+					width:80px;
+					height:40px;
+					//background-color:#000;
+					float:left;
+
+					h3{
+						font-size: 20px;
+						margin: 0 0 0 0;
+					}
+					p{
+						position: relative;
+						width:100%;
+						margin: 0 0 0 0;
+					}
+				}
+			}
+
+			.percentagebar{
+
+				position: absolute;
+
+				$barwidth: $boxwidth - $leftmargin*2;
+				$barheight : 10px;
+
+				width:$barwidth;
+				height:$barheight;
+
+				margin-left:$leftmargin;
+				
+				border-radius: $barheight/2;
+				overflow:hidden;
+				background-color:rgba(255,255,255,0.75);
+
+				margin-top:130px;
+
+				span{
+					position: relative;
+					display:block;
+					height:100%;
+					background-color:#3BCF8C;
+				}
+
+			}
+
+	    }
+	}
+}

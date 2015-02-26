@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+
+<head>
+<title>{{=response.title or request.application}}</title>
+	   
+  <meta charset="utf-8">
+
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+        <title>{{=response.title or request.application}}</title>
+        <meta name="description" content="">
+        <meta name="author" content="abgc500">
+     
+
+        <meta charset="utf-8" />
+
+        <meta name="application-name" content="{{=request.application}}" />
+
+        {{
+        response.files.insert(0,URL('static','css/web2py.css'))
+        response.files.insert(1,URL('static','css/bootstrap.min.css'))
+        response.files.insert(2,URL('static','css/bootstrap-responsive.min.css'))
+        response.files.insert(3,URL('static','css/web2py_bootstrap.css'))
+        response.files.insert(4,URL('static','css/crowdscribe_global.css'))
+        }}
+
+        {{include 'web2py_ajax.html'}}
+</head>
+
+<body>
+
+  <div class="navbar navbar-inverse">
+   
+    <div class="navbar-inner">
+      <div class="container">
+        
+        <a class="brand" href="{{=URL('default','index')}}">{{=request.application}}</a>
+
+        <div class="nav-collapse collapse">
+
+          <!-- Left Hand Buttons -->
+          <ul class="nav">
+            <!-- Button -->
+            <li class="active">
+              <a class="block" href="{{=URL('default','index')}}">Home</a>
+            </li>
+            <!-- /Button -->
+            <!-- Button -->
+            <li class="active">
+              <a class="block" href="{{=URL('projects','create')}}">Create</a>
+            </li>
+            <!-- /Button -->
+            <!-- Button -->
+            <li class="active">
+              <a href="#">Browse</a>
+            </li>
+            <!-- /Button -->
+            <!-- Button -->
+            <li class="active">
+              <a href="#">Create Account</a>
+            </li>
+            <!-- /Button -->
+            <!-- Button -->
+            <li class="active">
+              <a href="#">Login</a>
+            </li>
+            <!-- /Button -->
+          </ul>
+
+          
+
+        </div>
+
+      </div>
+    </div>
+  </div><!--/top navbar -->
+
+  <div class="container bg">
+    <div class="row-fluid">
+      {{include}}
+      {{pass}}
+    </div>    
+  </div>
+
+  
+</body>
+</html>
+
