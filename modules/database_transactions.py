@@ -92,6 +92,7 @@ def get_done_documents_for_project(db, project_id):
 
 
 def get_documents_for_a_user_that_have_transcription(db, user_id):
+    # FIXME: no attribute author_id
     result = db((db.document_image.author_id == user_id)
                 & (db.document_image.id == db.transcription.document_id)
                 & (db.transcription.status == "Open")).select()

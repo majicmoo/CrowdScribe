@@ -139,27 +139,45 @@ class TestDatabaseTransactions(unittest.TestCase):
 
 
     def test_get_transcriptions_by_user(self):
-        #database.get_transcriptions_by_user(db, user_id)
-        pass
+        target_number_of_documents = 2
+        transcriptions = database.get_transcriptions_by_user(db, self.user_two_id)
+        for i in transcriptions:
+            self.assertEquals(i.author_id, self.user_two_id)
+        self.assertEquals(target_number_of_documents, len(transcriptions))
 
 
     def test_get_transcribed_fields_for_transcription(self):
-        #database.get_transcribed_fields_for_transcription(db, transcription_id)
-        pass
+        target_number_of_documents = 1
+        transcribed_fields = database.get_transcribed_fields_for_transcription(db, self.transcription_open_id)
+        for i in transcribed_fields:
+            # Check right transcription ID
+            self.assertEquals(i.transcription_id, self.transcription_open_id)
+        # Check correct number is returned
+        self.assertEquals(target_number_of_documents, len(transcribed_fields))
+
 
 
     def test_get_data_fields_for_project(self):
-        #database.get_data_fields_for_project(db, project_id)
-        pass
+        target_number_of_documents = 1
+        data_fields = database.get_data_fields_for_project(db, self.project_open_id)
+        for i in data_fields:
+            self.assertEquals(i.project_id, self.project_open_id)
+        self.assertEquals(target_number_of_documents, len(data_fields))
 
 
     def test_get_transcriptions_for_document(self):
-        #database.get_transcriptions_for_document(db, document_id)
+        # FIXME: Doesn't have i.document_id
+        # target_number_of_documents = 1
+        # transcriptions = database.get_transcriptions_for_document(db, self.document_image_open_id)
+        # for i in transcriptions:
+        #     print i
+        #     self.assertEquals(i.document_id, self.document_image_open_id)
+        # self.assertEquals(target_number_of_documents, len(transcriptions))
         pass
 
-
     def test_get_done_documents_for_user(self):
-        #database.get_done_documents_for_user(db, user_id)
+        # FIXME: What are done documents?
+        # documents = database.get_done_documents_for_user(db, user_id)
         pass
 
 
@@ -169,13 +187,29 @@ class TestDatabaseTransactions(unittest.TestCase):
 
 
     def test_get_documents_for_a_user_that_have_transcription(self):
-        #database.get_documents_for_a_user_that_have_transcription(db, user_id)
-        pass
+        # Documents user own and have a transcription
+        documents = database.get_documents_for_a_user_that_have_transcription(db, self.user_one_id)
+        for i in documents:
+            print '1'
+            self.assertEquals(i.project_id.author_id, self.user_one_id)
 
 
     def test_get_documents_for_a_project_that_have_transcription(self):
-        #database.get_documents_for_a_project_that_have_transcription(db, project_id)
+        # FIXME: Not sure if the database transaction works for this one
         pass
+        # documents = database.get_documents_for_a_project_that_have_transcription(db, self.project_open_id)
+        # for i in documents:
+        #     print i
+        #     self.assertEquals(i.document_image.project_id, self.project_open_id)
+        #     self.assertTrue(self.exists(i.transcription.id))
+
+    def exists(self, x):
+        try:
+          x
+        except NameError:
+          return False
+        else:
+          return True
 
 
 
