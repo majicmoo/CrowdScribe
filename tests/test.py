@@ -57,13 +57,13 @@ class TestDatabaseTransactions(unittest.TestCase):
         self.data_field_id = test_db.data_field.insert(project_id=self.project_one, name='test',
                                                        short_description='test')
         # Create transcription
-        self.transcription_open_id = test_db.transcription.insert(document_id=self.document_image_open_id,
+        self.transcription_one = test_db.transcription.insert(document_id=self.document_image_open_id,
                                                                   author_id=self.user_two_id, status=self.open_status)
-        self.transcription_closed_id = test_db.transcription.insert(document_id=self.document_image_open_id,
+        self.transcription_two = test_db.transcription.insert(document_id=self.document_image_open_id,
                                                                     author_id=self.user_two_id, status=self.closed_status)
         # Create transcription field
         self.transcription_field_id = test_db.transcribed_field.insert(data_field_id=self.data_field_id,
-                                                                       transcription_id=self.transcription_open_id,
+                                                                       transcription_id=self.transcription_one,
                                                                        information='test')
         test_db.commit()
 
@@ -135,6 +135,10 @@ class TestDatabaseTransactions(unittest.TestCase):
                                                                   self.total_number_of_open_transcriptions_for_user_one
         self.total_number_of_closed_transcriptions_for_user_two = self.total_number_of_transcriptions_for_user_two - \
                                                                   self.total_number_of_open_transcriptions_for_user_two
+
+        # Number of transcribed fields for a transcription
+        self.total_number_of_fields_for_transcription_one = 1
+        self.total_number_of_fields_for_transcription_two = 0
 
 
     def test_get_user(self):
@@ -297,13 +301,19 @@ class TestDatabaseTransactions(unittest.TestCase):
         self.assertEquals(self.total_number_of_transcriptions_for_user_two, len(user_two_transcriptions))
 
     def test_get_transcribed_fields_for_transcription(self):
-        target_number_of_documents = 1
-        transcribed_fields = database.get_transcribed_fields_for_transcription(db, self.transcription_open_id)
-        for i in transcribed_fields:
+        transcription_one_transcribed_fields = database.get_transcribed_fields_for_transcription(db,
+                                                                                                 self.transcription_one)
+        transcription_two_transcribed_fields = database.get_transcribed_fields_for_transcription(db,
+                                                                                                 self.transcription_two)
+        for i in transcription_one_transcribed_fields:
             # Check right transcription ID
-            self.assertEquals(i.transcription_id, self.transcription_open_id)
+            self.assertEquals(i.transcription_id, self.transcription_one)
+        for i in transcription_two_transcribed_fields:
+            # Check right transcription ID
+            self.assertEquals(i.transcription_id, self.transcription_two)
         # Check correct number is returned
-        self.assertEquals(target_number_of_documents, len(transcribed_fields))
+        self.assertEquals(self.total_number_of_fields_for_transcription_one, len(transcription_one_transcribed_fields))
+        self.assertEquals(self.total_number_of_fields_for_transcription_two, len(transcription_two_transcribed_fields))
 
     def test_get_data_fields_for_project(self):
         target_number_of_documents = 1
