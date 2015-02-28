@@ -48,6 +48,7 @@ def get_project_closed_documents(db, project_id):
 
 
 def get_projects_by_tag(db, tag):
+    # FIXME: Should this only be open projects?
     result = db(db.project.tag == tag).select()
     return result
 
