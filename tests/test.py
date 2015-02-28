@@ -1,12 +1,8 @@
 import unittest
 import database_transactions as database
 
-from gluon.globals import Request
 db = test_db
 
-#execfile("applications/api/controllers/10.py", globals())
-
-#db.commit()
 
 class TestDatabaseTransactions(unittest.TestCase):
     def setUp(self):
@@ -112,7 +108,6 @@ class TestDatabaseTransactions(unittest.TestCase):
         # Check that correct number of projects are returned
         self.assertEquals(target_number_of_documents, len(open_documents))
 
-
     def test_get_project_closed_documents(self):
         target_number_of_documents = 1
         closed_documents = database.get_project_closed_documents(db, self.project_open_id)
@@ -132,11 +127,9 @@ class TestDatabaseTransactions(unittest.TestCase):
             self.assertEquals(i.tag, tag)
         self.assertEquals(len(projects), target_number_of_documents)
 
-
     def test_get_projects_by_keyword(self):
-        #database.get_projects_by_keyword(db, keyword)
+        # database.get_projects_by_keyword(db, keyword)
         pass
-
 
     def test_get_transcriptions_by_user(self):
         target_number_of_documents = 2
@@ -144,7 +137,6 @@ class TestDatabaseTransactions(unittest.TestCase):
         for i in transcriptions:
             self.assertEquals(i.author_id, self.user_two_id)
         self.assertEquals(target_number_of_documents, len(transcriptions))
-
 
     def test_get_transcribed_fields_for_transcription(self):
         target_number_of_documents = 1
@@ -155,15 +147,12 @@ class TestDatabaseTransactions(unittest.TestCase):
         # Check correct number is returned
         self.assertEquals(target_number_of_documents, len(transcribed_fields))
 
-
-
     def test_get_data_fields_for_project(self):
         target_number_of_documents = 1
         data_fields = database.get_data_fields_for_project(db, self.project_open_id)
         for i in data_fields:
             self.assertEquals(i.project_id, self.project_open_id)
         self.assertEquals(target_number_of_documents, len(data_fields))
-
 
     def test_get_transcriptions_for_document(self):
         # FIXME: Doesn't have i.document_id
@@ -180,19 +169,15 @@ class TestDatabaseTransactions(unittest.TestCase):
         # documents = database.get_done_documents_for_user(db, user_id)
         pass
 
-
     def test_get_done_documents_for_project(self):
-        #database.get_done_documents_for_project(db, project_id)
+        # database.get_done_documents_for_project(db, project_id)
         pass
-
 
     def test_get_documents_for_a_user_that_have_transcription(self):
         # Documents user own and have a transcription
         documents = database.get_documents_for_a_user_that_have_transcription(db, self.user_one_id)
         for i in documents:
-            print '1'
-            self.assertEquals(i.project_id.author_id, self.user_one_id)
-
+            self.assertEquals(i.project.author_id, self.user_one_id)
 
     def test_get_documents_for_a_project_that_have_transcription(self):
         # FIXME: Not sure if the database transaction works for this one
@@ -205,15 +190,13 @@ class TestDatabaseTransactions(unittest.TestCase):
 
     def exists(self, x):
         try:
-          x
+            x
         except NameError:
-          return False
+            return False
         else:
-          return True
-
+            return True
 
 
 suite = unittest.TestSuite()
 suite.addTest(unittest.makeSuite(TestDatabaseTransactions))
 unittest.TextTestRunner(verbosity=2).run(suite)
-

@@ -17,7 +17,7 @@ def register():
 	form.custom.widget.password["_placeholder"] = "Enter Password"
 
 	if form.validate():
-		userid = auth.get_or_create_user(form.vars);        
+		userid = auth.get_or_create_user(form.vars);
 	elif form.errors:
 		response.flash = 'One or more of your form fields has an error. Please see below for more information'
 
