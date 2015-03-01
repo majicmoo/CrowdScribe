@@ -1,3 +1,5 @@
+import database_transactions as database
+
 def register():
 
 	# Window Title
