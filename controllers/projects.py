@@ -7,7 +7,7 @@ def create():
 def project():
 
     project_id = request.args(0)
-    project = database.get_open_project(db, project_id).first()
+    project = database.get_open_project(db, project_id)
 
     #If project doesnt exist or isn't open, redirect
     if project is None:
