@@ -76,11 +76,27 @@ class TestDatabaseTransactions(unittest.TestCase):
         number_of_users = 0
         for user in self.users:
             # Check user object is returned
-            test_user = database.get_user(db, user.id).first()
+            test_user = database.get_user(db, user.id)
             self.assertEquals(test_user, user)
             number_of_users += 1
         # Check correct number of users are returned
         self.assertEquals(number_of_users, len(self.users))
+
+    def test_get_project(self):
+        number_of_projects = 0
+        for project in self.projects:
+            temp_project = database.get_project(db, project)
+            self.assertEquals(temp_project, project)
+            number_of_projects += 1
+        self.assertEquals(number_of_projects, len(self.projects))
+
+    def test_get_document(self):
+        number_of_documents = 0
+        for document in self.documents:
+            temp_document =database.get_document(db, document)
+            self.assertEquals(temp_document, document)
+            number_of_documents += 1
+        self.assertEquals(number_of_documents, len(self.documents))
 
     def test_get_all_projects(self):
         # Check correct number of projects are returned

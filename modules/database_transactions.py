@@ -1,26 +1,21 @@
 from gluon import *
 #db = current.db
 
-#FIXME: Test all these manually to check they work and possibly construct unit tests.
-
 def get_user(db, user_id):
-    result = db(db.auth_user.id== user_id).select()
+    result = db(db.auth_user.id== user_id).select().first()
     return result
 
-#TODO: Test this
 def get_project(db, project_id):
-    result = db(db.project.id == project_id).select()
+    result = db(db.project.id == project_id).select().first()
     return result
 
 def get_open_project(db, project_id):
-    result = db(db.project.id == project_id).select()
+    result = db(db.project.id == project_id).select().first()
     return result
 
-#TODO: Test this
 def get_document(db, document_id):
-    result = db(db.document_image.id == document_id).select()
+    result = db(db.document_image.id == document_id).select().first()
     return result
-
 
 def get_all_projects(db):
     result = db().select(db.project.ALL)
