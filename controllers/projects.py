@@ -29,3 +29,34 @@ def project():
     return dict(project=project, documents_for_project=documents_for_project,
                 data_fields_for_project=data_fields_for_project,
                 documents_transcribed_by_user = documents_transcribed_by_user)
+
+
+def add_transctiption():
+
+    #Remove if project data not required in page
+    project_id = request.args(0)
+    project = database.get_open_project(db, project_id)
+
+    if project is None:
+        redirect(URL('default','index'))
+
+    document_id = request.args(1)
+    document = database.get_document(db, document_id)
+
+    if document is None:
+        redirect(URL('projects','project',args=[project_id]))
+
+    if project.author_id == auth._get_user_id():
+        response.flash = DIV("You own this project", _class="alert alert-info")
+
+    if auth._get_user_id is None:
+        response.flash = DIV("Please register to transcribe", _class="alert alert-info")
+
+    form is None:
+
+    #Display transcription submission form if document image is open for transcriptions and
+    #user is authorised to make a submission
+    if document.status != 'Done' and project.author_id != auth._get_user_id:
+        form = SQLFORM(db.transcription_field, showid=False, formstyle='divs')
+
+    return dict(project=project, document=document, form=form)
