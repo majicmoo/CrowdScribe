@@ -52,7 +52,7 @@ def add_transctiption():
     if auth._get_user_id is None:
         response.flash = DIV("Please register to transcribe", _class="alert alert-info")
 
-    form is None:
+    form = None
 
     #Display transcription submission form if document image is open for transcriptions and
     #user is authorised to make a submission
