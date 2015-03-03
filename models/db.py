@@ -15,19 +15,6 @@ if not request.env.web2py_runtime_gae:
     ## if NOT running on Google App Engine use SQLite or other DB
     db = DAL('sqlite://crowdscribe.db', pool_size=1, check_reserved=['all'], lazy_tables=True)
 
-    db.define_table('project', Field('name'), Field('author_id', 'reference auth_user'), Field('status'),
-                    Field('description'), Field('tag'))
-
-    db.define_table('document_image', Field('description'), Field('image', 'upload'), Field('project_id', 'reference project'
-        ), Field('status'))
-
-    db.define_table('data_field', Field('project_id', 'reference project'), Field('name'), Field('short_description'))
-
-    db.define_table('transcription', Field('document_id', 'reference document_image'), Field('author_id',
-                    'reference auth_user'), Field('status'))
-
-    db.define_table('transcribed_field', Field('data_field_id', 'reference data_field'),
-                    Field('transcription_id', 'reference transcription'), Field('information'))
 
 
 else:
@@ -116,3 +103,18 @@ current.test_db = test_db
 
 ## after defining tables, uncomment below to enable auditing
 # auth.enable_record_versioning(db)
+
+
+db.define_table('project', Field('name'), Field('author_id', 'reference auth_user'), Field('status'),
+                Field('description'), Field('tag'))
+
+db.define_table('document_image', Field('description'), Field('image', 'upload'), Field('project_id', 'reference project'
+    ), Field('status'))
+
+db.define_table('data_field', Field('project_id', 'reference project'), Field('name'), Field('short_description'))
+
+db.define_table('transcription', Field('document_id', 'reference document_image'), Field('author_id',
+                'reference auth_user'), Field('status'))
+
+db.define_table('transcribed_field', Field('data_field_id', 'reference data_field'),
+                Field('transcription_id', 'reference transcription'), Field('information'))
