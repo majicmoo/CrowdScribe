@@ -31,7 +31,7 @@ def project():
                 documents_transcribed_by_user = documents_transcribed_by_user)
 
 
-def add_transctiption():
+def add_transcription():
 
     #Remove if project data not required in page
     project_id = request.args(0)
@@ -52,11 +52,23 @@ def add_transctiption():
     if auth._get_user_id is None:
         response.flash = DIV("Please register to transcribe", _class="alert alert-info")
 
-    form = None
+    form = FORM()
 
     #Display transcription submission form if document image is open for transcriptions and
     #user is authorised to make a submission
     if document.status != 'Done' and project.author_id != auth._get_user_id:
-        form = SQLFORM(db.transcription_field, showid=False, formstyle='divs')
+        for data_field in database.get_data_fields_for_project(db, project_id):
+            label = '%s \n %s' % (data_field.name, data_field.short_description)
+            text_input = INPUT(_name=data_field.name)
+            form.append(SPAN(label, text_input))
+            
+        form.append(INPUT(_type='submit'))
+            
+        if form.process().accepts:
+            transcription_id = db.transcription.insert(document_id=document_id, author_id=auth._get_user_id(), status='pending')
+            for data_field in database.get_data_fields_for_project(db, project_id):
+                print form.vars.data_field
+                print form.vars
+                db.transcribed_field.insert(data_field=data_field, transcription_id=transcription_id, information=form.vars.data_field)
 
     return dict(project=project, document=document, form=form)
