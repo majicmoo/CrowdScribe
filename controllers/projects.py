@@ -83,3 +83,27 @@ def add_transcription():
 
     return dict(project=project, document=document, form=form)
 
+def view_document():
+    # Current Project
+    project_id = request.args(0)
+    project = database.get_open_project(db, project_id)
+    if project is None:
+        # Redirect if project is none
+        redirect(URL('default','index'))
+    # Current Document
+    document_id = request.args(1)
+    document = database.get_document(db, document_id)
+
+    if document is None:
+        # Redirect if document is none
+        redirect(URL('projects','project',args=[project_id]))
+
+    if project.author_id == auth._get_user_id():
+        # Display alert if you own project
+        response.flash = DIV("You own this project", _class="alert alert-info")
+
+    # Current Data Fields
+    data_fields = database.get_data_fields_for_project(db, project_id)
+    return dict(project=project, document=document, data_fields=data_fields)
+
+
