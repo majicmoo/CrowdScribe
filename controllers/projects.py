@@ -1,7 +1,111 @@
 import database_transactions as database
 
-def create():
-    return dict()
+
+@auth.requires_login(otherwise=URL('user', 'login'))
+def create_step1():
+
+    project_id = None
+    project_being_edited = None
+    if session.project_being_created is not None:
+        project_id = session.project_being_created
+        project_being_edited = database.get_project(db, project_id)
+        session.project_being_created = None
+
+    form = SQLFORM.factory(db.project, submit_button="Continue to Step 2", formstyle='divs')
+
+    if form.process().accepted:
+
+        if project_id and project_being_edited:
+            project_being_edited.update_record(name=request.vars.name, author_id=auth._get_user_id(), status="Closed",
+                                               description=request.vars.description, tag=request.vars.tag)
+        else:
+            project_id = db.project.insert(name=request.vars.name, author_id=auth._get_user_id(), status="Closed",
+                                           description=request.vars.description, tag=request.vars.tag)
+
+        session.project_being_created = project_id
+        redirect(URL('projects', 'create_step2'))
+        pass
+
+        # Pre-populate form if project has already been created
+    if project_id and project_being_edited:
+        form.vars.name = project_being_edited.name
+        form.vars.description = project_being_edited.description
+        form.vars.tag = project_being_edited.tag
+
+    return dict(form=form)
+
+
+@auth.requires_login(otherwise=URL('user', 'login'))
+def create_step2():
+
+    project_id = None
+    if session.project_being_created is not None:
+        project_id = session.project_being_created
+        session.project_being_created = None
+
+    add_image_form = SQLFORM.factory(db.document_image, submit_button="Add Image")
+    go_to_step_3_form = FORM(DIV(BUTTON("Continue to Step 3", I(_class='icon-arrow-right icon-white'),
+                                        _type='submit', _class='btn btn-primary btn-block btn-large')))
+    go_to_step_1_form = FORM(DIV(BUTTON("Back to Step 1", I(_class='icon-arrow-left icon-white'),
+                                        _type='submit', _class='btn btn-primary btn-block btn-large')))
+
+    if add_image_form.process(formname="form_one").accepted:
+        db.document_image.insert(description=request.vars.description, status="Open", project_id=project_id,
+                                 image=request.vars.image)
+        db.commit()
+        session.project_being_created = project_id
+
+    if go_to_step_3_form.process(formname="form_two").accepted:
+        documents_added = database.get_project_documents(db, project_id)
+        if len(documents_added) < 1:
+            response.flash = DIV("At least one image must be added", _class="alert alert-error")
+        else:
+            session.project_being_created = project_id
+            redirect(URL('projects', 'create_step3'))
+
+    if go_to_step_1_form.process(formname="form_three").accepted:
+            session.project_being_created = project_id
+            redirect(URL('projects', 'create_step1'))
+
+    documents_added = database.get_project_documents(db, project_id)
+
+    return dict(add_image_form=add_image_form, go_to_step_3_form=go_to_step_3_form,
+                go_to_step_1_form=go_to_step_1_form, documents_added=documents_added)
+
+
+@auth.requires_login(otherwise=URL('user', 'login'))
+def create_step3():
+
+    project_id = None
+    if session.project_being_created is not None:
+        project_id = session.project_being_created
+        session.project_being_created = None
+
+    add_fields_form = SQLFORM.factory(db.data_field, submit_button="Add field")
+    create_project_form = FORM(DIV(BUTTON("Create Project", I(_class='icon-arrow-right icon-white'),
+                                          _type='submit', _class='btn btn-primary btn-block btn-large')))
+    go_to_step_2_form = FORM(DIV(BUTTON("Back to Step 2", I(_class='icon-arrow-left icon-white'),
+                                        _type='submit', _class='btn btn-primary btn-block btn-large')))
+
+    if add_fields_form.process(formname="form_one").accepted:
+        db.data_field.insert(name=request.vars.name, description=request.vars.description, project_id=project_id)
+        db.commit()
+        session.project_being_created = project_id
+
+    if create_project_form(formname="form_two").accepted:
+        project = database.get_project(db, project_id)
+        project.update_record(status="Open")
+        redirect(URL('default', 'index'))
+
+    if go_to_step_2_form(formname="form_three").accepted:
+        session.project_being_created = project_id
+        redirect(URL('projects', 'create_step2'))
+
+    documents_added = database.get_project_documents(db, project_id)
+    fields_added = database.get_data_fields_for_project(db, project_id)
+
+    return dict(documents_added=documents_added, add_fields_form=add_fields_form, fields_added=fields_added
+                , create_project_form=create_project_form, go_to_step_2_form=go_to_step_2_form)
 
 
 def project():
@@ -11,7 +115,7 @@ def project():
 
     #If project doesnt exist or isn't open, redirect
     if project is None:
-        redirect(URL('default','index'))
+        redirect(URL('default', 'index'))
 
     #If user owns project then initialise message to be displayed on page
     if project.author_id == auth._get_user_id():
@@ -25,11 +129,9 @@ def project():
     documents_transcribed_by_user = database.get_documents_in_project_that_has_already_been_transcribed_by_user\
                                     (db, project_id, auth._get_user_id())
 
-
     return dict(project=project, documents_for_project=documents_for_project,
                 data_fields_for_project=data_fields_for_project,
-                documents_transcribed_by_user = documents_transcribed_by_user)
-
+                documents_transcribed_by_user=documents_transcribed_by_user)
 
 
 def add_transcription():
