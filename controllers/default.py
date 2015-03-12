@@ -1,4 +1,5 @@
-import database_transactions as database
+import database_transactions as database_transactions
+database = database_transactions.DatabaseTransactions(db)
 from gluon import *
 
 # -*- coding: utf-8 -*-
@@ -21,7 +22,7 @@ def index():
     return auth.wiki()
     """
 
-    test = database.get_user(db,1)
+    test = database.get_user(1)
     #test = ""
     return dict(message=T('Testing my branch'), test=test)
 
