@@ -1,0 +1,9 @@
+{{extend 'crowdscribe-layout.html'}}
+{{=add_fields_form.custom.begin}}
+    <label for="name"> Name:</label><div> {{=add_fields_form.custom.widget.name}}</div>
+    <label for="shortdescription"> Short Description:</label><div> {{=add_fields_form.custom.widget.short_description}}</div>
+    <br>
+    {{=add_fields_form.custom.submit}}
+{{=add_fields_form.custom.end}}
+{{=create_project_form}}
+{{=go_to_step_2_form}}

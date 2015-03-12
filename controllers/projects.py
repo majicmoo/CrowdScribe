@@ -2,9 +2,10 @@ import database_transactions as database_transactions
 database = database_transactions.DatabaseTransactions(db)
 
 
-@auth.requires_login(otherwise=URL('user', 'login'))
+#@auth.requires_login(otherwise=URL('user', 'login'))
 def create_step1():
 
+    options = ['Arts', 'Comics', 'Crafts', 'Fashion', 'Film', 'Games', 'Music', 'Photography', 'Technology']
     project_id = None
     project_being_edited = None
     if session.project_being_created is not None:
@@ -13,6 +14,7 @@ def create_step1():
         session.project_being_created = None
 
     form = SQLFORM.factory(db.project, submit_button="Continue to Step 2", formstyle='divs')
+    tag_input = SELECT(*options, name='tag', id='tag')
 
     if form.process().accepted:
 
@@ -25,18 +27,17 @@ def create_step1():
 
         session.project_being_created = project_id
         redirect(URL('projects', 'create_step2'))
-        pass
 
-        # Pre-populate form if project has already been created
+    # Pre-populate form if project has already been created
     if project_id and project_being_edited:
         form.vars.name = project_being_edited.name
         form.vars.description = project_being_edited.description
         form.vars.tag = project_being_edited.tag
 
-    return dict(form=form)
+    return dict(form=form, tag_input=tag_input)
 
 
-@auth.requires_login(otherwise=URL('user', 'login'))
+#@auth.requires_login(otherwise=URL('user', 'login'))
 def create_step2():
 
     project_id = None
@@ -74,7 +75,7 @@ def create_step2():
                 go_to_step_1_form=go_to_step_1_form, documents_added=documents_added)
 
 
-@auth.requires_login(otherwise=URL('user', 'login'))
+# @auth.requires_login(otherwise=URL('user', 'login'))
 def create_step3():
 
     project_id = None
@@ -89,17 +90,17 @@ def create_step3():
                                         _type='submit', _class='btn btn-primary btn-block btn-large')))
 
     if add_fields_form.process(formname="form_one").accepted:
-        db.data_field.insert(name=request.vars.name, description=request.vars.description, project_id=project_id)
+        db.data_field.insert(name=request.vars.name, short_description=request.vars.short_description, project_id=project_id)
         db.commit()
         session.project_being_created = project_id
 
-    if create_project_form(formname="form_two").accepted:
+    if create_project_form.process(formname="form_two").accepted:
         project = database.get_project(project_id)
         project.update_record(status="Open")
         session.project_being_created = None
         redirect(URL('default', 'index'))
 
-    if go_to_step_2_form(formname="form_three").accepted:
+    if go_to_step_2_form.process(formname="form_three").accepted:
         session.project_being_created = project_id
         redirect(URL('projects', 'create_step2'))
 

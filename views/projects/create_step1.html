@@ -1,0 +1,8 @@
+{{extend 'crowdscribe-layout.html'}}
+<h1> Step 1</h1>
+{{=form.custom.begin}}
+    <label for="name"> Name:</label><div> {{=form.custom.widget.name}}</div>
+    <label for="description"> Description:</label><div> {{=form.custom.widget.description}}</div>
+    <label for="tag"> Tag:</label><div> {{=tag_input}}</div>
+    {{=form.custom.submit}}
+{{=form.custom.end}}

@@ -30,6 +30,7 @@ if not request.env.web2py_runtime_gae:
                     Field('transcription_id', 'reference transcription'), Field('information'))
 
 
+
 else:
     ## connect to Google BigTable (optional 'google:datastore://namespace')
     db = DAL('google:datastore+ndb')
@@ -116,3 +117,4 @@ current.test_db = test_db
 
 ## after defining tables, uncomment below to enable auditing
 # auth.enable_record_versioning(db)
+db.project.description.widget = SQLFORM.widgets.text.widget
