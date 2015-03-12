@@ -1,3 +1,4 @@
+import os
 # -*- coding: utf-8 -*-
 
 #########################################################################
@@ -17,7 +18,7 @@ if not request.env.web2py_runtime_gae:
 
     db.define_table('project', Field('name'), Field('author_id', 'reference auth_user'), Field('status'),
                     Field('description'), Field('tag'))
-
+#uploadfolder=os.path.join(request.folder,'uploads')
     db.define_table('document_image', Field('description'), Field('image', 'upload'), Field('project_id', 'reference project'
         ), Field('status'))
 

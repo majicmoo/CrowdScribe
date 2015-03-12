@@ -6,5 +6,13 @@
     <br>
     {{=add_image_form.custom.submit}}
 {{=add_image_form.custom.end}}
+
+{{for document in documents_added:}}
+        <div>
+        {{=document.description}}
+        <img src="{{=URL('default','download',args = document.image)}}" />
+        </div>
+        {{pass}}
+
 {{=go_to_step_1_form}}
 {{=go_to_step_3_form}}

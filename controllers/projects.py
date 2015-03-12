@@ -5,18 +5,19 @@ database = database_transactions.DatabaseTransactions(db)
 #@auth.requires_login(otherwise=URL('user', 'login'))
 def create_step1():
 
+    print "top"
     options = ['Arts', 'Comics', 'Crafts', 'Fashion', 'Film', 'Games', 'Music', 'Photography', 'Technology']
     project_id = None
     project_being_edited = None
     if session.project_being_created is not None:
         project_id = session.project_being_created
         project_being_edited = database.get_project(project_id)
-        session.project_being_created = None
+        #session.project_being_created = None
 
-    form = SQLFORM.factory(db.project, submit_button="Continue to Step 2", formstyle='divs')
+    form = SQLFORM(db.project, submit_button="Continue to Step 2", formstyle='divs', record=project_being_edited)
     tag_input = SELECT(*options, name='tag', id='tag')
 
-    if form.process().accepted:
+    if form.validate(onvalidation=validate_create_step1):
 
         if project_id and project_being_edited:
             project_being_edited.update_record(name=request.vars.name, author_id=auth._get_user_id(), status="Closed",
@@ -27,15 +28,14 @@ def create_step1():
 
         session.project_being_created = project_id
         redirect(URL('projects', 'create_step2'))
-
-    # Pre-populate form if project has already been created
-    if project_id and project_being_edited:
-        form.vars.name = project_being_edited.name
-        form.vars.description = project_being_edited.description
-        form.vars.tag = project_being_edited.tag
+    else:
+        print form.errors
+        print auth._get_user_id()
 
     return dict(form=form, tag_input=tag_input)
 
+def validate_create_step1(form):
+    pass
 
 #@auth.requires_login(otherwise=URL('user', 'login'))
 def create_step2():
@@ -43,18 +43,22 @@ def create_step2():
     project_id = None
     if session.project_being_created is not None:
         project_id = session.project_being_created
-        session.project_being_created = None
+        #session.project_being_created = None
 
-    add_image_form = SQLFORM.factory(db.document_image, submit_button="Add Image")
+
+    add_image_form = SQLFORM(db.document_image, submit_button="Add Image")
+
+
     go_to_step_3_form = FORM(DIV(BUTTON("Continue to Step 3", I(_class='icon-arrow-right icon-white'),
                                         _type='submit', _class='btn btn-primary btn-block btn-large')))
     go_to_step_1_form = FORM(DIV(BUTTON("Back to Step 1", I(_class='icon-arrow-left icon-white'),
                                         _type='submit', _class='btn btn-primary btn-block btn-large')))
 
-    if add_image_form.process(formname="form_one").accepted:
+
+    if add_image_form.validate(formname="form_one"):
+
         db.document_image.insert(description=request.vars.description, status="Open", project_id=project_id,
-                                 image=request.vars.image)
-        db.commit()
+                                 image=add_image_form.vars.image)
         session.project_being_created = project_id
 
     if go_to_step_3_form.process(formname="form_two").accepted:
@@ -81,7 +85,7 @@ def create_step3():
     project_id = None
     if session.project_being_created is not None:
         project_id = session.project_being_created
-        session.project_being_created = None
+        #session.project_being_created = None
 
     add_fields_form = SQLFORM.factory(db.data_field, submit_button="Add field")
     create_project_form = FORM(DIV(BUTTON("Create Project", I(_class='icon-arrow-right icon-white'),
