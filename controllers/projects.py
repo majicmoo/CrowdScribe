@@ -2,7 +2,7 @@ import database_transactions as database_transactions
 database = database_transactions.DatabaseTransactions(db)
 
 
-#@auth.requires_login(otherwise=URL('user', 'login'))
+@auth.requires_login(otherwise=URL('user', 'login'))
 def create_step1():
 
     print "top"
@@ -16,6 +16,7 @@ def create_step1():
 
     form = SQLFORM(db.project, submit_button="Continue to Step 2", formstyle='divs', record=project_being_edited)
     tag_input = SELECT(*options, name='tag', id='tag')
+    form.vars.author_id = auth.user_id
 
     if form.validate(onvalidation=validate_create_step1):
 
@@ -31,13 +32,14 @@ def create_step1():
     else:
         print form.errors
         print auth._get_user_id()
+        print form.vars
 
     return dict(form=form, tag_input=tag_input)
 
 def validate_create_step1(form):
     pass
 
-#@auth.requires_login(otherwise=URL('user', 'login'))
+@auth.requires_login(otherwise=URL('user', 'login'))
 def create_step2():
 
     project_id = None
@@ -79,7 +81,7 @@ def create_step2():
                 go_to_step_1_form=go_to_step_1_form, documents_added=documents_added)
 
 
-# @auth.requires_login(otherwise=URL('user', 'login'))
+@auth.requires_login(otherwise=URL('user', 'login'))
 def create_step3():
 
     project_id = None

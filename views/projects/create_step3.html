@@ -5,5 +5,12 @@
     <br>
     {{=add_fields_form.custom.submit}}
 {{=add_fields_form.custom.end}}
+{{for field in fields_added:}}
+       <div>
+       {{=field.name}}
+       {{=field.short_description}}
+       </div>
+{{pass}}
+
 {{=create_project_form}}
 {{=go_to_step_2_form}}
