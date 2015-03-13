@@ -16,10 +16,13 @@ def create_step1():
     form = SQLFORM(db.project, submit_button="Continue to Step 2", formstyle='divs', record=project_being_edited)
     clear_project = FORM(DIV(BUTTON("Clear Project",
                                         _type='submit', _class='btn btn-primary btn-block btn-large')))
-    tag_input = SELECT(*options, name='tag', id='tag')
+
+    tag_input = SELECT(*options, name='project_tag', id='project_tag')
+    #form[0].insert(-1, tag_input)
     form.vars.author_id = auth.user_id
 
-    if form.validate(formname="form_one", onvalidation=validate_create_step1):
+    print form.vars.project_tag
+    if form.validate(formname="form_one", request_vars=request.vars, onvalidation=validate_create_step1):
 
         start_date = convert_date_to_integer(request.vars.start_date, request.vars.start_era)
         end_date = convert_date_to_integer(request.vars.end_date, request.vars.end_era)
@@ -34,13 +37,18 @@ def create_step1():
 
         session.project_being_created = project_id
         redirect(URL('projects', 'create_step2'))
+    else:
+        print form.errors
 
     if clear_project.validate(formname="form_two"):
         session.project_being_created = None
         redirect(URL('projects', 'create_step1'))
 
+    prepopulation_data = retrieve_prepopulated_data_for_create_step_1(project_being_edited)
 
-    return dict(form=form, tag_input=tag_input, clear_project=clear_project)
+
+    return dict(form=form, tag_options=options, clear_project=clear_project, project_being_edited = project_being_edited,
+                pd=prepopulation_data)
 
 def convert_date_to_integer(date, era):
     if era =="BC":
@@ -48,8 +56,29 @@ def convert_date_to_integer(date, era):
     else:
         return int(date)
 
+def retrieve_prepopulated_data_for_create_step_1(project_being_edited):
+    if project_being_edited == None:
+        return None
+    else:
+        data = {}
+        data['tag'] = project_being_edited.tag
+        data['start_date'] = abs(project_being_edited.time_period_start_date)
+        data['end_date'] = abs(project_being_edited.time_period_end_date)
+        if project_being_edited.time_period_start_date < 0:
+            data['start_era'] = 'BC'
+            if project_being_edited.time_period_end_date < 0:
+                data['end_era'] = 'BC'
+            else:
+                data['end_era'] = 'AD'
+        else:
+            data['start_era'] = 'AD'
+            data['end_era'] = 'AD'
+        return data
+
+
 def validate_create_step1(form):
-    pass
+    print form.vars
+
 
 @auth.requires_login(otherwise=URL('user', 'login'))
 def create_step2():
