@@ -5,7 +5,6 @@ database = database_transactions.DatabaseTransactions(db)
 @auth.requires_login(otherwise=URL('user', 'login'))
 def create_step1():
 
-    print "top"
     options = ['Arts', 'Comics', 'Crafts', 'Fashion', 'Film', 'Games', 'Music', 'Photography', 'Technology']
     project_id = None
     project_being_edited = None
@@ -15,10 +14,12 @@ def create_step1():
         #session.project_being_created = None
 
     form = SQLFORM(db.project, submit_button="Continue to Step 2", formstyle='divs', record=project_being_edited)
+    clear_project = FORM(DIV(BUTTON("Clear Project",
+                                        _type='submit', _class='btn btn-primary btn-block btn-large')))
     tag_input = SELECT(*options, name='tag', id='tag')
     form.vars.author_id = auth.user_id
 
-    if form.validate(onvalidation=validate_create_step1):
+    if form.validate(formname="form_one", onvalidation=validate_create_step1):
 
         if project_id and project_being_edited:
             project_being_edited.update_record(name=request.vars.name, author_id=auth._get_user_id(), status="Closed",
@@ -29,12 +30,13 @@ def create_step1():
 
         session.project_being_created = project_id
         redirect(URL('projects', 'create_step2'))
-    else:
-        print form.errors
-        print auth._get_user_id()
-        print form.vars
 
-    return dict(form=form, tag_input=tag_input)
+    if clear_project.validate(formname="form_two"):
+        session.project_being_created = None
+        redirect(URL('projects', 'create_step1'))
+
+
+    return dict(form=form, tag_input=tag_input, clear_project=clear_project)
 
 def validate_create_step1(form):
     pass
@@ -47,15 +49,15 @@ def create_step2():
         project_id = session.project_being_created
         #session.project_being_created = None
 
+    clear_project = FORM(DIV(BUTTON("Clear Project",
+                                        _type='submit', _class='btn btn-primary btn-block btn-large')))
 
     add_image_form = SQLFORM(db.document_image, submit_button="Add Image")
-
 
     go_to_step_3_form = FORM(DIV(BUTTON("Continue to Step 3", I(_class='icon-arrow-right icon-white'),
                                         _type='submit', _class='btn btn-primary btn-block btn-large')))
     go_to_step_1_form = FORM(DIV(BUTTON("Back to Step 1", I(_class='icon-arrow-left icon-white'),
                                         _type='submit', _class='btn btn-primary btn-block btn-large')))
-
 
     if add_image_form.validate(formname="form_one"):
 
@@ -75,10 +77,14 @@ def create_step2():
             session.project_being_created = project_id
             redirect(URL('projects', 'create_step1'))
 
+    if clear_project.validate(formname="form_four"):
+        session.project_being_created = None
+        redirect(URL('projects', 'create_step1'))
+
     documents_added = database.get_project_documents(project_id)
 
     return dict(add_image_form=add_image_form, go_to_step_3_form=go_to_step_3_form,
-                go_to_step_1_form=go_to_step_1_form, documents_added=documents_added)
+                go_to_step_1_form=go_to_step_1_form, documents_added=documents_added, clear_project=clear_project)
 
 
 @auth.requires_login(otherwise=URL('user', 'login'))
@@ -93,6 +99,9 @@ def create_step3():
     create_project_form = FORM(DIV(BUTTON("Create Project", I(_class='icon-arrow-right icon-white'),
                                           _type='submit', _class='btn btn-primary btn-block btn-large')))
     go_to_step_2_form = FORM(DIV(BUTTON("Back to Step 2", I(_class='icon-arrow-left icon-white'),
+                                        _type='submit', _class='btn btn-primary btn-block btn-large')))
+
+    clear_project = FORM(DIV(BUTTON("Clear Project",
                                         _type='submit', _class='btn btn-primary btn-block btn-large')))
 
     if add_fields_form.process(formname="form_one").accepted:
@@ -110,17 +119,21 @@ def create_step3():
         session.project_being_created = project_id
         redirect(URL('projects', 'create_step2'))
 
+    if clear_project.validate(formname="form_four"):
+        session.project_being_created = None
+        redirect(URL('projects', 'create_step1'))
+
     documents_added = database.get_project_documents(project_id)
     fields_added = database.get_data_fields_for_project(project_id)
 
     return dict(documents_added=documents_added, add_fields_form=add_fields_form, fields_added=fields_added
-                , create_project_form=create_project_form, go_to_step_2_form=go_to_step_2_form)
+                , create_project_form=create_project_form, go_to_step_2_form=go_to_step_2_form, clear_project=clear_project)
 
 
 def project():
 
     project_id = request.args(0)
-    project = database.get_open_project(db, project_id)
+    project = database.get_open_project(project_id)
 
     #If project doesnt exist or isn't open, redirect
     if project is None:
