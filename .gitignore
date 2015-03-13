@@ -1,6 +1,7 @@
 # for web2py
 cache
 errors
+databases
 sessions
  
 # inherit https://github.com/github/gitignore/blob/master/Python.gitignore
