@@ -21,12 +21,16 @@ def create_step1():
 
     if form.validate(formname="form_one", onvalidation=validate_create_step1):
 
+        start_date = convert_date_to_integer(request.vars.start_date, request.vars.start_era)
+        end_date = convert_date_to_integer(request.vars.end_date, request.vars.end_era)
         if project_id and project_being_edited:
             project_being_edited.update_record(name=request.vars.name, author_id=auth._get_user_id(), status="Closed",
-                                               description=request.vars.description, tag=request.vars.tag)
+                                               description=request.vars.description, tag=request.vars.tag,
+                                               time_period_start_date=start_date, time_period_end_date=end_date)
         else:
             project_id = db.project.insert(name=request.vars.name, author_id=auth._get_user_id(), status="Closed",
-                                           description=request.vars.description, tag=request.vars.tag)
+                                           description=request.vars.description, tag=request.vars.tag,
+                                           time_period_start_date=start_date, time_period_end_date=end_date)
 
         session.project_being_created = project_id
         redirect(URL('projects', 'create_step2'))
@@ -37,6 +41,12 @@ def create_step1():
 
 
     return dict(form=form, tag_input=tag_input, clear_project=clear_project)
+
+def convert_date_to_integer(date, era):
+    if era =="BC":
+        return -int(date)
+    else:
+        return int(date)
 
 def validate_create_step1(form):
     pass

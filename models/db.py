@@ -17,7 +17,7 @@ if not request.env.web2py_runtime_gae:
     db = DAL('sqlite://crowdscribe.db', pool_size=1, check_reserved=['all'], lazy_tables=True)
 
     db.define_table('project', Field('name'), Field('author_id', 'reference auth_user', writable=False, readable=False), Field('status'),
-                    Field('description'), Field('tag'))
+                    Field('description'), Field('tag'), Field('time_period_start_date', 'integer'), Field('time_period_end_date', 'integer'))
 #uploadfolder=os.path.join(request.folder,'uploads')
     db.define_table('document_image', Field('description'), Field('image', 'upload'), Field('project_id', 'reference project'
         ), Field('status'))
