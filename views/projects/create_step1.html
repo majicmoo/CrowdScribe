@@ -2,9 +2,23 @@
 <h1> Step 1</h1>
 {{=clear_project}}
 {{=form.custom.begin}}
-    <label for="name"> Name:</label><div> {{=form.custom.widget.name}}</div>
-    <label for="description"> Description:</label><div> {{=form.custom.widget.description}}</div>
-    <label for="tag"> Tag:</label><div> {{=tag_input}}</div>
+    <div class="well">
+        <legend> Basic</legend>
+        <label for="name"> Name:</label><div> {{=form.custom.widget.name}}</div>
+        <label for="description"> Description:</label><div> {{=form.custom.widget.description}}</div>
+        <label for="tag"> Tag:</label><div> {{=tag_input}}</div>
+    </div>
+    <div class="well">
+        <legend> Time Period</legend>
+        <label class="checkbox" for="unknown"> Unknown
+            <input type="checkbox" name="unknown" display="span" value="unknown">
+        </label>
+        <div class="form-inline">
+            <input name="start_date" type="text" class="input-small" placeholder="Start Date"> <select class="input-small" name="start_era"> <option>BC</option> <option>AD</option></select>
+            To
+            <input name="end_date" type="text" class="input-small" placeholder="End Date"> <select class="input-small" name="end_era"> <option>BC</option> <option>AD</option></select>
+        </div>
+    </div>
    <!-- <label for="author_id"> Author ID:</label><div> {{=form.custom.widget.author_id}}</div> -->
     {{=form.custom.submit}}
 {{=form.custom.end}}
