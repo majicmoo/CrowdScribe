@@ -19,6 +19,16 @@ $(document).ready(function(){
         $('#time_period_container').toggle();
        });
 
+   $('#unknown_checkbox_container').click(function(){
+       if ($('#unknown_checkbox').is(':checked')){
+           $('#unknown_checkbox').prop('checked', false);
+           $('#unknown_checkbox').change();
+       }
+       else{
+            $('#unknown_checkbox').prop('checked', true);
+            $('#unknown_checkbox').change();
+       }
 
+   });
 
 });
