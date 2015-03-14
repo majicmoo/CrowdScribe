@@ -17,14 +17,16 @@ def create_step1():
     clear_project = FORM(DIV(BUTTON("Clear Project",
                                         _type='submit', _class='btn btn-primary btn-block btn-large')))
 
-    tag_input = SELECT(*options, name='project_tag', id='project_tag')
-    #form[0].insert(-1, tag_input)
     form.vars.author_id = auth.user_id
 
-    if form.validate(formname="form_one", request_vars=request.vars, onvalidation=validate_create_step1):
+    if form.validate(formname="form_one", onvalidation=validate_create_step1):
+        if request.vars.unknown == "yes":
+            start_date = None
+            end_date = None
+        else:
+            start_date = convert_date_to_integer(request.vars.start_date, request.vars.start_era)
+            end_date = convert_date_to_integer(request.vars.end_date, request.vars.end_era)
 
-        start_date = convert_date_to_integer(request.vars.start_date, request.vars.start_era)
-        end_date = convert_date_to_integer(request.vars.end_date, request.vars.end_era)
         if project_id and project_being_edited:
             project_being_edited.update_record(name=request.vars.name, author_id=auth._get_user_id(), status="Closed",
                                                description=request.vars.description, tag=request.vars.tag,
@@ -62,49 +64,66 @@ def retrieve_prepopulated_data_for_create_step_1(project_being_edited):
     else:
         data = {}
         data['tag'] = project_being_edited.tag
-        data['start_date'] = abs(project_being_edited.time_period_start_date)
-        data['end_date'] = abs(project_being_edited.time_period_end_date)
-        if project_being_edited.time_period_start_date < 0:
-            data['start_era'] = 'BC'
-            if project_being_edited.time_period_end_date < 0:
-                data['end_era'] = 'BC'
-            else:
-                data['end_era'] = 'AD'
-        else:
+        if project_being_edited.time_period_start_date is None:
+            data['start_date'] = ""
+            data['end_date'] = ""
             data['start_era'] = 'AD'
             data['end_era'] = 'AD'
+            data['unknown'] = "checked"
+        else:
+            data['unknown'] = "not checked"
+            data['start_date'] = abs(project_being_edited.time_period_start_date)
+            data['end_date'] = abs(project_being_edited.time_period_end_date)
+            if project_being_edited.time_period_start_date < 0:
+                data['start_era'] = 'BC'
+                if project_being_edited.time_period_end_date < 0:
+                    data['end_era'] = 'BC'
+                else:
+                    data['end_era'] = 'AD'
+            else:
+                data['start_era'] = 'AD'
+                data['end_era'] = 'AD'
         return data
 
 
 def validate_create_step1(form):
 
+    print request.vars
+
+    if (request.vars.name == "") or (request.vars.name == None):
+        form.errors.name = "Name must be entered"
+
+    if (request.vars.description == "") or (request.vars.description == None):
+        form.errors.description = "Description must be entered"
+
     start_date = None
     end_date = None
-
     date_validator = IS_INT_IN_RANGE(-2015, 2015, error_message ="Date must be whole number between 2015 BC and 2015 AD")
 
-    if (request.vars.start_date != "") and (request.vars.start_date != None) :
-        if date_validator(request.vars.start_date)[1] is not None:
-            form.errors.start_date = date_validator(start_date)[1]
+    if request.vars.unknown != "yes":
+        if (request.vars.start_date != "") and (request.vars.start_date != None):
+            if date_validator(request.vars.start_date)[1] is not None:
+                form.errors.start_date = date_validator(start_date)[1]
+            else:
+                start_date = convert_date_to_integer(request.vars.start_date, request.vars.start_era)
         else:
-            start_date = convert_date_to_integer(request.vars.start_date, request.vars.start_era)
-    else:
-        form.errors.start_date = "Start Date must not be empty"
+            form.errors.start_date = "Start Date must not be empty"
 
-    if (request.vars.end_date != "") and (request.vars.end_date != None) :
-        if date_validator(request.vars.end_date)[1] is not None:
-            form.errors.end_date = date_validator(end_date)[1]
+        if (request.vars.end_date != "") and (request.vars.end_date != None):
+            if date_validator(request.vars.end_date)[1] is not None:
+                form.errors.end_date = date_validator(end_date)[1]
+            else:
+                end_date = convert_date_to_integer(request.vars.end_date, request.vars.end_era)
+
         else:
-            end_date = convert_date_to_integer(request.vars.end_date, request.vars.end_era)
+            form.errors.end_date = "End Date must not be empty"
 
-    else:
-        form.errors.end_date = "End Date must not be empty"
-
-    if start_date and end_date:
-            if start_date > end_date:
-                form.errors.end_date = 'The End Date of the time period must be later than the Start Date'
+        if start_date and end_date:
+                if start_date > end_date:
+                    form.errors.end_date = 'The End Date of the time period must be later than the Start Date'
 
     print form.errors
+
 
 
 @auth.requires_login(otherwise=URL('user', 'login'))
@@ -125,7 +144,7 @@ def create_step2():
     go_to_step_1_form = FORM(DIV(BUTTON("Back to Step 1", I(_class='icon-arrow-left icon-white'),
                                         _type='submit', _class='btn btn-primary btn-block btn-large')))
 
-    if add_image_form.validate(formname="form_one"):
+    if add_image_form.validate(formname="form_one", onvalidation=validate_add_image_form):
 
         db.document_image.insert(description=request.vars.description, status="Open", project_id=project_id,
                                  image=add_image_form.vars.image)
@@ -153,6 +172,17 @@ def create_step2():
                 go_to_step_1_form=go_to_step_1_form, documents_added=documents_added, clear_project=clear_project)
 
 
+def validate_add_image_form(form):
+
+    if (request.vars.description == "") or (request.vars.description == None):
+        form.errors.description = "Description must not be empty"
+
+    image_validator = IS_NOT_EMPTY(error_message=T("Image must not be left empty"))
+    if image_validator(request.vars.image)[1] is not None:
+        form.errors.image = image_validator(request.vars.image)[1]
+
+
+
 @auth.requires_login(otherwise=URL('user', 'login'))
 def create_step3():
 
@@ -170,16 +200,20 @@ def create_step3():
     clear_project = FORM(DIV(BUTTON("Clear Project",
                                         _type='submit', _class='btn btn-primary btn-block btn-large')))
 
-    if add_fields_form.process(formname="form_one").accepted:
+    if add_fields_form.process(formname="form_one", onvalidate = validate_add_field_form).accepted:
         db.data_field.insert(name=request.vars.name, short_description=request.vars.short_description, project_id=project_id)
         db.commit()
         session.project_being_created = project_id
 
     if create_project_form.process(formname="form_two").accepted:
-        project = database.get_project(project_id)
-        project.update_record(status="Open")
-        session.project_being_created = None
-        redirect(URL('default', 'index'))
+        fields_added = database.get_data_fields_for_project(project_id)
+        if len(fields_added) < 1:
+            response.flash = DIV("At least one field must be added", _class="alert alert-error")
+        else:
+            project = database.get_project(project_id)
+            project.update_record(status="Open")
+            session.project_being_created = None
+            redirect(URL('default', 'index'))
 
     if go_to_step_2_form.process(formname="form_three").accepted:
         session.project_being_created = project_id
@@ -195,6 +229,13 @@ def create_step3():
     return dict(documents_added=documents_added, add_fields_form=add_fields_form, fields_added=fields_added
                 , create_project_form=create_project_form, go_to_step_2_form=go_to_step_2_form, clear_project=clear_project)
 
+def validate_add_field_form(form):
+
+    if (request.vars.name != "") and (request.vars.name != None):
+        form.errors.name = "Name must not be empty"
+
+    if (request.vars.short_description != "") and (request.vars.short_description != None):
+        form.errors.short_description = "Description must not be empty"
 
 def project():
 

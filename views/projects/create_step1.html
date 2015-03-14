@@ -20,24 +20,26 @@
     <div class="well">
         <legend> Time Period</legend>
         <label class="checkbox" for="unknown"> Unknown
-            <input type="checkbox" name="unknown" display="span" value="unknown">
+            <input type="checkbox" name="unknown" display="span" id="unknown_checkbox" value="yes"
+                    {{if pd:}} {{if pd['unknown']== 'checked':}} checked {{pass}} {{pass}}>
         </label>
-        <div>
+        <div id="time_period_container">
             <label for="start_date"> Start Date:</label> <input name="start_date" id="start_date" type="text" class="input-small" placeholder="Start Date"
                 value={{if pd:}}{{ =pd['start_date']}}{{pass}}>
             <select class="input-small" name="start_era">
-                <option {{if pd:}}{{if pd['start_era'] == "BC":}} selected{{pass}}{{pass}}>BC</option>
                 <option {{if pd:}}{{if pd['start_era'] == "AD":}} selected{{pass}}{{pass}}>AD</option>
+                <option {{if pd:}}{{if pd['start_era'] == "BC":}} selected{{pass}}{{pass}}>BC</option>
             </select>
             <h4>To</h4>
             <label for="end_date"> End Date:</label><input name="end_date" id="end_date" type="text" class="input-small" placeholder="End Date"
                 value={{if pd:}} {{=pd['end_date']}}{{pass}}>
             <select class="input-small" name="end_era">
-                <option {{if pd:}}{{if pd['end_era'] == "BC":}} selected{{pass}}{{pass}}>BC</option>
                 <option {{if pd:}}{{if pd['end_era'] == "AD":}} selected{{pass}}{{pass}}>AD</option>
+                <option {{if pd:}}{{if pd['end_era'] == "BC":}} selected{{pass}}{{pass}}>BC</option>
             </select>
         </div>
     </div>
+    <div>{{=form.errors}}</div>
    <!-- <label for="author_id"> Author ID:</label><div> {{=form.custom.widget.author_id}}</div> -->
     {{=form.custom.submit}}
 {{=form.custom.end}}
