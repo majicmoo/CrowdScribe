@@ -21,7 +21,6 @@ def create_step1():
     #form[0].insert(-1, tag_input)
     form.vars.author_id = auth.user_id
 
-    print form.vars.project_tag
     if form.validate(formname="form_one", request_vars=request.vars, onvalidation=validate_create_step1):
 
         start_date = convert_date_to_integer(request.vars.start_date, request.vars.start_era)
@@ -38,7 +37,8 @@ def create_step1():
         session.project_being_created = project_id
         redirect(URL('projects', 'create_step2'))
     else:
-        print form.errors
+        #print form.errors
+        pass
 
     if clear_project.validate(formname="form_two"):
         session.project_being_created = None
@@ -77,7 +77,34 @@ def retrieve_prepopulated_data_for_create_step_1(project_being_edited):
 
 
 def validate_create_step1(form):
-    print form.vars
+
+    start_date = None
+    end_date = None
+
+    date_validator = IS_INT_IN_RANGE(-2015, 2015, error_message ="Date must be whole number between 2015 BC and 2015 AD")
+
+    if (request.vars.start_date != "") and (request.vars.start_date != None) :
+        if date_validator(request.vars.start_date)[1] is not None:
+            form.errors.start_date = date_validator(start_date)[1]
+        else:
+            start_date = convert_date_to_integer(request.vars.start_date, request.vars.start_era)
+    else:
+        form.errors.start_date = "Start Date must not be empty"
+
+    if (request.vars.end_date != "") and (request.vars.end_date != None) :
+        if date_validator(request.vars.end_date)[1] is not None:
+            form.errors.end_date = date_validator(end_date)[1]
+        else:
+            end_date = convert_date_to_integer(request.vars.end_date, request.vars.end_era)
+
+    else:
+        form.errors.end_date = "End Date must not be empty"
+
+    if start_date and end_date:
+            if start_date > end_date:
+                form.errors.end_date = 'The End Date of the time period must be later than the Start Date'
+
+    print form.errors
 
 
 @auth.requires_login(otherwise=URL('user', 'login'))

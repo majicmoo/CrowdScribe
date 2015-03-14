@@ -23,14 +23,14 @@
             <input type="checkbox" name="unknown" display="span" value="unknown">
         </label>
         <div>
-            <label for="tag"> Start Date:</label> <input name="start_date" type="text" class="input-small" placeholder="Start Date"
+            <label for="start_date"> Start Date:</label> <input name="start_date" id="start_date" type="text" class="input-small" placeholder="Start Date"
                 value={{if pd:}}{{ =pd['start_date']}}{{pass}}>
             <select class="input-small" name="start_era">
                 <option {{if pd:}}{{if pd['start_era'] == "BC":}} selected{{pass}}{{pass}}>BC</option>
                 <option {{if pd:}}{{if pd['start_era'] == "AD":}} selected{{pass}}{{pass}}>AD</option>
             </select>
             <h4>To</h4>
-            <label for="tag"> End Date:</label><input name="end_date" type="text" class="input-small" placeholder="End Date"
+            <label for="end_date"> End Date:</label><input name="end_date" id="end_date" type="text" class="input-small" placeholder="End Date"
                 value={{if pd:}} {{=pd['end_date']}}{{pass}}>
             <select class="input-small" name="end_era">
                 <option {{if pd:}}{{if pd['end_era'] == "BC":}} selected{{pass}}{{pass}}>BC</option>
