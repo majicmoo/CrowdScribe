@@ -5,8 +5,10 @@
     <label for="description"> Description:</label><div> {{=add_image_form.custom.widget.description}}</div>
     <label for="image"> Image:</label><div> {{=add_image_form.custom.widget.image}}</div>
     <br>
+    <div><img id="image_being_uploaded" height="400" width="300" src="#" alt="Uploaded Image Will Appear Here"/></div>
     {{=add_image_form.custom.submit}}
 {{=add_image_form.custom.end}}
+
 
 {{for document in documents_added:}}
         <div>
