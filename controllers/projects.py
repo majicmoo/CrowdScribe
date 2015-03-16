@@ -13,19 +13,29 @@ def create_step1():
         project_being_edited = database.get_project(project_id)
         #session.project_being_created = None
 
-    form = SQLFORM(db.project, submit_button="Continue to Step 2", formstyle='divs', record=project_being_edited)
+    form = SQLFORM(db.project, submit_button="Continue to Step 2")
     clear_project = FORM(DIV(BUTTON("Clear Project",
                                         _type='submit', _class='btn btn-primary btn-block btn-large')))
-
-    form.vars.author_id = auth.user_id
+    
+    prepopulation_data = retrieve_prepopulated_data_for_create_step_1(project_being_edited)
+    
+    form.vars.tag = "Sport"
+    
+    if prepopulation_data is not None:
+        
+        form.vars.name =  prepopulation_data['name']
+        form.vars.description = prepopulation_data['description']
+        form.vars.tag = prepopulation_data['tag']
+        form.vars.time_period_start_date = prepopulation_data['start_date']
+        form.vars.time_period_end_date = prepopulation_data['end_date']
 
     if form.validate(formname="form_one", onvalidation=validate_create_step1):
         if request.vars.unknown == "yes":
             start_date = None
             end_date = None
         else:
-            start_date = convert_date_to_integer(request.vars.start_date, request.vars.start_era)
-            end_date = convert_date_to_integer(request.vars.end_date, request.vars.end_era)
+            start_date = convert_date_to_integer(request.vars.time_period_start_date, request.vars.start_era)
+            end_date = convert_date_to_integer(request.vars.time_period_end_date, request.vars.end_era)
 
         if project_id and project_being_edited:
             project_being_edited.update_record(name=request.vars.name, author_id=auth._get_user_id(), status="Closed",
@@ -46,8 +56,6 @@ def create_step1():
         session.project_being_created = None
         redirect(URL('projects', 'create_step1'))
 
-    prepopulation_data = retrieve_prepopulated_data_for_create_step_1(project_being_edited)
-
 
     return dict(form=form, tag_options=options, clear_project=clear_project, project_being_edited = project_being_edited,
                 pd=prepopulation_data)
@@ -63,6 +71,8 @@ def retrieve_prepopulated_data_for_create_step_1(project_being_edited):
         return None
     else:
         data = {}
+        data['name'] = project_being_edited.name
+        data['description'] = project_being_edited.description
         data['tag'] = project_being_edited.tag
         if project_being_edited.time_period_start_date is None:
             data['start_date'] = ""
@@ -95,32 +105,35 @@ def validate_create_step1(form):
 
     if (request.vars.description == "") or (request.vars.description == None):
         form.errors.description = "Description must be entered"
-
+    
+    if (request.vars.tag == "") or (request.vars.tag == None):
+        form.errors.tag = "Tag must be chosen"
+    
     start_date = None
     end_date = None
     date_validator = IS_INT_IN_RANGE(-2015, 2015, error_message ="Date must be whole number between 2015 BC and 2015 AD")
 
     if request.vars.unknown != "yes":
-        if (request.vars.start_date != "") and (request.vars.start_date != None):
-            if date_validator(request.vars.start_date)[1] is not None:
-                form.errors.start_date = date_validator(start_date)[1]
+        if (request.vars.time_period_start_date != "") and (request.vars.time_period_start_date != None):
+            if date_validator(request.vars.time_period_start_date)[1] is not None:
+                form.errors.time_period_start_date = date_validator(request.vars.time_period_start_date)[1]
             else:
-                start_date = convert_date_to_integer(request.vars.start_date, request.vars.start_era)
+                start_date = convert_date_to_integer(request.vars.time_period_start_date, request.vars.start_era)
         else:
-            form.errors.start_date = "Start Date must not be empty"
+            form.errors.time_period_start_date = "Start Date must not be empty"
 
-        if (request.vars.end_date != "") and (request.vars.end_date != None):
-            if date_validator(request.vars.end_date)[1] is not None:
-                form.errors.end_date = date_validator(end_date)[1]
+        if (request.vars.time_period_end_date != "") and (request.vars.time_period_end_date != None):
+            if date_validator(request.vars.time_period_end_date)[1] is not None:
+                form.errors.time_period_end_date = date_validator(request.vars.time_period_end_date)[1]
             else:
-                end_date = convert_date_to_integer(request.vars.end_date, request.vars.end_era)
+                end_date = convert_date_to_integer(request.vars.time_period_end_date, request.vars.end_era)
 
         else:
-            form.errors.end_date = "End Date must not be empty"
+            form.errors.time_period_end_date = "End Date must not be empty"
 
         if start_date and end_date:
                 if start_date > end_date:
-                    form.errors.end_date = 'The End Date of the time period must be later than the Start Date'
+                    form.errors.time_period_end_date = 'The End Date of the time period must be later than the Start Date'
 
     print form.errors
 
