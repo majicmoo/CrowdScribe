@@ -1,0 +1,32 @@
+{{extend 'crowdscribe-layout.html'}}
+
+<h3> Basic</h3>
+<div> Name: {{=project.name}}</div>
+<div> Description {{=project.description}}</div>
+<div> Tag: {{=project.tag}}</div>
+{{if project.time_period_start_date is None:}}
+<div> Time Period is Unknown</div>
+{{else:}}
+<div> {{=start_date}} To {{=end_date}}</div>
+{{pass}}
+
+<h3>Fields</h3>
+{{for field in fields_added:}}
+       <div>
+       <div> Name: </div>{{=field.name}}
+       <div> Short Description: </div>{{=field.short_description}}
+       </div>
+{{pass}}
+
+<h3> Images</h3>
+{{for document in documents_added:}}
+        <div>
+        Description: {{=document.description}} 
+         Image:<img src="{{=URL('default','download',args = document.image)}}" />
+        </div>
+        {{pass}}
+
+
+
+{{=create_project_form}}
+{{=go_to_step_3_form}}
