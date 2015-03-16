@@ -38,11 +38,11 @@ def create_step1():
             end_date = convert_date_to_integer(request.vars.time_period_end_date, request.vars.end_era)
 
         if project_id and project_being_edited:
-            project_being_edited.update_record(name=request.vars.name, author_id=auth._get_user_id(), status="Closed",
+            project_being_edited.update_record(name=request.vars.name, author_id=auth._get_user_id(), status="Being Created",
                                                description=request.vars.description, tag=request.vars.tag,
                                                time_period_start_date=start_date, time_period_end_date=end_date)
         else:
-            project_id = db.project.insert(name=request.vars.name, author_id=auth._get_user_id(), status="Closed",
+            project_id = db.project.insert(name=request.vars.name, author_id=auth._get_user_id(), status="Being Created",
                                            description=request.vars.description, tag=request.vars.tag,
                                            time_period_start_date=start_date, time_period_end_date=end_date)
 
@@ -65,6 +65,12 @@ def convert_date_to_integer(date, era):
         return -int(date)
     else:
         return int(date)
+
+def convert_integer_to_date_string(date):
+    if date < 0:
+        return str(abs(date)) + "BC"
+    else:
+        return str(abs(date)) + "AD"
 
 def retrieve_prepopulated_data_for_create_step_1(project_being_edited):
     if project_being_edited == None:
@@ -195,7 +201,6 @@ def validate_add_image_form(form):
         form.errors.image = image_validator(request.vars.image)[1]
 
 
-
 @auth.requires_login(otherwise=URL('user', 'login'))
 def create_step3():
 
@@ -205,7 +210,7 @@ def create_step3():
         #session.project_being_created = None
 
     add_fields_form = SQLFORM.factory(db.data_field, submit_button="Add field")
-    create_project_form = FORM(DIV(BUTTON("Create Project", I(_class='icon-arrow-right icon-white'),
+    review_project_form = FORM(DIV(BUTTON("Review Project", I(_class='icon-arrow-right icon-white'),
                                           _type='submit', _class='btn btn-primary btn-block btn-large')))
     go_to_step_2_form = FORM(DIV(BUTTON("Back to Step 2", I(_class='icon-arrow-left icon-white'),
                                         _type='submit', _class='btn btn-primary btn-block btn-large')))
@@ -218,15 +223,13 @@ def create_step3():
         db.commit()
         session.project_being_created = project_id
 
-    if create_project_form.process(formname="form_two").accepted:
+    if review_project_form.process(formname="form_two").accepted:
         fields_added = database.get_data_fields_for_project(project_id)
         if len(fields_added) < 1:
             response.flash = DIV("At least one field must be added", _class="alert alert-error")
         else:
-            project = database.get_project(project_id)
-            project.update_record(status="Open")
-            session.project_being_created = None
-            redirect(URL('default', 'index'))
+            session.project_being_created = project_id
+            redirect(URL('projects', 'create_step4'))
 
     if go_to_step_2_form.process(formname="form_three").accepted:
         session.project_being_created = project_id
@@ -240,7 +243,7 @@ def create_step3():
     fields_added = database.get_data_fields_for_project(project_id)
 
     return dict(documents_added=documents_added, add_fields_form=add_fields_form, fields_added=fields_added
-                , create_project_form=create_project_form, go_to_step_2_form=go_to_step_2_form, clear_project=clear_project)
+                , review_project_form=review_project_form, go_to_step_2_form=go_to_step_2_form, clear_project=clear_project)
 
 def validate_add_field_form(form):
 
@@ -249,6 +252,44 @@ def validate_add_field_form(form):
 
     if (request.vars.short_description != "") and (request.vars.short_description != None):
         form.errors.short_description = "Description must not be empty"
+
+
+@auth.requires_login(otherwise=URL('user', 'login'))        
+def create_step4():
+    
+    start_date = None
+    end_date = None
+    project_id = None
+    if session.project_being_created is not None:
+        project_id = session.project_being_created
+    
+    project_being_edited = database.get_project(project_id)
+    documents_added = database.get_project_documents(project_id)
+    fields_added = database.get_data_fields_for_project(project_id)
+    
+    if project_being_edited.time_period_start_date is not None:
+        start_date = convert_integer_to_date_string(project_being_edited.time_period_start_date)
+        end_date = convert_integer_to_date_string(project_being_edited.time_period_end_date)
+    
+    create_project_form = FORM(DIV(BUTTON("Create Project", I(_class='icon-arrow-right icon-white'),
+                                          _type='submit', _class='btn btn-primary btn-block btn-large')))
+    go_to_step_3_form = FORM(DIV(BUTTON("Back to Step 3", I(_class='icon-arrow-left icon-white'),
+                                        _type='submit', _class='btn btn-primary btn-block btn-large')))
+    
+    if go_to_step_3_form.process(formname="form_two").accepted:
+        session.project_being_created = project_id
+        redirect(URL('projects', 'create_step3'))
+    
+    if create_project_form.process(formname="form_one").accepted:
+        project = database.get_project(project_id)
+        project.update_record(status="Open")
+        session.project_being_created = None
+        redirect(URL('default', 'index'))
+  
+    
+    return dict(documents_added=documents_added, project=project_being_edited, fields_added=fields_added,
+               create_project_form=create_project_form, go_to_step_3_form=go_to_step_3_form, start_date=start_date,
+               end_date=end_date)
 
 def project():
 
