@@ -257,13 +257,10 @@ class TestDatabaseTransactions(unittest.TestCase):
 
 
     def test_get_transcriptions_for_document(self):
-        #
-        # for document in self.documents:
-        #     transcriptions = database.get_transcriptions_for_document(document)
-        #     for transcription in transcriptions:
-        #         print transcription
-        #         self.assertEquals(transcription.document_id, self.document_one)
-        pass
+        for document in self.documents:
+            transcriptions = database.get_transcriptions_for_document(document)
+            for transcription in transcriptions:
+                self.assertEquals(transcription.transcription.document_id, self.document_one)
 
     def test_get_done_documents_for_user(self):
         total_number_of_done_documents_found_by_a = 0

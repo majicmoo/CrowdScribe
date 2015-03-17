@@ -21,7 +21,6 @@ class DatabaseTransactions:
                     & (self.db.project.status == "Open")).select().first()
         return result
 
-
     def get_document(self, document_id):
         result = self.db(self.db.document_image.id == document_id).select().first()
         return result
@@ -94,8 +93,7 @@ class DatabaseTransactions:
 
 
     def get_transcriptions_for_document(self, document_id):
-        # FIXME: I don;t think this returns transcriptions
-        result = self.db((self.db.document_image.id == document_id) & (self.db.document_image.status == "Open")).select()
+        result = self.db((self.db.transcription.document_id == document_id)).select()
         return result
 
 

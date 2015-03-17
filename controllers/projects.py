@@ -317,7 +317,7 @@ def project():
                 documents_transcribed_by_user=documents_transcribed_by_user)
 
 
-def add_transcription():
+def view_document():
 
     #Remove if project data not required in page
     project_id = request.args(0)
@@ -368,27 +368,26 @@ def add_transcription():
 
     return dict(project=project, document=document, form=form)
 
-def view_document():
+def review_document():
     # Current Project
     project_id = request.args(0)
-    project = database.get_open_project(project_id)
-    if project is None:
-        # Redirect if project is none
-        redirect(URL('default','index'))
+    project = database.get_project(project_id)
     # Current Document
     document_id = request.args(1)
     document = database.get_document(document_id)
-
-    if document is None:
-        # Redirect if document is none
+    if project is None:
+        # Redirect if project is none
+        redirect(URL('default','index'))
+    if project_id == 'Open':
         redirect(URL('projects','project',args=[project_id]))
+    # Check Project Belongs to Current User
+    if project.author_id != auth._get_user_id():
+        redirect(URL('projects','project',args=[project_id]))
+    # Get current transcriptions for Document
+    transcriptions = database.get_transcriptions_for_document(document_id)
+    # FIXME: Need a way to dynamically create accept/reject transcription button/form, idk how to do this
 
-    if project.author_id == auth._get_user_id():
-        # Display alert if you own project
-        response.flash = DIV("You own this project", _class="alert alert-info")
+    return dict(project=project, document=document, transcriptions=transcriptions)
 
-    # Current Data Fields
-    data_fields = database.get_data_fields_for_project(project_id)
-    return dict(project=project, document=document, data_fields=data_fields)
 
 
