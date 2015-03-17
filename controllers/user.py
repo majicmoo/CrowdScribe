@@ -27,6 +27,40 @@ def register():
 
     return dict(form = form)
 
+def validate_register_form(form):
+    
+    empty_validator = IS_NOT_EMPTY(error_message=T("must not be empty"))
+    
+    if empty_validator(request.vars.first_name)[1] is not None:
+        form.errors.first_name = "First Name " + empty_validator(request.vars.first_name)[1]
+    
+    if empty_validator(request.vars.last_name)[1] is not None:
+        form.errors.last_name = "Last Name " + empty_validator(request.vars.last_name)[1]
+        
+    email_validator = IS_EMAIL(error_message="Email is not in correct format")
+        
+    if empty_validator(request.vars.email)[1] is not None:
+        form.errors.email = "Email " + empty_validator(request.vars.email)[1]
+    else:  
+        if email_validator(request.vars.email)[1] is not None:
+            form.errors.email = email_validator(request.vars.email)[1]
+        
+    username_validator = IS_NOT_IN_DB(db, 'auth_user.username', error_message="Username has already been taken")
+    
+    if empty_validator(request.vars.username)[1] is not None:
+        form.errors.username = "Username " + empty_validator(request.vars.username)[1]
+    else:
+        if username_validator(request.vars.username)[1] is not None:
+            form.errors.username = username_validator(request.vars.username)[1]
+        
+        
+    if empty_validator(request.vars.password)[1] is not None:
+        form.errors.password = "Password " + empty_validator(request.vars.password)[1]
+        
+        
+    
+        
+
 def login():
     response.title = 'Login'
 
