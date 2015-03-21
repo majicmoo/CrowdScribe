@@ -23,10 +23,10 @@ if not request.env.web2py_runtime_gae:
     db.define_table('project', Field('name'), Field('author_id', 'reference auth_user', writable=False, readable=False), Field('status'),
                     Field('description'), Field('tag', requires=IS_IN_SET(options)), Field('time_period_start_date', 'integer'), Field('time_period_end_date', 'integer'))
 #uploadfolder=os.path.join(request.folder,'uploads')
-    db.define_table('document_image', Field('description'), Field('image', 'upload'), Field('project_id', 'reference project'
+    db.define_table('document_image', Field('description', type='text'), Field('image', 'upload'), Field('project_id', 'reference project'
         ), Field('status'))
 
-    db.define_table('data_field', Field('project_id', 'reference project'), Field('name'), Field('short_description'))
+    db.define_table('data_field', Field('project_id', 'reference project'), Field('name'), Field('short_description', type='text'))
 
     db.define_table('transcription', Field('document_id', 'reference document_image'), Field('author_id',
                     'reference auth_user'), Field('status'))
