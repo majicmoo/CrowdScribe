@@ -384,10 +384,31 @@ def review_document():
     if project.author_id != auth._get_user_id():
         redirect(URL('projects','project',args=[project_id]))
     # Get current transcriptions for Document
-    transcriptions = database.get_transcriptions_for_document(document_id)
+    transcriptions = database.get_pending_transcriptions_for_document(document_id)
+    print transcriptions
+
+    transcribed_fields_for_transcriptions = []
+    for transcription in transcriptions:
+        transcribed_fields_for_transcriptions.append(database.get_transcribed_fields_for_transcription(transcription.id))
+
     # FIXME: Need a way to dynamically create accept/reject transcription button/form, idk how to do this
 
-    return dict(project=project, document=document, transcriptions=transcriptions)
+    return dict(project=project, document=document, transcriptions=transcriptions,
+                transcribed_fields_for_transcriptions=transcribed_fields_for_transcriptions)
 
+def accept_transcription():
 
+    db(db.document_image.id==request.vars.document_id).update(status='Closed')
+    db((db.transcription.id!=request.vars.transcription_id) & (db.transcription.document_id==request.vars.document_id))\
+    .update(status="Rejected")
+
+    db(db.transcription.id==request.vars.transcription_id).update(status='Accepted')
+    #document.update_record(status="Closed")
+    #transcription.update_record(status="Accepted")
+
+    #db.project.insert(name=request.vars.transcription_id)
+
+    db.commit()
+
+    redirect(URL('default','index'), client_side=True)
 

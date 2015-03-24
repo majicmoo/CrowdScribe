@@ -1,0 +1,24 @@
+{{extend 'crowdscribe-layout.html'}}
+
+<h2> Project</h2>
+{{=project.name}}
+
+<h2> Document</h2>
+    <img width="500" height="350" src="{{=URL('default','download',args = document.image)}}" />
+
+{{i=1}}
+{{for transcription in transcribed_fields_for_transcriptions:}}
+        <div>
+        <h3> Transcription {{=i}}</h3>
+        {{for field in transcription: }}
+            <div>
+                <b>{{=field.data_field.name}}:</b>
+                {{=field.transcribed_field.information}}
+            </div>
+            <br>
+        {{pass}}
+        {{=A(BUTTON('Accept',_class="btn btn-danger"), callback= URL('accept_transcription',
+        vars= dict(document_id=document.id, transcription_id=field.transcribed_field.transcription_id)))}}
+        </div>
+        {{i = i + 1}}
+{{pass}}

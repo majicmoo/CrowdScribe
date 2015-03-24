@@ -82,20 +82,27 @@ class DatabaseTransactions:
         return result
 
 
-    def get_transcribed_fields_for_transcription(self, transcription_id):
-        result = self.db(self.db.transcribed_field.transcription_id == transcription_id).select()
-        return result
-
-
     def get_data_fields_for_project(self, project_id):
         result = self.db(self.db.data_field.project_id == project_id).select()
         return result
 
+    def get_transcription(self, transcription_id):
+        result = self.db((self.db.transcription.id == transcription_id)).select()
+        return result
 
     def get_transcriptions_for_document(self, document_id):
         result = self.db((self.db.transcription.document_id == document_id)).select()
         return result
 
+    def get_pending_transcriptions_for_document(self, document_id):
+        result = self.db((self.db.transcription.document_id == document_id)
+                    & (self.db.transcription.status == "Pending")).select()
+        return result
+
+    def get_transcribed_fields_for_transcription(self, transcription_id):
+        result = self.db((self.db.transcribed_field.transcription_id == transcription_id)
+                    & (self.db.transcribed_field.data_field_id == self.db.data_field.id)).select()
+        return result
 
     def get_done_documents_for_user(self, user_id):
         result = self.db((self.db.document_image.status == "Done")
