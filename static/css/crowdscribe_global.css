@@ -5,6 +5,9 @@ body, html {
   padding: 0;
   height: 100%; }
 
+.alert-danger, .alert-error {
+  margin-bottom: 0; }
+
 .bg {
   background-color: #e6e6e6;
   height: 100%; }
@@ -18,7 +21,7 @@ body, html {
 
 .padded_container {
   padding: 20px;
-  overflow: auto; }
+  overflow: hidden; }
 
 .less_top_padding {
   padding-top: 10px; }

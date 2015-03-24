@@ -37,8 +37,10 @@
 
   </div>
 
+  <h3>Current Fields</h3>
+  <p>Fugiat culpa proident magna amet esse consequat eiusmod elit proident laborum.</p>
+
   <div class="fields">
-    {{include "subviews/field-display.html"}}
     {{for field in fields_added:}}
       <!-- {{=field.name}}
       {{=field.short_description}} -->
@@ -46,6 +48,8 @@
     {{pass}}
   </div>
 
-  <!-- {{=add_fields_form.errors}} -->
+  {{=add_fields_form.errors}}
+
+  {{=review_project_form}}
 
 </div>
