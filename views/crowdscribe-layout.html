@@ -2,7 +2,7 @@
 
 <head>
 <title>{{=response.title or request.application}}</title>
-	   
+
   <meta charset="utf-8">
 
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -10,7 +10,7 @@
         <title>{{=response.title or request.application}}</title>
         <meta name="description" content="">
         <meta name="author" content="abgc500">
-     
+
 
         <meta charset="utf-8" />
 
@@ -34,10 +34,10 @@
 <body>
 
   <div class="navbar navbar-inverse">
-   
+
     <div class="navbar-inner">
       <div class="container">
-        
+
         <a class="brand" href="{{=URL('default','index')}}">{{=request.application}}</a>
 
         <div class="nav-collapse collapse">
@@ -80,7 +80,7 @@
             <!-- /Button -->
           </ul>
 
-          
+
 
         </div>
 
@@ -88,14 +88,10 @@
     </div>
   </div><!--/top navbar -->
 
-  <div class="container bg">
-    <div class="row-fluid">
+	<div class="content_container">
       {{include}}
-      {{pass}}
-    </div>    
   </div>
 
-  
+
 </body>
 </html>
-
