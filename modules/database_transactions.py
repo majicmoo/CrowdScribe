@@ -114,14 +114,14 @@ class DatabaseTransactions:
         result = self.db((self.db.document_image.project_id == self.db.project.id)
                     & (self.db.project.author_id == user_id)
                     & (self.db.document_image.id == self.db.transcription.document_id)
-                    & (self.db.transcription.status == "Open")).select()
+                    & (self.db.transcription.status == 'Pending')).select()
         return result
 
 
     def get_documents_for_a_project_that_have_transcription(self, project_id):
         result = self.db((self.db.document_image.project_id == project_id)
                     & (self.db.document_image.id == self.db.transcription.document_id)
-                    & (self.db.transcription.status == "Open")).select()
+                    & (self.db.transcription.status == 'Pending')).select()
         return result
 
 

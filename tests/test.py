@@ -36,9 +36,15 @@ class TestDatabaseTransactions(unittest.TestCase):
         self.keywords = []
 
         # Setup statuses
+        # Document
         self.open_status = 'Open'
         self.closed_status = 'Closed'
         self.done_status = 'Done'
+        # Transcriptions
+        self.pending_status = 'Pending'
+        self.accepted_status = 'Accepted'
+        self.rejected_status = 'Rejected'
+
 
         # Setup tags
         self.tag_one = self.add_tag('Sports')
@@ -68,9 +74,9 @@ class TestDatabaseTransactions(unittest.TestCase):
         self.data_field_one = self.add_field(project_id=self.project_one, name='test', short_description='test')
         # Create transcription
         self.transcription_one = self.add_transcription(document_id=self.document_one, author_id=self.user_two,
-                                                        status=self.open_status)
+                                                        status=self.pending_status)
         self.transcription_two =  self.add_transcription(document_id=self.document_one, author_id=self.user_two,
-                                                         status=self.closed_status)
+                                                         status=self.accepted_status)
         # Create transcription field
         self.transcription_field_one = self.add_transcription_field(data_field_id=self.data_field_one,
                                                                     transcription_id=self.transcription_one,
