@@ -1,19 +1,55 @@
+{{response.files.append(URL(r=request,c='static/css',f='create.css'))}}
 {{extend 'crowdscribe-layout.html'}}
-<h1> Step 3</h1>
-{{=clear_project}}
-{{=add_fields_form.custom.begin}}
-    <label for="name"> Name:</label><div> {{=add_fields_form.custom.widget.name}}</div>
-    <label for="shortdescription"> Short Description:</label><div> {{=add_fields_form.custom.widget.short_description}}</div>
-    <br>
+
+<div class="form_nav">
+  <div class="inner">
+    <a href="{{=URL('projects','create_step1')}}"><div class="stage ">1. Basic Details</div></a>
+    <a href="{{=URL('projects','create_step2')}}"><div class="stage">2. Add Documents</div></a></a>
+    <a href="{{=URL('projects','create_step3')}}"><div class="stage highlighted rightmost">3. Fields</div></a>
+  </div>
+</div>
+
+<div class="padded_container form_container less_top_padding">
+
+  <h1>Create Project (3/3)</h1>
+  <h3>Add Fields</h3>
+
+  <div class="add_new_field_form">
+
+    <h4>Add New Field</h4>
+    <p>Fugiat culpa proident magna amet esse consequat eiusmod elit proident laborum.</p>
+
+    {{=add_fields_form.custom.begin}}
+
+    <div class="field_title">
+      <h4>Field Name</h4>
+      <div> {{=add_fields_form.custom.widget.name}}</div>
+    </div>
+
+    <div class="field_title">
+      <h4>Field Description</h4>
+      {{=add_fields_form.custom.widget.short_description}}
+    </div>
+
     {{=add_fields_form.custom.submit}}
-{{=add_fields_form.custom.end}}
-{{for field in fields_added:}}
-       <div>
-       {{=field.name}}
-       {{=field.short_description}}
-       </div>
-{{pass}}
-<div>{{=add_fields_form.errors}}</div>
-{{=response.flash}}
-{{=review_project_form}}
-{{=go_to_step_2_form}}
+
+    {{=add_fields_form.custom.end}}
+
+  </div>
+
+  <h3>Current Fields</h3>
+  <p>Fugiat culpa proident magna amet esse consequat eiusmod elit proident laborum.</p>
+
+  <div class="fields">
+    {{for field in fields_added:}}
+      <!-- {{=field.name}}
+      {{=field.short_description}} -->
+      {{include "subviews/field-display.html"}}
+    {{pass}}
+  </div>
+
+  {{=add_fields_form.errors}}
+
+  {{=review_project_form}}
+
+</div>

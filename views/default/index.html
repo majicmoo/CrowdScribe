@@ -1,13 +1,32 @@
+{{response.files.append(URL(r=request,c='static/css',f='index.css'))}}
 {{extend 'crowdscribe-layout.html'}}
 
-<div class="row-fluid">
-  <div class="span6">
-    {{include "subviews/project-display.html"}}
-    {{include "subviews/project-display.html"}}
-    {{include "subviews/project-display.html"}}
-    {{include "subviews/project-display.html"}}
-  </div>
-  <div class="span6">
-    {{include "subviews/project-display.html"}}
-  </div>
+<div class = "featured_project">
+  <h1>Featured Project Title</h1>
+</div>
+
+<div class="padded_container form_container">
+  <h1>Latest Projects</h1>
+</div>
+
+<div class="projects">
+  {{include "subviews/project-display.html"}}
+  {{include "subviews/project-display.html"}}
+  {{include "subviews/project-display.html"}}
+  {{include "subviews/project-display.html"}}
+  {{include "subviews/project-display.html"}}
+  {{include "subviews/project-display.html"}}
+</div>
+
+<div class="padded_container form_container">
+  <h1>Coolest Projects</h1>
+</div>
+
+<div class="projects">
+  {{include "subviews/project-display.html"}}
+  {{include "subviews/project-display.html"}}
+  {{include "subviews/project-display.html"}}
+  {{include "subviews/project-display.html"}}
+  {{include "subviews/project-display.html"}}
+  {{include "subviews/project-display.html"}}
 </div>

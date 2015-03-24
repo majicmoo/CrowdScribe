@@ -1,115 +1,257 @@
+// This document is used for CSS that is used on the majority of pages throughout
+// The site. This means quicker loading and less I/O
+
+@import 'colors';
+
+// Global Text Formatting
+// This can be overridden in view specific css files.
+
+h1, p{
+	margin:0;
+}
+
+body, html{
+	padding:0;
+	height: 100%;
+}
+
+// Site Wide Layour Formatting
+
+.alert-danger, .alert-error{
+	margin-bottom:0;
+}
+
 .bg{
 	background-color:#e6e6e6;
 	height:100%;
 }
 
-.project{
+.content_container{
+	width:1000px;
+	min-height:95%;
+	margin-left:auto;
+	margin-right:auto;
+	background:$lightest_grey;
+}
 
-	$boxheight: 230px;
-	$boxwidth : 470px;
+.padded_container{
+	padding:20px;
+	overflow:hidden;
+}
 
-	.box{
+.less_top_padding{
+	padding-top:10px;
+}
+
+.no_bottom_padding{
+	padding-bottom:0;
+}
+
+.form_container{
+	.btn{
 		width:100%;
-		height:200px;
-		background-color:#FF0000;
+	}
+	.string, .text, select{
+		margin:10px 5px 15px 0;
+		width:100%;
+		-webkit-box-sizing: border-box; /* Safari 3.0 - 5.0, Chrome 1 - 9, Android 2.1 - 3.x */
+	  -moz-box-sizing: border-box;    /* Firefox 1 - 28 */
+	  box-sizing: border-box;         /* Safari 5.1+, Chrome 10+, Firefox 29+, Opera 7+, IE 8+, Android 4.0+, iOS any */
+	}
+	.string{
+		height:30px;
+	}
+}
 
-		border: 1px solid #DBDBDB;
+.form_nav{
+
+	$navheight:30px;
+	$padding:10px;
+
+	height:$navheight;
+	// background-color:red;
+	text-align:center;
+	padding:$padding;
+	overflow:auto;
+
+	.inner{
+		// background:blue;
+		height:100%;
 		border-radius: 10px;
+
+		$numstages : 3;
+		overflow:hidden;
+
+		a{
+			color:black;
+		}
+
+		.stage{
+			height:100%;
+			width:100%/$numstages;
+			background:orange;
+			float:left;
+
+			line-height:$navheight;
+			font-weight:bold;
+
+			-webkit-box-sizing: border-box;
+		  -moz-box-sizing: border-box;
+		  box-sizing: border-box;
+		  border-right: 3px solid $lightest_grey;
+
+			opacity:.5;
+		}
+
+		.highlighted{
+			opacity:1;
+		}
+
+		.rightmost{
+			border-right:0;
+		}
+
+	}
+}
+
+.projects{
+
+	$padding : 10px;
+	$numprojectsinrow : 3;
+
+	overflow:auto;
+
+	padding:$padding;
+
+	$boxwidth : 230px;
+	$boxheight: 230px;
+
+	.project{
+		float:left;
+		min-width:$boxwidth;
+		min-height:$boxheight;
+		height:$boxheight;
+		width:100%/$numprojectsinrow;
+
+		padding:$padding;
 		overflow: hidden;
 
 		position:relative;
+		-webkit-box-sizing: border-box; /* Safari 3.0 - 5.0, Chrome 1 - 9, Android 2.1 - 3.x */
+	  -moz-box-sizing: border-box;    /* Firefox 1 - 28 */
+	  box-sizing: border-box;         /* Safari 5.1+, Chrome 10+, Firefox 29+, Opera 7+, IE 8+, Android 4.0+, iOS any */
 
-		.innerContent {
+		.content{
+			height:100%;
+			background-color:$med_grey;
+		}
 
-	    	$innerheight: $boxheight/2-40px;
-	 
-			position: absolute;
-			left: 0;
-			right: 0;
-			top:$innerheight;
-			bottom: 0;
-			background-color:rgba(0,0,0,0.7);
-			//padding: 10px;
-			margin: 0 0 0 0;
+	}
+}
 
-			$leftmargin: 13px;
 
-			h1{
-				position: absolute;
-				font-size: 20px;
-				margin:$leftmargin $leftmargin 0 $leftmargin;
-				clear:none;
-				padding-top:0px;
-				color:white;
+.documents{
+
+	$padding : 10px;
+	$numprojectsinrow : 4;
+
+	overflow:auto;
+
+	padding:$padding;
+
+	$boxwidth : 230px;
+	$boxheight: 400px;
+
+	$imgheight : 55%;
+	$descheight : 35%;
+	$deleteheight : 100% - $descheight - $imgheight;
+
+	.doc_image{
+		background:$med_grey;
+		height:$imgheight;
+	}
+
+	.doc_desc{
+		height:$descheight;
+		-webkit-box-sizing: border-box; /* Safari 3.0 - 5.0, Chrome 1 - 9, Android 2.1 - 3.x */
+	  -moz-box-sizing: border-box;    /* Firefox 1 - 28 */
+	  box-sizing: border-box;         /* Safari 5.1+, Chrome 10+, Firefox 29+, Opera 7+, IE 8+, Android 4.0+, iOS any */
+		padding:10px;
+		overflow:hidden;
+		background:white;
+	}
+
+	.doc_delete{
+		background:orange;
+		height:$deleteheight;
+
+		.btn{
+			width:100%;
+			height:100%;
+			border-radius:0;
+		}
+	}
+
+	.document{
+		float:left;
+		min-width:$boxwidth;
+		min-height:$boxheight;
+		height:$boxheight;
+		width:100%/$numprojectsinrow;
+
+		padding:$padding;
+		overflow: hidden;
+
+		position:relative;
+		-webkit-box-sizing: border-box; /* Safari 3.0 - 5.0, Chrome 1 - 9, Android 2.1 - 3.x */
+	  -moz-box-sizing: border-box;    /* Firefox 1 - 28 */
+	  box-sizing: border-box;         /* Safari 5.1+, Chrome 10+, Firefox 29+, Opera 7+, IE 8+, Android 4.0+, iOS any */
+
+		.content{
+			height:100%;
+			background-color:$med_grey;
+		}
+		a{
+			color:black;
+		}
+	}
+}
+
+.fields{
+
+	.field{
+		width:100%;
+		height:80px;
+		background:$light_grey;
+		overflow:hidden;
+		margin-top:10px;
+
+		border-radius:10px;
+
+		.field_left{
+			float:left;
+			width:90%;
+			height:100%;
+			-webkit-box-sizing: border-box;
+		  -moz-box-sizing: border-box;
+		  box-sizing: border-box;
+			padding:5px;
+
+			h4{
+				margin:0;
 			}
+		}
 
-			p{
-				position: absolute;
-				font-size: 14px;
-				margin:43px $leftmargin 0 $leftmargin;
-				width:450px;
-				height:40px;
-				word-wrap:normal;
-				color:white;
+		.field_right{
+			background:blue;
+			float:left;
+			width:10%;
+			height:100%;
+
+			.btn{
+				border-radius:0;
+				height:100%;
 			}
-
-			.stats{
-				margin-top: 82px;
-				margin-left: $leftmargin;
-				position: absolute;
-				overflow:hidden;
-
-				height:40px;
-				
-				width:300px;
-				//background-color: #FF0000;
-
-				.stat{
-					text-align: left;
-					width:80px;
-					height:40px;
-					//background-color:#000;
-					float:left;
-
-					h3{
-						font-size: 20px;
-						margin: 0 0 0 0;
-					}
-					p{
-						position: relative;
-						width:100%;
-						margin: 0 0 0 0;
-					}
-				}
-			}
-
-			.percentagebar{
-
-				position: absolute;
-
-				$barwidth: $boxwidth - $leftmargin*2;
-				$barheight : 10px;
-
-				width:$barwidth;
-				height:$barheight;
-
-				margin-left:$leftmargin;
-				
-				border-radius: $barheight/2;
-				overflow:hidden;
-				background-color:rgba(255,255,255,0.75);
-
-				margin-top:130px;
-
-				span{
-					position: relative;
-					display:block;
-					height:100%;
-					background-color:#3BCF8C;
-				}
-
-			}
-
-	    }
+		}
 	}
 }

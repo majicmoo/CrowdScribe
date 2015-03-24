@@ -1,22 +1,75 @@
+{{response.files.append(URL(r=request,c='static/css',f='create.css'))}}
 {{extend 'crowdscribe-layout.html'}}
-<h1> Step 2</h1>
-{{=clear_project}}
-{{=add_image_form.custom.begin}}
-    <label for="description"> Description:</label><div> {{=add_image_form.custom.widget.description}}</div>
-    <label for="image"> Image:</label><div> {{=add_image_form.custom.widget.image}}</div>
-    <br>
-    <div><img id="image_being_uploaded" height="400" width="300" src="#" alt="Uploaded Image Will Appear Here"/></div>
-    {{=add_image_form.custom.submit}}
-{{=add_image_form.custom.end}}
 
+<div class="form_nav">
+  <div class="inner">
+    <a href="{{=URL('projects','create_step1')}}"><div class="stage ">1. Basic Details</div></a>
+    <a href="{{=URL('projects','create_step2')}}"><div class="stage highlighted">2. Add Documents</div></a></a>
+    <a href="{{=URL('projects','create_step3')}}"><div class="stage rightmost">3. Fields</div></a>
+  </div>
+</div>
 
-{{for document in documents_added:}}
-        <div>
-        {{=document.description}}
-        <img src="{{=URL('default','download',args = document.image)}}" />
+<div class="padded_container form_container less_top_padding no_bottom_padding">
+
+  <h1>Create Project (2/3)</h1>
+  <h3>Add Documents</h3>
+
+  <div class="add_new_document_form">
+    <h4>Add New Document</h4>
+    <p>Fugiat culpa proident magna amet esse consequat eiusmod elit proident laborum.</p>
+
+    {{=add_image_form.custom.begin}}
+      <div class = "document_image_upload_form">
+
+        <div class = "document_image_upload_form_content">
+          <!-- Preview Image -->
+          <div id = "image_upload">
+            <img id="image_being_uploaded" src="#" alt="Uploaded Image Will Appear Here"/>
+          </div>
+
+          <!-- Overlay Text -->
+          <div id = "image_upload_overlay">
+            <h4>Upload Image</h4>
+            {{=add_image_form.custom.widget.image}}
+          </div>
         </div>
-        {{pass}}
-<div>{{=add_image_form.errors}}</div>
-<div>{{=go_to_step_3_form.errors}}</div>
-{{=go_to_step_1_form}}
-{{=go_to_step_3_form}}
+
+      </div>
+
+      <div class = "document_desc_upload_form">
+
+        <div class = "desc_field">
+          <h4>Document Description</h4>
+          <div>
+            {{=add_image_form.custom.widget.description}}
+          </div>
+        </div>
+
+        <div class = "submit_btn">
+          {{=add_image_form.custom.submit}}
+        </div>
+
+      </div>
+
+  </div>
+
+  <h3>Current Documents</h3>
+  <p>Fugiat culpa proident magna amet esse consequat eiusmod elit proident laborum.</p>
+
+</div>
+
+<div class="documents">
+  {{for document in documents_added:}}
+    {{include "subviews/document-display.html"}}
+    <!-- <img src="{{=URL('default','download',args = document.image)}}" /> -->
+  {{pass}}
+</div>
+
+<!-- {{=add_image_form.errors}} -->
+<!-- {{=go_to_step_3_form.errors}} -->
+
+<div class="padded_container form_container less_top_padding">
+  {{=go_to_step_3_form}}
+  <!-- <input type="submit" value="Continue to Step 3" class="btn"> -->
+
+</div>
