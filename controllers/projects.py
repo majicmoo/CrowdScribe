@@ -14,8 +14,8 @@ def create_step1():
         #session.project_being_created = None
 
     form = SQLFORM(db.project, submit_button="Continue to Step 2")
-    clear_project = FORM(DIV(BUTTON("Clear Project",
-                                        _type='submit', _class='btn btn-primary btn-block btn-large')))
+
+    clear_project = FORM(DIV(BUTTON("Clear Project", _type='submit', _class='btn btn-primary btn-block')))
 
     prepopulation_data = retrieve_prepopulated_data_for_create_step_1(project_being_edited)
 
@@ -154,8 +154,7 @@ def create_step2():
         project_id = session.project_being_created
         #session.project_being_created = None
 
-    clear_project = FORM(DIV(BUTTON("Clear Project",
-                                        _type='submit', _class='btn btn-primary btn-block btn-large')))
+    clear_project = FORM(DIV(BUTTON("Clear Project", _type='submit', _class='btn btn-primary btn-block')))
 
     add_image_form = SQLFORM(db.document_image, submit_button="Add Image")
 
@@ -215,8 +214,7 @@ def create_step3():
     go_to_step_2_form = FORM(DIV(BUTTON("Back to Step 2", I(_class='icon-arrow-left icon-white'),
                                         _type='submit', _class='btn btn-primary btn-block btn-large')))
 
-    clear_project = FORM(DIV(BUTTON("Clear Project",
-                                        _type='submit', _class='btn btn-primary btn-block btn-large')))
+    clear_project = FORM(DIV(BUTTON("Clear Project", _type='submit', _class='btn btn-primary btn-block')))
 
     if add_fields_form.process(formname="form_one", onvalidate = validate_add_field_form).accepted:
         db.data_field.insert(name=request.vars.name, short_description=request.vars.short_description, project_id=project_id)
@@ -263,6 +261,8 @@ def create_step4():
     else:
         redirect(URL('projects', 'create_step1'))
 
+    clear_project = FORM(DIV(BUTTON("Clear Project", _type='submit', _class='btn btn-primary btn-block')))
+
     project_being_edited = database.get_project(project_id)
     documents_added = database.get_project_documents(project_id)
 
@@ -275,7 +275,7 @@ def create_step4():
         session.project_being_created = None
         redirect(URL('projects','project', args=[project.id]))
 
-    return dict(project=project_being_edited, documents_for_project=documents_added, publish_project_form = publish_project_form)
+    return dict(project=project_being_edited, documents_for_project=documents_added, publish_project_form = publish_project_form, clear_project = clear_project)
 
     # start_date = None
     # end_date = None

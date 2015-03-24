@@ -1,5 +1,29 @@
 @import 'colors';
 
+.clear_btn{
+
+  // VERY MESSY, NEED TO RECODE
+
+  $navheight:30px;
+	$padding:10px;
+
+	height:$navheight;
+	// background-color:red;
+	text-align:center;
+	padding:10px;
+  padding-bottom:0;
+	// overflow:auto;
+  height:30px;
+
+  form{
+    margin:0;
+  }
+
+  .btn{
+    height:100%;
+  }
+}
+
 .add_new_field_form{
 
   $formheight:410px;
@@ -31,6 +55,27 @@
     .text{
       height:100px;
     }
+  }
+}
+
+.checkbox{
+  margin-top:10px;
+}
+
+#time_period_container{
+
+  .date{
+    height:70px;
+  }
+
+  .float_left{
+    float:left;
+    width:100px;
+    margin:0;
+  }
+
+  .integer{
+    width:100%;
   }
 }
 

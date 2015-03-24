@@ -1,6 +1,9 @@
+{{response.files.append(URL(r=request,c='static/css',f='create.css'))}}
 {{extend 'crowdscribe-layout.html'}}
 
-{{=clear_project}}
+<div class="clear_btn">
+  {{=clear_project}}
+</div>
 
 <div class="form_nav">
   <div class="inner">
@@ -46,17 +49,33 @@
           </label>
       </div>
       <div id="time_period_container">
-          <label for="start_date"> Start Date:</label>{{=form.custom.widget.time_period_start_date}}
-          <select class="input-small" name="start_era">
+
+        <div class="date">
+
+          <label class ="" for="start_date"> Start Date:</label>
+          <div class="float_left">
+            {{=form.custom.widget.time_period_start_date}}
+          </div>
+          <select class="float_left input-small" name="start_era">
               <option {{if pd:}}{{if pd['start_era'] == "AD":}} selected{{pass}}{{pass}}>AD</option>
               <option {{if pd:}}{{if pd['start_era'] == "BC":}} selected{{pass}}{{pass}}>BC</option>
           </select>
-          <h4>To</h4>
-          <label for="end_date"> End Date:</label>{{=form.custom.widget.time_period_end_date}}
-          <select class="input-small" name="end_era">
+
+        </div>
+
+        <div class="date">
+
+          <label for="end_date"> End Date:</label>
+          <div class="float_left">
+            {{=form.custom.widget.time_period_end_date}}
+          </div>
+          <select class="float_left input-small" name="end_era">
               <option {{if pd:}}{{if pd['end_era'] == "AD":}} selected{{pass}}{{pass}}>AD</option>
               <option {{if pd:}}{{if pd['end_era'] == "BC":}} selected{{pass}}{{pass}}>BC</option>
           </select>
+
+        </div>
+
       </div>
 
       {{=form.custom.submit}}
