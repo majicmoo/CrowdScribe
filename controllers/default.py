@@ -26,6 +26,9 @@ def index():
     #test = ""
     return dict(message=T('Testing my branch'), test=test)
 
+def browse():
+    return dict()
+
 
 def user():
     """
@@ -64,7 +67,7 @@ def call():
     return service()
 
 
-@auth.requires_login() 
+@auth.requires_login()
 def api():
     """
     this is example of API with access control
@@ -75,4 +78,3 @@ def api():
         '<tablename>': {'GET':{},'POST':{},'PUT':{},'DELETE':{}},
         }
     return Collection(db).process(request,response,rules)
-
