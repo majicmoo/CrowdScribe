@@ -16,13 +16,13 @@ def create_step1():
     form = SQLFORM(db.project, submit_button="Continue to Step 2")
     clear_project = FORM(DIV(BUTTON("Clear Project",
                                         _type='submit', _class='btn btn-primary btn-block btn-large')))
-    
+
     prepopulation_data = retrieve_prepopulated_data_for_create_step_1(project_being_edited)
-    
+
     form.vars.tag = "Sport"
-    
+
     if prepopulation_data is not None:
-        
+
         form.vars.name =  prepopulation_data['name']
         form.vars.description = prepopulation_data['description']
         form.vars.tag = prepopulation_data['tag']
@@ -112,10 +112,10 @@ def validate_create_step1(form):
 
     if (request.vars.description == "") or (request.vars.description == None):
         form.errors.description = "Description must be entered"
-    
+
     if (request.vars.tag == "") or (request.vars.tag == None):
         form.errors.tag = "Tag must be chosen"
-    
+
     start_date = None
     end_date = None
     date_validator = IS_INT_IN_RANGE(-2015, 2015, error_message ="Date must be whole number between 2015 BC and 2015 AD")
@@ -165,7 +165,6 @@ def create_step2():
                                         _type='submit', _class='btn btn-primary btn-block btn-large')))
 
     if add_image_form.validate(formname="form_one", onvalidation=validate_add_image_form):
-
         db.document_image.insert(description=request.vars.description, status="Open", project_id=project_id,
                                  image=add_image_form.vars.image)
         session.project_being_created = project_id
@@ -255,39 +254,39 @@ def validate_add_field_form(form):
         form.errors.short_description = "Description must not be empty"
 
 
-@auth.requires_login(otherwise=URL('user', 'login'))        
+@auth.requires_login(otherwise=URL('user', 'login'))
 def create_step4():
-    
+
     start_date = None
     end_date = None
     project_id = None
     if session.project_being_created is not None:
         project_id = session.project_being_created
-    
+
     project_being_edited = database.get_project(project_id)
     documents_added = database.get_project_documents(project_id)
     fields_added = database.get_data_fields_for_project(project_id)
-    
+
     if project_being_edited.time_period_start_date is not None:
         start_date = convert_integer_to_date_string(project_being_edited.time_period_start_date)
         end_date = convert_integer_to_date_string(project_being_edited.time_period_end_date)
-    
+
     create_project_form = FORM(DIV(BUTTON("Create Project", I(_class='icon-arrow-right icon-white'),
                                           _type='submit', _class='btn btn-primary btn-block btn-large')))
     go_to_step_3_form = FORM(DIV(BUTTON("Back to Step 3", I(_class='icon-arrow-left icon-white'),
                                         _type='submit', _class='btn btn-primary btn-block btn-large')))
-    
+
     if go_to_step_3_form.process(formname="form_two").accepted:
         session.project_being_created = project_id
         redirect(URL('projects', 'create_step3'))
-    
+
     if create_project_form.process(formname="form_one").accepted:
         project = database.get_project(project_id)
         project.update_record(status="Open")
         session.project_being_created = None
         redirect(URL('default', 'index'))
-  
-    
+
+
     return dict(documents_added=documents_added, project=project_being_edited, fields_added=fields_added,
                create_project_form=create_project_form, go_to_step_3_form=go_to_step_3_form, start_date=start_date,
                end_date=end_date)
@@ -332,37 +331,37 @@ def view_document():
 
     if document is None:
         redirect(URL('projects','project',args=[project_id]))
-    
+
     form = FORM()
 
     if project.author_id == auth._get_user_id():
         response.flash = DIV("You own this project", _class="alert alert-info")
-    
+
     elif auth._get_user_id is None:
         response.flash = DIV("Please register to transcribe", _class="alert alert-info")
-        
+
     elif not database.check_if_document_has_already_been_transcribed_by_user(document_id, auth._get_user_id):
         response.flash = DIV("You have already transcribed this document", _class="alert alert-info")
 
     elif document.status == 'Done':
         response.flash = DIV("This document has already received the maximum number of transcriptions allowed", _class="alert alert-info")
-        
+
     #Display transcription submission form if document image is open for transcriptions and
     #user is authorised to make a submission (ie registered user, not project creator and has not already made
-    #transcription for document image)    
+    #transcription for document image)
     else:
         #Create dynamic form according to number of data_fields
         for data_field in database.get_data_fields_for_project(project_id):
             label = '%s\n%s' % (data_field.name, data_field.short_description)
             text_input = INPUT(_name=data_field.name)
             form.append(SPAN(label, text_input))
-            
+
         form.append(INPUT(_type='submit'))
-            
+
         if form.process().accepts:
             #Insert new transcription record to insert transcribed fields
             transcription_id = db.transcription.insert(document_id=document_id, author_id=auth._get_user_id(), status='pending')
-            
+
             #Inserts each transcribed field in db
             for data_field in database.get_data_fields_for_project(project_id):
                 db.transcribed_field.insert(data_field_id=data_field.id, transcription_id=transcription_id, information=form.vars[data_field.name])
@@ -412,4 +411,3 @@ def accept_transcription():
     db.commit()
 
     redirect(URL('default','index'), client_side=True)
-

@@ -98,7 +98,8 @@ body, html {
   padding: 10px; }
   .documents .doc_image {
     background: #999999;
-    height: 55%; }
+    height: 55%;
+    overflow: hidden; }
   .documents .doc_desc {
     height: 35%;
     -webkit-box-sizing: border-box;

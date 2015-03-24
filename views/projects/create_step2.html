@@ -12,7 +12,7 @@
 <div class="padded_container form_container less_top_padding no_bottom_padding">
 
   <h1>Create Project (2/3)</h1>
-  <h3>Add Documents</h3>
+  <h3>Add Documents to ProjectName</h3>
 
   <div class="add_new_document_form">
     <h4>Add New Document</h4>
@@ -51,15 +51,18 @@
 
       </div>
 
+      {{=add_image_form.custom.end}}
+
   </div>
 
-  <h3>Current Documents</h3>
+  <h3>Current Documents (n)</h3>
   <p>Fugiat culpa proident magna amet esse consequat eiusmod elit proident laborum.</p>
 
 </div>
 
 <div class="documents">
   {{for document in documents_added:}}
+    <!-- {{=document}} -->
     {{include "subviews/document-display.html"}}
     <!-- <img src="{{=URL('default','download',args = document.image)}}" /> -->
   {{pass}}

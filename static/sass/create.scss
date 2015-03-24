@@ -82,6 +82,10 @@
           width:100%;
           height:100%;
         }
+
+        img[src="#"] {
+           display: none;
+        }
       }
 
       #image_upload_overlay{

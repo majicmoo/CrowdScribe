@@ -64,6 +64,8 @@
         .add_new_document_form .document_image_upload_form .document_image_upload_form_content #image_upload img {
           width: 100%;
           height: 100%; }
+        .add_new_document_form .document_image_upload_form .document_image_upload_form_content #image_upload img[src="#"] {
+          display: none; }
       .add_new_document_form .document_image_upload_form .document_image_upload_form_content #image_upload_overlay {
         background-color: rgba(0, 0, 0, 0.6);
         width: 100%;

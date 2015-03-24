@@ -3,9 +3,10 @@
   <a href={{=URL('default','index')}}>
     <div class="content">
       <div class="doc_image">
+        <img src="{{=URL('default','download',args = document.image)}}"/>
       </div>
       <div class="doc_desc">
-        Pariatur nostrud non labore dolor anim ad. Ea proident anim ut et incididunt laboris deserunt velit tempor ex in. Amet occaecat fugiat excepteur.
+        {{=document.description}}
       </div>
       <div class="doc_delete">
         <input type="submit" value="Delete" class="btn">
