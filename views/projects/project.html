@@ -1,20 +1,4 @@
 {{response.files.append(URL(r=request,c='static/css',f='project.css'))}}
 {{extend 'crowdscribe-layout.html'}}
 
-<div id = "project_header">
-  <h1>{{=project.name}}</h1>
-  <h3>{{=project.tag}} (12-14 AD)</h3>
-  <div id = "progress">
-    <h4>4/5 Transcriptions Completed</h4>
-  </div>
-</div>
-
-<div class="padded_container form_container no_bottom_padding">
-  <p>{{=project.description}}</p>
-</div>
-
-<div class="documents">
-  {{for document in documents_for_project:}}
-    {{include "subviews/document-display.html"}}
-  {{pass}}
-</div>
+{{include "subviews/project-page-view.html"}}

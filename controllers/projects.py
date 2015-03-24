@@ -257,39 +257,59 @@ def validate_add_field_form(form):
 @auth.requires_login(otherwise=URL('user', 'login'))
 def create_step4():
 
-    start_date = None
-    end_date = None
     project_id = None
     if session.project_being_created is not None:
         project_id = session.project_being_created
+    else:
+        redirect(URL('projects', 'create_step1'))
 
     project_being_edited = database.get_project(project_id)
     documents_added = database.get_project_documents(project_id)
-    fields_added = database.get_data_fields_for_project(project_id)
 
-    if project_being_edited.time_period_start_date is not None:
-        start_date = convert_integer_to_date_string(project_being_edited.time_period_start_date)
-        end_date = convert_integer_to_date_string(project_being_edited.time_period_end_date)
-
-    create_project_form = FORM(DIV(BUTTON("Create Project", I(_class='icon-arrow-right icon-white'),
+    publish_project_form = FORM(DIV(BUTTON("Publish Project", I(_class='icon-arrow-right icon-white'),
                                           _type='submit', _class='btn btn-primary btn-block btn-large')))
-    go_to_step_3_form = FORM(DIV(BUTTON("Back to Step 3", I(_class='icon-arrow-left icon-white'),
-                                        _type='submit', _class='btn btn-primary btn-block btn-large')))
 
-    if go_to_step_3_form.process(formname="form_two").accepted:
-        session.project_being_created = project_id
-        redirect(URL('projects', 'create_step3'))
-
-    if create_project_form.process(formname="form_one").accepted:
+    if publish_project_form.process(formname="form_one").accepted:
         project = database.get_project(project_id)
         project.update_record(status="Open")
         session.project_being_created = None
-        redirect(URL('default', 'index'))
+        redirect(URL('projects','project', args=[project.id]))
 
+    return dict(project=project_being_edited, documents_for_project=documents_added, publish_project_form = publish_project_form)
 
-    return dict(documents_added=documents_added, project=project_being_edited, fields_added=fields_added,
-               create_project_form=create_project_form, go_to_step_3_form=go_to_step_3_form, start_date=start_date,
-               end_date=end_date)
+    # start_date = None
+    # end_date = None
+    # project_id = None
+    # if session.project_being_created is not None:
+    #     project_id = session.project_being_created
+    #
+    # project_being_edited = database.get_project(project_id)
+    # documents_added = database.get_project_documents(project_id)
+    # fields_added = database.get_data_fields_for_project(project_id)
+    #
+    # if project_being_edited.time_period_start_date is not None:
+    #     start_date = convert_integer_to_date_string(project_being_edited.time_period_start_date)
+    #     end_date = convert_integer_to_date_string(project_being_edited.time_period_end_date)
+    #
+    # create_project_form = FORM(DIV(BUTTON("Create Project", I(_class='icon-arrow-right icon-white'),
+    #                                       _type='submit', _class='btn btn-primary btn-block btn-large')))
+    # go_to_step_3_form = FORM(DIV(BUTTON("Back to Step 3", I(_class='icon-arrow-left icon-white'),
+    #                                     _type='submit', _class='btn btn-primary btn-block btn-large')))
+    #
+    # if go_to_step_3_form.process(formname="form_two").accepted:
+    #     session.project_being_created = project_id
+    #     redirect(URL('projects', 'create_step3'))
+    #
+    # if create_project_form.process(formname="form_one").accepted:
+    #     project = database.get_project(project_id)
+    #     project.update_record(status="Open")
+    #     session.project_being_created = None
+    #     redirect(URL('default', 'index'))
+    #
+    #
+    # return dict(documents_added=documents_added, project=project_being_edited, fields_added=fields_added,
+    #            create_project_form=create_project_form, go_to_step_3_form=go_to_step_3_form, start_date=start_date,
+    #            end_date=end_date)
 
 def project():
 

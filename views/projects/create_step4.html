@@ -1,32 +1,25 @@
+{{response.files.append(URL(r=request,c='static/css',f='create.css'))}}
+{{response.files.append(URL(r=request,c='static/css',f='project.css'))}}
 {{extend 'crowdscribe-layout.html'}}
 
-<h3> Basic</h3>
-<div> Name: {{=project.name}}</div>
-<div> Description {{=project.description}}</div>
-<div> Tag: {{=project.tag}}</div>
-{{if project.time_period_start_date is None:}}
-<div> Time Period is Unknown</div>
-{{else:}}
-<div> {{=start_date}} To {{=end_date}}</div>
-{{pass}}
+<div class="form_nav">
+  <div class="inner">
+    <a href="{{=URL('projects','create_step1')}}"><div class="stage ">1. Basic Details</div></a>
+    <a href="{{=URL('projects','create_step2')}}"><div class="stage">2. Add Documents</div></a></a>
+    <a href="{{=URL('projects','create_step3')}}"><div class="stage ">3. Fields</div></a>
+    <a href="{{=URL('projects','create_step4')}}"><div class="stage highlighted rightmost">4. Review</div></a>
+  </div>
+</div>
 
-<h3>Fields</h3>
-{{for field in fields_added:}}
-       <div>
-       <div> Name: </div>{{=field.name}}
-       <div> Short Description: </div>{{=field.short_description}}
-       </div>
-{{pass}}
+<div class="padded_container form_container less_top_padding">
 
-<h3> Images</h3>
-{{for document in documents_added:}}
-        <div>
-        Description: {{=document.description}} 
-         Image:<img src="{{=URL('default','download',args = document.image)}}" />
-        </div>
-        {{pass}}
+  <h1>Review Project (4/4)</h1>
+  <p>
+    Laboris ipsum tempor dolor nostrud irure exercitation excepteur. Eu elit consectetur reprehenderit sint nisi aliquip incididunt velit ad velit mollit reprehenderit. Quis occaecat eiusmod velit quis aliquip amet elit deserunt incididunt eu. Esse cillum labore mollit ullamco nulla. Eu id amet excepteur aute officia exercitation eu excepteur.
+  </p>
 
+</div>
 
+{{include "subviews/project-page-view.html"}}
 
-{{=create_project_form}}
-{{=go_to_step_3_form}}
+{{=publish_project_form}}

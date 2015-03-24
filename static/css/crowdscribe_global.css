@@ -56,7 +56,7 @@ body, html {
       color: black; }
     .form_nav .inner .stage {
       height: 100%;
-      width: 33.33333%;
+      width: 25%;
       background: orange;
       float: left;
       line-height: 30px;

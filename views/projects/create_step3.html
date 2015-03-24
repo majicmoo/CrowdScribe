@@ -5,13 +5,14 @@
   <div class="inner">
     <a href="{{=URL('projects','create_step1')}}"><div class="stage ">1. Basic Details</div></a>
     <a href="{{=URL('projects','create_step2')}}"><div class="stage">2. Add Documents</div></a></a>
-    <a href="{{=URL('projects','create_step3')}}"><div class="stage highlighted rightmost">3. Fields</div></a>
+    <a href="{{=URL('projects','create_step3')}}"><div class="stage highlighted">3. Fields</div></a>
+    <a href="{{=URL('projects','create_step4')}}"><div class="stage rightmost">4. Review</div></a>
   </div>
 </div>
 
 <div class="padded_container form_container less_top_padding">
 
-  <h1>Create Project (3/3)</h1>
+  <h1>Create Project (3/4)</h1>
   <h3>Add Fields</h3>
 
   <div class="add_new_field_form">
@@ -48,7 +49,7 @@
     {{pass}}
   </div>
 
-  {{=add_fields_form.errors}}
+  <!-- {{=add_fields_form.errors}} -->
 
   {{=review_project_form}}
 
