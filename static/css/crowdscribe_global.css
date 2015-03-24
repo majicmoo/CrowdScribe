@@ -164,3 +164,26 @@ body, html {
     .fields .field .field_right .btn {
       border-radius: 0;
       height: 100%; }
+
+/* The message tag is used across all pages, and shows a message at the top when desired by the controller */
+#message {
+  min-width: 1000px;
+  width: 100%;
+  height: 30px;
+  background-color: #64B58B; }
+  #message #centeredmessage {
+    width: 1000px;
+    height: 30px;
+    margin-left: auto;
+    margin-right: auto;
+    /* I've used written colour descriptors where possible to make it more human readable */
+    color: white;
+    font-family: Arial;
+    text-align: center;
+    line-height: 30px; }
+  #message a {
+    display: inline-block;
+    /* Need to color white here to override default */
+    color: white;
+    text-decoration: none;
+    position: relative; }

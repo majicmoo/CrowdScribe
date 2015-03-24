@@ -85,6 +85,23 @@
 
   {{=response.flash}}
 
+  <!-- This is a centered message to be displayed permanently across certain pages if set in the controller -->
+  <!-- It is used in the project display/edit pages to show the status and options a user has -->
+  <!-- A background colour can be dynamically set from the controller -->
+  <div id="message" style="background-color:{{=response.messagecolour if response.messagecolour else "#FF0000"}}">
+      <div id="centeredmessage">
+          {{=response.message}}
+      </div>
+  </div>
+
+  <!-- This small script (not worth externally linking) just checks to see if a message exists, if it doesnt, hide the message bar -->
+  <script>
+      var string = "{{=response.message}}";
+      if(!string || string == "None"){
+          $("#message").remove();
+      }
+  </script>
+
 	<div class="content_container">
       {{include}}
   </div>

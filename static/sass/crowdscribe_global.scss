@@ -256,3 +256,37 @@ body, html{
 		}
 	}
 }
+
+/* The message tag is used across all pages, and shows a message at the top when desired by the controller */
+
+#message{
+
+	$messageheight:30px;
+
+	min-width:1000px;
+	width:100%;
+	height:$messageheight;
+
+	background-color:#64B58B;
+
+	#centeredmessage{
+		width:1000px;
+		height:$messageheight;
+		margin-left:auto;
+		margin-right:auto;
+
+		/* I've used written colour descriptors where possible to make it more human readable */
+		color:white;
+		font-family: Arial;
+		text-align: center;
+		line-height: $messageheight;
+	}
+
+	a{
+		display:inline-block;
+		/* Need to color white here to override default */
+		color:white;
+		text-decoration: none;
+		position:relative;
+	}
+}
