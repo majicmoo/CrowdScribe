@@ -1,5 +1,7 @@
 {{extend 'crowdscribe-layout.html'}}
 
+{{=clear_project}}
+
 <div class="form_nav">
   <div class="inner">
     <a href="{{=URL('projects','create_step1')}}"><div class="stage highlighted">1. Basic Details</div></a>
@@ -33,6 +35,9 @@
       <div>{{=form.custom.widget.tag}}</div>
 
       <h4>Time Period</h4>
+      <p>
+        Mention that SPACE toggles checkboxes. reprehenderit excepteur incididunt fugiat qui. Aliqua esse dolor velit excepteur ea aliquip Lorem anim minim ut. Sunt quis deserunt velit ipsum labore adipisicing. Elit amet qui aliqua fugiat consequat laboris nisi eiusmod culpa.
+      </p>
       <div>
           <label class="checkbox"  for="unknown"> <span id="unknown_checkbox_container"> Unknown</span>
                           <input type="checkbox" name="unknown" id="unknown_checkbox" value="yes"
