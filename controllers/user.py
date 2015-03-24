@@ -109,8 +109,42 @@ def login():
 def profile():
     user_id = auth._get_user_id
     response.title = 'Profile'
-    # no_of_closed_projects = len(database.get_closed_projects_by_user(user_id))
-    # response.closed_project_alert = 'You have', no_of_closed_projects, 'projects that are currently closed.'
-    # database.get_transcriptions_by_user(user_id) =
+
+    # Alerts
+    # Number of Closed Projects that belong to user
+    closed_projects = database.get_closed_projects_by_user(user_id)
+    if closed_projects is None:
+        no_of_closed_projects = 0
+    else:
+        no_of_closed_projects = len(closed_projects)
+
+    # Number of transcriptions user has made awaiting approval
+    no_of_transcriptions_awaiting_approval = 0
+    for closed_project in closed_projects:
+        documents = database.get_documents_for_a_project_that_have_transcription(closed_project)
+        for document in documents:
+            transcriptions = database.get_transcriptions_for_document(document)
+            for i in transcriptions:
+                no_of_transcriptions_awaiting_approval += 1
+
+    response.closed_project_alert = 'You have', no_of_closed_projects, 'projects that are currently closed for review.'
+    response.transcriptions_alert = 'You have', no_of_transcriptions_awaiting_approval, 'transcriptions awaiting approval.'
+    return dict()
+
+def transactions_made():
+    # Controller for transactions made by user
+
+
 
     return dict()
+
+def manage_projects():
+    user_id = auth._get_user_id
+
+    # Open Projects
+    open_projects = database.get_open_projects_by_user(user_id)
+
+    # Closed Projects
+    closed_projects = database.get_closed_projects_by_user(user_id)
+
+    return dict(open_projects=open_projects, closed_projects=closed_projects)

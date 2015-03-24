@@ -390,4 +390,3 @@ def review_document():
     return dict(project=project, document=document, transcriptions=transcriptions)
 
 
-
