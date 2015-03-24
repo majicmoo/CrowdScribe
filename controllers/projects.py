@@ -302,7 +302,9 @@ def project():
 
     #If user owns project then initialise message to be displayed on page
     if project.author_id == auth._get_user_id():
-        response.flash = DIV("You own this project", _class="alert alert-info")
+        # Example Message
+        response.message = A('You own this project. Go to X', _href=URL('default','index'))
+        # response.messagecolour = '#00F'
 
     documents_for_project = database.get_project_open_documents(project.id)
     data_fields_for_project = database.get_data_fields_for_project(project.id)

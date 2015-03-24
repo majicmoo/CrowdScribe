@@ -55,7 +55,6 @@
     position: relative; }
     .add_new_document_form .document_image_upload_form .document_image_upload_form_content {
       height: 100%;
-      background-color: #999999;
       position: relative; }
       .add_new_document_form .document_image_upload_form .document_image_upload_form_content #image_upload {
         width: 100%;

@@ -60,11 +60,9 @@
 
 </div>
 
-<div class="documents">
+<div class="documents_delete">
   {{for document in documents_added:}}
-    <!-- {{=document}} -->
-    {{include "subviews/document-display.html"}}
-    <!-- <img src="{{=URL('default','download',args = document.image)}}" /> -->
+    {{include "subviews/document-display-delete.html"}}
   {{pass}}
 </div>
 
@@ -74,5 +72,4 @@
 <div class="padded_container form_container less_top_padding">
   {{=go_to_step_3_form}}
   <!-- <input type="submit" value="Continue to Step 3" class="btn"> -->
-
 </div>

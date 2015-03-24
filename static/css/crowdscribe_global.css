@@ -93,14 +93,14 @@ body, html {
       height: 100%;
       background-color: #999999; }
 
-.documents {
+.documents_delete {
   overflow: auto;
   padding: 10px; }
-  .documents .doc_image {
+  .documents_delete .doc_image {
     background: #999999;
     height: 55%;
     overflow: hidden; }
-  .documents .doc_desc {
+  .documents_delete .doc_desc {
     height: 35%;
     -webkit-box-sizing: border-box;
     /* Safari 3.0 - 5.0, Chrome 1 - 9, Android 2.1 - 3.x */
@@ -111,14 +111,14 @@ body, html {
     padding: 10px;
     overflow: hidden;
     background: white; }
-  .documents .doc_delete {
+  .documents_delete .doc_delete {
     background: orange;
     height: 10%; }
-    .documents .doc_delete .btn {
+    .documents_delete .doc_delete .btn {
       width: 100%;
       height: 100%;
       border-radius: 0; }
-  .documents .document {
+  .documents_delete .document {
     float: left;
     min-width: 230px;
     min-height: 400px;
@@ -133,10 +133,10 @@ body, html {
     /* Firefox 1 - 28 */
     box-sizing: border-box;
     /* Safari 5.1+, Chrome 10+, Firefox 29+, Opera 7+, IE 8+, Android 4.0+, iOS any */ }
-    .documents .document .content {
+    .documents_delete .document .content {
       height: 100%;
       background-color: #999999; }
-    .documents .document a {
+    .documents_delete .document a {
       color: black; }
 
 .fields .field {

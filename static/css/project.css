@@ -1,0 +1,85 @@
+#project_header {
+  width: 100%;
+  height: 300px;
+  background: #999999;
+  text-align: center;
+  padding-top: 75px;
+  padding-right: 10px;
+  padding-bottom: 10px;
+  padding-left: 50px;
+  -webkit-box-sizing: border-box;
+  /* Safari 3.0 - 5.0, Chrome 1 - 9, Android 2.1 - 3.x */
+  -moz-box-sizing: border-box;
+  /* Firefox 1 - 28 */
+  box-sizing: border-box;
+  /* Safari 5.1+, Chrome 10+, Firefox 29+, Opera 7+, IE 8+, Android 4.0+, iOS any */ }
+  #project_header h3 {
+    margin: 0; }
+  #project_header #progress {
+    margin: 10px auto 0 auto;
+    border-radius: 10px;
+    border-style: solid;
+    border-width: 2px;
+    background: rgba(255, 255, 255, 0.4);
+    width: 300px;
+    height: 40px; }
+
+.documents {
+  overflow: auto;
+  padding: 10px; }
+  .documents .document {
+    float: left;
+    min-width: 230px;
+    min-height: 300px;
+    height: 300px;
+    width: 50%;
+    padding: 10px;
+    overflow: hidden;
+    position: relative;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box; }
+    .documents .document .content {
+      height: 100%;
+      background-color: #999999; }
+      .documents .document .content .left {
+        float: left;
+        width: 45%;
+        height: 100%;
+        background: red;
+        overflow: hidden; }
+        .documents .document .content .left img {
+          height: 300px;
+          width: auto;
+          max-width: none;
+          min-width: 100%; }
+      .documents .document .content .right {
+        float: left;
+        width: 55%;
+        height: 100%; }
+        .documents .document .content .right .top {
+          text-align: left;
+          height: 20%;
+          -webkit-box-sizing: border-box;
+          -moz-box-sizing: border-box;
+          box-sizing: border-box;
+          padding: 8px; }
+        .documents .document .content .right .center {
+          background: white;
+          height: 60%;
+          -webkit-box-sizing: border-box;
+          -moz-box-sizing: border-box;
+          box-sizing: border-box;
+          padding: 8px; }
+        .documents .document .content .right .bottom {
+          -webkit-box-sizing: border-box;
+          -moz-box-sizing: border-box;
+          box-sizing: border-box;
+          padding: 13px;
+          height: 20%;
+          text-align: center; }
+          .documents .document .content .right .bottom .btn-group {
+            width: 100%;
+            height: 100%; }
+    .documents .document a {
+      color: black; }

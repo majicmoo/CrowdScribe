@@ -1,0 +1,16 @@
+<div class="document">
+
+  <a href={{=URL('default','index')}}>
+    <div class="content">
+      <div class="doc_image">
+        <img src="{{=URL('default','download',args = document.image)}}"/>
+      </div>
+      <div class="doc_desc">
+        {{=document.description}}
+      </div>
+      <div class="doc_delete">
+        <input type="submit" value="Delete" class="btn">
+      </div>
+  	</div>
+  </a>
+</div>
