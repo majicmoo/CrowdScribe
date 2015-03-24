@@ -107,5 +107,10 @@ def login():
     return dict(form=form)
 
 def profile():
+    user_id = auth._get_user_id
     response.title = 'Profile'
+    # no_of_closed_projects = len(database.get_closed_projects_by_user(user_id))
+    # response.closed_project_alert = 'You have', no_of_closed_projects, 'projects that are currently closed.'
+    # database.get_transcriptions_by_user(user_id) =
+
     return dict()
