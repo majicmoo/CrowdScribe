@@ -38,6 +38,7 @@
   /* Safari 5.1+, Chrome 10+, Firefox 29+, Opera 7+, IE 8+, Android 4.0+, iOS any */
   margin-bottom: 10px; }
   .add_new_document_form .document_image_upload_form {
+    position: relative;
     margin-top: 10px;
     float: left;
     width: 40%;
@@ -50,7 +51,29 @@
     /* Firefox 1 - 28 */
     box-sizing: border-box;
     /* Safari 5.1+, Chrome 10+, Firefox 29+, Opera 7+, IE 8+*/
-    border: 1px solid #c8c8c8; }
+    border: 1px solid #c8c8c8;
+    position: relative; }
+    .add_new_document_form .document_image_upload_form .document_image_upload_form_content {
+      height: 100%;
+      background-color: #999999;
+      position: relative; }
+      .add_new_document_form .document_image_upload_form .document_image_upload_form_content #image_upload {
+        width: 100%;
+        height: 100%;
+        position: absolute; }
+        .add_new_document_form .document_image_upload_form .document_image_upload_form_content #image_upload img {
+          width: 100%;
+          height: 100%; }
+      .add_new_document_form .document_image_upload_form .document_image_upload_form_content #image_upload_overlay {
+        background-color: rgba(0, 0, 0, 0.6);
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        text-align: center;
+        color: white; }
+        .add_new_document_form .document_image_upload_form .document_image_upload_form_content #image_upload_overlay .upload {
+          margin-left: auto;
+          margin-right: auto; }
   .add_new_document_form .document_desc_upload_form {
     margin-top: 10px;
     float: left;

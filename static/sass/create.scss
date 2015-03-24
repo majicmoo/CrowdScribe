@@ -53,6 +53,7 @@
   $submitbtnheight : 50px;
 
   .document_image_upload_form{
+    position:relative;
     margin-top:10px;
     float:left;
     width:$imageformsize;
@@ -63,6 +64,42 @@
     -moz-box-sizing: border-box;    /* Firefox 1 - 28 */
     box-sizing: border-box;         /* Safari 5.1+, Chrome 10+, Firefox 29+, Opera 7+, IE 8+*/
     border: 1px solid $light_grey;
+    // overflow:hidden;
+    position:relative;
+
+    .document_image_upload_form_content{
+      height:100%;
+      background-color:$med_grey;
+      position: relative;
+
+      #image_upload{
+        width:100%;
+        height:100%;
+        // background:red;
+        position:absolute;
+
+        img{
+          width:100%;
+          height:100%;
+        }
+      }
+
+      #image_upload_overlay{
+        background-color:rgba(0,0,0,0.6);
+        width:100%;
+        height:100%;
+        position:absolute;
+
+        text-align:center;
+        color:white;
+
+        .upload{
+          margin-left:auto;
+          margin-right:auto;
+        }
+      }
+
+    }
   }
 
   .document_desc_upload_form{

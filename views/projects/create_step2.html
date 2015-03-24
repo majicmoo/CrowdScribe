@@ -20,9 +20,20 @@
 
     {{=add_image_form.custom.begin}}
       <div class = "document_image_upload_form">
-        <div><img id="image_being_uploaded" height="400" width="300" src="#" alt="Uploaded Image Will Appear Here"/></div>
-        <h4>Upload Image</h4>
-        <div> {{=add_image_form.custom.widget.image}}</div>
+
+        <div class = "document_image_upload_form_content">
+          <!-- Preview Image -->
+          <div id = "image_upload">
+            <img id="image_being_uploaded" src="#" alt="Uploaded Image Will Appear Here"/>
+          </div>
+
+          <!-- Overlay Text -->
+          <div id = "image_upload_overlay">
+            <h4>Upload Image</h4>
+            {{=add_image_form.custom.widget.image}}
+          </div>
+        </div>
+
       </div>
 
       <div class = "document_desc_upload_form">
