@@ -1,6 +1,26 @@
+{{response.files.append(URL(r=request,c='static/css',f='project.css'))}}
 {{extend 'crowdscribe-layout.html'}}
-{{=response.flash}}
-<h1>{{=project.name}}</h1>
-{{=document.description}}
-        {{=form}}
-{{pass}}
+
+<div class="padded_container form_container no_bottom_padding">
+  <h1>{{=project.name}}</h1>
+  <h3>{{=project.tag}} (12-14 AD)</h3>
+  <p>{{=document.description}}</p>
+
+  <div class="document_viewer">
+    <div class="document_viewer_inner">
+      Image Viewer Here
+    </div>
+  </div>
+
+
+
+  <div class="transcription_form_holder">
+    {{for field in form:}}
+      {{=field}}<br>
+    {{pass}}
+
+  </div>
+
+
+
+</div>

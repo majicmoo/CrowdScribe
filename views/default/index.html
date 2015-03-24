@@ -10,7 +10,9 @@
 </div>
 
 <div class="projects">
-
+  {{for project in latest_projects:}}
+    {{include "subviews/project-display.html"}}
+  {{pass}}
 </div>
 
 <div class="padded_container form_container">

@@ -22,9 +22,10 @@ def index():
     return auth.wiki()
     """
 
-    test = database.get_user(1)
-    #test = ""
-    return dict(message=T('Testing my branch'), test=test)
+    # NOT REALLY LATEST PROJECTS
+    latest_projects = database.get_open_projects(db)
+
+    return dict(latest_projects = latest_projects)
 
 def browse():
     projects = database.get_open_projects(db)

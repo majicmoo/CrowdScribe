@@ -16,8 +16,10 @@
         </div>
         <div class="bottom">
             <div class="btn-group" role="group" aria-label="...">
-              <button type="button" class="btn btn-default">View</button>
-              <button type="button" class="btn btn-default">Transcribe</button>
+              <a href="{{=URL('projects','view_document', args=[project.id, document.id])}}"
+                 class="btn btn-info" role="button">Link Button</a>
+              <!-- <button type="button" class="btn btn-default">View</button>
+              <button type="button" class="btn btn-default">Transcribe</button> -->
             </div>
         </div>
       </div>

@@ -337,7 +337,7 @@ def view_document():
     form = FORM()
 
     if project.author_id == auth._get_user_id():
-        response.flash = DIV("You own this project", _class="alert alert-info")
+        response.message = A('You own this project. Go to X', _href=URL('default','index'))
 
     elif auth._get_user_id is None:
         response.flash = DIV("Please register to transcribe", _class="alert alert-info")
@@ -367,6 +367,8 @@ def view_document():
             #Inserts each transcribed field in db
             for data_field in database.get_data_fields_for_project(project_id):
                 db.transcribed_field.insert(data_field_id=data_field.id, transcription_id=transcription_id, information=form.vars[data_field.name])
+
+    # newform = SQLFORM.factory(form)
 
     return dict(project=project, document=document, form=form)
 
