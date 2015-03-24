@@ -1,0 +1,7 @@
+{{extend 'crowdscribe-layout.html'}}
+
+<div class="projects">
+  {{for project in projects:}}
+    {{include "subviews/project-display.html"}}
+  {{pass}}
+</div>

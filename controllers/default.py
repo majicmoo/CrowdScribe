@@ -27,7 +27,8 @@ def index():
     return dict(message=T('Testing my branch'), test=test)
 
 def browse():
-    return dict()
+    projects = database.get_open_projects(db)
+    return dict(projects = projects)
 
 
 def user():

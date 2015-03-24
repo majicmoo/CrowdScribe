@@ -30,6 +30,9 @@ class DatabaseTransactions:
         result = self.db().select(self.db.project.ALL)
         return result
 
+    def get_open_projects(self, db):
+        result = self.db(self.db.project.status == "Open").select(self.db.project.ALL)
+        return result
 
     def get_projects_by_user(self, user_id):
         result = self.db(self.db.project.author_id == user_id).select()
