@@ -435,3 +435,14 @@ def accept_transcription():
     db.commit()
 
     redirect(URL('default','index'), client_side=True)
+
+def reject_all_transcriptions():
+
+    db((db.transcription.document_id==request.vars.document_id)).update(status="Rejected")
+    db.commit()
+
+    redirect(URL('default','index'), client_side=True)
+
+
+
+

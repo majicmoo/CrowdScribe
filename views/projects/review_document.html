@@ -17,8 +17,13 @@
             </div>
             <br>
         {{pass}}
-        {{=A(BUTTON('Accept',_class="btn btn-danger"), callback= URL('accept_transcription',
+        {{=A(BUTTON('Accept',_class="btn btn-success"), callback= URL('accept_transcription',
         vars= dict(document_id=document.id, transcription_id=field.transcribed_field.transcription_id)))}}
         </div>
         {{i = i + 1}}
 {{pass}}
+<br>
+<div>
+{{=A(BUTTON('Reject All',_class="btn btn-danger btn-large"), callback= URL('reject_all_transcriptions',
+vars= dict(document_id=document.id)))}}
+</div>
