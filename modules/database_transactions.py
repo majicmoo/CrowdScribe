@@ -151,3 +151,7 @@ class DatabaseTransactions:
                     & (self.db.project.id == project_id)
                     & (self.db.transcription.author_id == user_id)).select()
         return result
+
+    def get_document_image_for_project_header(self, project_id):
+        result = self.db(self.db.document_image.project_id == project_id).select().first()
+        return result
