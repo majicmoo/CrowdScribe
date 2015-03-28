@@ -323,8 +323,9 @@ def project():
     #If user owns project then initialise message to be displayed on page
     if project.author_id == auth._get_user_id():
         # Example Message
-        response.message = A('You own this project. Go to X', _href=URL('default','index'))
-        # response.messagecolour = '#00F'
+        # response.message = A('You own this project. Go to X', _href=URL('default','index'))
+        # response.messagecolour = '#69c72a'
+        None;
 
     documents_for_project = database.get_project_open_documents(project.id)
     data_fields_for_project = database.get_data_fields_for_project(project.id)
@@ -334,7 +335,12 @@ def project():
     documents_transcribed_by_user = database.get_documents_in_project_that_has_already_been_transcribed_by_user\
                                     (project_id, auth._get_user_id())
 
-    return dict(project=project, documents_for_project=documents_for_project,
+    # Time String
+    timestring = ''
+    if project.time_period_start_date:
+         timestring = '('+convert_integer_to_date_string(project.time_period_start_date) + " - " + convert_integer_to_date_string(project.time_period_end_date)+')'
+
+    return dict(project=project, timestring = timestring, documents_for_project=documents_for_project,
                 data_fields_for_project=data_fields_for_project,
                 documents_transcribed_by_user=documents_transcribed_by_user)
 
@@ -442,7 +448,3 @@ def reject_all_transcriptions():
     db.commit()
 
     redirect(URL('default','index'), client_side=True)
-
-
-
-

@@ -25,11 +25,16 @@ def index():
     # NOT REALLY LATEST PROJECTS
     latest_projects = database.get_open_projects(db)
 
-    return dict(latest_projects = latest_projects)
+    # Featured Project
+    featured_project = latest_projects[1]
+    featured_project_image = database.get_document_image_for_project_header(featured_project.id).image
+
+    return dict(latest_projects = latest_projects, database = database,
+                featured_project = featured_project, featured_project_image = featured_project_image)
 
 def browse():
     projects = database.get_open_projects(db)
-    return dict(projects = projects)
+    return dict(projects = projects, database = database)
 
 
 def user():

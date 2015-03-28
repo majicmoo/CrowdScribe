@@ -2,10 +2,18 @@
 {{extend 'crowdscribe-layout.html'}}
 
 <div class = "featured_project">
-  <h1>Featured Project Title</h1>
+  <img src="{{=URL('default','download',args = featured_project_image)}}"/>
+  <div class = "overlay">
+    <div class = "text">
+      <h1>Featured : {{=featured_project.name}}</h1>
+      <p>
+        {{=featured_project.description}}
+      </p>
+    </div>
+  </div>
 </div>
 
-<div class="padded_container form_container">
+<div class="padded_container form_container no_bottom_padding">
   <h1>Latest Projects</h1>
 </div>
 
@@ -13,10 +21,6 @@
   {{for project in latest_projects:}}
     {{include "subviews/project-display.html"}}
   {{pass}}
-</div>
-
-<div class="padded_container form_container">
-  <h1>Coolest Projects</h1>
 </div>
 
 <div class="projects">
