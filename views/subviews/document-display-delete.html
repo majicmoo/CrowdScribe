@@ -11,7 +11,8 @@
         {{=document.description}}
       </div>
       <div class="doc_delete">
-        <input type="submit" value="Delete" class="btn">
+      {{=A(BUTTON('Delete',_class="btn btn-danger"), callback= URL('delete_document',
+        vars= dict(document_id=document.id)))}}
       </div>
   	</div>
   </a>

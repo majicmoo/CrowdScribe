@@ -190,6 +190,12 @@ def create_step2():
     return dict(add_image_form=add_image_form, go_to_step_3_form=go_to_step_3_form,
                 go_to_step_1_form=go_to_step_1_form, documents_added=documents_added, clear_project=clear_project)
 
+def delete_document():
+    db((db.document_image.id==request.vars.document_id)).delete()
+    db.commit()
+    redirect(URL('projects','create_step2'), client_side=True)
+
+
 
 def validate_add_image_form(form):
 
@@ -242,7 +248,13 @@ def create_step3():
     fields_added = database.get_data_fields_for_project(project_id)
 
     return dict(documents_added=documents_added, add_fields_form=add_fields_form, fields_added=fields_added
-                , review_project_form=review_project_form, go_to_step_2_form=go_to_step_2_form, clear_project=clear_project)
+                , review_project_form=review_project_form, go_to_step_2_form=go_to_step_2_form,
+                clear_project=clear_project)
+
+def delete_field():
+    db((db.data_field.id==request.vars.field_id)).delete()
+    db.commit()
+    redirect(URL('projects','create_step3'), client_side=True)
 
 def validate_add_field_form(form):
 
@@ -451,8 +463,6 @@ def accept_transcription():
     redirect(URL('default','index'), client_side=True)
 
 def reject_all_transcriptions():
-
     db((db.transcription.document_id==request.vars.document_id)).update(status="Rejected")
     db.commit()
-
     redirect(URL('default','index'), client_side=True)

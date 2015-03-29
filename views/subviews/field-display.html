@@ -5,7 +5,8 @@
   </div>
 
   <div class="field_right">
-    <input type="submit" value="Delete" class="btn">
+    {{=A(BUTTON('Delete',_class="btn btn-danger"), callback= URL('delete_field',
+    vars= dict(field_id=field.id)))}}
   </div>
 
 
