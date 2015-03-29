@@ -34,6 +34,7 @@ def index():
                 featured_project = featured_project, featured_project_image = featured_project_image)
 
 def browse():
+<<<<<<< HEAD
     print "--------------Begin-------------"
     projects = database.get_open_projects(db)
     #Lists for SELECT() helper in advanced search form
@@ -145,6 +146,10 @@ def date_validator(advanced):
         if start > end:
             advanced.errors.time_period_end_date = 'The End Date of the time period must be later than the Start Date'
             
+=======
+    projects = database.get_open_projects()
+    return dict(projects = projects, database = database)
+>>>>>>> rory
 
 
 def user():

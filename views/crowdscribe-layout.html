@@ -29,59 +29,106 @@
         <script type="text/javascript" src="{{=URL('static','js/web2py.js')}}"></script>
         <script type="text/javascript" src="{{=URL('static','js/bootup.js')}}"></script>
         <script type="text/javascript" src="{{=URL('static','js/crowdscribe.js')}}"></script>
+
+
 </head>
 
 <body>
 
-  <div class="navbar navbar-inverse">
 
+
+  <div class="navbar">
     <div class="navbar-inner">
-      <div class="container">
-
-        <a class="brand" href="{{=URL('default','index')}}">{{=request.application}}</a>
-
-        <div class="nav-collapse collapse">
-
-          <!-- Left Hand Buttons -->
-          <ul class="nav">
-            <!-- Button -->
-            <li class="active">
-              <a class="block" href="{{=URL('default','index')}}">Home</a>
-            </li>
-            <!-- /Button -->
-            <!-- Button -->
-            <li class="active">
-              <a class="block" href="{{=URL('projects','create_step1')}}">Create</a>
-            </li>
-            <!-- /Button -->
-            <!-- Button -->
-            <li class="active">
-              <a class="block" href="{{=URL('default','browse')}}">Browse</a>
-            </li>
-            <!-- /Button -->
-            <!-- Button -->
-            <li class="active">
-              <a class="block" href="{{=URL('user','register')}}">Register</a>
-            </li>
-            <!-- /Button -->
-            <!-- Button -->
-            <li class="active">
-              <a class="block" href="{{=URL('user','login')}}">Login</a>
-            </li>
-
-            <li class="active">
-              <a class="block" href="{{=URL('default','user/logout')}}">Logout</a>
-            </li>
-            <!-- /Button -->
-          </ul>
 
 
 
-        </div>
+      <ul class="nav">
 
-      </div>
+        <li class="logo noline">
+          <a href="{{=URL('default','index')}}">
+            <img src="{{=URL('static','images/logo.png')}}"/>
+          </a>
+        </li>
+
+        <li class="{{= 'selected' if request.function == 'index' else ''}}">
+          <a href="{{=URL('default','index')}}">Home</a>
+        </li>
+        <li class="{{= 'selected' if request.function == 'browse' else ''}}">
+          <a href="{{=URL('default','browse')}}">Browse</a>
+        </li>
+
+        <!-- Search -->
+
+        <li class="noline">
+          <input type="text" class="search-query" placeholder="Search">
+        </li>
+
+      </ul>
+
+      <ul class="nav right">
+
+
+
+        {{if auth.is_logged_in():}}
+
+          <!-- Logged In -->
+
+          <li class="{{= 'selected' if request.function == 'create_step1' else ''}}">
+              <a href="{{=URL(c="projects",f="create_step1")}}">
+                  Create
+              </a>
+          </li>
+
+          <li class="{{= 'selected' if request.function == 'profile' else ''}}">
+              <a href="{{=URL(c="user",f="profile")}}">
+                  Profile
+              </a>
+          </li>
+
+          <li class = "noline" >
+              <a href="{{=URL(c="default",f="user/logout")}}">
+                  Logout
+              </a>
+          </li>
+
+        {{else:}}
+          <!-- Not Logged In -->
+
+          <li>
+              <a href="{{=URL(c="user",f="register")}}">
+                  Register
+              </a>
+          </li>
+
+          <li class = "rightmost">
+              <a href="{{=URL(c="user",f="login")}}">
+                  Login
+              </a>
+          </li>
+
+        {{pass}}
+
+
+        <!-- Not Logged In -->
+
+        <!-- <li style="width:{{=100-auth.is_logged_in()*100}}px">
+            <a href="{{=URL(c="user",f="register")}}">
+                {{="" if auth.is_logged_in() else "Register"}}
+            </a>
+        </li> -->
+
+        <!-- <li class="">
+          <a href="{{=URL('projects','create_step1')}}">Create</a>
+        </li>
+        <li class="rightmost">
+          <a href="{{=URL('user','login')}}">Login</a>
+        </li>
+      </ul> -->
+
+
+
     </div>
-  </div><!--/top navbar -->
+  </div>
 
   <!-- {{=response.flash}} -->
 

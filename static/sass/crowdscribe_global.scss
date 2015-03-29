@@ -15,6 +15,94 @@ body, html{
 	height: 100%;
 }
 
+.navbar{
+
+	$navheight : 55px;
+	$navmargin : 15px;
+
+	.navbar-inner{
+		$padding : 40px;
+		padding: 0 $padding 0 $padding;
+
+		background-image: linear-gradient(to bottom,#FFF,rgb(240, 240, 240));
+		border:0;
+		border-bottom: 1px solid $lightest_grey;
+		min-height:$navheight;
+
+		.right{
+			float:right;
+			margin-right:0;
+		}
+
+		.nav{
+			// margin-left:20px;
+			height:$navheight;
+
+			.logo{
+
+				width:160px;
+				a{
+					width:140px;
+					height:$navheight;
+					margin:0 auto 0 auto;
+					padding:0;
+				}
+
+				img{
+					$buffer : 3px;
+					height:$navheight - $navmargin*2;
+					 margin:$navmargin - $buffer 0 $navmargin 0;
+				}
+			}
+
+			.selected{
+				background-color:$logo_color;
+
+				a{
+					color:white;
+					border-right: none;
+				}
+			}
+
+			.noline{
+				a{
+					border-right: none;
+				}
+			}
+
+			$aheight:30px;
+			$margin: ($navheight - $aheight) / 2;
+
+			li{
+				height:100%;
+				text-align:center;
+				width:100px;
+
+				a{
+
+					margin:$margin 0 $margin 0;
+					padding:0 10px 0 10px;
+					height:$aheight;
+					text-shadow: none;
+					line-height:$aheight;
+					color:black;
+					font-weight:normal;
+					font-size:16px;
+					font-family: "Myriad Pro", "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
+					border-right: thin solid $light_grey;
+				}
+			}
+
+			.search-query{
+				margin:$margin 10px $margin 10px;
+				width:200px;
+			}
+
+		}
+	}
+
+}
+
 // Site Wide Layour Formatting
 
 .alert-danger, .alert-error{
@@ -89,11 +177,11 @@ body, html{
 		.stage{
 			height:100%;
 			width:100%/$numstages;
-			background:orange;
+			background:$med_grey;
 			float:left;
 
 			line-height:$navheight;
-			font-weight:bold;
+			font-weight:normal;
 
 			-webkit-box-sizing: border-box;
 		  -moz-box-sizing: border-box;
@@ -105,6 +193,7 @@ body, html{
 
 		.highlighted{
 			opacity:1;
+			font-weight:bold;
 		}
 
 		.rightmost{
@@ -137,13 +226,43 @@ body, html{
 		overflow: hidden;
 
 		position:relative;
-		-webkit-box-sizing: border-box; /* Safari 3.0 - 5.0, Chrome 1 - 9, Android 2.1 - 3.x */
-	  -moz-box-sizing: border-box;    /* Firefox 1 - 28 */
-	  box-sizing: border-box;         /* Safari 5.1+, Chrome 10+, Firefox 29+, Opera 7+, IE 8+, Android 4.0+, iOS any */
+		-webkit-box-sizing: border-box;
+	  -moz-box-sizing: border-box;
+	  box-sizing: border-box;
+
+		a{
+			color:white;
+		}
 
 		.content{
+			position:relative;
 			height:100%;
 			background-color:$med_grey;
+			overflow:hidden;
+
+			img{
+				position:absolute;
+			}
+
+			.overlay{
+				position:absolute;
+				width:100%;
+				height:100%;
+				background:rgba(0, 0, 0, .6);
+
+				.text{
+					-webkit-box-sizing: border-box;
+				  -moz-box-sizing: border-box;
+				  box-sizing: border-box;
+					padding:10px;
+
+					h1{
+						margin-top:0;
+						font-size:20px;
+						line-height:20px;
+					}
+				}
+			}
 		}
 
 	}
@@ -165,6 +284,24 @@ body, html{
 	$imgheight : 55%;
 	$descheight : 35%;
 	$deleteheight : 100% - $descheight - $imgheight;
+
+	.crop {
+	  height: $imgheight;
+	  overflow: hidden;
+	  position: relative;
+
+	  img {
+	    display: block;
+	    min-width: 100%;
+	    min-height: 100%;
+	    margin: auto;
+	    position: absolute;
+	    top: -100%;
+	    right: -100%;
+	    bottom: -100%;
+	    left: -100%;
+	  }
+	}
 
 	.doc_image{
 		background:$med_grey;

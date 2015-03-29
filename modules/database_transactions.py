@@ -26,11 +26,11 @@ class DatabaseTransactions:
         return result
 
 
-    def get_all_projects(self, db):
+    def get_all_projects(self):
         result = self.db().select(self.db.project.ALL)
         return result
 
-    def get_open_projects(self, db):
+    def get_open_projects(self):
         result = self.db(self.db.project.status == "Open").select(self.db.project.ALL)
         return result
 
@@ -153,5 +153,7 @@ class DatabaseTransactions:
         return result
 
     def get_document_image_for_project_header(self, project_id):
+        print project_id
         result = self.db(self.db.document_image.project_id == project_id).select().first()
+        print result
         return result

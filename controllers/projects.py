@@ -2,7 +2,8 @@ import database_transactions as database_transactions
 database = database_transactions.DatabaseTransactions(db)
 
 
-@auth.requires_login(otherwise=URL('user', 'login'))
+@auth.requires_login(otherwise=URL('user', 'login',
+                     vars= dict(controller_after_login='projects', page_after_login='create_step1')))
 def create_step1():
 
     options = ['Arts', 'Comics', 'Crafts', 'Fashion', 'Film', 'Games', 'Music', 'Photography', 'Technology']
@@ -15,7 +16,7 @@ def create_step1():
 
     form = SQLFORM(db.project, submit_button="Continue to Step 2")
 
-    clear_project = FORM(DIV(BUTTON("Clear Project", _type='submit', _class='btn btn-primary btn-block')))
+    clear_project = FORM(DIV(BUTTON("Clear Project", _type='submit', _class='btn btn-primary btn-block btn-danger')))
 
     prepopulation_data = retrieve_prepopulated_data_for_create_step_1(project_being_edited)
 
@@ -154,7 +155,7 @@ def create_step2():
         project_id = session.project_being_created
         #session.project_being_created = None
 
-    clear_project = FORM(DIV(BUTTON("Clear Project", _type='submit', _class='btn btn-primary btn-block')))
+    clear_project = FORM(DIV(BUTTON("Clear Project", _type='submit', _class='btn btn-danger btn-block')))
 
     add_image_form = SQLFORM(db.document_image, submit_button="Add Image")
 
@@ -189,6 +190,12 @@ def create_step2():
     return dict(add_image_form=add_image_form, go_to_step_3_form=go_to_step_3_form,
                 go_to_step_1_form=go_to_step_1_form, documents_added=documents_added, clear_project=clear_project)
 
+def delete_document():
+    db((db.document_image.id==request.vars.document_id)).delete()
+    db.commit()
+    redirect(URL('projects','create_step2'), client_side=True)
+
+
 
 def validate_add_image_form(form):
 
@@ -214,7 +221,7 @@ def create_step3():
     go_to_step_2_form = FORM(DIV(BUTTON("Back to Step 2", I(_class='icon-arrow-left icon-white'),
                                         _type='submit', _class='btn btn-primary btn-block btn-large')))
 
-    clear_project = FORM(DIV(BUTTON("Clear Project", _type='submit', _class='btn btn-primary btn-block')))
+    clear_project = FORM(DIV(BUTTON("Clear Project", _type='submit', _class='btn btn-danger btn-block')))
 
     if add_fields_form.process(formname="form_one", onvalidate = validate_add_field_form).accepted:
         db.data_field.insert(name=request.vars.name, short_description=request.vars.short_description, project_id=project_id)
@@ -241,7 +248,13 @@ def create_step3():
     fields_added = database.get_data_fields_for_project(project_id)
 
     return dict(documents_added=documents_added, add_fields_form=add_fields_form, fields_added=fields_added
-                , review_project_form=review_project_form, go_to_step_2_form=go_to_step_2_form, clear_project=clear_project)
+                , review_project_form=review_project_form, go_to_step_2_form=go_to_step_2_form,
+                clear_project=clear_project)
+
+def delete_field():
+    db((db.data_field.id==request.vars.field_id)).delete()
+    db.commit()
+    redirect(URL('projects','create_step3'), client_side=True)
 
 def validate_add_field_form(form):
 
@@ -261,7 +274,7 @@ def create_step4():
     else:
         redirect(URL('projects', 'create_step1'))
 
-    clear_project = FORM(DIV(BUTTON("Clear Project", _type='submit', _class='btn btn-primary btn-block')))
+    clear_project = FORM(DIV(BUTTON("Clear Project", _type='submit', _class='btn btn-danger btn-block')))
 
     project_being_edited = database.get_project(project_id)
     documents_added = database.get_project_documents(project_id)
@@ -275,7 +288,13 @@ def create_step4():
         session.project_being_created = None
         redirect(URL('projects','project', args=[project.id]))
 
-    return dict(project=project_being_edited, documents_for_project=documents_added, publish_project_form = publish_project_form, clear_project = clear_project)
+    # Time String
+    project = database.get_project(project_id)
+    timestring = ''
+    if project.time_period_start_date:
+         timestring = '('+convert_integer_to_date_string(project.time_period_start_date) + " - " + convert_integer_to_date_string(project.time_period_end_date)+')'
+
+    return dict(project=project_being_edited, timestring = timestring, documents_for_project=documents_added, publish_project_form = publish_project_form, clear_project = clear_project)
 
     # start_date = None
     # end_date = None
@@ -323,8 +342,9 @@ def project():
     #If user owns project then initialise message to be displayed on page
     if project.author_id == auth._get_user_id():
         # Example Message
-        response.message = A('You own this project. Go to X', _href=URL('default','index'))
-        # response.messagecolour = '#00F'
+        # response.message = A('You own this project. Go to X', _href=URL('default','index'))
+        # response.messagecolour = '#69c72a'
+        None;
 
     documents_for_project = database.get_project_open_documents(project.id)
     data_fields_for_project = database.get_data_fields_for_project(project.id)
@@ -334,7 +354,12 @@ def project():
     documents_transcribed_by_user = database.get_documents_in_project_that_has_already_been_transcribed_by_user\
                                     (project_id, auth._get_user_id())
 
-    return dict(project=project, documents_for_project=documents_for_project,
+    # Time String
+    timestring = ''
+    if project.time_period_start_date:
+         timestring = '('+convert_integer_to_date_string(project.time_period_start_date) + " - " + convert_integer_to_date_string(project.time_period_end_date)+')'
+
+    return dict(project=project, timestring = timestring, documents_for_project=documents_for_project,
                 data_fields_for_project=data_fields_for_project,
                 documents_transcribed_by_user=documents_transcribed_by_user)
 
@@ -357,7 +382,8 @@ def view_document():
     form = FORM()
 
     if project.author_id == auth._get_user_id():
-        response.message = A('You own this project. Go to X', _href=URL('default','index'))
+        # response.message = A('You own this project. Go to X', _href=URL('default','index'))
+        None;
 
     elif auth._get_user_id is None:
         response.flash = DIV("Please register to transcribe", _class="alert alert-info")
@@ -437,12 +463,6 @@ def accept_transcription():
     redirect(URL('default','index'), client_side=True)
 
 def reject_all_transcriptions():
-
     db((db.transcription.document_id==request.vars.document_id)).update(status="Rejected")
     db.commit()
-
     redirect(URL('default','index'), client_side=True)
-
-
-
-
