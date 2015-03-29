@@ -2,7 +2,8 @@ import database_transactions as database_transactions
 database = database_transactions.DatabaseTransactions(db)
 
 
-@auth.requires_login(otherwise=URL('user', 'login'))
+@auth.requires_login(otherwise=URL('user', 'login',
+                     vars= dict(controller_after_login='projects', page_after_login='create_step1')))
 def create_step1():
 
     options = ['Arts', 'Comics', 'Crafts', 'Fashion', 'Film', 'Games', 'Music', 'Photography', 'Technology']
