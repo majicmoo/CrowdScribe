@@ -1,4 +1,5 @@
 from gluon import *
+import random
 #db = current.db
 
 class DatabaseTransactions:
@@ -157,3 +158,8 @@ class DatabaseTransactions:
         result = self.db(self.db.document_image.project_id == project_id).select().first()
         print result
         return result
+
+    def get_random_open_project(self):
+        projects = self.get_open_projects()
+        index = random.randrange(0, len(projects)-1)
+        return projects[index]

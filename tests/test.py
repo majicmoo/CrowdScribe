@@ -111,7 +111,7 @@ class TestDatabaseTransactions(unittest.TestCase):
 
     def test_get_all_projects(self):
         # Check correct number of projects are returned
-        all_projects = len(database.get_all_projects(db))
+        all_projects = len(database.get_all_projects())
         self.assertEquals(len(self.projects), all_projects)
 
     def test_get_projects_by_user(self):
@@ -319,6 +319,24 @@ class TestDatabaseTransactions(unittest.TestCase):
         #     self.assertTrue(self.exists(i.transcription.id))
 
 
+    def test_get_random_open_project(self):
+        project = database.get_random_open_project()
+        is_project = True
+        try:
+            project.status
+            project.time_period_start_date
+            project.description
+            project.tag
+            project.time_period_end_date
+            project.author_id
+            project.name
+        except NameError:
+            is_project = False
+        self.assertTrue(is_project)
+
+
+
+##########################
     def add_user(self, username):
         user = test_db.auth_user.insert(username=username)
         self.users.append(user)
