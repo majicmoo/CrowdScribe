@@ -56,11 +56,12 @@ body, html{
 			}
 
 			.selected{
-				background-color:$logo_color;
+				// background-color:$logo_color;
 
 				a{
-					color:white;
-					border-right: none;
+					color:$logo_color;
+					font-weight:bold;
+					// border-right: none;
 				}
 			}
 
