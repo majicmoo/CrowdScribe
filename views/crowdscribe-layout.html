@@ -94,13 +94,13 @@
         {{else:}}
           <!-- Not Logged In -->
 
-          <li>
+          <li class="{{= 'selected' if request.function == 'register' else ''}}">
               <a href="{{=URL(c="user",f="register")}}">
                   Register
               </a>
           </li>
 
-          <li class = "rightmost">
+          <li class="{{= 'selected rightmost' if request.function == 'login' else 'rightmost'}}">
               <a href="{{=URL(c="user",f="login")}}">
                   Login
               </a>

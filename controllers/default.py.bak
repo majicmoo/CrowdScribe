@@ -35,6 +35,9 @@ def index():
 def browse():
     print "--------------Begin-------------"
     projects = database.get_open_projects(db)
+<<<<<<< HEAD
+    return dict(projects = projects, database = database)
+=======
     #Lists for SELECT() helper in advanced search form
     tags = ["All", "Sport", "Theatre", "Military", "Journal Entries", "Architecture", "Citizen Information",
            "Religion", "Art", "Literature", "Finance", "Scientific", "Media", "Music", "Other"]
@@ -55,7 +58,7 @@ def browse():
         INPUT(_value='Refine search', _type='submit', _id="advancesubmit"),
         _action='', _method='GET'
     )
-
+    
     #Determine how to order results. If none specified (ie, new search), default
     #order alphabetically
     if request.vars.order == 'Earliest':
@@ -64,9 +67,9 @@ def browse():
         projects = database.get_open_projects(db).sort(lambda project: project.time_period_end_date, reverse=True)
     else:
         projects = database.get_open_projects(db).sort(lambda project: project.name)
-
+    
     print request.vars
-
+    
     #Gets keywords
     if request.vars.search is not None:
         searchstr = request.vars.quicksearch
@@ -114,7 +117,7 @@ def browse():
             #exclude if before start date or after end date or Date is none
             projects.exclude(lambda project: (project.time_period_end_date < start_date) or
                 (end_date < project.time_period_start_date))
-
+            
     #Have to clear request.vars before processing otherwise consecutive
     #searches accumulate into lists rather than individual elements
     #advanced.vars = request.vars
@@ -126,24 +129,25 @@ def browse():
     elif advanced.errors:
         response.flash='errors'
 
-    return dict(advanced=advanced, projects=projects, database = database)
+    return dict(advanced=advanced, projects=projects)
 
 def convert_date_to_integer(date, era):
     if era =="BC":
         return -int(date)
     else:
         return int(date)
-
+    
 def date_validator(advanced):
     #Check that start date is before end date
     if ((request.vars.start_date is not None or request.vars.start_date == "") and (request.vars.start_date is None or request.vars.start_date != "") and
         (request.vars.end_date is not None or request.vars.end_date == "") and (request.vars.end_date is None or request.vars.end_date != "")):
-
+        
         start = convert_date_to_integer(request.vars.start_date,request.vars.start_era)
         end = convert_date_to_integer(request.vars.end_date,request.vars.end_era)
         if start > end:
             advanced.errors.time_period_end_date = 'The End Date of the time period must be later than the Start Date'
-
+            
+>>>>>>> 02f82fc684b659275ff8c6654780db1d2a46f204
 
 
 def user():
