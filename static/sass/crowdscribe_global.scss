@@ -29,20 +29,31 @@ body, html{
 		border-bottom: 1px solid $lightest_grey;
 		min-height:$navheight;
 
-		img{
-			float:left;
-			$buffer : 3px;
-			height:$navheight - $navmargin*2;
-			margin:$navmargin - $buffer 0 $navmargin 0;
-		}
-
 		.right{
 			float:right;
+			margin-right:0;
 		}
 
 		.nav{
-			margin-left:20px;
+			// margin-left:20px;
 			height:$navheight;
+
+			.logo{
+
+				width:160px;
+				a{
+					width:140px;
+					height:$navheight;
+					margin:0 auto 0 auto;
+					padding:0;
+				}
+
+				img{
+					$buffer : 3px;
+					height:$navheight - $navmargin*2;
+					 margin:$navmargin - $buffer 0 $navmargin 0;
+				}
+			}
 
 			.selected{
 				background-color:$logo_color;
@@ -53,7 +64,7 @@ body, html{
 				}
 			}
 
-			.rightmost{
+			.noline{
 				a{
 					border-right: none;
 				}
@@ -166,11 +177,11 @@ body, html{
 		.stage{
 			height:100%;
 			width:100%/$numstages;
-			background:orange;
+			background:$med_grey;
 			float:left;
 
 			line-height:$navheight;
-			font-weight:bold;
+			font-weight:normal;
 
 			-webkit-box-sizing: border-box;
 		  -moz-box-sizing: border-box;
@@ -182,6 +193,7 @@ body, html{
 
 		.highlighted{
 			opacity:1;
+			font-weight:bold;
 		}
 
 		.rightmost{
@@ -272,6 +284,24 @@ body, html{
 	$imgheight : 55%;
 	$descheight : 35%;
 	$deleteheight : 100% - $descheight - $imgheight;
+
+	.crop {
+	  height: $imgheight;
+	  overflow: hidden;
+	  position: relative;
+
+	  img {
+	    display: block;
+	    min-width: 100%;
+	    min-height: 100%;
+	    margin: auto;
+	    position: absolute;
+	    top: -100%;
+	    right: -100%;
+	    bottom: -100%;
+	    left: -100%;
+	  }
+	}
 
 	.doc_image{
 		background:$med_grey;

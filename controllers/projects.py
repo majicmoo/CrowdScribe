@@ -15,7 +15,7 @@ def create_step1():
 
     form = SQLFORM(db.project, submit_button="Continue to Step 2")
 
-    clear_project = FORM(DIV(BUTTON("Clear Project", _type='submit', _class='btn btn-primary btn-block')))
+    clear_project = FORM(DIV(BUTTON("Clear Project", _type='submit', _class='btn btn-primary btn-block btn-danger')))
 
     prepopulation_data = retrieve_prepopulated_data_for_create_step_1(project_being_edited)
 
@@ -275,7 +275,13 @@ def create_step4():
         session.project_being_created = None
         redirect(URL('projects','project', args=[project.id]))
 
-    return dict(project=project_being_edited, documents_for_project=documents_added, publish_project_form = publish_project_form, clear_project = clear_project)
+    # Time String
+    project = database.get_project(project_id)
+    timestring = ''
+    if project.time_period_start_date:
+         timestring = '('+convert_integer_to_date_string(project.time_period_start_date) + " - " + convert_integer_to_date_string(project.time_period_end_date)+')'
+
+    return dict(project=project_being_edited, timestring = timestring, documents_for_project=documents_added, publish_project_form = publish_project_form, clear_project = clear_project)
 
     # start_date = None
     # end_date = None
@@ -363,7 +369,8 @@ def view_document():
     form = FORM()
 
     if project.author_id == auth._get_user_id():
-        response.message = A('You own this project. Go to X', _href=URL('default','index'))
+        # response.message = A('You own this project. Go to X', _href=URL('default','index'))
+        None;
 
     elif auth._get_user_id is None:
         response.flash = DIV("Please register to transcribe", _class="alert alert-info")

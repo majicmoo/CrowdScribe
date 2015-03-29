@@ -11,21 +11,27 @@ body, html {
   border: 0;
   border-bottom: 1px solid #e6e6e6;
   min-height: 55px; }
-  .navbar .navbar-inner img {
-    float: left;
-    height: 25px;
-    margin: 12px 0 15px 0; }
   .navbar .navbar-inner .right {
-    float: right; }
+    float: right;
+    margin-right: 0; }
   .navbar .navbar-inner .nav {
-    margin-left: 20px;
     height: 55px; }
+    .navbar .navbar-inner .nav .logo {
+      width: 160px; }
+      .navbar .navbar-inner .nav .logo a {
+        width: 140px;
+        height: 55px;
+        margin: 0 auto 0 auto;
+        padding: 0; }
+      .navbar .navbar-inner .nav .logo img {
+        height: 25px;
+        margin: 12px 0 15px 0; }
     .navbar .navbar-inner .nav .selected {
       background-color: #69c72a; }
       .navbar .navbar-inner .nav .selected a {
         color: white;
         border-right: none; }
-    .navbar .navbar-inner .nav .rightmost a {
+    .navbar .navbar-inner .nav .noline a {
       border-right: none; }
     .navbar .navbar-inner .nav li {
       height: 100%;
@@ -98,17 +104,18 @@ body, html {
     .form_nav .inner .stage {
       height: 100%;
       width: 25%;
-      background: orange;
+      background: #999999;
       float: left;
       line-height: 30px;
-      font-weight: bold;
+      font-weight: normal;
       -webkit-box-sizing: border-box;
       -moz-box-sizing: border-box;
       box-sizing: border-box;
       border-right: 3px solid #e6e6e6;
       opacity: .5; }
     .form_nav .inner .highlighted {
-      opacity: 1; }
+      opacity: 1;
+      font-weight: bold; }
     .form_nav .inner .rightmost {
       border-right: 0; }
 
@@ -154,6 +161,20 @@ body, html {
 .documents_delete {
   overflow: auto;
   padding: 10px; }
+  .documents_delete .crop {
+    height: 55%;
+    overflow: hidden;
+    position: relative; }
+    .documents_delete .crop img {
+      display: block;
+      min-width: 100%;
+      min-height: 100%;
+      margin: auto;
+      position: absolute;
+      top: -100%;
+      right: -100%;
+      bottom: -100%;
+      left: -100%; }
   .documents_delete .doc_image {
     background: #999999;
     height: 55%;

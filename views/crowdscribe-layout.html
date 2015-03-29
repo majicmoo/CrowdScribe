@@ -40,21 +40,26 @@
   <div class="navbar">
     <div class="navbar-inner">
 
-      <a href="{{=URL('default','index')}}">
-        <img src="{{=URL('static','images/logo.png')}}"/>
-      </a>
+
 
       <ul class="nav">
-        <li class="selected">
+
+        <li class="logo noline">
+          <a href="{{=URL('default','index')}}">
+            <img src="{{=URL('static','images/logo.png')}}"/>
+          </a>
+        </li>
+
+        <li class="{{= 'selected' if request.function == 'index' else ''}}">
           <a href="{{=URL('default','index')}}">Home</a>
         </li>
-        <li class="">
+        <li class="{{= 'selected' if request.function == 'browse' else ''}}">
           <a href="{{=URL('default','browse')}}">Browse</a>
         </li>
 
         <!-- Search -->
 
-        <li class="rightmost">
+        <li class="noline">
           <input type="text" class="search-query" placeholder="Search">
         </li>
 
@@ -68,19 +73,19 @@
 
           <!-- Logged In -->
 
-          <li>
+          <li class="{{= 'selected' if request.function == 'create_step1' else ''}}">
               <a href="{{=URL(c="projects",f="create_step1")}}">
                   Create
               </a>
           </li>
 
-          <li>
+          <li class="{{= 'selected' if request.function == 'profile' else ''}}">
               <a href="{{=URL(c="user",f="profile")}}">
                   Profile
               </a>
           </li>
 
-          <li class = "rightmost"> 
+          <li class = "noline" >
               <a href="{{=URL(c="user",f="logout")}}">
                   Logout
               </a>

@@ -6,11 +6,7 @@
   <h3>{{=project.tag}} (12-14 AD)</h3>
   <p>{{=document.description}}</p>
 
-  <div class="document_viewer">
-    <div class="document_viewer_inner">
-      Image Viewer Here
-    </div>
-  </div>
+  <img src="{{=URL('default','download',args = document.image)}}"/>
 
 
 
