@@ -1,10 +1,6 @@
 {{response.files.append(URL(r=request,c='static/css',f='create.css'))}}
 {{extend 'crowdscribe-layout.html'}}
 
-<div class="clear_btn">
-  {{=clear_project}}
-</div>
-
 <div class="form_nav">
   <div class="inner">
     <a href="{{=URL('projects','create_step1')}}"><div class="stage ">1. Basic Details</div></a>
@@ -76,5 +72,8 @@
 
 <div class="padded_container form_container less_top_padding">
   {{=go_to_step_3_form}}
+  {{=clear_project}}
   <!-- <input type="submit" value="Continue to Step 3" class="btn"> -->
 </div>
+
+

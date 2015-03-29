@@ -8,7 +8,7 @@
 <div class="form_nav">
   <div class="inner">
     <a href="{{=URL('projects','create_step1')}}"><div class="stage highlighted">1. Basic Details</div></a>
-    <a href="{{=URL('projects','create_step2')}}"><div class="stage">2. Documents</div></a></a>
+    <a href="{{=URL('projects','create_step2')}}"><div class="stage">2. Add Documents</div></a></a>
     <a href="{{=URL('projects','create_step3')}}"><div class="stage">3. Fields</div></a>
     <a href="{{=URL('projects','create_step4')}}"><div class="stage rightmost">4. Review</div></a>
   </div>
@@ -78,8 +78,13 @@
 
       </div>
 
-      {{=form.custom.submit}}
+    <button type="submit" class="btn btn-primary btn-large" value="Continue to Step 2" value="Submit">
+        Continue to Step 2 <i class='icon-arrow-right icon-white'> </i>
+    </button>
 
   {{=form.custom.end}}
+
+  {{=clear_project}}
+
 
 </div>

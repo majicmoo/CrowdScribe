@@ -2,9 +2,7 @@
 {{response.files.append(URL(r=request,c='static/css',f='project.css'))}}
 {{extend 'crowdscribe-layout.html'}}
 
-<div class="clear_btn">
-  {{=clear_project}}
-</div>
+
 
 <div class="form_nav">
   <div class="inner">
@@ -27,3 +25,4 @@
 {{include "subviews/project-page-view.html"}}
 
 {{=publish_project_form}}
+{{=clear_project}}
