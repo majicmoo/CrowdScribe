@@ -96,8 +96,8 @@ def login():
         else:
             # Checks whether user was sent to login form when trying to pledge. If true, the user is redirected back
             # to the pledge they was trying to make.
-            if request.vars.controller:
-                redirect(URL(request.vars.controller, request.vars.function, args=[request.vars.project_id, request.vars.pledge_level_id]))
+            if request.vars.controller_after_login and request.vars.page_after_login:
+                redirect(URL(request.vars.controller_after_login, request.vars.page_after_login))
             else:
                 # Redirect them to their profile page.
                 redirect(URL('default','index'))

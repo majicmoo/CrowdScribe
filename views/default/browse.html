@@ -1,11 +1,1 @@
 {{extend 'crowdscribe-layout.html'}}
-
-<div class="padded_container form_container">
-  {{=advanced}}
-</div>
-
-<div class="projects">
-  {{for project in projects:}}
-    {{include "subviews/project-display.html"}}
-  {{pass}}
-</div>

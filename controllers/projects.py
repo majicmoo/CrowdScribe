@@ -2,7 +2,8 @@ import database_transactions as database_transactions
 database = database_transactions.DatabaseTransactions(db)
 
 
-@auth.requires_login(otherwise=URL('user', 'login'))
+@auth.requires_login(otherwise=URL('user', 'login',
+                     vars= dict(controller_after_login='projects', page_after_login='create_step1')))
 def create_step1():
 
     options = ['Arts', 'Comics', 'Crafts', 'Fashion', 'Film', 'Games', 'Music', 'Photography', 'Technology']
@@ -154,7 +155,7 @@ def create_step2():
         project_id = session.project_being_created
         #session.project_being_created = None
 
-    clear_project = FORM(DIV(BUTTON("Clear Project", _type='submit', _class='btn btn-primary btn-block')))
+    clear_project = FORM(DIV(BUTTON("Clear Project", _type='submit', _class='btn btn-danger btn-block')))
 
     add_image_form = SQLFORM(db.document_image, submit_button="Add Image")
 
@@ -189,6 +190,12 @@ def create_step2():
     return dict(add_image_form=add_image_form, go_to_step_3_form=go_to_step_3_form,
                 go_to_step_1_form=go_to_step_1_form, documents_added=documents_added, clear_project=clear_project)
 
+def delete_document():
+    db((db.document_image.id==request.vars.document_id)).delete()
+    db.commit()
+    redirect(URL('projects','create_step2'), client_side=True)
+
+
 
 def validate_add_image_form(form):
 
@@ -214,7 +221,7 @@ def create_step3():
     go_to_step_2_form = FORM(DIV(BUTTON("Back to Step 2", I(_class='icon-arrow-left icon-white'),
                                         _type='submit', _class='btn btn-primary btn-block btn-large')))
 
-    clear_project = FORM(DIV(BUTTON("Clear Project", _type='submit', _class='btn btn-primary btn-block')))
+    clear_project = FORM(DIV(BUTTON("Clear Project", _type='submit', _class='btn btn-danger btn-block')))
 
     if add_fields_form.process(formname="form_one", onvalidate = validate_add_field_form).accepted:
         db.data_field.insert(name=request.vars.name, short_description=request.vars.short_description, project_id=project_id)
@@ -241,7 +248,13 @@ def create_step3():
     fields_added = database.get_data_fields_for_project(project_id)
 
     return dict(documents_added=documents_added, add_fields_form=add_fields_form, fields_added=fields_added
-                , review_project_form=review_project_form, go_to_step_2_form=go_to_step_2_form, clear_project=clear_project)
+                , review_project_form=review_project_form, go_to_step_2_form=go_to_step_2_form,
+                clear_project=clear_project)
+
+def delete_field():
+    db((db.data_field.id==request.vars.field_id)).delete()
+    db.commit()
+    redirect(URL('projects','create_step3'), client_side=True)
 
 def validate_add_field_form(form):
 
@@ -261,7 +274,7 @@ def create_step4():
     else:
         redirect(URL('projects', 'create_step1'))
 
-    clear_project = FORM(DIV(BUTTON("Clear Project", _type='submit', _class='btn btn-primary btn-block')))
+    clear_project = FORM(DIV(BUTTON("Clear Project", _type='submit', _class='btn btn-danger btn-block')))
 
     project_being_edited = database.get_project(project_id)
     documents_added = database.get_project_documents(project_id)
@@ -435,24 +448,15 @@ def review_document():
                 transcribed_fields_for_transcriptions=transcribed_fields_for_transcriptions)
 
 def accept_transcription():
-
     db(db.document_image.id==request.vars.document_id).update(status='Closed')
     db((db.transcription.id!=request.vars.transcription_id) & (db.transcription.document_id==request.vars.document_id))\
     .update(status="Rejected")
 
     db(db.transcription.id==request.vars.transcription_id).update(status='Accepted')
-    #document.update_record(status="Closed")
-    #transcription.update_record(status="Accepted")
-
-    #db.project.insert(name=request.vars.transcription_id)
-
     db.commit()
-
     redirect(URL('default','index'), client_side=True)
 
 def reject_all_transcriptions():
-
     db((db.transcription.document_id==request.vars.document_id)).update(status="Rejected")
     db.commit()
-
     redirect(URL('default','index'), client_side=True)

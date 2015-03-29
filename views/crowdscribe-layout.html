@@ -60,7 +60,9 @@
         <!-- Search -->
 
         <li class="noline">
-          <input type="text" class="search-query" placeholder="Search">
+          <form action="{{=URL('search','search_results')}}" method="GET">
+            <input type="search" name="quicksearch" class="search-query" placeholder="Search">
+          </form>
         </li>
 
       </ul>
@@ -86,7 +88,7 @@
           </li>
 
           <li class = "noline" >
-              <a href="{{=URL(c="user",f="logout")}}">
+              <a href="{{=URL(c="default",f="user/logout")}}">
                   Logout
               </a>
           </li>
