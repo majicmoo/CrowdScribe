@@ -35,7 +35,7 @@ def index():
 
 def browse():
     print "--------------Begin-------------"
-    projects = database.get_open_projects(db)
+    projects = database.get_open_projects()
     #Lists for SELECT() helper in advanced search form
     tags = ["All", "Sport", "Theatre", "Military", "Journal Entries", "Architecture", "Citizen Information",
            "Religion", "Art", "Literature", "Finance", "Scientific", "Media", "Music", "Other"]
@@ -60,11 +60,11 @@ def browse():
     #Determine how to order results. If none specified (ie, new search), default
     #order alphabetically
     if request.vars.order == 'Earliest':
-        projects = database.get_open_projects(db).sort(lambda project: project.time_period_start_date)
+        projects = database.get_open_projects().sort(lambda project: project.time_period_start_date)
     elif request.vars.order == 'Latest':
-        projects = database.get_open_projects(db).sort(lambda project: project.time_period_end_date, reverse=True)
+        projects = database.get_open_projects().sort(lambda project: project.time_period_end_date, reverse=True)
     else:
-        projects = database.get_open_projects(db).sort(lambda project: project.name)
+        projects = database.get_open_projects().sort(lambda project: project.name)
     
     print request.vars
     
@@ -127,7 +127,7 @@ def browse():
     elif advanced.errors:
         response.flash='errors'
 
-    return dict(advanced=advanced, projects=projects)
+    return dict(advanced=advanced, projects=projects, database=database)
 
 def convert_date_to_integer(date, era):
     if era =="BC":

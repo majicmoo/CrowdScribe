@@ -447,19 +447,12 @@ def review_document():
                 transcribed_fields_for_transcriptions=transcribed_fields_for_transcriptions)
 
 def accept_transcription():
-
     db(db.document_image.id==request.vars.document_id).update(status='Closed')
     db((db.transcription.id!=request.vars.transcription_id) & (db.transcription.document_id==request.vars.document_id))\
     .update(status="Rejected")
 
     db(db.transcription.id==request.vars.transcription_id).update(status='Accepted')
-    #document.update_record(status="Closed")
-    #transcription.update_record(status="Accepted")
-
-    #db.project.insert(name=request.vars.transcription_id)
-
     db.commit()
-
     redirect(URL('default','index'), client_side=True)
 
 def reject_all_transcriptions():
