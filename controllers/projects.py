@@ -5,14 +5,15 @@ database = database_transactions.DatabaseTransactions(db)
 @auth.requires_login(otherwise=URL('user', 'login',
                      vars= dict(controller_after_login='projects', page_after_login='create_step1')))
 def create_step1():
-
-    options = ['Arts', 'Comics', 'Crafts', 'Fashion', 'Film', 'Games', 'Music', 'Photography', 'Technology']
     project_id = None
     project_being_edited = None
     if session.project_being_created is not None:
         project_id = session.project_being_created
         project_being_edited = database.get_project(project_id)
         #session.project_being_created = None
+
+    step_available = check_if_steps_available(project_id)
+    print step_available
 
     form = SQLFORM(db.project, submit_button="Continue to Step 2")
 
@@ -40,9 +41,9 @@ def create_step1():
             end_date = convert_date_to_integer(request.vars.time_period_end_date, request.vars.end_era)
 
         if project_id and project_being_edited:
-            project_being_edited.update_record(name=request.vars.name, author_id=auth._get_user_id(), status="Being Created",
-                                               description=request.vars.description, tag=request.vars.tag,
-                                               time_period_start_date=start_date, time_period_end_date=end_date)
+            project_being_edited.update_record(name=request.vars.name, description=request.vars.description,
+                                               tag=request.vars.tag, time_period_start_date=start_date,
+                                               time_period_end_date=end_date)
         else:
             project_id = db.project.insert(name=request.vars.name, author_id=auth._get_user_id(), status="Being Created",
                                            description=request.vars.description, tag=request.vars.tag,
@@ -59,8 +60,35 @@ def create_step1():
         redirect(URL('projects', 'create_step1'))
 
 
-    return dict(form=form, tag_options=options, clear_project=clear_project, project_being_edited = project_being_edited,
-                pd=prepopulation_data)
+    return dict(form=form, clear_project=clear_project, project_being_edited = project_being_edited,
+                pd=prepopulation_data, step_available=step_available)
+
+def check_if_steps_available(project_id):
+
+    step2_available = False
+    step3_available = False
+    step4_available = False
+
+    if project_id is not None:
+
+        if database.get_project(project_id) is not None:
+            step2_available = True
+
+            if database.get_project_documents(project_id).first() is not None:
+                step3_available = True
+
+                if database.get_data_fields_for_project(project_id).first() is not None:
+                    step4_available = True
+
+    result = {}
+    result['2'] = step2_available
+    result['3'] = step3_available
+    result['4'] = step4_available
+
+    return result
+
+
+
 
 def convert_date_to_integer(date, era):
     if era =="BC":
@@ -147,13 +175,16 @@ def validate_create_step1(form):
 
 
 
-@auth.requires_login(otherwise=URL('user', 'login'))
+@auth.requires_login(otherwise=URL('user', 'login',
+                     vars= dict(controller_after_login='projects', page_after_login='create_step1')))
 def create_step2():
 
     project_id = None
     if session.project_being_created is not None:
         project_id = session.project_being_created
         #session.project_being_created = None
+
+    step_available = check_if_steps_available(project_id)
 
     clear_project = FORM(DIV(BUTTON("Clear Project", _type='submit', _class='btn btn-danger btn-block')))
 
@@ -188,7 +219,8 @@ def create_step2():
     documents_added = database.get_project_documents(project_id)
 
     return dict(add_image_form=add_image_form, go_to_step_3_form=go_to_step_3_form,
-                go_to_step_1_form=go_to_step_1_form, documents_added=documents_added, clear_project=clear_project)
+                go_to_step_1_form=go_to_step_1_form, documents_added=documents_added, clear_project=clear_project,
+                step_available=step_available)
 
 def delete_document():
     db((db.document_image.id==request.vars.document_id)).delete()
@@ -207,13 +239,16 @@ def validate_add_image_form(form):
         form.errors.image = image_validator(request.vars.image)[1]
 
 
-@auth.requires_login(otherwise=URL('user', 'login'))
+@auth.requires_login(otherwise=URL('user', 'login',
+                     vars= dict(controller_after_login='projects', page_after_login='create_step1')))
 def create_step3():
 
     project_id = None
     if session.project_being_created is not None:
         project_id = session.project_being_created
         #session.project_being_created = None
+
+    step_available = check_if_steps_available(project_id)
 
     add_fields_form = SQLFORM.factory(db.data_field, submit_button="Add field")
     review_project_form = FORM(DIV(BUTTON("Review Project", I(_class='icon-arrow-right icon-white'),
@@ -249,7 +284,7 @@ def create_step3():
 
     return dict(documents_added=documents_added, add_fields_form=add_fields_form, fields_added=fields_added
                 , review_project_form=review_project_form, go_to_step_2_form=go_to_step_2_form,
-                clear_project=clear_project)
+                clear_project=clear_project, step_available=step_available)
 
 def delete_field():
     db((db.data_field.id==request.vars.field_id)).delete()
@@ -265,7 +300,8 @@ def validate_add_field_form(form):
         form.errors.short_description = "Description must not be empty"
 
 
-@auth.requires_login(otherwise=URL('user', 'login'))
+@auth.requires_login(otherwise=URL('user', 'login',
+                     vars= dict(controller_after_login='projects', page_after_login='create_step1')))
 def create_step4():
 
     project_id = None
