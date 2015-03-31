@@ -7,7 +7,7 @@
 
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-        <title>{{=response.title or request.application}}</title>
+        <title>{{=response.title or "CrowdScribe"}}</title>
         <meta name="description" content="">
         <meta name="author" content="abgc500">
 
@@ -75,9 +75,9 @@
 
           <!-- Logged In -->
 
-          <li class="{{= 'selected' if request.function == 'create_step1' else ''}}">
+          <li class="{{= 'selected create_project' if request.function == 'create_step1' else 'create_project'}}">
               <a href="{{=URL(c="projects",f="create_step1")}}">
-                  Create
+                  Create Project
               </a>
           </li>
 
@@ -96,13 +96,13 @@
         {{else:}}
           <!-- Not Logged In -->
 
-          <li>
+          <li class="{{= 'selected' if request.function == 'register' else ''}}">
               <a href="{{=URL(c="user",f="register")}}">
                   Register
               </a>
           </li>
 
-          <li class = "rightmost">
+          <li class="{{= 'selected noline' if request.function == 'login' else 'noline'}}">
               <a href="{{=URL(c="user",f="login")}}">
                   Login
               </a>

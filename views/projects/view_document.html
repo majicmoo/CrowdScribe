@@ -6,15 +6,17 @@
   <h3>{{=project.tag}} (12-14 AD)</h3>
   <p>{{=document.description}}</p>
 
-  <img src="{{=URL('default','download',args = document.image)}}"/>
+  <!-- Maybe highlight that image can be opened in new tab for zooming etc -->
 
+  <div class="document_viewer">
+    <img src="{{=URL('default','download',args = document.image)}}"/>
+  </div>
 
 
   <div class="transcription_form_holder">
     {{for field in form:}}
       {{=field}}<br>
     {{pass}}
-
   </div>
 
 

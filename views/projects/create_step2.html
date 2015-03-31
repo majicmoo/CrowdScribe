@@ -4,7 +4,7 @@
 <div class="form_nav">
   <div class="inner">
 
-    <a href="{{=URL('projects','create_step1')}}"><div class="stage">1. Basic Details</div></a>
+    <a href="{{=URL('projects','create_step1')}}"><div class="stage clickable">1. Basic Details</div></a>
 
     {{if step_available['2']:}}
       <a href="{{=URL('projects','create_step2')}}"><div class="stage highlighted">2. Add Documents</div></a>
@@ -13,13 +13,13 @@
     {{pass}}
 
     {{if step_available['3']:}}
-      <a href="{{=URL('projects','create_step3')}}"><div class="stage">3. Fields</div></a>
+      <a href="{{=URL('projects','create_step3')}}"><div class="stage clickable">3. Fields</div></a>
     {{else:}}
       <div class="stage">3. Fields</div>
     {{pass}}
 
     {{if step_available['4']:}}
-      <a href="{{=URL('projects','create_step4')}}"><div class="stage rightmost">4. Review</div></a>
+      <a href="{{=URL('projects','create_step4')}}"><div class="stage rightmost clickable">4. Review</div></a>
     {{else:}}
       <div class="stage rightmost">4. Review</div>
     {{pass}}
@@ -92,5 +92,3 @@
   {{=clear_project}}
   <!-- <input type="submit" value="Continue to Step 3" class="btn"> -->
 </div>
-
-

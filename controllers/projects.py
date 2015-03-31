@@ -440,9 +440,10 @@ def view_document():
     else:
         #Create dynamic form according to number of data_fields
         for data_field in database.get_data_fields_for_project(project_id):
-            label = '%s\n%s' % (data_field.name, data_field.short_description)
-            text_input = INPUT(_name=data_field.name)
-            form.append(SPAN(label, text_input))
+            label = H1(data_field.name)
+            description = P(data_field.short_description)
+            text_input = TEXTAREA(_name=data_field.name)
+            form.append(SPAN(label, description, text_input))
 
         form.append(INPUT(_type='submit'))
 

@@ -26,11 +26,9 @@ body, html {
       .navbar .navbar-inner .nav .logo img {
         height: 25px;
         margin: 12px 0 15px 0; }
-    .navbar .navbar-inner .nav .selected {
-      background-color: #69c72a; }
-      .navbar .navbar-inner .nav .selected a {
-        color: white;
-        border-right: none; }
+    .navbar .navbar-inner .nav .selected a {
+      color: #69c72a;
+      font-weight: bold; }
     .navbar .navbar-inner .nav .noline a {
       border-right: none; }
     .navbar .navbar-inner .nav li {
