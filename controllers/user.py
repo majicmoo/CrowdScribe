@@ -94,6 +94,7 @@ def login():
             # If username and password combination is not found in database, return this message
             response.flash = DIV("Invalid Username/Password Combination", _class='alert alert-error')
         else:
+            db((db.project.author_id == auth._get_user_id()) &(db.project.status == "Being Created")).delete()
             # Checks whether user was sent to login form when trying to pledge. If true, the user is redirected back
             # to the pledge they was trying to make.
             if request.vars.controller_after_login and request.vars.page_after_login:
