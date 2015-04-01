@@ -122,12 +122,38 @@ body, html{
 				}
 			}
 
-			.search-query{
-				/* Search Bar */
-				margin:$margin 10px $margin 10px;
-				width:200px;
-			}
+			$searchwidth : 200px;
 
+			.search{
+				width:$searchwidth;
+				height:50px;
+				position:relative;
+
+				.search_form{
+					position:absolute;
+					width:$searchwidth;
+					margin:0;
+
+					.search-query{
+						/* Search Bar */
+						margin:$margin 10px $margin 10px;
+						width:$searchwidth;
+					}
+
+					.search_button{
+						position:absolute;
+						top:8px;
+						right:-35px;
+						background-color: Transparent;
+				    background-repeat:no-repeat;
+						background-image:none;
+				    border: none;
+				    cursor:pointer;
+				    overflow: hidden;
+				    // outline:none;
+					}
+				}
+			}
 		}
 	}
 
