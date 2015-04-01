@@ -1,10 +1,12 @@
-// This document is used for CSS that is used on the majority of pages throughout
-// The site. This means quicker loading and less I/O
-
 @import 'colors';
 
-// Global Text Formatting
-// This can be overridden in view specific css files.
+/*!
+ * This document is used for CSS that is used on the majority of pages throughout
+ * the site. This means quicker loading and less I/O. It is loaded in crowdscribe-layout.html
+ */
+
+/* Global Text Formatting */
+/* This can be overwritten in view specific css files */
 
 h1, p{
 	margin:0;
@@ -15,79 +17,105 @@ body, html{
 	height: 100%;
 }
 
+/* Global navigation bar - at the top of all pages */
+
 .navbar{
 
 	$navheight : 55px;
 	$navmargin : 15px;
 
 	.navbar-inner{
+
+		/* Used to space inner content */
+
 		$padding : 40px;
 		padding: 0 $padding 0 $padding;
 
+		/* Slight gradient to highlight features */
 		background-image: linear-gradient(to bottom,#FFF,rgb(240, 240, 240));
+
+		/* Some Bootstrap Overwrites */
 		border:0;
 		border-bottom: 1px solid $lightest_grey;
-		min-height:$navheight;
+		height:$navheight;
+
+		/* Hides right hand content if the window size is too small */
+		overflow:hidden;
 
 		.right{
+			/* Right-side content */
 			float:right;
 			margin-right:0;
 		}
 
 		.nav{
-			// margin-left:20px;
+
+			/* List(ul) of navigation items */
 			height:$navheight;
 
 			.logo{
 
+				/* Logo and Home Redirect */
+
 				width:160px;
+
 				a{
+					/* Produces square tabbing area on TAB key press */
 					width:140px;
 					height:$navheight;
+
+					/* Centralises logo within container */
 					margin:0 auto 0 auto;
-					padding:0;
 				}
 
 				img{
+					/* Image position is slightly adjusted to bring it in line with navigation items */
 					$buffer : 3px;
 					height:$navheight - $navmargin*2;
-					 margin:$navmargin - $buffer 0 $navmargin 0;
+					margin:$navmargin - $buffer 0 $navmargin 0;
 				}
 			}
 
-			.selected{
-				// background-color:$logo_color;
-
-				a{
-					color:$logo_color;
-					font-weight:bold;
-					// border-right: none;
-				}
+			.create_project{
+				/* List object widths are set manually for consistency and readability */
+				width:150px;
 			}
 
-			.noline{
-				a{
-					border-right: none;
-				}
+			.selected a{
+				/* A button is highlighted in green and bolded to signify it is the element associated with the current page */
+				color:$logo_color;
+				font-weight:bold;
+			}
+
+			.noline a{
+				/* Used to more visually seperate items */
+				border-right: none;
 			}
 
 			$aheight:30px;
 			$margin: ($navheight - $aheight) / 2;
 
 			li{
-				height:100%;
+
+				/* Generic list item with modifiers */
 				text-align:center;
+				/* Standard width is 100px */
 				width:100px;
 
 				a{
-
+					/* Vertically centers text */
 					margin:$margin 0 $margin 0;
 					padding:0 10px 0 10px;
+
+					/* Set a{} height to 30px */
 					height:$aheight;
-					text-shadow: none;
 					line-height:$aheight;
+
+					/* Removes bootstrap styling */
+					text-shadow: none;
 					color:black;
 					font-weight:normal;
+
 					font-size:16px;
 					font-family: "Myriad Pro", "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
 					border-right: thin solid $light_grey;
@@ -95,6 +123,7 @@ body, html{
 			}
 
 			.search-query{
+				/* Search Bar */
 				margin:$margin 10px $margin 10px;
 				width:200px;
 			}
@@ -104,7 +133,7 @@ body, html{
 
 }
 
-// Site Wide Layour Formatting
+/* Site-wide Layout Formatting */
 
 .alert-danger, .alert-error{
 	margin-bottom:0;
@@ -113,6 +142,14 @@ body, html{
 .bg{
 	background-color:#e6e6e6;
 	height:100%;
+}
+
+.error{
+	border:none !important;
+	background-image:none !important;
+	background:rgba(255, 0, 0, 0.5) !important;
+	padding:5px 10px 5px 10px !important;
+	width:auto  !important;
 }
 
 .content_container{
@@ -192,9 +229,16 @@ body, html{
 			opacity:.5;
 		}
 
+		.clickable{
+			opacity:1;
+		}
+
 		.highlighted{
 			opacity:1;
 			font-weight:bold;
+			background:$logo_color;
+			color:white;
+			//rgb(70, 70, 70);
 		}
 
 		.rightmost{

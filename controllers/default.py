@@ -14,13 +14,9 @@ from gluon import *
 #########################################################################
 
 def index():
-    """
-    example action using the internationalization operator T and flash
-    rendered by views/default/index.html or views/generic.html
 
-    if you need a simple wiki simply replace the two lines below with:
-    return auth.wiki()
-    """
+    #Page Title
+    response.title = "CrowdScribe"  
 
     # NOT REALLY LATEST PROJECTS
     latest_projects = database.get_open_projects()
@@ -34,7 +30,9 @@ def index():
                 featured_project = featured_project, featured_project_image = featured_project_image)
 
 def browse():
-   return dict()
+    # Page Title
+    response.title = "Browse"
+    return dict()
 
 
 def user():

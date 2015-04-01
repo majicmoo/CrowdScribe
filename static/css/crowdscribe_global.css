@@ -1,81 +1,138 @@
+/*!
+ * This document is used for CSS that is used on the majority of pages throughout
+ * the site. This means quicker loading and less I/O. It is loaded in crowdscribe-layout.html
+ */
+/* Global Text Formatting */
+/* This can be overwritten in view specific css files */
 h1, p {
-  margin: 0; }
+  margin: 0;
+}
 
 body, html {
   padding: 0;
-  height: 100%; }
+  height: 100%;
+}
 
+/* Global navigation bar - at the top of all pages */
 .navbar .navbar-inner {
+  /* Used to space inner content */
   padding: 0 40px 0 40px;
+  /* Slight gradient to highlight features */
   background-image: linear-gradient(to bottom, white, #f0f0f0);
+  /* Some Bootstrap Overwrites */
   border: 0;
   border-bottom: 1px solid #e6e6e6;
-  min-height: 55px; }
-  .navbar .navbar-inner .right {
-    float: right;
-    margin-right: 0; }
-  .navbar .navbar-inner .nav {
-    height: 55px; }
-    .navbar .navbar-inner .nav .logo {
-      width: 160px; }
-      .navbar .navbar-inner .nav .logo a {
-        width: 140px;
-        height: 55px;
-        margin: 0 auto 0 auto;
-        padding: 0; }
-      .navbar .navbar-inner .nav .logo img {
-        height: 25px;
-        margin: 12px 0 15px 0; }
-    .navbar .navbar-inner .nav .selected a {
-      color: #69c72a;
-      font-weight: bold; }
-    .navbar .navbar-inner .nav .noline a {
-      border-right: none; }
-    .navbar .navbar-inner .nav li {
-      height: 100%;
-      text-align: center;
-      width: 100px; }
-      .navbar .navbar-inner .nav li a {
-        margin: 12.5px 0 12.5px 0;
-        padding: 0 10px 0 10px;
-        height: 30px;
-        text-shadow: none;
-        line-height: 30px;
-        color: black;
-        font-weight: normal;
-        font-size: 16px;
-        font-family: "Myriad Pro", "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
-        border-right: thin solid #c8c8c8; }
-    .navbar .navbar-inner .nav .search-query {
-      margin: 12.5px 10px 12.5px 10px;
-      width: 200px; }
+  height: 55px;
+  /* Hides right hand content if the window size is too small */
+  overflow: hidden;
+}
+.navbar .navbar-inner .right {
+  /* Right-side content */
+  float: right;
+  margin-right: 0;
+}
+.navbar .navbar-inner .nav {
+  /* List(ul) of navigation items */
+  height: 55px;
+}
+.navbar .navbar-inner .nav .logo {
+  /* Logo and Home Redirect */
+  width: 160px;
+}
+.navbar .navbar-inner .nav .logo a {
+  /* Produces square tabbing area on TAB key press */
+  width: 140px;
+  height: 55px;
+  /* Centralises logo within container */
+  margin: 0 auto 0 auto;
+}
+.navbar .navbar-inner .nav .logo img {
+  /* Image position is slightly adjusted to bring it in line with navigation items */
+  height: 25px;
+  margin: 12px 0 15px 0;
+}
+.navbar .navbar-inner .nav .create_project {
+  /* List object widths are set manually for consistency and readability */
+  width: 150px;
+}
+.navbar .navbar-inner .nav .selected a {
+  /* A button is highlighted in green and bolded to signify it is the element associated with the current page */
+  color: #69c72a;
+  font-weight: bold;
+}
+.navbar .navbar-inner .nav .noline a {
+  /* Used to more visually seperate items */
+  border-right: none;
+}
+.navbar .navbar-inner .nav li {
+  /* Generic list item with modifiers */
+  text-align: center;
+  /* Standard width is 100px */
+  width: 100px;
+}
+.navbar .navbar-inner .nav li a {
+  /* Vertically centers text */
+  margin: 12.5px 0 12.5px 0;
+  padding: 0 10px 0 10px;
+  /* Set a{} height to 30px */
+  height: 30px;
+  line-height: 30px;
+  /* Removes bootstrap styling */
+  text-shadow: none;
+  color: black;
+  font-weight: normal;
+  font-size: 16px;
+  font-family: "Myriad Pro", "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
+  border-right: thin solid #c8c8c8;
+}
+.navbar .navbar-inner .nav .search-query {
+  /* Search Bar */
+  margin: 12.5px 10px 12.5px 10px;
+  width: 200px;
+}
 
+/* Site-wide Layout Formatting */
 .alert-danger, .alert-error {
-  margin-bottom: 0; }
+  margin-bottom: 0;
+}
 
 .bg {
   background-color: #e6e6e6;
-  height: 100%; }
+  height: 100%;
+}
+
+.error {
+  border: none !important;
+  background-image: none !important;
+  background: rgba(255, 0, 0, 0.5) !important;
+  padding: 5px 10px 5px 10px !important;
+  width: auto  !important;
+}
 
 .content_container {
   width: 1000px;
   min-height: 95%;
   margin-left: auto;
   margin-right: auto;
-  background: #e6e6e6; }
+  background: #e6e6e6;
+}
 
 .padded_container {
   padding: 20px;
-  overflow: hidden; }
+  overflow: hidden;
+}
 
 .less_top_padding {
-  padding-top: 10px; }
+  padding-top: 10px;
+}
 
 .no_bottom_padding {
-  padding-bottom: 0; }
+  padding-bottom: 0;
+}
 
 .form_container .btn {
-  width: 100%; }
+  width: 100%;
+}
 .form_container .string, .form_container .text, .form_container select {
   margin: 10px 5px 15px 0;
   width: 100%;
@@ -84,137 +141,168 @@ body, html {
   -moz-box-sizing: border-box;
   /* Firefox 1 - 28 */
   box-sizing: border-box;
-  /* Safari 5.1+, Chrome 10+, Firefox 29+, Opera 7+, IE 8+, Android 4.0+, iOS any */ }
+  /* Safari 5.1+, Chrome 10+, Firefox 29+, Opera 7+, IE 8+, Android 4.0+, iOS any */
+}
 .form_container .string {
-  height: 30px; }
+  height: 30px;
+}
 
 .form_nav {
   height: 30px;
   text-align: center;
   padding: 10px;
-  overflow: auto; }
-  .form_nav .inner {
-    height: 100%;
-    border-radius: 10px;
-    overflow: hidden; }
-    .form_nav .inner a {
-      color: black; }
-    .form_nav .inner .stage {
-      height: 100%;
-      width: 25%;
-      background: #999999;
-      float: left;
-      line-height: 30px;
-      font-weight: normal;
-      -webkit-box-sizing: border-box;
-      -moz-box-sizing: border-box;
-      box-sizing: border-box;
-      border-right: 3px solid #e6e6e6;
-      opacity: .5; }
-    .form_nav .inner .highlighted {
-      opacity: 1;
-      font-weight: bold; }
-    .form_nav .inner .rightmost {
-      border-right: 0; }
+  overflow: auto;
+}
+.form_nav .inner {
+  height: 100%;
+  border-radius: 10px;
+  overflow: hidden;
+}
+.form_nav .inner a {
+  color: black;
+}
+.form_nav .inner .stage {
+  height: 100%;
+  width: 25%;
+  background: #999999;
+  float: left;
+  line-height: 30px;
+  font-weight: normal;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  border-right: 3px solid #e6e6e6;
+  opacity: .5;
+}
+.form_nav .inner .clickable {
+  opacity: 1;
+}
+.form_nav .inner .highlighted {
+  opacity: 1;
+  font-weight: bold;
+  background: #69c72a;
+  color: white;
+}
+.form_nav .inner .rightmost {
+  border-right: 0;
+}
 
 .projects {
   overflow: auto;
-  padding: 10px; }
-  .projects .project {
-    float: left;
-    min-width: 230px;
-    min-height: 230px;
-    height: 230px;
-    width: 33.33333%;
-    padding: 10px;
-    overflow: hidden;
-    position: relative;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box; }
-    .projects .project a {
-      color: white; }
-    .projects .project .content {
-      position: relative;
-      height: 100%;
-      background-color: #999999;
-      overflow: hidden; }
-      .projects .project .content img {
-        position: absolute; }
-      .projects .project .content .overlay {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.6); }
-        .projects .project .content .overlay .text {
-          -webkit-box-sizing: border-box;
-          -moz-box-sizing: border-box;
-          box-sizing: border-box;
-          padding: 10px; }
-          .projects .project .content .overlay .text h1 {
-            margin-top: 0;
-            font-size: 20px;
-            line-height: 20px; }
+  padding: 10px;
+}
+.projects .project {
+  float: left;
+  min-width: 230px;
+  min-height: 230px;
+  height: 230px;
+  width: 33.33333%;
+  padding: 10px;
+  overflow: hidden;
+  position: relative;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.projects .project a {
+  color: white;
+}
+.projects .project .content {
+  position: relative;
+  height: 100%;
+  background-color: #999999;
+  overflow: hidden;
+}
+.projects .project .content img {
+  position: absolute;
+}
+.projects .project .content .overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+}
+.projects .project .content .overlay .text {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  padding: 10px;
+}
+.projects .project .content .overlay .text h1 {
+  margin-top: 0;
+  font-size: 20px;
+  line-height: 20px;
+}
 
 .documents_delete {
   overflow: auto;
-  padding: 10px; }
-  .documents_delete .crop {
-    height: 55%;
-    overflow: hidden;
-    position: relative; }
-    .documents_delete .crop img {
-      display: block;
-      min-width: 100%;
-      min-height: 100%;
-      margin: auto;
-      position: absolute;
-      top: -100%;
-      right: -100%;
-      bottom: -100%;
-      left: -100%; }
-  .documents_delete .doc_image {
-    background: #999999;
-    height: 55%;
-    overflow: hidden; }
-  .documents_delete .doc_desc {
-    height: 35%;
-    -webkit-box-sizing: border-box;
-    /* Safari 3.0 - 5.0, Chrome 1 - 9, Android 2.1 - 3.x */
-    -moz-box-sizing: border-box;
-    /* Firefox 1 - 28 */
-    box-sizing: border-box;
-    /* Safari 5.1+, Chrome 10+, Firefox 29+, Opera 7+, IE 8+, Android 4.0+, iOS any */
-    padding: 10px;
-    overflow: hidden;
-    background: white; }
-  .documents_delete .doc_delete {
-    background: orange;
-    height: 10%; }
-    .documents_delete .doc_delete .btn {
-      width: 100%;
-      height: 100%;
-      border-radius: 0; }
-  .documents_delete .document {
-    float: left;
-    min-width: 230px;
-    min-height: 400px;
-    height: 400px;
-    width: 25%;
-    padding: 10px;
-    overflow: hidden;
-    position: relative;
-    -webkit-box-sizing: border-box;
-    /* Safari 3.0 - 5.0, Chrome 1 - 9, Android 2.1 - 3.x */
-    -moz-box-sizing: border-box;
-    /* Firefox 1 - 28 */
-    box-sizing: border-box;
-    /* Safari 5.1+, Chrome 10+, Firefox 29+, Opera 7+, IE 8+, Android 4.0+, iOS any */ }
-    .documents_delete .document .content {
-      height: 100%;
-      background-color: #999999; }
-    .documents_delete .document a {
-      color: black; }
+  padding: 10px;
+}
+.documents_delete .crop {
+  height: 55%;
+  overflow: hidden;
+  position: relative;
+}
+.documents_delete .crop img {
+  display: block;
+  min-width: 100%;
+  min-height: 100%;
+  margin: auto;
+  position: absolute;
+  top: -100%;
+  right: -100%;
+  bottom: -100%;
+  left: -100%;
+}
+.documents_delete .doc_image {
+  background: #999999;
+  height: 55%;
+  overflow: hidden;
+}
+.documents_delete .doc_desc {
+  height: 35%;
+  -webkit-box-sizing: border-box;
+  /* Safari 3.0 - 5.0, Chrome 1 - 9, Android 2.1 - 3.x */
+  -moz-box-sizing: border-box;
+  /* Firefox 1 - 28 */
+  box-sizing: border-box;
+  /* Safari 5.1+, Chrome 10+, Firefox 29+, Opera 7+, IE 8+, Android 4.0+, iOS any */
+  padding: 10px;
+  overflow: hidden;
+  background: white;
+}
+.documents_delete .doc_delete {
+  background: orange;
+  height: 10%;
+}
+.documents_delete .doc_delete .btn {
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
+}
+.documents_delete .document {
+  float: left;
+  min-width: 230px;
+  min-height: 400px;
+  height: 400px;
+  width: 25%;
+  padding: 10px;
+  overflow: hidden;
+  position: relative;
+  -webkit-box-sizing: border-box;
+  /* Safari 3.0 - 5.0, Chrome 1 - 9, Android 2.1 - 3.x */
+  -moz-box-sizing: border-box;
+  /* Firefox 1 - 28 */
+  box-sizing: border-box;
+  /* Safari 5.1+, Chrome 10+, Firefox 29+, Opera 7+, IE 8+, Android 4.0+, iOS any */
+}
+.documents_delete .document .content {
+  height: 100%;
+  background-color: #999999;
+}
+.documents_delete .document a {
+  color: black;
+}
 
 .fields .field {
   width: 100%;
@@ -222,45 +310,53 @@ body, html {
   background: #c8c8c8;
   overflow: hidden;
   margin-top: 10px;
-  border-radius: 10px; }
-  .fields .field .field_left {
-    float: left;
-    width: 90%;
-    height: 100%;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-    padding: 5px; }
-    .fields .field .field_left h4 {
-      margin: 0; }
-  .fields .field .field_right {
-    background: blue;
-    float: left;
-    width: 10%;
-    height: 100%; }
-    .fields .field .field_right .btn {
-      border-radius: 0;
-      height: 100%; }
+  border-radius: 10px;
+}
+.fields .field .field_left {
+  float: left;
+  width: 90%;
+  height: 100%;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  padding: 5px;
+}
+.fields .field .field_left h4 {
+  margin: 0;
+}
+.fields .field .field_right {
+  background: blue;
+  float: left;
+  width: 10%;
+  height: 100%;
+}
+.fields .field .field_right .btn {
+  border-radius: 0;
+  height: 100%;
+}
 
 /* The message tag is used across all pages, and shows a message at the top when desired by the controller */
 #message {
   min-width: 1000px;
   width: 100%;
   height: 30px;
-  background-color: #64B58B; }
-  #message #centeredmessage {
-    width: 1000px;
-    height: 30px;
-    margin-left: auto;
-    margin-right: auto;
-    /* I've used written colour descriptors where possible to make it more human readable */
-    color: white;
-    font-family: Arial;
-    text-align: center;
-    line-height: 30px; }
-  #message a {
-    display: inline-block;
-    /* Need to color white here to override default */
-    color: white;
-    text-decoration: none;
-    position: relative; }
+  background-color: #64B58B;
+}
+#message #centeredmessage {
+  width: 1000px;
+  height: 30px;
+  margin-left: auto;
+  margin-right: auto;
+  /* I've used written colour descriptors where possible to make it more human readable */
+  color: white;
+  font-family: Arial;
+  text-align: center;
+  line-height: 30px;
+}
+#message a {
+  display: inline-block;
+  /* Need to color white here to override default */
+  color: white;
+  text-decoration: none;
+  position: relative;
+}

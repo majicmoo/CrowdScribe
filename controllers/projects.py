@@ -5,6 +5,10 @@ database = database_transactions.DatabaseTransactions(db)
 @auth.requires_login(otherwise=URL('user', 'login',
                      vars= dict(controller_after_login='projects', page_after_login='create_step1')))
 def create_step1():
+
+    # Page Title
+    response.title = "Create - Step 1"
+
     project_id = None
     project_being_edited = None
     if session.project_being_created is not None:
@@ -179,6 +183,9 @@ def validate_create_step1(form):
                      vars= dict(controller_after_login='projects', page_after_login='create_step1')))
 def create_step2():
 
+    # Page Title
+    response.title = "Create - Step 2"
+
     project_id = None
     if session.project_being_created is not None:
         project_id = session.project_being_created
@@ -188,7 +195,7 @@ def create_step2():
 
     clear_project = FORM(DIV(BUTTON("Clear Project", _type='submit', _class='btn btn-danger btn-block')))
 
-    add_image_form = SQLFORM(db.document_image, submit_button="Add Image")
+    add_image_form = SQLFORM(db.document_image, submit_button="Add Document")
 
     go_to_step_3_form = FORM(DIV(BUTTON("Continue to Step 3", I(_class='icon-arrow-right icon-white'),
                                         _type='submit', _class='btn btn-primary btn-block btn-large')))
@@ -242,6 +249,9 @@ def validate_add_image_form(form):
 @auth.requires_login(otherwise=URL('user', 'login',
                      vars= dict(controller_after_login='projects', page_after_login='create_step1')))
 def create_step3():
+
+    # Page Title
+    response.title = "Create - Step 3"
 
     project_id = None
     if session.project_being_created is not None:
@@ -303,6 +313,9 @@ def validate_add_field_form(form):
 @auth.requires_login(otherwise=URL('user', 'login',
                      vars= dict(controller_after_login='projects', page_after_login='create_step1')))
 def create_step4():
+
+    # Page Title
+    response.title = "Create - Review"
 
     project_id = None
     if session.project_being_created is not None:
@@ -382,6 +395,9 @@ def project():
         # response.messagecolour = '#69c72a'
         None;
 
+    # Page Title
+    response.title = project.name;
+
     documents_for_project = database.get_project_open_documents(project.id)
     data_fields_for_project = database.get_data_fields_for_project(project.id)
 
@@ -405,6 +421,9 @@ def view_document():
     #Remove if project data not required in page
     project_id = request.args(0)
     project = database.get_open_project(project_id)
+
+    # Page Title
+    response.title = project.name;
 
     if project is None:
         redirect(URL('default','index'))
@@ -459,6 +478,10 @@ def review_document():
     # Current Project
     project_id = request.args(0)
     project = database.get_project(project_id)
+
+    # Page Title
+    response.title = project.name;
+
     # Current Document
     document_id = request.args(1)
     document = database.get_document(document_id)

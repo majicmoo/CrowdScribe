@@ -1,8 +1,12 @@
 import database_transactions as database_transactions
 database = database_transactions.DatabaseTransactions(db)
 from gluon import *
- 
+
 def search_results():
+
+    # Page Title
+    response.title = "Search Results"    
+
     print "--------------Begin-------------"
     projects = database.get_open_projects()
     #Lists for SELECT() helper in advanced search form
@@ -25,7 +29,7 @@ def search_results():
         INPUT(_value='Refine search', _type='submit', _id="advancesubmit"),
         _action='', _method='GET'
     )
-    
+
     #Determine how to order results. If none specified (ie, new search), default
     #order alphabetically
     if request.vars.order == 'Earliest':
@@ -34,9 +38,9 @@ def search_results():
         projects = database.get_open_projects().sort(lambda project: project.time_period_end_date, reverse=True)
     else:
         projects = database.get_open_projects().sort(lambda project: project.name)
-    
+
     print request.vars
-    
+
     #Gets keywords
     if request.vars.quicksearch is not None:
         searchstr = request.vars.quicksearch
@@ -84,7 +88,7 @@ def search_results():
             #exclude if before start date or after end date or Date is none
             projects.exclude(lambda project: (project.time_period_end_date < start_date) or
                 (end_date < project.time_period_start_date))
-            
+
     #Have to clear request.vars before processing otherwise consecutive
     #searches accumulate into lists rather than individual elements
     #advanced.vars = request.vars
@@ -103,14 +107,13 @@ def convert_date_to_integer(date, era):
         return -int(date)
     else:
         return int(date)
-    
+
 def date_validator(advanced):
     #Check that start date is before end date
     if ((request.vars.start_date is not None or request.vars.start_date == "") and (request.vars.start_date is None or request.vars.start_date != "") and
         (request.vars.end_date is not None or request.vars.end_date == "") and (request.vars.end_date is None or request.vars.end_date != "")):
-        
+
         start = convert_date_to_integer(request.vars.start_date,request.vars.start_era)
         end = convert_date_to_integer(request.vars.end_date,request.vars.end_era)
         if start > end:
             advanced.errors.time_period_end_date = 'The End Date of the time period must be later than the Start Date'
-            
