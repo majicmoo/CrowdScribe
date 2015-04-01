@@ -20,14 +20,13 @@ def search_results():
     advanced = FORM(
         INPUT(_name='advance', _id="advancetext"),
         LABEL("Category", SELECT(tags, _name='tag', requires=IS_IN_SET(tags))),
-        LABEL("Start Date", INPUT(_name='start_date', requires=IS_EMPTY_OR(IS_INT_IN_RANGE(0,2016)))), #doesn't work atm
+        LABEL("Start Date", INPUT(_name='start_date', _class='integer', requires=IS_EMPTY_OR(IS_INT_IN_RANGE(0,2016)))), #doesn't work atm
         SELECT(eras, _name='start_era', requires=IS_IN_SET(eras)),
-        LABEL("End Date", INPUT(_name='end_date', requires=IS_EMPTY_OR(IS_INT_IN_RANGE(0,2016)))), #doesn't work atm
+        LABEL("End Date", INPUT(_name='end_date', _class='integer', requires=IS_EMPTY_OR(IS_INT_IN_RANGE(0,2016)))), #doesn't work atm
         SELECT(eras, _name='end_era', requires=IS_IN_SET(eras)),
         LABEL("Include Unknown dates?", INPUT(_name='include_unknown_date', _type='checkbox')),
         LABEL("Sort by", SELECT(orders, _name='order', requires=IS_IN_SET(orders))),
-        INPUT(_value='Refine search', _type='submit', _id="advancesubmit"),
-        _action='', _method='GET'
+        INPUT(_value='Refine search', _type='submit', _id="advancesubmit"), _method='GET'
     )
 
     #Determine how to order results. If none specified (ie, new search), default
@@ -94,6 +93,7 @@ def search_results():
     #advanced.vars = request.vars
     request.vars = {}
 
+    #Does not validate
     if advanced.process(onvalidation=date_validator).accepted:
         #advanced.vars=request.vars
         redirect(URL('browse', vars=advanced.vars))
