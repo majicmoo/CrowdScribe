@@ -65,46 +65,44 @@ def login():
     # Window Title
     response.title = 'Login'
 
-    # auth.settings.login_userfield = 'username'
-    # if request.vars.username and not IS_EMAIL()(request.vars.username)[1]:
-    # 	# If this doesnt work, check if its an email.
-    # 	auth.settings.login_userfield = 'email'
-    # 	request.vars.email = request.vars.username
-    # 	request.post_vars.email = request.vars.email
-    # 	request.vars.username = None
-    # 	request.post_vars.username = None
-    #
-    # form = auth.login()
-    #
-    # # Define placeholder values
-    # form.custom.widget.username["_placeholder"] = "Username or Email"
-    # form.custom.widget.password["_placeholder"] = "Password"
+    auth.settings.login_userfield = 'username'
+    if request.vars.username and not IS_EMAIL()(request.vars.username)[1]:
+    	# If this doesnt work, check if its an email.
+    	auth.settings.login_userfield = 'email'
+    	request.vars.email = request.vars.username
+    	request.post_vars.email = request.vars.email
+    	request.vars.username = None
+    	request.post_vars.username = None
 
-    form = FORM(LEGEND('Login'),
-                INPUT(_type='text', _name='username', _class = 'input-block-level', _placeholder='username',
-                      requires=IS_NOT_EMPTY( error_message=T("Please enter a username"))),
-                INPUT(_type='password',_name='password', _class = 'input-block-level', _placeholder='password',
-                      requires=IS_NOT_EMPTY(error_message=T("Please enter a password"))),
-                INPUT(_type='submit', _class='btn btn-primary', _value='Login'),
-                A('Register',_href=URL('register'), _role='button', _class='btn btn-info'))
+    form = auth.login()
+    form.custom.widget.username["_placeholder"] = "Username"
+    form.custom.widget.password["_placeholder"] = "Password"
 
-    if form.process().accepted:
-        # Log user in
-        user = auth.login_bare(request.vars.username, request.vars.password)
-        if(user is False):
-            # If username and password combination is not found in database, return this message
-            response.flash = DIV("Invalid Username/Password Combination", _class='alert alert-error')
-        else:
-            db((db.project.author_id == auth._get_user_id()) &(db.project.status == "Being Created")).delete()
-            # Checks whether user was sent to login form when trying to pledge. If true, the user is redirected back
-            # to the pledge they was trying to make.
-            if request.vars.controller_after_login and request.vars.page_after_login:
-                redirect(URL(request.vars.controller_after_login, request.vars.page_after_login))
-            else:
-                # Redirect them to their profile page.
-                redirect(URL('default','index'))
-    elif form.errors:
-        response.flash = DIV("Username or Password field is empty", _class='alert alert-error')
+    # FORM(LEGEND('Login'),
+    #             INPUT(_type='text', _name='username', _class = 'input-block-level', _placeholder='username',
+    #                   requires=IS_NOT_EMPTY( error_message=T("Please enter a username"))),
+    #             INPUT(_type='password',_name='password', _class = 'input-block-level', _placeholder='password',
+    #                   requires=IS_NOT_EMPTY(error_message=T("Please enter a password"))),
+    #             INPUT(_type='submit', _class='btn btn-primary', _value='Login'),
+    #             A('Register',_href=URL('register'), _role='button', _class='btn btn-info'))
+
+    # if form.process().accepted:
+    #     # Log user in
+    #     user = auth.login_bare(request.vars.username, request.vars.password)
+    #     if(user is False):
+    #         # If username and password combination is not found in database, return this message
+    #         response.flash = DIV("Invalid Username/Password Combination", _class='alert alert-error')
+    #     else:
+    #         db((db.project.author_id == auth._get_user_id()) &(db.project.status == "Being Created")).delete()
+    #         # Checks whether user was sent to login form when trying to pledge. If true, the user is redirected back
+    #         # to the pledge they was trying to make.
+    #         if request.vars.controller_after_login and request.vars.page_after_login:
+    #             redirect(URL(request.vars.controller_after_login, request.vars.page_after_login))
+    #         else:
+    #             # Redirect them to their profile page.
+    #             redirect(URL('default','index'))
+    # elif form.errors:
+    #     response.flash = DIV("Username or Password field is empty", _class='alert alert-error')
 
     return dict(form=form)
 

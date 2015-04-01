@@ -2,27 +2,39 @@
   width: 100%;
   height: 300px;
   background: #999999;
-  text-align: center;
-  padding-top: 75px;
-  padding-right: 10px;
-  padding-bottom: 10px;
-  padding-left: 50px;
-  -webkit-box-sizing: border-box;
-  /* Safari 3.0 - 5.0, Chrome 1 - 9, Android 2.1 - 3.x */
-  -moz-box-sizing: border-box;
-  /* Firefox 1 - 28 */
-  box-sizing: border-box;
-  /* Safari 5.1+, Chrome 10+, Firefox 29+, Opera 7+, IE 8+, Android 4.0+, iOS any */ }
-  #project_header h3 {
-    margin: 0; }
-  #project_header #progress {
-    margin: 10px auto 0 auto;
-    border-radius: 10px;
-    border-style: solid;
-    border-width: 2px;
-    background: rgba(255, 255, 255, 0.4);
-    width: 300px;
-    height: 40px; }
+  position: relative;
+  overflow: hidden; }
+  #project_header img {
+    position: absolute;
+    width: 100%; }
+  #project_header .overlay {
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    text-align: center;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    padding-top: 75px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+    padding-left: 50px;
+    -webkit-box-sizing: border-box;
+    /* Safari 3.0 - 5.0, Chrome 1 - 9, Android 2.1 - 3.x */
+    -moz-box-sizing: border-box;
+    /* Firefox 1 - 28 */
+    box-sizing: border-box;
+    /* Safari 5.1+, Chrome 10+, Firefox 29+, Opera 7+, IE 8+, Android 4.0+, iOS any */ }
+    #project_header .overlay h3 {
+      margin: 0; }
+    #project_header .overlay #progress {
+      color: #323232;
+      margin: 10px auto 0 auto;
+      border-radius: 10px;
+      border-style: solid;
+      border-width: 2px;
+      background: rgba(255, 255, 255, 0.4);
+      width: 300px;
+      height: 40px; }
 
 .document_viewer {
   margin-top: 10px;

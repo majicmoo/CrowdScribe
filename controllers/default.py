@@ -16,7 +16,7 @@ from gluon import *
 def index():
 
     #Page Title
-    response.title = "CrowdScribe"  
+    response.title = "CrowdScribe"
 
     # NOT REALLY LATEST PROJECTS
     latest_projects = database.get_open_projects()
@@ -32,7 +32,7 @@ def index():
 def browse():
     # Page Title
     response.title = "Browse"
-    return dict()
+    return dict(options = options)
 
 
 def user():

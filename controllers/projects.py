@@ -417,7 +417,7 @@ def project():
 
     return dict(project=project, timestring = timestring, documents_for_project=documents_for_project,
                 data_fields_for_project=data_fields_for_project,
-                documents_transcribed_by_user=documents_transcribed_by_user)
+                documents_transcribed_by_user=documents_transcribed_by_user, database = database)
 
 
 def view_document():
@@ -472,7 +472,7 @@ def view_document():
 
             #Inserts each transcribed field in db
             for data_field in database.get_data_fields_for_project(project_id):
-                db.transcribed_field.insert(data_field_id=data_field.id, transcription_id=transcription_id, information=form.vars[data_field.name])
+                db.transcribed_field.insert(data_field_id=data_field.id, transcription_id=transcription_id, information=form.vars[data_field.name] )
 
     # newform = SQLFORM.factory(form)
 
@@ -507,7 +507,7 @@ def review_document():
 
     # FIXME: Need a way to dynamically create accept/reject transcription button/form, idk how to do this
 
-    return dict(project=project, document=document, transcriptions=transcriptions,
+    return dict(project=project, document=document, transcriptions=transcriptions, database = database,
                 transcribed_fields_for_transcriptions=transcribed_fields_for_transcriptions)
 
 def accept_transcription():

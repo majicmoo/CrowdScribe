@@ -1,3 +1,30 @@
+{{response.files.append(URL(r=request,c='static/css',f='user.css'))}}
 {{extend 'crowdscribe-layout.html'}}
 
-{{=form}}
+<div class="padded_container form_container">
+  <div class='login'>
+
+  	<div id='loginform'>
+
+  		<h1>Sign In</h1>
+
+  		{{=form.custom.begin}}
+
+  			{{=form.custom.widget.username}}
+
+  			{{=form.custom.widget.password}}
+
+  		<div id='submitcontainer'>
+  		{{=form.custom.submit}}
+  		</div>
+
+  		{{=form.custom.end}}
+
+  		<p>Don't have an account? Sign up <a href="{{=URL(c="user",f="register")}}">here</a>.</p>
+
+  	</div>
+
+
+
+  </div>
+</div>
