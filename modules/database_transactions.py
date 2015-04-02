@@ -45,6 +45,11 @@ class DatabaseTransactions:
                     & (self.db.project.status == "Open")).select()
         return result
 
+    def get_under_review_projects_by_user(self, user_id):
+        result = self.db((self.db.project.author_id == user_id)
+                    & (self.db.project.status == "Under Review")).select()
+        return result
+
 
     def get_closed_projects_by_user(self, user_id):
         result = self.db((self.db.project.author_id == user_id)
@@ -117,6 +122,17 @@ class DatabaseTransactions:
 
     def get_done_documents_for_project(self, project_id):
         result = self.db((self.db.document_image.status == "Done")
+                    & (self.db.document_image.project_id == project_id)).select()
+        return result
+
+    def get_documents_for_a_project_that_have_a_transcription(self, project_id):
+        result = self.db((self.db.document_image.project_id == self.db.project.id)
+                    & (self.db.document_image.id == self.db.transcription.document_id)
+                    & (self.db.transcription.status == 'Pending')).select()
+        return result
+
+    def get_successfully_transcribed_documents_for_a_project(self, project_id):
+        result = self.db((self.db.document_image.status == "Closed")
                     & (self.db.document_image.project_id == project_id)).select()
         return result
 
