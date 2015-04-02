@@ -65,6 +65,11 @@ def login():
     # Window Title
     response.title = 'Login'
 
+    if request.vars.controller_after_login and request.vars.page_after_login:
+        auth.settings.login_next = URL(request.vars.controller_after_login, request.vars.page_after_login)
+    else:
+        auth.settings.login_next = URL('default', 'index')
+
     #auth.settings.login_userfield = 'username'
     # if request.vars.username and not IS_EMAIL()(request.vars.username)[1]:
     # 	# If this doesnt work, check if its an email.
