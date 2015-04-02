@@ -1,4 +1,6 @@
 <div id = "project_header">
+  {{import database_transactions as database_transactions}}
+  {{database=database_transactions.DatabaseTransactions(db)}}
 
   <img src="{{=URL('default','download',args = database.get_document_image_for_project_header(project.id).image)}}"/>
 

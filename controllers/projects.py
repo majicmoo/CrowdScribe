@@ -22,7 +22,8 @@ def create_step1():
     form = SQLFORM(db.project, submit_button="Continue to Step 2")
 
     clear_project = FORM(DIV(BUTTON("Clear Project", _type='submit', _class='btn btn-primary btn-block btn-danger',
-                                    _onclick="return confirm('Clearing will wipe all of your progress. Click 'OK' if you wish to continue');")))
+                                    _onclick="return confirm('Clearing a project will wipe all of your progress. Continue?');")))
+
 
     prepopulation_data = retrieve_prepopulated_data_for_create_step_1(project_being_edited)
 
@@ -195,7 +196,7 @@ def create_step2():
     step_available = check_if_steps_available(project_id)
 
     clear_project = FORM(DIV(BUTTON("Clear Project", _type='submit', _class='btn btn-danger btn-block',
-                                    _onclick="return confirm('Clearing will wipe all of your progress. Click 'OK' if you wish to continue');")))
+                                    _onclick="return confirm('Clearing a project will wipe all of your progress. Continue?');")))
 
     add_image_form = SQLFORM(db.document_image, submit_button="Add Document")
 
@@ -269,7 +270,7 @@ def create_step3():
                                         _type='submit', _class='btn btn-primary btn-block btn-large')))
 
     clear_project = FORM(DIV(BUTTON("Clear Project", _type='submit', _class='btn btn-danger btn-block',
-                                    _onclick="return confirm('Clearing will wipe all of your progress. Click 'OK' if you wish to continue');")))
+                                    _onclick="return confirm('Clearing a project will wipe all of your progress. Continue?');")))
 
     if add_fields_form.process(formname="form_one", onvalidate = validate_add_field_form).accepted:
         db.data_field.insert(name=request.vars.name, short_description=request.vars.short_description, project_id=project_id)
@@ -327,7 +328,7 @@ def create_step4():
         redirect(URL('projects', 'create_step1'))
 
     clear_project = FORM(DIV(BUTTON("Clear Project", _type='submit', _class='btn btn-danger btn-block',
-                                    _onclick="return confirm('Clearing will wipe all of your progress. Click 'OK' if you wish to continue');")))
+                                    _onclick="return confirm('Clearing a project will wipe all of your progress. Continue?');")))
 
     project_being_edited = database.get_project(project_id)
     documents_added = database.get_project_documents(project_id)
@@ -340,6 +341,10 @@ def create_step4():
         project.update_record(status="Open")
         session.project_being_created = None
         redirect(URL('projects','project', args=[project.id]))
+        
+    if clear_project.validate(formname="form_two"):
+        session.project_being_created = None
+        redirect(URL('projects', 'create_step1'))
 
     # Time String
     project = database.get_project(project_id)
