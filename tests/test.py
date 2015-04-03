@@ -164,7 +164,7 @@ class TestDatabaseTransactions(unittest.TestCase):
     def test_get_project_documents(self):
         total_number_of_documents = 0
         for project in self.projects:
-            project_documents = database.get_project_documents(project)
+            project_documents = database.get_documents_by_project(project)
             for document in project_documents:
                 total_number_of_documents += 1
                 self.assertEquals(document.project_id, project.id)
@@ -175,7 +175,7 @@ class TestDatabaseTransactions(unittest.TestCase):
         total_number_of_open_documents_found_by_b = 0
         # A
         for project in self.projects:
-            project_documents = database.get_project_open_documents(project)
+            project_documents = database.get_open_documents_by_project(project)
             for document in project_documents:
                 total_number_of_open_documents_found_by_a += 1
                 self.assertEquals(document.project_id, project.id)
@@ -192,7 +192,7 @@ class TestDatabaseTransactions(unittest.TestCase):
         total_number_of_closed_documents_found_by_b = 0
         # A
         for project in self.projects:
-            project_documents = database.get_project_closed_documents(project)
+            project_documents = database.get_closed_documents_by_project(project)
             for document in project_documents:
                 total_number_of_closed_documents_found_by_a += 1
                 self.assertEquals(document.project_id, project.id)
@@ -255,7 +255,7 @@ class TestDatabaseTransactions(unittest.TestCase):
     def test_get_data_fields_for_project(self):
         total_number_of_data_fields = 0
         for project in self.projects:
-            data_fields = database.get_data_fields_for_project(project)
+            data_fields = database.get_data_fields_by_project(project)
             for data_field in data_fields:
                 total_number_of_data_fields += 1
                 self.assertEquals(data_field.project_id, self.project_one)
@@ -264,7 +264,7 @@ class TestDatabaseTransactions(unittest.TestCase):
 
     def test_get_transcriptions_for_document(self):
         for document in self.documents:
-            transcriptions = database.get_transcriptions_for_document(document)
+            transcriptions = database.get_transcriptions_by_document(document)
             for transcription in transcriptions:
                 self.assertEquals(transcription.transcription.document_id, self.document_one)
 
@@ -273,7 +273,7 @@ class TestDatabaseTransactions(unittest.TestCase):
         total_number_of_done_documents_found_by_b = 0
         # A
         for user in self.users:
-            documents = database.get_done_documents_for_user(user)
+            documents = database.get_done_documents_by_user(user)
             for document in documents:
                 total_number_of_done_documents_found_by_a += 1
                 self.assertEquals(document.document_image.status, self.done_status)
@@ -290,7 +290,7 @@ class TestDatabaseTransactions(unittest.TestCase):
         total_number_of_done_documents_found_by_b = 0
         # A
         for project in self.projects:
-            documents = database.get_done_documents_for_project(project)
+            documents = database.get_done_documents_by_project(project)
             for document in documents:
                 total_number_of_done_documents_found_by_a += 1
                 self.assertEquals(document.status, self.done_status)
@@ -305,7 +305,7 @@ class TestDatabaseTransactions(unittest.TestCase):
         # FIXME: Might not be extensive enough
         # Documents user own and have a transcription
         for user in self.users:
-            documents = database.get_documents_for_a_user_that_have_transcription(user)
+            documents = database.get_documents_with_transcription_by_user(user)
             for document in documents:
                 self.assertEquals(document.project.author_id, user)
 

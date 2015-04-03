@@ -80,10 +80,10 @@ def check_if_steps_available(project_id):
         if database.get_project(project_id) is not None:
             step2_available = True
 
-            if database.get_project_documents(project_id).first() is not None:
+            if database.get_documents_by_project(project_id).first() is not None:
                 step3_available = True
 
-                if database.get_data_fields_for_project(project_id).first() is not None:
+                if database.get_data_fields_by_project(project_id).first() is not None:
                     step4_available = True
 
     result = {}
@@ -211,7 +211,7 @@ def create_step2():
         session.project_being_created = project_id
 
     if go_to_step_3_form.process(formname="form_two").accepted:
-        documents_added = database.get_project_documents(project_id)
+        documents_added = database.get_documents_by_project(project_id)
         if len(documents_added) < 1:
             response.flash = DIV("At least one image must be added", _class="alert alert-error")
         else:
@@ -226,7 +226,7 @@ def create_step2():
         session.project_being_created = None
         redirect(URL('projects', 'create_step1'))
 
-    documents_added = database.get_project_documents(project_id)
+    documents_added = database.get_documents_by_project(project_id)
 
     return dict(add_image_form=add_image_form, go_to_step_3_form=go_to_step_3_form,
                 go_to_step_1_form=go_to_step_1_form, documents_added=documents_added, clear_project=clear_project,
@@ -278,7 +278,7 @@ def create_step3():
         session.project_being_created = project_id
 
     if review_project_form.process(formname="form_two").accepted:
-        fields_added = database.get_data_fields_for_project(project_id)
+        fields_added = database.get_data_fields_by_project(project_id)
         if len(fields_added) < 1:
             response.flash = DIV("At least one field must be added", _class="alert alert-error")
         else:
@@ -293,8 +293,8 @@ def create_step3():
         session.project_being_created = None
         redirect(URL('projects', 'create_step1'))
 
-    documents_added = database.get_project_documents(project_id)
-    fields_added = database.get_data_fields_for_project(project_id)
+    documents_added = database.get_documents_by_project(project_id)
+    fields_added = database.get_data_fields_by_project(project_id)
 
     return dict(documents_added=documents_added, add_fields_form=add_fields_form, fields_added=fields_added
                 , review_project_form=review_project_form, go_to_step_2_form=go_to_step_2_form,
@@ -331,7 +331,7 @@ def create_step4():
                                     _onclick="return confirm('Clearing a project will wipe all of your progress. Continue?');")))
 
     project_being_edited = database.get_project(project_id)
-    documents_added = database.get_project_documents(project_id)
+    documents_added = database.get_documents_by_project(project_id)
 
     publish_project_form = FORM(DIV(BUTTON("Publish Project", I(_class='icon-arrow-right icon-white'),
                                           _type='submit', _class='btn btn-primary btn-block btn-large')))
@@ -407,12 +407,12 @@ def project():
     # Page Title
     response.title = project.name;
 
-    documents_for_project = database.get_project_open_documents(project.id)
-    data_fields_for_project = database.get_data_fields_for_project(project.id)
+    documents_for_project = database.get_open_documents_by_project(project.id)
+    data_fields_for_project = database.get_data_fields_by_project(project.id)
 
     #Retrieve documents that have already been transcribed by the user in this project. This
     #can be used to alert users to that fact on the page.
-    documents_transcribed_by_user = database.get_documents_in_project_that_has_already_been_transcribed_by_user\
+    documents_transcribed_by_user = database.get_documents_with_transcription_by_project_and_transcription_author\
                                     (project_id, auth._get_user_id())
 
     # Time String
@@ -452,7 +452,7 @@ def view_document():
     elif auth._get_user_id is None:
         response.flash = DIV("Please register to transcribe", _class="alert alert-info")
 
-    elif not database.check_if_document_has_already_been_transcribed_by_user(document_id, auth._get_user_id):
+    elif not database.document_has_already_been_transcribed_by_user(document_id, auth._get_user_id):
         response.flash = DIV("You have already transcribed this document", _class="alert alert-info")
 
     elif document.status == 'Done':
@@ -463,7 +463,7 @@ def view_document():
     #transcription for document image)
     else:
         #Create dynamic form according to number of data_fields
-        for data_field in database.get_data_fields_for_project(project_id):
+        for data_field in database.get_data_fields_by_project(project_id):
             label = H1(data_field.name)
             description = P(data_field.short_description)
             text_input = TEXTAREA(_name=data_field.name)
@@ -476,7 +476,7 @@ def view_document():
             transcription_id = db.transcription.insert(document_id=document_id, author_id=auth._get_user_id(), status='pending')
 
             #Inserts each transcribed field in db
-            for data_field in database.get_data_fields_for_project(project_id):
+            for data_field in database.get_data_fields_by_project(project_id):
                 db.transcribed_field.insert(data_field_id=data_field.id, transcription_id=transcription_id, information=form.vars[data_field.name] )
 
     # newform = SQLFORM.factory(form)
@@ -503,7 +503,7 @@ def review_document():
     if project.author_id != auth._get_user_id():
         redirect(URL('projects','project',args=[project_id]))
     # Get current transcriptions for Document
-    transcriptions = database.get_pending_transcriptions_for_document(document_id)
+    transcriptions = database.get_pending_transcriptions_by_document(document_id)
     print transcriptions
 
     transcribed_fields_for_transcriptions = []

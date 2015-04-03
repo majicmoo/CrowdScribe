@@ -123,7 +123,7 @@ def profile():
     for closed_project in closed_projects:
         documents = database.get_documents_for_a_project_that_have_transcription(closed_project)
         for document in documents:
-            transcriptions = database.get_transcriptions_for_document(document)
+            transcriptions = database.get_transcriptions_by_document(document)
             for i in transcriptions:
                 no_of_transcriptions_awaiting_approval += 1
 

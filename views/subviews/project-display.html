@@ -4,7 +4,7 @@
 	<a href={{=URL('projects','project', args=[project.id])}}>
 		<div class="content">
 
-			<img src="{{=URL('default','download',args = database.get_document_image_for_project_header(project.id).image)}}"/>
+			<img src="{{=URL('default','download',args = database.get_document_for_project_header(project.id).image)}}"/>
 
 			<div class = "overlay">
 				<div class="text">
