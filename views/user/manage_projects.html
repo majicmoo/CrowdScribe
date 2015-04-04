@@ -1,0 +1,33 @@
+{{extend 'crowdscribe-layout.html'}}
+<h2>Under Review</h2>
+{{for project in under_review_projects:}}
+    <h3><a href="{{=URL('projects','project',args=[project.id])}}">{{=project.name}}</a></h3>
+    {{=project}}
+    <!--Button to reopen project-->
+    {{#FIXME: Button needs renaming }}
+    {{=A(BUTTON('Open For transactions',_class="btn btn-success"), callback= URL('reopen_project_for_transcriptions',
+        vars= dict(project_id=project.id)))}}
+
+{{pass}}
+
+<h2>Open, Has Transcription</h2>
+{{for project in open_projects_with_transcriptions:}}
+    <h3><a href="{{=URL('projects','project',args=[project.id])}}">{{=project.name}}</a></h3>
+    {{=project}}
+    <!--Button to put project under review-->
+    {{#FIXME: Button needs renaming }}
+    {{=A(BUTTON('Close for review',_class="btn btn-success"), callback= URL('place_project_under_review',
+        vars= dict(project_id=project.id)))}}
+{{pass}}
+
+<h2>Open, Has No Transcription</h2>
+{{for project in open_projects_without_transcriptions:}}
+    <h3><a href="{{=URL('projects','project',args=[project.id])}}">{{=project.name}}</a></h3>
+    {{=project}}
+{{pass}}
+
+<h2>Closed</h2>
+{{for project in closed_projects:}}
+    <h3><a href="{{=URL('projects','project',args=[project.id])}}">{{=project.name}}</a></h3>
+    {{=project}}
+{{pass}}

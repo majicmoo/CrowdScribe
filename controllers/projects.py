@@ -489,7 +489,7 @@ def review_document():
     project = database.get_project(project_id)
 
     # Page Title
-    response.title = project.name;
+    response.title = project.name
 
     # Current Document
     document_id = request.args(1)
