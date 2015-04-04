@@ -95,6 +95,21 @@ class DatabaseTransactions:
                     & (self.db.document_image.status == "Open")).select()
         return result
 
+    def get_open_documents_with_transcription_for_project(self, project_id):
+        result = self.db((self.db.document_image.project_id == project_id)
+                    & (self.db.document_image.status == "Open")
+                    & (self.db.document_image.id == self.db.transcription.document_id)
+                    & (self.db.transcription.status == 'Pending')).select()
+        return result
+
+    def get_open_documents_without_transcription_for_project(self, project_id):
+        open_documents = self.get_open_documents_for_project(project_id)
+        open_documents_with_transcription = self.get_open_documents_with_transcription_for_project(project_id)
+        result = []
+        for i in open_documents:
+            if i not in open_documents_with_transcription:
+                result.append(i)
+
     def get_closed_documents_for_project(self, project_id):
         result = self.db((self.db.document_image.project_id == project_id)
                     & (self.db.document_image.status == "Closed")).select()
@@ -212,6 +227,15 @@ class DatabaseTransactions:
                     & (self.db.transcribed_field.data_field_id == self.db.data_field.id)).select()
         return result
 
+    # Other
+    def project_can_be_closed_for_review(self, project_id):
+        done_documents = self.get_done_documents_for_project(project_id)
+        if len(done_documents) > 0:
+            return True
+        open_documents_with_transcription = self.get_open_documents_with_transcription_for_project(project_id)
+        if len(open_documents_with_transcription) > 0:
+            return True
+        return False
 
 
 
