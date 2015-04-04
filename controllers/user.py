@@ -107,7 +107,7 @@ def login():
     return dict(form=form)
 
 def profile():
-    user_id = auth._get_user_id
+    user_id = auth._get_user_id()
     response.title = auth.user.username
 
     # Alerts
@@ -131,20 +131,36 @@ def profile():
     response.transcriptions_alert = 'You have', no_of_transcriptions_awaiting_approval, 'transcriptions awaiting approval.'
     return dict()
 
-def transactions_made():
+def view_own_transcriptions():
+    user_id = auth._get_user_id()
     # Controller for transactions made by user
 
+    pending_transcriptions = database.get_pending_transcriptions_for_user(user_id)
+    accepted_transcriptions = database.get_accepted_transcriptions_for_user(user_id)
+    rejected_transcriptions = database.get_rejected_transcriptions_for_user(user_id)
 
+    return dict(pending_transcriptions=pending_transcriptions, accepted_transcriptions=accepted_transcriptions,
+                rejected_transcriptions=rejected_transcriptions)
 
-    return dict()
+def view_individual_transcriptions():
+    transcription_id = request.args(0)
+    transcription = database.get_transcription(transcription_id)
+    transcribed_fields = database.get_transcribed_fields_for_transcription(transcription_id)
+    document_transcription_was_made_on = database.get_document_that_transcription_was_made_on(transcription_id)
+
+    return dict(transcription=transcription, transcribed_fields=transcribed_fields,
+                document_transcription_was_made_on=document_transcription_was_made_on)
+
 
 def manage_projects():
-    user_id = auth._get_user_id
+    user_id = auth._get_user_id()
 
     # Open Projects
     open_projects = database.get_open_projects_by_user(user_id)
-
     # Closed Projects
     closed_projects = database.get_closed_projects_by_user(user_id)
 
+
     return dict(open_projects=open_projects, closed_projects=closed_projects)
+
+

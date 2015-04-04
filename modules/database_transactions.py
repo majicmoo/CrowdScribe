@@ -39,6 +39,9 @@ class DatabaseTransactions:
                     & (self.db.project.status == "Open")).select()
         return result
 
+    def get_projects_that_have_a_document_with_a_transcription_for_user(self, user):
+        pass
+
     def get_under_review_projects_by_user(self, user_id):
         result = self.db((self.db.project.author_id == user_id)
                     & (self.db.project.status == "Under Review")).select()
@@ -121,6 +124,7 @@ class DatabaseTransactions:
         else:
             return True
 
+    # I don't know what purpose this serves and I'm pretty sure its functionality is wrong anyway
     def get_documents_with_transcription_by_project_and_transcription_author(self, project_id, user_id):
         result = self.db((self.db.project.id == self.db.document_image.project_id)
                     & (self.db.document_image.id == self.db.transcription.document_id)
@@ -129,9 +133,7 @@ class DatabaseTransactions:
         return result
 
     def get_document_for_project_header(self, project_id):
-        print project_id
         result = self.db(self.db.document_image.project_id == project_id).select().first()
-        print result
         return result
 
 
@@ -142,12 +144,35 @@ class DatabaseTransactions:
             result.remove(i)
         return result
 
+    def get_document_that_transcription_was_made_on(self, transcription_id):
+        result = self.db((self.db.transcription.document_id == self.db.document_image.id)
+                        & (self.db.document_image.project_id == self.db.project.id)
+                        & (self.db.transcription.id == transcription_id)).select()
+
     # Get Transcriptions
-    def get_transcriptions_by_user(self, user_id):
-        result = self.db(self.db.transcription.author_id == user_id).select()
+    def get_pending_transcriptions_for_user(self, user_id):
+        result = self.db((self.db.transcription.author_id == user_id)
+                        & (self.db.transcription.document_id == self.db.document_image.id)
+                        & (self.db.document_image.project_id == self.db.project.id)
+                        & (self.db.transcription.status == "Pending")).select()
         return result
 
-    def get_transcription_by_transcription_id(self, transcription_id):
+    def get_accepted_transcriptions_for_user(self, user_id):
+        result = self.db((self.db.transcription.author_id == user_id)
+                        & (self.db.transcription.document_id == self.db.document_image.id)
+                        & (self.db.document_image.project_id == self.db.project.id)
+                        & (self.db.transcription.status == "Accepted")).select()
+        return result
+
+    def get_rejected_transcriptions_for_user(self, user_id):
+        result = self.db((self.db.transcription.author_id == user_id)
+                        & (self.db.transcription.document_id == self.db.document_image.id)
+                        & (self.db.document_image.project_id == self.db.project.id)
+                        & (self.db.transcription.status == "Rejected")).select()
+        return result
+
+
+    def get_transcription(self, transcription_id):
         result = self.db((self.db.transcription.id == transcription_id)).select()
         return result
 
@@ -170,6 +195,8 @@ class DatabaseTransactions:
         result = self.db((self.db.transcribed_field.transcription_id == transcription_id)
                     & (self.db.transcribed_field.data_field_id == self.db.data_field.id)).select()
         return result
+
+
 
 
 

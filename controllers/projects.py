@@ -510,7 +510,6 @@ def review_document():
     for transcription in transcriptions:
         transcribed_fields_for_transcriptions.append(database.get_transcribed_fields_for_transcription(transcription.id))
 
-    # FIXME: Need a way to dynamically create accept/reject transcription button/form, idk how to do this
 
     return dict(project=project, document=document, transcriptions=transcriptions, database = database,
                 transcribed_fields_for_transcriptions=transcribed_fields_for_transcriptions)
