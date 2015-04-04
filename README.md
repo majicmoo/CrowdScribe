@@ -23,7 +23,9 @@ Windows:
 
 **Open** - Not Transcribed
 
-**Closed** - Transcribed
+**Closed** - Succesful Transcription
+
+**Done** - 3 or more transcriptions
 
 
 ### Transcription Status:
