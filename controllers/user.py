@@ -112,7 +112,7 @@ def profile():
 
     # Alerts
     # Number of Closed Projects that belong to user
-    closed_projects = database.get_closed_projects_by_user(user_id)
+    closed_projects = database.get_closed_projects_for_user(user_id)
     if closed_projects is None:
         no_of_closed_projects = 0
     else:
@@ -123,7 +123,7 @@ def profile():
     for closed_project in closed_projects:
         documents = database.get_documents_for_a_project_that_have_transcription(closed_project)
         for document in documents:
-            transcriptions = database.get_transcriptions_by_document(document)
+            transcriptions = database.get_transcriptions_for_document(document)
             for i in transcriptions:
                 no_of_transcriptions_awaiting_approval += 1
 
@@ -146,7 +146,7 @@ def view_individual_transcriptions():
     transcription_id = request.args(0)
     transcription = database.get_transcription(transcription_id)
     transcribed_fields = database.get_transcribed_fields_for_transcription(transcription_id)
-    document_transcription_was_made_on = database.get_document_that_transcription_was_made_on(transcription_id)
+    document_transcription_was_made_on = database.get_document_for_transcription(transcription_id)
 
     return dict(transcription=transcription, transcribed_fields=transcribed_fields,
                 document_transcription_was_made_on=document_transcription_was_made_on)
@@ -156,9 +156,9 @@ def manage_projects():
     user_id = auth._get_user_id()
 
     # Open Projects
-    open_projects = database.get_open_projects_by_user(user_id)
+    open_projects = database.get_open_projects_for_user(user_id)
     # Closed Projects
-    closed_projects = database.get_closed_projects_by_user(user_id)
+    closed_projects = database.get_closed_projects_for_user(user_id)
 
 
     return dict(open_projects=open_projects, closed_projects=closed_projects)

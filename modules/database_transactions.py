@@ -30,11 +30,11 @@ class DatabaseTransactions:
         result = self.db(self.db.project.status == "Open").select(self.db.project.ALL)
         return result
 
-    def get_projects_by_user(self, user_id):
+    def get_projects_for_user(self, user_id):
         result = self.db(self.db.project.author_id == user_id).select()
         return result
 
-    def get_open_projects_by_user(self, user_id):
+    def get_open_projects_for_user(self, user_id):
         result = self.db((self.db.project.author_id == user_id)
                     & (self.db.project.status == "Open")).select()
         return result
@@ -42,22 +42,22 @@ class DatabaseTransactions:
     def get_projects_that_have_a_document_with_a_transcription_for_user(self, user):
         pass
 
-    def get_under_review_projects_by_user(self, user_id):
+    def get_under_review_projects_for_user(self, user_id):
         result = self.db((self.db.project.author_id == user_id)
                     & (self.db.project.status == "Under Review")).select()
         return result
 
-    def get_closed_projects_by_user(self, user_id):
+    def get_closed_projects_for_user(self, user_id):
         result = self.db((self.db.project.author_id == user_id)
                     & (self.db.project.status == "Closed")).select()
         return result
 
-    def get_projects_by_tag(self, tag):
+    def get_projects_for_tag(self, tag):
         # FIXME: Should this only be open projects?
         result = self.db(self.db.project.tag == tag).select()
         return result
 
-    def get_projects_by_keyword(self, keyword):
+    def get_projects_for_keyword(self, keyword):
         result = self.db(((self.db.project.name.like('%' + keyword + '%')) | (self.db.project.description.like('%' + keyword + '%')))
                     & (self.db.project.status == "Open")).select()
         return result
@@ -72,43 +72,43 @@ class DatabaseTransactions:
         result = self.db(self.db.document_image.id == document_id).select().first()
         return result
 
-    def get_documents_by_project(self, project_id):
+    def get_documents_for_project(self, project_id):
         result = self.db(self.db.document_image.project_id == project_id).select()
         return result
 
-    def get_open_documents_by_project(self, project_id):
+    def get_open_documents_for_project(self, project_id):
         result = self.db((self.db.document_image.project_id == project_id)
                     & (self.db.document_image.status == "Open")).select()
         return result
 
-    def get_closed_documents_by_project(self, project_id):
+    def get_closed_documents_for_project(self, project_id):
         result = self.db((self.db.document_image.project_id == project_id)
                     & (self.db.document_image.status == "Closed")).select()
         return result
 
-    def get_done_documents_by_user(self, user_id):
+    def get_done_documents_for_user(self, user_id):
         result = self.db((self.db.document_image.status == "Done")
                     & (self.db.document_image.project_id == self.db.project.id)
                     & (self.db.project.author_id == user_id)).select()
         return result
 
-    def get_done_documents_by_project(self, project_id):
+    def get_done_documents_for_project(self, project_id):
         result = self.db((self.db.document_image.status == "Done")
                     & (self.db.document_image.project_id == project_id)).select()
         return result
 
-    def get_documents_with_transcription_by_project(self, project_id):
+    def get_documents_with_transcription_for_project(self, project_id):
         result = self.db((self.db.document_image.project_id == self.db.project.id)
                     & (self.db.document_image.id == self.db.transcription.document_id)
                     & (self.db.transcription.status == 'Pending')).select()
         return result
 
-    def get_successfully_transcribed_documents_by_project(self, project_id):
+    def get_successfully_transcribed_documents_for_project(self, project_id):
         result = self.db((self.db.document_image.status == "Closed")
                     & (self.db.document_image.project_id == project_id)).select()
         return result
 
-    def get_documents_with_transcription_by_user(self, user_id):
+    def get_documents_with_transcription_for_user(self, user_id):
         result = self.db((self.db.document_image.project_id == self.db.project.id)
                     & (self.db.project.author_id == user_id)
                     & (self.db.document_image.id == self.db.transcription.document_id)
@@ -125,7 +125,7 @@ class DatabaseTransactions:
             return True
 
     # I don't know what purpose this serves and I'm pretty sure its functionality is wrong anyway
-    def get_documents_with_transcription_by_project_and_transcription_author(self, project_id, user_id):
+    def get_documents_with_transcription_for_project_and_transcription_author(self, project_id, user_id):
         result = self.db((self.db.project.id == self.db.document_image.project_id)
                     & (self.db.document_image.id == self.db.transcription.document_id)
                     & (self.db.project.id == project_id)
@@ -137,14 +137,14 @@ class DatabaseTransactions:
         return result
 
 
-    def get_documents_with_no_transcriptions_by_project(self, project_id):
-        has_transcription = self.get_documents_with_transcription_by_project(project_id)
-        result = self.get_documents_by_project(project_id)
+    def get_documents_with_no_transcriptions_for_project(self, project_id):
+        has_transcription = self.get_documents_with_transcription_for_project(project_id)
+        result = self.get_documents_for_project(project_id)
         for i in has_transcription:
             result.remove(i)
         return result
 
-    def get_document_that_transcription_was_made_on(self, transcription_id):
+    def get_document_for_transcription(self, transcription_id):
         result = self.db((self.db.transcription.document_id == self.db.document_image.id)
                         & (self.db.document_image.project_id == self.db.project.id)
                         & (self.db.transcription.id == transcription_id)).select()
@@ -176,17 +176,17 @@ class DatabaseTransactions:
         result = self.db((self.db.transcription.id == transcription_id)).select()
         return result
 
-    def get_transcriptions_by_document(self, document_id):
+    def get_transcriptions_for_document(self, document_id):
         result = self.db((self.db.transcription.document_id == document_id)).select()
         return result
 
-    def get_pending_transcriptions_by_document(self, document_id):
+    def get_pending_transcriptions_for_document(self, document_id):
         result = self.db((self.db.transcription.document_id == document_id)
                     & (self.db.transcription.status == "Pending")).select()
         return result
 
     # Get Data Fields
-    def get_data_fields_by_project(self, project_id):
+    def get_data_fields_for_project(self, project_id):
         result = self.db(self.db.data_field.project_id == project_id).select()
         return result
 
