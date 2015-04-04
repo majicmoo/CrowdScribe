@@ -21,7 +21,7 @@ Windows:
 
 ### Document Status:
 
-**Open** - Not Transcribed
+**Open** - Less than 3 transcriptions 
 
 **Closed** - Succesful Transcription
 
