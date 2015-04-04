@@ -400,7 +400,6 @@ def project():
     #If user owns project then initialise message to be displayed on page
     if project.author_id == auth._get_user_id():
         # for view: close for review if possible
-        if database.
 
 
 
