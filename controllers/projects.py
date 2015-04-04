@@ -399,13 +399,38 @@ def project():
 
     #If user owns project then initialise message to be displayed on page
     if project.author_id == auth._get_user_id():
+        # for view: close for review if possible
+        if database.
+
+
+
+        # List of done documents - 3 or more transcriptions
+        done_documents = database.get_done_documents_for_project(project_id)
+
+        # List of documents that have transcription - open - less than 3 transcriptions
+        open_documents_with_transcription = database.get_open_documents_with_transcription_for_project(project_id)
+
+        # List of document that don't have a transcription - open
+        open_documents_without_transcription = database.get_open_documents_without_transcription_for_project(project_id)
+
+        # List of Complete Document - succesfully transcribed - closed
+        closed_documents = database.get_closed_documents_for_project(project_id)
+
         # Example Message
         # response.message = A('You own this project. Go to X', _href=URL('default','index'))
         # response.messagecolour = '#69c72a'
-        None;
+        response.message = 'You own this project'
+    else:
+        # if not owner
+        pass
+        # 2 Lists
+        # Done documents
+        # Open Documents
+
+
 
     # Page Title
-    response.title = project.name;
+    response.title = project.name
 
     documents_for_project = database.get_open_documents_for_project(project.id)
     data_fields_for_project = database.get_data_fields_for_project(project.id)
@@ -447,7 +472,7 @@ def view_document():
 
     if project.author_id == auth._get_user_id():
         # response.message = A('You own this project. Go to X', _href=URL('default','index'))
-        None;
+        pass
 
     elif auth._get_user_id is None:
         response.flash = DIV("Please register to transcribe", _class="alert alert-info")
