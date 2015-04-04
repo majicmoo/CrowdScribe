@@ -121,7 +121,7 @@ def profile():
     # Number of transcriptions user has made awaiting approval
     no_of_transcriptions_awaiting_approval = 0
     for closed_project in closed_projects:
-        documents = database.get_documents_for_a_project_that_have_transcription(closed_project)
+        documents = database.get_documents_with_transcription_for_project(closed_project)
         for document in documents:
             transcriptions = database.get_transcriptions_for_document(document)
             for i in transcriptions:
@@ -154,13 +154,30 @@ def view_individual_transcriptions():
 
 def manage_projects():
     user_id = auth._get_user_id()
+    # Under Review Projects
+    under_review_projects = database.get_under_review_projects_for_user(user_id)
 
-    # Open Projects
-    open_projects = database.get_open_projects_for_user(user_id)
-    # Closed Projects
+    # Have Transcriptions and open Projects
+    open_projects_with_transcriptions = database.get_open_projects_with_transcriptions_for_user(user_id)
+
+    # No Transcriptions and open Projects
+    open_projects_without_transcriptions = database.get_open_projects_without_transcriptions_for_user(user_id)
+
+    # All documents transcribed - closed
     closed_projects = database.get_closed_projects_for_user(user_id)
 
+    return dict(under_review_projects=under_review_projects,
+                open_projects_with_transcriptions=open_projects_with_transcriptions,
+                open_projects_without_transcriptions=open_projects_without_transcriptions,
+                closed_projects=closed_projects)
 
-    return dict(open_projects=open_projects, closed_projects=closed_projects)
 
+def place_project_under_review():
+    db((db.project.id==request.vars.project_id)).update(status="Under Review")
+    db.commit()
+    redirect(URL('user','manage_projects'), client_side=True)
 
+def reopen_project_for_transcriptions():
+    db((db.project.id==request.vars.project_id)).update(status="Open")
+    db.commit()
+    redirect(URL('user','manage_projects'), client_side=True)

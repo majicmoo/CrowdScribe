@@ -2,3 +2,5 @@
 {{extend 'crowdscribe-layout.html'}}
 
 Hi {{=auth.user.username}}
+
+<a href="{{=URL('user','manage_projects')}}">Manage Projects</a>

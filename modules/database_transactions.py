@@ -39,8 +39,22 @@ class DatabaseTransactions:
                     & (self.db.project.status == "Open")).select()
         return result
 
-    def get_projects_that_have_a_document_with_a_transcription_for_user(self, user):
-        pass
+    def get_open_projects_with_transcriptions_for_user(self, user_id):
+        result = self.db((self.db.project.author_id == user_id)
+                         & (self.db.document_image.project_id == self.db.project.id)
+                         & (self.db.transcription.document_id == self.db.document_image.id)
+                         & (self.db.transcription.status == "Pending")
+                        & (self.db.project.status == "Open")).select(self.db.project.ALL)
+        return result
+
+    def get_open_projects_without_transcriptions_for_user(self, user_id):
+        open_projects = self.get_open_projects_for_user(user_id)
+        open_projects_with_transcriptions = self.get_open_projects_with_transcriptions_for_user(user_id)
+        result = []
+        for i in open_projects:
+            if i not in open_projects_with_transcriptions:
+                result.append(i)
+        return result
 
     def get_under_review_projects_for_user(self, user_id):
         result = self.db((self.db.project.author_id == user_id)
@@ -139,9 +153,11 @@ class DatabaseTransactions:
 
     def get_documents_with_no_transcriptions_for_project(self, project_id):
         has_transcription = self.get_documents_with_transcription_for_project(project_id)
-        result = self.get_documents_for_project(project_id)
-        for i in has_transcription:
-            result.remove(i)
+        documents = self.get_documents_for_project(project_id)
+        result = []
+        for i in documents:
+            if i not in has_transcription:
+                result.append(i)
         return result
 
     def get_document_for_transcription(self, transcription_id):
