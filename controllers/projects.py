@@ -389,44 +389,53 @@ def create_step4():
     #            end_date=end_date)
 
 def project():
-
     project_id = request.args(0)
-    project = database.get_open_project(project_id)
+    project = database.get_project(project_id)
 
-    #If project doesnt exist or isn't open, redirect
+    #If project doesnt exist, redirect
     if project is None:
         redirect(URL('default', 'index'))
 
-    #If user owns project then initialise message to be displayed on page
+    # Initialise Variables
+    project_status = project.status
+    open_documents_with_transcription = []
+    open_documents_without_transcription = []
+    closed_documents = []
+    open_documents = []
+
     if project.author_id == auth._get_user_id():
-        # for view: close for review if possible
-
-
-
-        # List of done documents - 3 or more transcriptions
-        done_documents = database.get_done_documents_for_project(project_id)
-
+        # Current user owns project
         # List of documents that have transcription - open - less than 3 transcriptions
         open_documents_with_transcription = database.get_open_documents_with_transcription_for_project(project_id)
-
+        if open_documents_with_transcription is None:
+            open_documents_with_transcription = []
         # List of document that don't have a transcription - open
         open_documents_without_transcription = database.get_open_documents_without_transcription_for_project(project_id)
-
+        print open_documents_without_transcription
+        if open_documents_without_transcription is None:
+            open_documents_without_transcription = []
         # List of Complete Document - succesfully transcribed - closed
         closed_documents = database.get_closed_documents_for_project(project_id)
+        if closed_documents is None:
+            closed_documents = []
 
         # Example Message
         # response.message = A('You own this project. Go to X', _href=URL('default','index'))
         # response.messagecolour = '#69c72a'
         response.message = 'You own this project'
     else:
-        # if not owner
-        pass
-        # 2 Lists
-        # Done documents
-        # Open Documents
+        # If not owner
+        # Project is not open, redirect
+        if project_status != 'Open':
+            redirect(URL('default', 'index'))
+        open_documents = database.get_open_documents_for_project(project_id)
+        if open_documents is None:
+            closed_documents = []
 
-
+    # List of done documents - 3 or more transcriptions
+    done_documents = database.get_done_documents_for_project(project_id)
+    if done_documents is None:
+        done_documents = []
 
     # Page Title
     response.title = project.name
@@ -438,16 +447,18 @@ def project():
     #can be used to alert users to that fact on the page.
     documents_transcribed_by_user = database.get_documents_with_transcription_for_project_and_transcription_author\
                                     (project_id, auth._get_user_id())
+    header_image = URL('default','download',args = database.get_document_for_project_header(project.id).image)
 
     # Time String
     timestring = ''
     if project.time_period_start_date:
          timestring = '('+convert_integer_to_date_string(project.time_period_start_date) + " - " + convert_integer_to_date_string(project.time_period_end_date)+')'
 
-    return dict(project=project, timestring = timestring, documents_for_project=documents_for_project,
-                data_fields_for_project=data_fields_for_project,
-                documents_transcribed_by_user=documents_transcribed_by_user, database = database)
-
+    return dict(project=project, timestring = timestring, data_fields_for_project=data_fields_for_project,
+                documents_transcribed_by_user=documents_transcribed_by_user, header_image=header_image,
+                done_documents=done_documents, open_documents_with_transcription=open_documents_with_transcription,
+                open_documents_without_transcription=open_documents_without_transcription,
+                closed_documents=closed_documents, open_documents=open_documents)
 
 def view_document():
 
@@ -539,6 +550,7 @@ def review_document():
                 transcribed_fields_for_transcriptions=transcribed_fields_for_transcriptions)
 
 def accept_transcription():
+    # Function for button which will accept a given transcription for a given document
     db(db.document_image.id==request.vars.document_id).update(status='Closed')
     db((db.transcription.id!=request.vars.transcription_id) & (db.transcription.document_id==request.vars.document_id))\
     .update(status="Rejected")
@@ -548,6 +560,14 @@ def accept_transcription():
     redirect(URL('default','index'), client_side=True)
 
 def reject_all_transcriptions():
+    # Function for button which will reject all transcriptions for a given document
     db((db.transcription.document_id==request.vars.document_id)).update(status="Rejected")
     db.commit()
     redirect(URL('default','index'), client_side=True)
+
+def close_project_for_review():
+    # Function for button which will close a project for review
+    # FIXME: May need some validation depending on how it is implemented
+    db((db.project.id==request.vars.project_id)).update(status="Under Review")
+    db.commit()
+    redirect(URL('projects','project', args=request.vars.project_id), client_side=True)

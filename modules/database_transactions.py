@@ -109,6 +109,7 @@ class DatabaseTransactions:
         for i in open_documents:
             if i not in open_documents_with_transcription:
                 result.append(i)
+        return result
 
     def get_closed_documents_for_project(self, project_id):
         result = self.db((self.db.document_image.project_id == project_id)

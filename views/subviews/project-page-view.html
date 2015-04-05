@@ -1,8 +1,6 @@
 <div id = "project_header">
-  {{import database_transactions as database_transactions}}
-  {{database=database_transactions.DatabaseTransactions(db)}}
 
-  <img src="{{=URL('default','download',args = database.get_document_for_project_header(project.id).image)}}"/>
+  <img src="{{=header_image}}"/>
 
   <div class = "overlay">
     <h1>{{=project.name}}</h1>
@@ -18,9 +16,31 @@
 <div class="padded_container form_container no_bottom_padding">
   <p>{{=project.description}}</p>
 </div>
-
 <div class="documents">
-  {{for document in documents_for_project:}}
-    {{include "subviews/document-display.html"}}
-  {{pass}}
+    {{#FIXME: I am not sure if this is the best way to this, currently all lists are returned with some being empty, however it may be better to have ifs? idk }}
+    <!--Open Documents : Not project owner -->
+    {{for document in done_documents:}}
+        {{include "subviews/document-display.html"}}
+    {{pass}}
+
+    <!--Open Documents With Transcription: Project owner -->
+    {{for document in open_documents_with_transcription:}}
+        {{include "subviews/document-display.html"}}
+    {{pass}}
+
+    <!--Open Documents Without Transcription: Project owner -->
+    {{for document in open_documents_without_transcription:}}
+        {{include "subviews/document-display.html"}}
+    {{pass}}
+
+    <!--Closed Documents: Project owner -->
+    {{for document in closed_documents:}}
+        {{include "subviews/document-display.html"}}
+    {{pass}}
+
+    <!--Done Documents : Everyone-->
+    {{fdor document in done_documents:}}
+        {{include "subviews/document-display.html"}}
+    {{pass}}
+
 </div>
