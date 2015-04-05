@@ -1,5 +1,10 @@
 {{response.files.append(URL(r=request,c='static/css',f='project.css'))}}
 {{extend 'crowdscribe-layout.html'}}
+        <!--
+<link rel="stylesheet" type="text/css" href="{{=URL('static','css/ion.zoom.css')}}">
+<link rel="stylesheet" type="text/css" href="{{=URL('static','css/normalize.min.css')}}">
+<script type="text/javascript" src="{{=URL('static','js/ion.zoom.min.js')}}"></script>
+<script type="text/javascript" src="{{=URL('static','js/ion.zoom.js')}}"></script> -->
 
 <div class="padded_container form_container no_bottom_padding">
   <h1>{{=project.name}}</h1>
@@ -7,11 +12,9 @@
   <p>{{=document.description}}</p>
 
   <!-- Maybe highlight that image can be opened in new tab for zooming etc -->
-
   <div class="document_viewer">
-    <img src="{{=URL('default','download',args = document.image)}}"/>
+      <img src="{{=image}}" alt="document image">
   </div>
-
 
   <div class="transcription_form_holder">
     {{for field in form:}}
@@ -19,6 +22,5 @@
     {{pass}}
   </div>
 
-
-
 </div>
+

@@ -515,8 +515,9 @@ def view_document():
                 db.transcribed_field.insert(data_field_id=data_field.id, transcription_id=transcription_id, information=form.vars[data_field.name] )
 
     # newform = SQLFORM.factory(form)
+    image = URL('default','download',args = document.image)
 
-    return dict(project=project, document=document, form=form)
+    return dict(project=project, document=document, form=form, image=image)
 
 def review_document():
     # Current Project
