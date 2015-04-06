@@ -38,30 +38,32 @@
 
   {{=form.custom.begin}}
 
-      <h4> Project Title</h4>
+      <!-- <h4> Project Title</h4> -->
+      <label for="project_name">Project Title</label>
       <p>
         Ut elit cillum qui et officia consequat reprehenderit excepteur incididunt fugiat qui. Aliqua esse dolor velit excepteur ea aliquip Lorem anim minim ut. Sunt quis deserunt velit ipsum labore adipisicing. Elit amet qui aliqua fugiat consequat laboris nisi eiusmod culpa.
       </p>
-      <div> {{=form.custom.widget.name}}</div>
 
-      <h4> Project Description</h4>
+      {{=form.custom.widget.name}}
+
+      <label for="project_description">Project Description</label>
       <p>
         Ut elit cillum qui et officia consequat reprehenderit excepteur incididunt fugiat qui. Aliqua esse dolor velit excepteur ea aliquip Lorem anim minim ut. Sunt quis deserunt velit ipsum labore adipisicing. Elit amet qui aliqua fugiat consequat laboris nisi eiusmod culpa.
       </p>
       <div> {{=form.custom.widget.description}}</div>
 
-      <h4>Category</h4>
+      <label for="project_tag">Category</label>
       <p>
         Ut elit cillum qui et officia consequat reprehenderit excepteur incididunt fugiat qui. Aliqua esse dolor velit excepteur ea aliquip Lorem anim minim ut. Sunt quis deserunt velit ipsum labore adipisicing. Elit amet qui aliqua fugiat consequat laboris nisi eiusmod culpa.
       </p>
       <div>{{=form.custom.widget.tag}}</div>
 
-      <h4>Time Period</h4>
+      <label for="unknown_checkbox_container">Time Period</label>
       <p>
         Mention that SPACE toggles checkboxes. reprehenderit excepteur incididunt fugiat qui. Aliqua esse dolor velit excepteur ea aliquip Lorem anim minim ut. Sunt quis deserunt velit ipsum labore adipisicing. Elit amet qui aliqua fugiat consequat laboris nisi eiusmod culpa.
       </p>
       <div>
-          <label class="checkbox"  for="unknown"> <span id="unknown_checkbox_container"> Unknown</span>
+          <label class="checkbox"  for="unknown"> <span id="unknown_checkbox_container"> Unknown Time Period</span>
                           <input type="checkbox" name="unknown" id="unknown_checkbox" value="yes"
                       {{if pd:}} {{if pd['unknown']== 'checked':}} checked {{pass}} {{pass}}>
           </label>
@@ -74,7 +76,8 @@
           <div class="float_left">
             {{=form.custom.widget.time_period_start_date}}
           </div>
-          <select class="float_left input-small" name="start_era">
+          <label for="start_date_adbc">Start Time Domain:</label>
+          <select id = "start_date_adbc" class="float_left input-small" name="start_era">
               <option {{if pd:}}{{if pd['start_era'] == "AD":}} selected{{pass}}{{pass}}>AD</option>
               <option {{if pd:}}{{if pd['start_era'] == "BC":}} selected{{pass}}{{pass}}>BC</option>
           </select>
@@ -87,7 +90,8 @@
           <div class="float_left">
             {{=form.custom.widget.time_period_end_date}}
           </div>
-          <select class="float_left input-small" name="end_era">
+          <label for="start_date_adbc">End Time Domain:</label>
+          <select id = "end_date_adbc" class="float_left input-small" name="end_era">
               <option {{if pd:}}{{if pd['end_era'] == "AD":}} selected{{pass}}{{pass}}>AD</option>
               <option {{if pd:}}{{if pd['end_era'] == "BC":}} selected{{pass}}{{pass}}>BC</option>
           </select>
