@@ -407,21 +407,13 @@ def project():
         # Current user owns project
         # List of documents that have transcription - open - less than 3 transcriptions
         open_documents_with_transcription = database.get_open_documents_with_transcription_for_project(project_id)
-        if open_documents_with_transcription is None:
-            open_documents_with_transcription = []
+        open_documents_with_transcription = convert_none_to_empty_list(open_documents_with_transcription)
         # List of document that don't have a transcription - open
         open_documents_without_transcription = database.get_open_documents_without_transcription_for_project(project_id)
-        print open_documents_without_transcription
-        if open_documents_without_transcription is None:
-            open_documents_without_transcription = []
+        open_documents_without_transcription = convert_none_to_empty_list(open_documents_without_transcription)
         # List of Complete Document - succesfully transcribed - closed
         closed_documents = database.get_closed_documents_for_project(project_id)
-        if closed_documents is None:
-            closed_documents = []
-
-        # Example Message
-        # response.message = A('You own this project. Go to X', _href=URL('default','index'))
-        # response.messagecolour = '#69c72a'
+        closed_documents = convert_none_to_empty_list(closed_documents)
         response.message = 'You own this project'
     else:
         # If not owner
@@ -429,18 +421,16 @@ def project():
         if project_status != 'Open':
             redirect(URL('default', 'index'))
         open_documents = database.get_open_documents_for_project(project_id)
-        if open_documents is None:
-            closed_documents = []
+        open_documents = convert_none_to_empty_list(open_documents)
 
     # List of done documents - 3 or more transcriptions
     done_documents = database.get_done_documents_for_project(project_id)
-    if done_documents is None:
-        done_documents = []
+    done_documents = convert_none_to_empty_list(done_documents)
 
     # Page Title
     response.title = project.name
 
-    documents_for_project = database.get_open_documents_for_project(project.id)
+    #documents_for_project = database.get_open_documents_for_project(project.id)
     data_fields_for_project = database.get_data_fields_for_project(project.id)
 
     #Retrieve documents that have already been transcribed by the user in this project. This
@@ -453,6 +443,8 @@ def project():
     timestring = ''
     if project.time_period_start_date:
          timestring = '('+convert_integer_to_date_string(project.time_period_start_date) + " - " + convert_integer_to_date_string(project.time_period_end_date)+')'
+
+    print open_documents_without_transcription
 
     return dict(project=project, timestring = timestring, data_fields_for_project=data_fields_for_project,
                 documents_transcribed_by_user=documents_transcribed_by_user, header_image=header_image,
@@ -484,10 +476,10 @@ def view_document():
         # response.message = A('You own this project. Go to X', _href=URL('default','index'))
         pass
 
-    elif auth._get_user_id is None:
+    elif auth._get_user_id() is None:
         response.flash = DIV("Please register to transcribe", _class="alert alert-info")
 
-    elif not database.document_has_already_been_transcribed_by_user(document_id, auth._get_user_id):
+    elif not database.document_has_already_been_transcribed_by_user(document_id, auth._get_user_id()):
         response.flash = DIV("You have already transcribed this document", _class="alert alert-info")
 
     elif document.status == 'Done':
@@ -572,3 +564,9 @@ def close_project_for_review():
     db((db.project.id==request.vars.project_id)).update(status="Under Review")
     db.commit()
     redirect(URL('projects','project', args=request.vars.project_id), client_side=True)
+
+def convert_none_to_empty_list(array):
+    if array is None:
+        return []
+    else:
+        return array

@@ -17,29 +17,35 @@
   <p>{{=project.description}}</p>
 </div>
 <div class="documents">
-    {{#FIXME: I am not sure if this is the best way to this, currently all lists are returned with some being empty, however it may be better to have ifs? idk }}
-    <!--Open Documents : Not project owner -->
-    {{for document in done_documents:}}
-        {{include "subviews/document-display.html"}}
+
+    {{if auth._get_user_id() == project.author_id:}}
+        <!--Project Owner-->
+        <!--Open Documents With Transcription: Project owner -->
+        {{for document in open_documents_with_transcription:}}
+            {{include "subviews/document-display.html"}}
+        {{pass}}
+
+        <!--Open Documents Without Transcription: Project owner -->
+        {{for document in open_documents_without_transcription:}}
+            {{include "subviews/document-display.html"}}
+        {{pass}}
+
+        <!--Closed Documents: Project owner -->
+        {{for document in closed_documents:}}
+            {{include "subviews/document-display.html"}}
+        {{pass}}
+    {{else:}}
+        <!--Not Project Owner-->
+        <!--Open Documents : Not project owner -->
+        {{for document in open_documents:}}
+            {{include "subviews/document-display.html"}}
+        {{pass}}
     {{pass}}
 
-    <!--Open Documents With Transcription: Project owner -->
-    {{for document in open_documents_with_transcription:}}
-        {{include "subviews/document-display.html"}}
-    {{pass}}
 
-    <!--Open Documents Without Transcription: Project owner -->
-    {{for document in open_documents_without_transcription:}}
-        {{include "subviews/document-display.html"}}
-    {{pass}}
-
-    <!--Closed Documents: Project owner -->
-    {{for document in closed_documents:}}
-        {{include "subviews/document-display.html"}}
-    {{pass}}
 
     <!--Done Documents : Everyone-->
-    {{fdor document in done_documents:}}
+    {{for document in done_documents:}}
         {{include "subviews/document-display.html"}}
     {{pass}}
 
