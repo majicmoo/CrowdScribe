@@ -228,9 +228,12 @@ def create_step2():
 
     documents_added = database.get_documents_for_project(project_id)
 
+    # Use the project name to clarify to the user that they are still working on their setup
+    project = database.get_project(project_id)
+
     return dict(add_image_form=add_image_form, go_to_step_3_form=go_to_step_3_form,
                 go_to_step_1_form=go_to_step_1_form, documents_added=documents_added, clear_project=clear_project,
-                step_available=step_available)
+                step_available=step_available, project_name=project.name)
 
 def delete_document():
     db((db.document_image.id==request.vars.document_id)).delete()
@@ -296,9 +299,12 @@ def create_step3():
     documents_added = database.get_documents_for_project(project_id)
     fields_added = database.get_data_fields_for_project(project_id)
 
+    # Use the project name to clarify to the user that they are still working on their setup
+    project = database.get_project(project_id)
+
     return dict(documents_added=documents_added, add_fields_form=add_fields_form, fields_added=fields_added
                 , review_project_form=review_project_form, go_to_step_2_form=go_to_step_2_form,
-                clear_project=clear_project, step_available=step_available)
+                clear_project=clear_project, step_available=step_available, project_name=project.name)
 
 def delete_field():
     db((db.data_field.id==request.vars.field_id)).delete()
@@ -341,7 +347,7 @@ def create_step4():
         project.update_record(status="Open")
         session.project_being_created = None
         redirect(URL('projects','project', args=[project.id]))
-        
+
     if clear_project.validate(formname="form_two"):
         session.project_being_created = None
         redirect(URL('projects', 'create_step1'))
@@ -352,7 +358,9 @@ def create_step4():
     if project.time_period_start_date:
          timestring = '('+convert_integer_to_date_string(project.time_period_start_date) + " - " + convert_integer_to_date_string(project.time_period_end_date)+')'
 
-    return dict(project=project_being_edited, timestring = timestring, documents_for_project=documents_added, publish_project_form = publish_project_form, clear_project = clear_project)
+    header_image = URL('default','download',args = database.get_document_for_project_header(project.id).image)
+
+    return dict(project=project_being_edited, timestring = timestring, documents_for_project=documents_added, publish_project_form = publish_project_form, clear_project = clear_project, header_image=header_image,)
 
     # start_date = None
     # end_date = None

@@ -8,8 +8,16 @@
 /* Global Text Formatting */
 /* This can be overwritten in view specific css files */
 
+textarea{
+	resize: none;
+}
+
 h1, p{
 	margin:0;
+}
+
+p{
+	font-size:1em;
 }
 
 body, html{
@@ -241,13 +249,18 @@ body, html{
 
 		a{
 			color:black;
+			display: block;
+			width:100%/$numstages;
+			height:100%;
+			float:left;
+			text-decoration: none;
 		}
 
 		.stage{
-			height:100%;
-			width:100%/$numstages;
+			// height:100%;
+			// width:100%;
 			background:$med_grey;
-			float:left;
+			// float:left;
 
 			line-height:$navheight;
 			font-weight:normal;
@@ -354,7 +367,7 @@ body, html{
 }
 
 
-.documents_delete{
+.documents{
 
 	$padding : 10px;
 	$numprojectsinrow : 4;
@@ -415,7 +428,8 @@ body, html{
 		}
 	}
 
-	.document{
+	.document, .document_delete{
+
 		float:left;
 		min-width:$boxwidth;
 		min-height:$boxheight;
@@ -431,6 +445,8 @@ body, html{
 	  box-sizing: border-box;         /* Safari 5.1+, Chrome 10+, Firefox 29+, Opera 7+, IE 8+, Android 4.0+, iOS any */
 
 		.content{
+			border-radius:5px;
+			overflow:hidden;
 			height:100%;
 			background-color:$med_grey;
 		}
@@ -444,10 +460,12 @@ body, html{
 
 	.field{
 		width:100%;
-		height:80px;
+		// height:80px;
 		background:$light_grey;
 		overflow:hidden;
 		margin-top:10px;
+		display:block;
+		position:relative;
 
 		border-radius:10px;
 
@@ -458,7 +476,7 @@ body, html{
 			-webkit-box-sizing: border-box;
 		  -moz-box-sizing: border-box;
 		  box-sizing: border-box;
-			padding:5px;
+			padding:10px;
 
 			h4{
 				margin:0;
@@ -466,10 +484,10 @@ body, html{
 		}
 
 		.field_right{
-			background:blue;
-			float:left;
 			width:10%;
 			height:100%;
+			position:absolute;
+			left:90%;
 
 			.btn{
 				border-radius:0;

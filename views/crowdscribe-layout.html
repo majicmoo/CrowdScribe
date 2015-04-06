@@ -72,13 +72,15 @@
 
       <ul class="nav right">
 
-
-
         {{if auth.is_logged_in():}}
 
           <!-- Logged In -->
 
-          <li class="{{= 'selected create_project' if request.function == 'create_step1' else 'create_project'}}">
+          <li class="{{= 'selected create_project' if request.function == 'create_step1' or
+                                                      request.function == 'create_step2' or
+                                                      request.function == 'create_step3' or
+                                                      request.function == 'create_step4'
+                                                      else 'create_project'}}">
               <a href="{{=URL(c="projects",f="create_step1")}}">
                   Create Project
               </a>

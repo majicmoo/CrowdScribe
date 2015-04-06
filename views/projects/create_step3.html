@@ -9,28 +9,28 @@
     {{if step_available['2']:}}
       <a href="{{=URL('projects','create_step2')}}"><div class="stage clickable">2. Add Documents</div></a>
     {{else:}}
-      <div class="stage">2. Add Documents</div>
+      <a><div class="stage">2. Add Documents</div></a>
     {{pass}}
 
     {{if step_available['3']:}}
       <a href="{{=URL('projects','create_step3')}}"><div class="stage highlighted">3. Fields</div></a>
     {{else:}}
-      <div class="stage">3. Fields</div>
+      <a><div class="stage">3. Fields</div></a>
     {{pass}}
 
     {{if step_available['4']:}}
       <a href="{{=URL('projects','create_step4')}}"><div class="stage rightmost clickable">4. Review</div></a>
     {{else:}}
-      <div class="stage rightmost">4. Review</div>
+      <a><div class="stage rightmost">4. Review</div></a>
     {{pass}}
 
   </div>
 </div>
 
-<div class="padded_container form_container less_top_padding">
+<div class="padded_container form_container less_top_padding no_bottom_padding">
 
-  <h1>Create Project (3/4)</h1>
-  <h3>Add Fields</h3>
+  <h1>Create Project (Step 3 of 4)</h1>
+  <h3>Add Fields to {{=project_name}}</h3>
 
   <div class="add_new_field_form">
 
@@ -55,7 +55,7 @@
 
   </div>
 
-  <h3>Current Fields</h3>
+  <h3>Current Fields ({{=len(fields_added)}})</h3>
   <p>Fugiat culpa proident magna amet esse consequat eiusmod elit proident laborum.</p>
 
   <div class="fields">
@@ -66,9 +66,18 @@
     {{pass}}
   </div>
 
-  <!-- {{=add_fields_form.errors}} -->
-  <br>
+  <h3>Current Documents ({{=len(documents_added)}})</h3>
+  <p>Fugiat culpa proident magna amet esse consequat eiusmod elit proident laborum.</p>
+
+</div>
+
+<div class="documents">
+  {{for document in documents_added:}}
+    {{include "subviews/document-create-display.html"}}
+  {{pass}}
+</div>
+
+<div class="padded_container form_container less_top_padding no_bottom_padding">
   {{=review_project_form}}
   {{=clear_project}}
-
 </div>

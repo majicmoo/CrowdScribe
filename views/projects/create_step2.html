@@ -9,19 +9,19 @@
     {{if step_available['2']:}}
       <a href="{{=URL('projects','create_step2')}}"><div class="stage highlighted">2. Add Documents</div></a>
     {{else:}}
-      <div class="stage">2. Add Documents</div>
+      <a><div class="stage">2. Add Documents</div></a>
     {{pass}}
 
     {{if step_available['3']:}}
       <a href="{{=URL('projects','create_step3')}}"><div class="stage clickable">3. Fields</div></a>
     {{else:}}
-      <div class="stage">3. Fields</div>
+      <a><div class="stage">3. Fields</div></a>
     {{pass}}
 
     {{if step_available['4']:}}
       <a href="{{=URL('projects','create_step4')}}"><div class="stage rightmost clickable">4. Review</div></a>
     {{else:}}
-      <div class="stage rightmost">4. Review</div>
+      <a><div class="stage rightmost">4. Review</div></a>
     {{pass}}
 
   </div>
@@ -29,8 +29,8 @@
 
 <div class="padded_container form_container less_top_padding no_bottom_padding">
 
-  <h1>Create Project (2/4)</h1>
-  <h3>Add Documents to ProjectName</h3>
+  <h1>Create Project (Step 2 of 4)</h1>
+  <h3>Add Documents to {{=project_name}}</h3>
 
   <div class="add_new_document_form">
     <h4>Add New Document</h4>
@@ -48,7 +48,11 @@
           <!-- Overlay Text -->
           <div id = "image_upload_overlay">
             <h4>Upload Image</h4>
-            {{=add_image_form.custom.widget.image}}
+
+            <div class="fileUpload btn btn-primary">
+                <span>Select File</span>
+                {{=add_image_form.custom.widget.image}}
+            </div>
           </div>
         </div>
 
@@ -73,12 +77,12 @@
 
   </div>
 
-  <h3>Current Documents (n)</h3>
+  <h3>Current Documents ({{=len(documents_added)}})</h3>
   <p>Fugiat culpa proident magna amet esse consequat eiusmod elit proident laborum.</p>
 
 </div>
 
-<div class="documents_delete">
+<div class="documents">
   {{for document in documents_added:}}
     {{include "subviews/document-display-delete.html"}}
   {{pass}}

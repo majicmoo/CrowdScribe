@@ -1,4 +1,4 @@
-<div class="document_delete">
+<div class="document">
 
     <div class="content">
 
@@ -8,10 +8,6 @@
 
       <div class="doc_desc">
         {{=document.description}}
-      </div>
-      <div class="doc_delete">
-      {{=A(BUTTON('Delete',_class="btn btn-danger"), callback= URL('delete_document',
-        vars= dict(document_id=document.id)))}}
       </div>
   	</div>
 
