@@ -360,41 +360,43 @@ def create_step4():
 
     header_image = URL('default','download',args = database.get_document_for_project_header(project.id).image)
 
-    return dict(project=project_being_edited, timestring = timestring, documents_for_project=documents_added, publish_project_form = publish_project_form, clear_project = clear_project, header_image=header_image,)
+    project_status = project.status
+    open_documents_with_transcription = []
+    open_documents_without_transcription = []
+    closed_documents = []
+    open_documents = []
 
-    # start_date = None
-    # end_date = None
-    # project_id = None
-    # if session.project_being_created is not None:
-    #     project_id = session.project_being_created
-    #
-    # project_being_edited = database.get_project(project_id)
-    # documents_added = database.get_project_documents(project_id)
-    # fields_added = database.get_data_fields_for_project(project_id)
-    #
-    # if project_being_edited.time_period_start_date is not None:
-    #     start_date = convert_integer_to_date_string(project_being_edited.time_period_start_date)
-    #     end_date = convert_integer_to_date_string(project_being_edited.time_period_end_date)
-    #
-    # create_project_form = FORM(DIV(BUTTON("Create Project", I(_class='icon-arrow-right icon-white'),
-    #                                       _type='submit', _class='btn btn-primary btn-block btn-large')))
-    # go_to_step_3_form = FORM(DIV(BUTTON("Back to Step 3", I(_class='icon-arrow-left icon-white'),
-    #                                     _type='submit', _class='btn btn-primary btn-block btn-large')))
-    #
-    # if go_to_step_3_form.process(formname="form_two").accepted:
-    #     session.project_being_created = project_id
-    #     redirect(URL('projects', 'create_step3'))
-    #
-    # if create_project_form.process(formname="form_one").accepted:
-    #     project = database.get_project(project_id)
-    #     project.update_record(status="Open")
-    #     session.project_being_created = None
-    #     redirect(URL('default', 'index'))
-    #
-    #
-    # return dict(documents_added=documents_added, project=project_being_edited, fields_added=fields_added,
-    #            create_project_form=create_project_form, go_to_step_3_form=go_to_step_3_form, start_date=start_date,
-    #            end_date=end_date)
+    if project.author_id == auth._get_user_id():
+        # Current user owns project
+        # List of documents that have transcription - open - less than 3 transcriptions
+        open_documents_with_transcription = database.get_open_documents_with_transcription_for_project(project_id)
+        open_documents_with_transcription = convert_none_to_empty_list(open_documents_with_transcription)
+        # List of document that don't have a transcription - open
+        open_documents_without_transcription = database.get_open_documents_without_transcription_for_project(project_id)
+        open_documents_without_transcription = convert_none_to_empty_list(open_documents_without_transcription)
+        # List of Complete Document - succesfully transcribed - closed
+        closed_documents = database.get_closed_documents_for_project(project_id)
+        closed_documents = convert_none_to_empty_list(closed_documents)
+        # response.message = 'You own this project'
+    else:
+        # If not owner
+        # Project is not open, redirect
+        if project_status != 'Open':
+            redirect(URL('default', 'index'))
+        open_documents = database.get_open_documents_for_project(project_id)
+        open_documents = convert_none_to_empty_list(open_documents)
+
+    # List of done documents - 3 or more transcriptions
+    done_documents = database.get_done_documents_for_project(project_id)
+    done_documents = convert_none_to_empty_list(done_documents)
+
+    done_documents = database.get_done_documents_for_project(project_id)
+    done_documents = convert_none_to_empty_list(done_documents)
+
+    return dict(project=project_being_edited, timestring = timestring, documents_for_project=documents_added, publish_project_form = publish_project_form, clear_project = clear_project, header_image=header_image,
+    done_documents=done_documents, open_documents_with_transcription=open_documents_with_transcription,
+    open_documents_without_transcription=open_documents_without_transcription,
+    closed_documents=closed_documents, open_documents=open_documents)
 
 def project():
     project_id = request.args(0)
