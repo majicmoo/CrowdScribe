@@ -1,6 +1,8 @@
 {{response.files.append(URL(r=request,c='static/css',f='index.css'))}}
 {{extend 'crowdscribe-layout.html'}}
 
+{{if featured_project:}}
+
 <div class = "featured_project">
   <img src="{{=URL('default','download',args = featured_project_image)}}"/>
   <div class = "overlay">
@@ -12,6 +14,8 @@
     </div>
   </div>
 </div>
+
+{{pass}}
 
 <div class="padded_container form_container no_bottom_padding">
   <h1>Latest Projects</h1>
