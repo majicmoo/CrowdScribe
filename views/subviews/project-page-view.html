@@ -7,7 +7,7 @@
     <h3>{{=project.tag}} </h3>
     <h4>{{=timestring}}</h4>
     <div id = "progress">
-      <h4>4/5 Transcriptions Completed</h4>
+      <h4>4/5 Documents Transcribed</h4>
     </div>
   </div>
 
@@ -18,35 +18,37 @@
 </div>
 <div class="documents">
 
+    <!--Project Owner-->
     {{if auth._get_user_id() == project.author_id:}}
-        <!--Project Owner-->
+
         <!--Open Documents With Transcription: Project owner -->
         <h3>Open Documents With Transcription</h3>
         {{for document in open_documents_with_transcription:}}
-            {{include "subviews/document-display.html"}}
+            {{include "subviews/document-display-owner.html"}}
         {{pass}}
-        
+
         <h3>Open Documents Without Transcription</h3>
         <!--Open Documents Without Transcription: Project owner -->
         {{for document in open_documents_without_transcription:}}
-            {{include "subviews/document-display.html"}}
+            {{include "subviews/document-display-owner.html"}}
         {{pass}}
 
         <h3>Closed Documents</h3>
         <!--Closed Documents: Project owner -->
         {{for document in closed_documents:}}
-            {{include "subviews/document-display.html"}}
+            {{include "subviews/document-display-owner.html"}}
         {{pass}}
+
+    <!--Not Project Owner-->
     {{else:}}
-        <!--Not Project Owner-->
+
         <!--Open Documents : Not project owner -->
         <h3>Open Documents</h3>
         {{for document in open_documents:}}
             {{include "subviews/document-display.html"}}
         {{pass}}
+
     {{pass}}
-
-
 
     <!--Done Documents : Everyone-->
     <h3>Done Documents</h3>

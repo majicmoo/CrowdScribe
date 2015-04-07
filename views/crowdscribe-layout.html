@@ -35,12 +35,8 @@
 
 <body>
 
-
-
   <div class="navbar">
     <div class="navbar-inner">
-
-
 
       <ul class="nav">
 
@@ -115,25 +111,6 @@
 
         {{pass}}
 
-
-        <!-- Not Logged In -->
-
-        <!-- <li style="width:{{=100-auth.is_logged_in()*100}}px">
-            <a href="{{=URL(c="user",f="register")}}">
-                {{="" if auth.is_logged_in() else "Register"}}
-            </a>
-        </li> -->
-
-        <!-- <li class="">
-          <a href="{{=URL('projects','create_step1')}}">Create</a>
-        </li>
-        <li class="rightmost">
-          <a href="{{=URL('user','login')}}">Login</a>
-        </li>
-      </ul> -->
-
-
-
     </div>
   </div>
 
@@ -142,7 +119,7 @@
   <!-- This is a centered message to be displayed permanently across certain pages if set in the controller -->
   <!-- It is used in the project display/edit pages to show the status and options a user has -->
   <!-- A background colour can be dynamically set from the controller -->
-  <div id="message" style="background-color:{{=response.messagecolour if response.messagecolour else "#FF0000"}}">
+  <div id="message" style="background-color:{{=response.messagecolour if response.messagecolour else "#69c72a"}}">
       <div id="centeredmessage">
           {{=response.message}}
       </div>

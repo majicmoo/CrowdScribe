@@ -16,13 +16,19 @@
   <p>{{=document.description}}</p>
 
   <!-- Maybe highlight that image can be opened in new tab for zooming etc -->
-<div class="document_viewer">
-      <a href="{{=image}}" class="docGal" title="document"><img src="{{=image}}" alt="document"/></a>
-</div>
-
-  <div class="transcription_form_holder">
-    {{=form}}
+  <div class="document_viewer">
+        <a href="{{=image}}" class="docGal" title="document"><img src="{{=image}}" alt="document"/></a>
   </div>
 
-  {{=transcriptions}}
+  {{if form:}}
+    <div class="transcription_form_holder">
+      {{=form}}
+    </div>
+  {{pass}}
+
+  <!-- If user has provided a transcription, show this transcription below -->
+  {{if transcription:}}
+    <h3>Your Transcription</h3>
+    {{=transcription}}
+  {{pass}}
 </div>

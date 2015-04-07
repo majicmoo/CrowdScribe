@@ -517,7 +517,10 @@ def view_document():
     form = None
     fields = []
 
+    # All transcriptions for this doc
     transcriptions = database.get_transcriptions_for_document(document_id)
+    # Transcriptions by the current user for this doc
+    transcription = None
 
     # If you are the owner, you cannot transcribe the document. Gives link to review transcriptions.
     if project.author_id == auth._get_user_id() and not transcriptions:
@@ -533,7 +536,8 @@ def view_document():
 
     # If user has already provided a transcription
     elif database.document_has_already_been_transcribed_by_user(document_id, auth._get_user_id()):
-        response.message = A("You have already transcribed this document")
+        transcription = database.document_transcribed_by_user(document_id, auth._get_user_id())
+        response.message = A("You have already transcribed this document. Only 1 transcription can be added per user.")
 
     # If doc is no longer accepting transcriptions
     elif document.status == 'Done':
@@ -566,11 +570,13 @@ def view_document():
                                             transcription_id = transcription_id,
                                             information = form.vars[data_field.name])
 
-
-    # newform = SQLFORM.factory(form)
     image = URL('default', 'download', args = document.image)
 
-    return dict(project=project, document=document, image=image, transcriptions=transcriptions, form = form)
+    return dict(project = project,
+                document = document,
+                image = image,
+                form = form,
+                transcription = transcription)
 
 
 @auth.requires_login(otherwise=URL('user', 'login'))

@@ -149,8 +149,13 @@ class DatabaseTransactions:
         result = self.db((self.db.document_image.id == self.db.transcription.document_id)
                     & (self.db.document_image.id == document_id)
                     & (self.db.transcription.author_id == user_id)).select()
-        print result
         return True if result else False
+
+    def document_transcribed_by_user(self, document_id, user_id):
+        result = self.db((self.db.document_image.id == self.db.transcription.document_id)
+                    & (self.db.document_image.id == document_id)
+                    & (self.db.transcription.author_id == user_id)).select()
+        return result
 
     # I don't know what purpose this serves and I'm pretty sure its functionality is wrong anyway
     def get_documents_with_transcription_for_project_and_transcription_author(self, project_id, user_id):
