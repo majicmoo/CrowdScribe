@@ -92,14 +92,14 @@ class DatabaseTransactions:
 
     def get_open_documents_for_project(self, project_id):
         result = self.db((self.db.document_image.project_id == project_id)
-                    & (self.db.document_image.status == "Open")).select()
+                    & (self.db.document_image.status == "Open")).select(self.db.document_image.ALL, distinct=True)
         return result
 
     def get_open_documents_with_transcription_for_project(self, project_id):
         result = self.db((self.db.document_image.project_id == project_id)
                     & (self.db.document_image.status == "Open")
                     & (self.db.document_image.id == self.db.transcription.document_id)
-                    & (self.db.transcription.status == 'Pending')).select(self.db.document_image.ALL)
+                    & (self.db.transcription.status == 'Pending')).select(self.db.document_image.ALL, distinct=True)
         return result
 
     def get_open_documents_without_transcription_for_project(self, project_id):
@@ -130,7 +130,7 @@ class DatabaseTransactions:
     def get_documents_with_transcription_for_project(self, project_id):
         result = self.db((self.db.document_image.project_id == self.db.project.id)
                     & (self.db.document_image.id == self.db.transcription.document_id)
-                    & (self.db.transcription.status == 'Pending')).select()
+                    & (self.db.transcription.status == 'Pending')).select(self.db.document_image.ALL, distinct=True)
         return result
 
     def get_successfully_transcribed_documents_for_project(self, project_id):
@@ -142,7 +142,7 @@ class DatabaseTransactions:
         result = self.db((self.db.document_image.project_id == self.db.project.id)
                     & (self.db.project.author_id == user_id)
                     & (self.db.document_image.id == self.db.transcription.document_id)
-                    & (self.db.transcription.status == 'Pending')).select()
+                    & (self.db.transcription.status == 'Pending')).select(self.db.document_image.ALL, distinct=True)
         return result
 
     def document_has_already_been_transcribed_by_user(self, document_id, user_id):
@@ -179,7 +179,7 @@ class DatabaseTransactions:
     def get_document_for_transcription(self, transcription_id):
         result = self.db((self.db.transcription.document_id == self.db.document_image.id)
                         & (self.db.document_image.project_id == self.db.project.id)
-                        & (self.db.transcription.id == transcription_id)).select(self.db.project.ALL)
+                        & (self.db.transcription.id == transcription_id)).select(self.db.document_image.ALL, distinct=True)
 
     # Get Transcriptions
     def get_pending_transcriptions_for_user(self, user_id):
