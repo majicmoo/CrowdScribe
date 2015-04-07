@@ -425,6 +425,9 @@ def create_step4():
     open_documents_without_transcription=open_documents_without_transcription,
     closed_documents=closed_documents, open_documents=open_documents)
 
+
+
+
 def project():
     project_id = request.args(0)
     project = database.get_project(project_id)
@@ -445,12 +448,15 @@ def project():
         # List of documents that have transcription - open - less than 3 transcriptions
         open_documents_with_transcription = database.get_open_documents_with_transcription_for_project(project_id)
         open_documents_with_transcription = convert_none_to_empty_list(open_documents_with_transcription)
+
         # List of document that don't have a transcription - open
         open_documents_without_transcription = database.get_open_documents_without_transcription_for_project(project_id)
         open_documents_without_transcription = convert_none_to_empty_list(open_documents_without_transcription)
+
         # List of Complete Document - succesfully transcribed - closed
         closed_documents = database.get_closed_documents_for_project(project_id)
         closed_documents = convert_none_to_empty_list(closed_documents)
+
         response.message = 'You own this project'
     else:
         # If not owner
@@ -498,35 +504,44 @@ def view_document():
     # Page Title
     response.title = project.name;
 
+    # Redirect if null project.
     if project is None:
         redirect(URL('default','index'))
 
-
+    # Get Doc from URL args
     document_id = request.args(1)
     document = database.get_document(document_id)
 
+    # If null doc, go back to the project
     if document is None:
         redirect(URL('projects','project',args=[project_id]))
 
+    # The form needs to be built dynamically to include all fields.
     form = FORM()
 
+    # TEST
+    formfact = None
+    fields = []
+
+    # If you are the owner, you cannot transcribe the document. Gives link to review transcriptions.
     if project.author_id == auth._get_user_id():
-        response.message = A('You are the owner of this project and cannot transcribe its documents. Click here to review this document',
-        _href=URL('projects','review_document', args=[project.id, document.id]))
+        response.message = A('You are the owner of this project and cannot transcribe its documents. Click here to review this document', _href=URL('projects','review_document', args=[project.id, document.id]))
 
+    # Need an account to login
     elif auth._get_user_id() is None:
-        response.message = A("Please login to transcribe.",
-        _href=URL('user','login'))
+        response.message = A("Please login to transcribe.", _href=URL('user','login'))
 
-    elif not database.document_has_already_been_transcribed_by_user(document_id, auth._get_user_id()):
+    # If user has already provided a transcription
+    elif database.document_has_already_been_transcribed_by_user(document_id, auth._get_user_id()):
         response.message = A("You have already transcribed this document")
 
+    # If doc is no longer accepting transcriptions
     elif document.status == 'Done':
         response.message = A("This document has already received the maximum number of transcriptions allowed")
 
-    #Display transcription submission form if document image is open for transcriptions and
-    #user is authorised to make a submission (ie registered user, not project creator and has not already made
-    #transcription for document image)
+    # Display transcription submission form if document image is open for transcriptions and
+    # user is authorised to make a submission (ie registered user, not project creator and has not already made
+    # transcription for document image)
     else:
         #Create dynamic form according to number of data_fields
         for data_field in database.get_data_fields_for_project(project_id):
@@ -535,9 +550,13 @@ def view_document():
             text_input = TEXTAREA(_name=data_field.name)
             form.append(SPAN(label, description, text_input))
 
+            fields += [Field(data_field.name,'text', comment=T(data_field.short_description), label=T(data_field.name))]
+
+        formfact = SQLFORM.factory(*fields, formstyle='bootstrap', _class='customer form-horizontal', table_name='customer')
+
         form.append(INPUT(_type='submit'))
 
-        if form.process().accepts:
+        if formfact.process().accepted:
 
             #Check if document currently has 2 transcriptions or more and if so mark document as done before
             #adding new transcription
@@ -553,14 +572,16 @@ def view_document():
                 db.transcribed_field.insert(data_field_id=data_field.id, transcription_id=transcription_id,
                                             information=form.vars[data_field.name])
 
-
+            redirect(URL('projects','project',args=[project_id]))
 
 
 
     # newform = SQLFORM.factory(form)
     image = URL('default','download',args = document.image)
 
-    return dict(project=project, document=document, form=form, image=image)
+    transcriptions = database.get_transcriptions_for_document(document_id)
+
+    return dict(project=project, document=document, form=form, image=image, transcriptions=transcriptions, formfact = formfact)
 
 
 @auth.requires_login(otherwise=URL('user', 'login'))

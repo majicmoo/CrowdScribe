@@ -21,9 +21,10 @@
     {{if auth._get_user_id() == project.author_id:}}
         <!--Project Owner-->
         <!--Open Documents With Transcription: Project owner -->
-        {{for document in open_documents_with_transcription:}}
-            {{include "subviews/document-display.html"}}
-        {{pass}}
+
+        <!-- {{=open_documents_with_transcription}} -->
+
+
 
         <!--Open Documents Without Transcription: Project owner -->
         {{for document in open_documents_without_transcription:}}
