@@ -555,19 +555,20 @@ def view_document():
 
         if formfact.process().accepted:
 
-            #Check if document currently has 2 transcriptions or more and if so mark document as done before
-            #adding new transcription
-            if len(database.get_transcriptions_for_document(document_id)) > 1:
+            # Check if document currently has 2 transcriptions or more and if so mark document as done before adding new transcription
+            if len(database.get_transcriptions_for_document(document_id)) >= 2:
                 document.update_record(status="Done")
 
-            #Insert new transcription record to insert transcribed fields
-            transcription_id = db.transcription.insert(document_id=document_id, author_id=auth._get_user_id(),
+            # Insert new transcription record to insert transcribed fields
+            transcription_id = db.transcription.insert(document_id=document_id,
+                                                       author_id=auth._get_user_id(),
                                                        status='Pending')
 
-            #Inserts each transcribed field in db
+            # Inserts each transcribed field in db
             for data_field in database.get_data_fields_for_project(project_id):
-                db.transcribed_field.insert(data_field_id=data_field.id, transcription_id=transcription_id,
-                                            information=form.vars[data_field.name])
+                db.transcribed_field.insert(data_field_id = data_field.id,
+                                            transcription_id = transcription_id,
+                                            information = formfact.vars[data_field.name])
 
             redirect(URL('projects','project',args=[project_id]))
 
@@ -592,14 +593,14 @@ def review_document():
     document_id = request.args(1)
     document = database.get_document(document_id)
 
-    if project is None:
-        # Redirect if project is none
-        redirect(URL('default','index'))
-    if project.status != 'Under Review':
-        redirect(URL('projects','project',args=[project_id]))
-    # Check Project Belongs to Current User
-    if project.author_id != auth._get_user_id():
-        redirect(URL('projects','project',args=[project_id]))
+    # if project is None:
+    #     # Redirect if project is none
+    #     redirect(URL('default','index'))
+    # if project.status != 'Under Review':
+    #     redirect(URL('projects','project',args=[project_id]))
+    # # Check Project Belongs to Current User
+    # if project.author_id != auth._get_user_id():
+    #     redirect(URL('projects','project',args=[project_id]))
     # Get current transcriptions for Document
     transcriptions = database.get_pending_transcriptions_for_document(document_id)
     print transcriptions

@@ -149,10 +149,8 @@ class DatabaseTransactions:
         result = self.db((self.db.document_image.id == self.db.transcription.document_id)
                     & (self.db.document_image.id == document_id)
                     & (self.db.transcription.author_id == user_id)).select()
-        if result is None:
-            return False
-        else:
-            return True
+        print result
+        return True if result else False
 
     # I don't know what purpose this serves and I'm pretty sure its functionality is wrong anyway
     def get_documents_with_transcription_for_project_and_transcription_author(self, project_id, user_id):
@@ -238,7 +236,3 @@ class DatabaseTransactions:
         if len(open_documents_with_transcription) > 0:
             return True
         return False
-
-
-
-
