@@ -584,14 +584,14 @@ def review_document():
     document_id = request.args(1)
     document = database.get_document(document_id)
 
-    # if project is None:
-    #     # Redirect if project is none
-    #     redirect(URL('default','index'))
-    # if project.status != 'Under Review':
-    #     redirect(URL('projects','project',args=[project_id]))
-    # # Check Project Belongs to Current User
-    # if project.author_id != auth._get_user_id():
-    #     redirect(URL('projects','project',args=[project_id]))
+    if project is None:
+        # Redirect if project is none
+        redirect(URL('default','index'))
+    if project.status != 'Under Review':
+        redirect(URL('projects','project',args=[project_id]))
+    # Check Project Belongs to Current User
+    if project.author_id != auth._get_user_id():
+        redirect(URL('projects','project',args=[project_id]))
     # Get current transcriptions for Document
     transcriptions = database.get_pending_transcriptions_for_document(document_id)
     print transcriptions
