@@ -142,7 +142,7 @@ def view_own_transcriptions():
     return dict(pending_transcriptions=pending_transcriptions, accepted_transcriptions=accepted_transcriptions,
                 rejected_transcriptions=rejected_transcriptions)
 
-def view_individual_transcriptions():
+def view_individual_transcription():
     transcription_id = request.args(0)
     transcription = database.get_transcription(transcription_id)
     transcribed_fields = database.get_transcribed_fields_for_transcription(transcription_id)

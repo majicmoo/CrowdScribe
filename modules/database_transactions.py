@@ -179,7 +179,7 @@ class DatabaseTransactions:
     def get_document_for_transcription(self, transcription_id):
         result = self.db((self.db.transcription.document_id == self.db.document_image.id)
                         & (self.db.document_image.project_id == self.db.project.id)
-                        & (self.db.transcription.id == transcription_id)).select()
+                        & (self.db.transcription.id == transcription_id)).select(self.db.project.ALL)
 
     # Get Transcriptions
     def get_pending_transcriptions_for_user(self, user_id):
@@ -216,6 +216,7 @@ class DatabaseTransactions:
         result = self.db((self.db.transcription.document_id == document_id)
                     & (self.db.transcription.status == "Pending")).select()
         return result
+
 
     # Get Data Fields
     def get_data_fields_for_project(self, project_id):
