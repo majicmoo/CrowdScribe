@@ -31,8 +31,16 @@ def index():
         featured_project = latest_projects[0]
         featured_project_image = database.get_document_for_project_header(featured_project.id).image
 
+    latest_projects = attach_header_image_to_projects(latest_projects)
+
     return dict(latest_projects = latest_projects, database = database,
                 featured_project = featured_project, featured_project_image = featured_project_image)
+
+def attach_header_image_to_projects(projects):
+    for project in projects:
+        project.header_image = database.get_document_for_project_header(project.id).image
+
+    return projects
 
 def browse():
     # Page Title

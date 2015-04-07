@@ -100,7 +100,15 @@ def search_results():
     elif advanced.errors:
         response.flash='errors'
 
+    projects = attach_header_image_to_projects(projects)
+
     return dict(advanced=advanced, projects=projects, database=database)
+
+def attach_header_image_to_projects(projects):
+    for project in projects:
+        project.header_image = database.get_document_for_project_header(project.id).image
+
+    return projects
 
 def convert_date_to_integer(date, era):
     if era =="BC":
