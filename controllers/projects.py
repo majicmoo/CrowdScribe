@@ -1,4 +1,5 @@
 import database_transactions as database_transactions
+#from projects_functions import *
 database = database_transactions.DatabaseTransactions(db)
 
 
@@ -17,7 +18,6 @@ def create_step1():
         #session.project_being_created = None
 
     step_available = check_if_steps_available(project_id)
-    print step_available
 
     form = SQLFORM(db.project, submit_button="Continue to Step 2")
 
@@ -39,12 +39,16 @@ def create_step1():
 
     if form.validate(formname="form_one", onvalidation=validate_create_step1):
 
+        print request.vars.time_period_start_date
+        print request.vars.time_period_end_date
         if request.vars.unknown == "yes":
             start_date = None
             end_date = None
         else:
             start_date = convert_date_to_integer(request.vars.time_period_start_date, request.vars.start_era)
             end_date = convert_date_to_integer(request.vars.time_period_end_date, request.vars.end_era)
+            print start_date
+            print end_date
 
         if project_id and project_being_edited:
             project_being_edited.update_record(name=request.vars.name, description=request.vars.description,
@@ -92,9 +96,6 @@ def check_if_steps_available(project_id):
     result['4'] = step4_available
 
     return result
-
-
-
 
 def convert_date_to_integer(date, era):
     if era =="BC":
@@ -521,21 +522,22 @@ def view_document():
 
     return dict(project=project, document=document, form=form, image=image)
 
+
+@auth.requires_login(otherwise=URL('user', 'login'))
 def review_document():
     # Current Project
     project_id = request.args(0)
     project = database.get_project(project_id)
-
     # Page Title
     response.title = project.name
-
     # Current Document
     document_id = request.args(1)
     document = database.get_document(document_id)
+
     if project is None:
         # Redirect if project is none
         redirect(URL('default','index'))
-    if project_id == 'Open':
+    if project.status != 'Under Review':
         redirect(URL('projects','project',args=[project_id]))
     # Check Project Belongs to Current User
     if project.author_id != auth._get_user_id():
