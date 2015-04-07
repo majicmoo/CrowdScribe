@@ -67,7 +67,11 @@ def login():
     # Window Title
     response.title = 'Login'
 
-    if request.vars.controller_after_login and request.vars.page_after_login:
+    if request.vars.controller_after_login and request.vars.page_after_login and request.vars.args_after_login:
+        request.vars.args_after_login = request.vars.args_after_login.split('-')
+        auth.settings.login_next = URL(request.vars.controller_after_login, request.vars.page_after_login,
+                                       args=request.vars.args_after_login)
+    elif request.vars.controller_after_login and request.vars.page_after_login:
         auth.settings.login_next = URL(request.vars.controller_after_login, request.vars.page_after_login)
     else:
         auth.settings.login_next = URL('default', 'index')
@@ -108,6 +112,7 @@ def remove_projects_being_created(form):
     if auth._get_user_id():
         db((db.project.author_id == auth._get_user_id()) &(db.project.status == "Being Created")).delete()
 
+@auth.requires_login(otherwise=URL('user', 'login'))
 def profile():
     user_id = auth._get_user_id()
     if user_id is None:
@@ -137,6 +142,7 @@ def profile():
     response.transcriptions_alert = 'You have', no_of_transcriptions_awaiting_approval, 'transcriptions awaiting approval.'
     return dict()
 
+@auth.requires_login(otherwise=URL('user', 'login'))
 def view_own_transcriptions():
     user_id = auth._get_user_id()
     # Controller for transactions made by user
@@ -148,6 +154,7 @@ def view_own_transcriptions():
     return dict(pending_transcriptions=pending_transcriptions, accepted_transcriptions=accepted_transcriptions,
                 rejected_transcriptions=rejected_transcriptions)
 
+@auth.requires_login(otherwise=URL('user', 'login'))
 def view_individual_transcription():
     transcription_id = request.args(0)
     transcription = database.get_transcription(transcription_id)
@@ -157,7 +164,7 @@ def view_individual_transcription():
     return dict(transcription=transcription, transcribed_fields=transcribed_fields,
                 document_transcription_was_made_on=document_transcription_was_made_on)
 
-
+@auth.requires_login(otherwise=URL('user', 'login'))
 def manage_projects():
     user_id = auth._get_user_id()
     # Under Review Projects
