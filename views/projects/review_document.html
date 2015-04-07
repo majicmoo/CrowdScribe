@@ -18,7 +18,8 @@
             <br>
         {{pass}}
         {{=A(BUTTON('Accept',_class="btn btn-success"), callback= URL('accept_transcription',
-        vars= dict(document_id=document.id, transcription_id=field.transcribed_field.transcription_id)))}}
+        vars= dict(document_id=document.id, transcription_id=field.transcribed_field.transcription_id,
+            project_id=project.id)))}}
         </div>
         {{i = i + 1}}
 {{pass}}

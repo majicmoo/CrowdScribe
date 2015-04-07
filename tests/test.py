@@ -22,9 +22,6 @@ class TestDatabaseTransactions(unittest.TestCase):
         test_db.auth_cas.truncate()
         test_db.commit()
 
-
-
-
         # Setup arrays
         self.users = []
         self.projects = []

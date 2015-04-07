@@ -21,7 +21,7 @@ if not request.env.web2py_runtime_gae:
     db = DAL('sqlite://crowdscribe.db', pool_size=1, check_reserved=['all'], lazy_tables=True)
 
     db.define_table('project', Field('name'), Field('author_id', 'reference auth_user', writable=False, readable=False), Field('status'),
-                    Field('description'), Field('tag', requires=IS_IN_SET(options)), Field('time_period_start_date', 'integer'), Field('time_period_end_date', 'integer'))
+                    Field('description', type='text'), Field('tag', requires=IS_IN_SET(options)), Field('time_period_start_date', 'integer'), Field('time_period_end_date', 'integer'))
 #uploadfolder=os.path.join(request.folder,'uploads')
     db.define_table('document_image', Field('description', type='text'), Field('image', 'upload'), Field('project_id', 'reference project'
         ), Field('status'))
@@ -32,7 +32,7 @@ if not request.env.web2py_runtime_gae:
                     'reference auth_user'), Field('status'))
 
     db.define_table('transcribed_field', Field('data_field_id', 'reference data_field'),
-                    Field('transcription_id', 'reference transcription'), Field('information'))
+                    Field('transcription_id', 'reference transcription'), Field('information', type='text'))
 
 
 
