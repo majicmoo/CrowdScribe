@@ -7,7 +7,7 @@
     <h3>{{=project.tag}} </h3>
     <h4>{{=timestring}}</h4>
     <div id = "progress">
-      <h4>4/5 Transcriptions Completed</h4>
+      <h4>4/5 Documents Transcribed</h4>
     </div>
   </div>
 
@@ -47,7 +47,7 @@
         {{for document in open_documents:}}
             {{include "subviews/document-display.html"}}
         {{pass}}
-        
+
     {{pass}}
 
     <!--Done Documents : Everyone-->
