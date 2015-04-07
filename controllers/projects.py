@@ -598,9 +598,13 @@ def accept_transcription():
     db(db.document_image.id==request.vars.document_id).update(status='Closed')
     db((db.transcription.id!=request.vars.transcription_id) & (db.transcription.document_id==request.vars.document_id))\
     .update(status="Rejected")
-
     db(db.transcription.id==request.vars.transcription_id).update(status='Accepted')
     db.commit()
+
+    if len(database.get_open_documents_for_project(request.vars.project_id))==0:
+        db(db.project.id==request.vars.project_id).update(status="Closed")
+        db.commit()
+
     redirect(URL('default','index'), client_side=True)
 
 def reject_all_transcriptions():
