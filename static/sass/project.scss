@@ -112,6 +112,10 @@
 	$descwidth : 35%;
 	$deletewidth : 100% - $descwidth - $imgwidth;
 
+  h3{
+    clear:both;
+  }
+
 	.document{
 		float:left;
 		min-width:$boxwidth;

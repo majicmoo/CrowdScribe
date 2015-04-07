@@ -72,6 +72,8 @@
 .documents {
   overflow: auto;
   padding: 10px; }
+  .documents h3 {
+    clear: both; }
   .documents .document {
     float: left;
     min-width: 230px;
