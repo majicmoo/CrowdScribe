@@ -33,8 +33,8 @@ def index():
 
     latest_projects = attach_header_image_to_projects(latest_projects)
 
-    return dict(latest_projects = latest_projects, database = database,
-                featured_project = featured_project, featured_project_image = featured_project_image)
+    return dict(latest_projects = latest_projects, featured_project = featured_project,
+                featured_project_image = featured_project_image)
 
 def attach_header_image_to_projects(projects):
     for project in projects:

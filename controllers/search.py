@@ -102,7 +102,7 @@ def search_results():
 
     projects = attach_header_image_to_projects(projects)
 
-    return dict(advanced=advanced, projects=projects, database=database)
+    return dict(advanced=advanced, projects=projects)
 
 def attach_header_image_to_projects(projects):
     for project in projects:
