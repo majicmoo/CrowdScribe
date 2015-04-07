@@ -483,17 +483,18 @@ def view_document():
     form = FORM()
 
     if project.author_id == auth._get_user_id():
-        # response.message = A('You own this project. Go to X', _href=URL('default','index'))
-        pass
+        response.message = A('You are the owner of this project and cannot transcribe its documents. Click here to review this document',
+        _href=URL('projects','review_document', args=[project.id, document.id]))
 
     elif auth._get_user_id() is None:
-        response.flash = DIV("Please register to transcribe", _class="alert alert-info")
+        response.message = A("Please login to transcribe.",
+        _href=URL('user','login'))
 
     elif not database.document_has_already_been_transcribed_by_user(document_id, auth._get_user_id()):
-        response.flash = DIV("You have already transcribed this document", _class="alert alert-info")
+        response.message = A("You have already transcribed this document")
 
     elif document.status == 'Done':
-        response.flash = DIV("This document has already received the maximum number of transcriptions allowed", _class="alert alert-info")
+        response.message = A("This document has already received the maximum number of transcriptions allowed")
 
     #Display transcription submission form if document image is open for transcriptions and
     #user is authorised to make a submission (ie registered user, not project creator and has not already made
