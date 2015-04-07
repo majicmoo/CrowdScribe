@@ -22,6 +22,7 @@ def register():
 
     if form.validate(onvalidation=validate_register_form):
         userid = auth.get_or_create_user(form.vars)
+        auth.login_bare(request.vars.username, request.vars.password)
     elif form.errors:
         response.flash = 'One or more of your form fields has an error. Please see below for more information'
 
@@ -108,7 +109,11 @@ def remove_projects_being_created(form):
 
 def profile():
     user_id = auth._get_user_id()
-    response.title = auth.user.username
+    if user_id is None:
+        redirect(URL('default','index'))
+
+    user = database.get_user(user_id)
+    response.title = user.username
 
     # Alerts
     # Number of Closed Projects that belong to user
