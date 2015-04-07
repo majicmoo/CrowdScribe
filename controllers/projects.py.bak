@@ -447,6 +447,18 @@ def project():
         # Current user owns project
         # List of documents that have transcription - open - less than 3 transcriptions
         open_documents_with_transcription = database.get_open_documents_with_transcription_for_project(project_id)
+<<<<<<< HEAD
+        open_documents_with_transcription = convert_none_to_empty_list(open_documents_with_transcription)
+
+        # List of document that don't have a transcription - open
+        open_documents_without_transcription = database.get_open_documents_without_transcription_for_project(project_id)
+        open_documents_without_transcription = convert_none_to_empty_list(open_documents_without_transcription)
+
+        # List of Complete Document - succesfully transcribed - closed
+        closed_documents = database.get_closed_documents_for_project(project_id)
+        closed_documents = convert_none_to_empty_list(closed_documents)
+
+=======
         open_documents_with_transcription = if_none_convert_to_empty_list(open_documents_with_transcription)
         # List of document that don't have a transcription - open
         open_documents_without_transcription = database.get_open_documents_without_transcription_for_project(project_id)
@@ -454,6 +466,7 @@ def project():
         # List of Complete Document - succesfully transcribed - closed
         closed_documents = database.get_closed_documents_for_project(project_id)
         closed_documents = if_none_convert_to_empty_list(closed_documents)
+>>>>>>> 302cf1aff9239c3395b0b0a890e38ad982ac857d
         response.message = 'You own this project'
     else:
         # If not owner

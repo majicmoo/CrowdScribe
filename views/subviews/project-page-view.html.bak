@@ -21,11 +21,19 @@
     {{if auth._get_user_id() == project.author_id:}}
         <!--Project Owner-->
         <!--Open Documents With Transcription: Project owner -->
+<<<<<<< HEAD
+
+        <!-- {{=open_documents_with_transcription}} -->
+
+
+
+=======
         <h3>Open Documents With Transcription</h3>
         {{for document in open_documents_with_transcription:}}
             {{include "subviews/document-display.html"}}
         {{pass}}
         <h3>Open Documents Without Transcription</h3>
+>>>>>>> 302cf1aff9239c3395b0b0a890e38ad982ac857d
         <!--Open Documents Without Transcription: Project owner -->
         {{for document in open_documents_without_transcription:}}
             {{include "subviews/document-display.html"}}
