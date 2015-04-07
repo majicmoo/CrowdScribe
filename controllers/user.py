@@ -14,15 +14,16 @@ def register():
     form = SQLFORM.factory(db.auth_user, formstyle="divs")
 
     # Placeholder Values
-    form.custom.widget.first_name["_placeholder"] = "Enter First Name"
-    form.custom.widget.last_name["_placeholder"] = "Enter Last Name"
-    form.custom.widget.email["_placeholder"] = "Enter Email"
+    #form.custom.widget.first_name["_placeholder"] = "Enter First Name"
+    #form.custom.widget.last_name["_placeholder"] = "Enter Last Name"
+    #form.custom.widget.email["_placeholder"] = "Enter Email"
     form.custom.widget.username["_placeholder"] = "Enter Unique Username"
     form.custom.widget.password["_placeholder"] = "Enter Password"
 
     if form.validate(onvalidation=validate_register_form):
         userid = auth.get_or_create_user(form.vars)
         auth.login_bare(request.vars.username, request.vars.password)
+        redirect(URL('user','profile'))
     elif form.errors:
         response.flash = 'One or more of your form fields has an error. Please see below for more information'
 
