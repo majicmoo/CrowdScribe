@@ -20,7 +20,7 @@ def register():
     form.custom.widget.username["_placeholder"] = "Enter Unique Username"
     form.custom.widget.password["_placeholder"] = "Enter Password"
 
-    if form.validate():
+    if form.validate(onvalidation=validate_register_form):
         userid = auth.get_or_create_user(form.vars)
     elif form.errors:
         response.flash = 'One or more of your form fields has an error. Please see below for more information'
@@ -83,7 +83,7 @@ def login():
     #
     #     auth.settings.login_next = URL(request.vars.controller_after_login, request.vars.page_after_login)
 
-    form = auth.login()
+    form = auth.login(onaccept=remove_projects_being_created)
     form.custom.widget.username["_placeholder"] = "Username"
     form.custom.widget.password["_placeholder"] = "Password"
 
@@ -96,15 +96,15 @@ def login():
     #             A('Register',_href=URL('register'), _role='button', _class='btn btn-info'))
 
 
-    if auth._get_user_id():
-        db((db.project.author_id == auth._get_user_id()) &(db.project.status == "Being Created")).delete()
+
             # Checks whether user was sent to login form when trying to pledge. If true, the user is redirected back
             # to the pledge they was trying to make.
 
-
-
-
     return dict(form=form)
+
+def remove_projects_being_created(form):
+    if auth._get_user_id():
+        db((db.project.author_id == auth._get_user_id()) &(db.project.status == "Being Created")).delete()
 
 def profile():
     user_id = auth._get_user_id()
