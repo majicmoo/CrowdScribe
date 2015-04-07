@@ -397,13 +397,13 @@ def create_step4():
         # Current user owns project
         # List of documents that have transcription - open - less than 3 transcriptions
         open_documents_with_transcription = database.get_open_documents_with_transcription_for_project(project_id)
-        open_documents_with_transcription = convert_none_to_empty_list(open_documents_with_transcription)
+        open_documents_with_transcription = if_none_convert_to_empty_list(open_documents_with_transcription)
         # List of document that don't have a transcription - open
         open_documents_without_transcription = database.get_open_documents_without_transcription_for_project(project_id)
-        open_documents_without_transcription = convert_none_to_empty_list(open_documents_without_transcription)
+        open_documents_without_transcription = if_none_convert_to_empty_list(open_documents_without_transcription)
         # List of Complete Document - succesfully transcribed - closed
         closed_documents = database.get_closed_documents_for_project(project_id)
-        closed_documents = convert_none_to_empty_list(closed_documents)
+        closed_documents = if_none_convert_to_empty_list(closed_documents)
         # response.message = 'You own this project'
     else:
         # If not owner
@@ -411,14 +411,14 @@ def create_step4():
         if project_status != 'Open':
             redirect(URL('default', 'index'))
         open_documents = database.get_open_documents_for_project(project_id)
-        open_documents = convert_none_to_empty_list(open_documents)
+        open_documents = if_none_convert_to_empty_list(open_documents)
 
     # List of done documents - 3 or more transcriptions
     done_documents = database.get_done_documents_for_project(project_id)
-    done_documents = convert_none_to_empty_list(done_documents)
+    done_documents = if_none_convert_to_empty_list(done_documents)
 
     done_documents = database.get_done_documents_for_project(project_id)
-    done_documents = convert_none_to_empty_list(done_documents)
+    done_documents = if_none_convert_to_empty_list(done_documents)
 
     return dict(project=project_being_edited, timestring = timestring, documents_for_project=documents_added, publish_project_form = publish_project_form, clear_project = clear_project, header_image=header_image,
     done_documents=done_documents, open_documents_with_transcription=open_documents_with_transcription,
@@ -444,13 +444,13 @@ def project():
         # Current user owns project
         # List of documents that have transcription - open - less than 3 transcriptions
         open_documents_with_transcription = database.get_open_documents_with_transcription_for_project(project_id)
-        open_documents_with_transcription = convert_none_to_empty_list(open_documents_with_transcription)
+        open_documents_with_transcription = if_none_convert_to_empty_list(open_documents_with_transcription)
         # List of document that don't have a transcription - open
         open_documents_without_transcription = database.get_open_documents_without_transcription_for_project(project_id)
-        open_documents_without_transcription = convert_none_to_empty_list(open_documents_without_transcription)
+        open_documents_without_transcription = if_none_convert_to_empty_list(open_documents_without_transcription)
         # List of Complete Document - succesfully transcribed - closed
         closed_documents = database.get_closed_documents_for_project(project_id)
-        closed_documents = convert_none_to_empty_list(closed_documents)
+        closed_documents = if_none_convert_to_empty_list(closed_documents)
         response.message = 'You own this project'
     else:
         # If not owner
@@ -458,11 +458,11 @@ def project():
         if project_status != 'Open':
             redirect(URL('default', 'index'))
         open_documents = database.get_open_documents_for_project(project_id)
-        open_documents = convert_none_to_empty_list(open_documents)
+        open_documents = if_none_convert_to_empty_list(open_documents)
 
     # List of done documents - 3 or more transcriptions
     done_documents = database.get_done_documents_for_project(project_id)
-    done_documents = convert_none_to_empty_list(done_documents)
+    done_documents = if_none_convert_to_empty_list(done_documents)
 
     # Page Title
     response.title = project.name
@@ -620,7 +620,7 @@ def close_project_for_review():
     db.commit()
     redirect(URL('projects','project', args=request.vars.project_id), client_side=True)
 
-def convert_none_to_empty_list(array):
+def if_none_convert_to_empty_list(array):
     if array is None:
         return []
     else:

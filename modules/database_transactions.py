@@ -99,7 +99,7 @@ class DatabaseTransactions:
         result = self.db((self.db.document_image.project_id == project_id)
                     & (self.db.document_image.status == "Open")
                     & (self.db.document_image.id == self.db.transcription.document_id)
-                    & (self.db.transcription.status == 'Pending')).select()
+                    & (self.db.transcription.status == 'Pending')).select(self.db.document_image.ALL)
         return result
 
     def get_open_documents_without_transcription_for_project(self, project_id):
