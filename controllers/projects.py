@@ -7,28 +7,33 @@ database = database_transactions.DatabaseTransactions(db)
                      vars= dict(controller_after_login='projects', page_after_login='create_step1')))
 def create_step1():
 
-    # Page Title
+    # Set Page Title
     response.title = "Create - Step 1"
 
+    # Retrieve project and set session project variable to allow for prepopulating.
     project_id = None
     project_being_edited = None
     if session.project_being_created is not None:
         project_id = session.project_being_created
         project_being_edited = database.get_project(project_id)
-        #session.project_being_created = None
 
+    # Calls function that checks whether steps in the creation process should be navigatable to.
     step_available = check_if_steps_available(project_id)
 
+    # Create step 1 form is initialised
     form = SQLFORM(db.project, submit_button="Continue to Step 2")
 
+    # This form will allow for the create wizard to be reset
     clear_project = FORM(DIV(BUTTON("Clear Project", _type='submit', _class='btn btn-primary btn-block btn-danger',
                                     _onclick="return confirm('Clearing a project will wipe all of your progress. Continue?');")))
 
-
+    # Data needed to prepopulate form is retrieved
     prepopulation_data = retrieve_prepopulated_data_for_create_step_1(project_being_edited)
 
+    # Initialise select box for tag
     form.vars.tag = "Sport"
 
+    # Prepopulate form
     if prepopulation_data is not None:
 
         form.vars.name =  prepopulation_data['name']
@@ -37,24 +42,24 @@ def create_step1():
         form.vars.time_period_start_date = prepopulation_data['start_date']
         form.vars.time_period_end_date = prepopulation_data['end_date']
 
+    # Process form without communicating with the database
     if form.validate(formname="form_one", onvalidation=validate_create_step1):
 
-        print request.vars.time_period_start_date
-        print request.vars.time_period_end_date
+        # If unknown select box was selected then make start_date and end_date none, otherwise make them correct format
         if request.vars.unknown == "yes":
             start_date = None
             end_date = None
         else:
             start_date = convert_date_to_integer(request.vars.time_period_start_date, request.vars.start_era)
             end_date = convert_date_to_integer(request.vars.time_period_end_date, request.vars.end_era)
-            print start_date
-            print end_date
 
+        # If project record has already been created, just update
         if project_id and project_being_edited:
             project_being_edited.update_record(name=request.vars.name, description=request.vars.description,
                                                tag=request.vars.tag, time_period_start_date=start_date,
                                                time_period_end_date=end_date)
         else:
+            #Otherwise insert new project record
             project_id = db.project.insert(name=request.vars.name, author_id=auth._get_user_id(), status="Being Created",
                                            description=request.vars.description, tag=request.vars.tag,
                                            time_period_start_date=start_date, time_period_end_date=end_date)
@@ -62,10 +67,10 @@ def create_step1():
         session.project_being_created = project_id
         redirect(URL('projects', 'create_step2'))
     else:
-        # print form.errors
         pass
 
     if clear_project.validate(formname="form_two"):
+        #If clear project button is pressed, reset project wizard
         session.project_being_created = None
         redirect(URL('projects', 'create_step1'))
 
@@ -186,31 +191,38 @@ def validate_create_step1(form):
                      vars= dict(controller_after_login='projects', page_after_login='create_step1')))
 def create_step2():
 
-    # Page Title
+    # Set Page Title
     response.title = "Create - Step 2"
 
+    # Retrieve project and set session project variable to allow for prepopulating.
     project_id = None
     if session.project_being_created is not None:
         project_id = session.project_being_created
-        #session.project_being_created = None
 
+    # Calls function that checks whether steps in the creation process should be navigatable to.
     step_available = check_if_steps_available(project_id)
 
+     # This form will allow for the create wizard to be reset
     clear_project = FORM(DIV(BUTTON("Clear Project", _type='submit', _class='btn btn-danger btn-block',
                                     _onclick="return confirm('Clearing a project will wipe all of your progress. Continue?');")))
 
+    # This form allows documents to be added
     add_image_form = SQLFORM(db.document_image, submit_button="Add Document")
 
+    # This form allows for the wizard to progress to step 3
     go_to_step_3_form = FORM(DIV(BUTTON("Continue to Step 3", I(_class='icon-arrow-right icon-white'),
                                         _type='submit', _class='btn btn-primary btn-block btn-large')))
+    # This form allows for the wizard to go back to step 1
     go_to_step_1_form = FORM(DIV(BUTTON("Back to Step 1", I(_class='icon-arrow-left icon-white'),
                                         _type='submit', _class='btn btn-primary btn-block btn-large')))
 
+    # Process add image form
     if add_image_form.validate(formname="form_one", onvalidation=validate_add_image_form):
         db.document_image.insert(description=request.vars.description, status="Open", project_id=project_id,
                                  image=add_image_form.vars.image)
         session.project_being_created = project_id
 
+    # Process form allowing you to move to step 3
     if go_to_step_3_form.process(formname="form_two").accepted:
         documents_added = database.get_documents_for_project(project_id)
         if len(documents_added) < 1:
@@ -219,14 +231,17 @@ def create_step2():
             session.project_being_created = project_id
             redirect(URL('projects', 'create_step3'))
 
+    # Process form allowing you to move to step 1
     if go_to_step_1_form.process(formname="form_three").accepted:
             session.project_being_created = project_id
             redirect(URL('projects', 'create_step1'))
 
+    #If clear project button is pressed, reset project wizard
     if clear_project.validate(formname="form_four"):
         session.project_being_created = None
         redirect(URL('projects', 'create_step1'))
 
+    # Retrieve documents that project already has.
     documents_added = database.get_documents_for_project(project_id)
 
     # Use the project name to clarify to the user that they are still working on their setup
@@ -257,30 +272,39 @@ def validate_add_image_form(form):
                      vars= dict(controller_after_login='projects', page_after_login='create_step1')))
 def create_step3():
 
-    # Page Title
+    # Set Page Title
     response.title = "Create - Step 3"
 
+    # Retrieve project and set session project variable to allow for prepopulating.
     project_id = None
     if session.project_being_created is not None:
         project_id = session.project_being_created
-        #session.project_being_created = None
 
+    # Calls function that checks whether steps in the creation process should be navigatable to.
     step_available = check_if_steps_available(project_id)
 
+    # Creates form that allows fields to be added
     add_fields_form = SQLFORM.factory(db.data_field, submit_button="Add field")
+
+    # Form that moves you forward to the review step
     review_project_form = FORM(DIV(BUTTON("Review Project", I(_class='icon-arrow-right icon-white'),
                                           _type='submit', _class='btn btn-primary btn-block btn-large')))
+
+    # Form that allows you to move back to step 2
     go_to_step_2_form = FORM(DIV(BUTTON("Back to Step 2", I(_class='icon-arrow-left icon-white'),
                                         _type='submit', _class='btn btn-primary btn-block btn-large')))
 
+    # Forms that resets project wizard
     clear_project = FORM(DIV(BUTTON("Clear Project", _type='submit', _class='btn btn-danger btn-block',
                                     _onclick="return confirm('Clearing a project will wipe all of your progress. Continue?');")))
 
+    # Process form that allows fields to be added.
     if add_fields_form.process(formname="form_one", onvalidate = validate_add_field_form).accepted:
         db.data_field.insert(name=request.vars.name, short_description=request.vars.short_description, project_id=project_id)
         db.commit()
         session.project_being_created = project_id
 
+    # Move project forward to review when button clicked
     if review_project_form.process(formname="form_two").accepted:
         fields_added = database.get_data_fields_for_project(project_id)
         if len(fields_added) < 1:
@@ -288,19 +312,21 @@ def create_step3():
         else:
             session.project_being_created = project_id
             redirect(URL('projects', 'create_step4'))
-
+    # Go back to step 2 when button clicked
     if go_to_step_2_form.process(formname="form_three").accepted:
         session.project_being_created = project_id
         redirect(URL('projects', 'create_step2'))
 
+    # Reset Project wizard when button clicked.
     if clear_project.validate(formname="form_four"):
         session.project_being_created = None
         redirect(URL('projects', 'create_step1'))
 
+    #Retrieve document and fields added to project
     documents_added = database.get_documents_for_project(project_id)
     fields_added = database.get_data_fields_for_project(project_id)
 
-    # Use the project name to clarify to the user that they are still working on their setup
+    # Retrieve project
     project = database.get_project(project_id)
 
     return dict(documents_added=documents_added, add_fields_form=add_fields_form, fields_added=fields_added
