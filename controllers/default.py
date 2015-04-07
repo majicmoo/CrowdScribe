@@ -28,7 +28,7 @@ def index():
         featured_project_image = None
     else:
         # Featured Project
-        featured_project = latest_projects[1]
+        featured_project = latest_projects[0]
         #print featured_project
         featured_project_image = database.get_document_for_project_header(featured_project.id).image
 
