@@ -88,12 +88,15 @@
     box-sizing: border-box; }
     .documents .document .content {
       height: 100%;
-      background-color: #999999; }
+      background-color: #999999;
+      border-radius: 10px;
+      border-style: solid;
+      border-width: 3px;
+      border-color: white; }
       .documents .document .content .left {
         float: left;
         width: 45%;
         height: 100%;
-        background: red;
         overflow: hidden; }
         .documents .document .content .left img {
           height: 300px;
@@ -106,14 +109,14 @@
         height: 100%; }
         .documents .document .content .right .top {
           text-align: left;
-          height: 20%;
+          height: 0;
           -webkit-box-sizing: border-box;
           -moz-box-sizing: border-box;
           box-sizing: border-box;
-          padding: 8px; }
+          overflow: hidden; }
         .documents .document .content .right .center {
           background: white;
-          height: 60%;
+          height: 80%;
           -webkit-box-sizing: border-box;
           -moz-box-sizing: border-box;
           box-sizing: border-box;

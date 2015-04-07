@@ -1,0 +1,23 @@
+<div class="document">
+
+  <!-- <a href={{=URL('default','index')}}> -->
+    <div class="content">
+      <div class="left">
+        <img src="{{=URL('default','download',args = document.image)}}"/>
+      </div>
+      <div class="right">
+        <div class="center">
+          <p>
+            {{=document.description}}
+          </p>
+        </div>
+        <div class="bottom">
+            <div class="btn-group" role="group" aria-label="...">
+              <a href="{{=URL('projects','view_document', args=[project.id, document.id])}}" class="btn btn-warning" role="button">View</a>
+              <a href="{{=URL('projects','review_document', args=[project.id, document.id])}}" class="btn btn-info" role="button">Review</a>
+            </div>
+        </div>
+      </div>
+  	</div>
+  <!-- </a> -->
+</div>
