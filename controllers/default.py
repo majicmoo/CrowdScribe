@@ -15,7 +15,7 @@ from gluon import *
 
 def index():
 
-    #Page Title
+    # Page Title
     response.title = "CrowdScribe"
 
     # NOT REALLY LATEST PROJECTS
