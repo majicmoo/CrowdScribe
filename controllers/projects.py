@@ -449,10 +449,7 @@ def project():
 
     # Initialise Variables
     project_status = project.status
-    open_documents_with_transcription = []
-    open_documents_without_transcription = []
-    closed_documents = []
-    open_documents = []
+    open_documents_with_transcription = open_documents_without_transcription = closed_documents = open_documents = []
 
     if project.author_id == auth._get_user_id():
         # Current user owns project
@@ -496,13 +493,22 @@ def project():
         timestring = '('+convert_integer_to_date_string(project.time_period_start_date) + " - " +\
                      convert_integer_to_date_string(project.time_period_end_date)+')'
 
-    print open_documents_without_transcription
+    documents_transcribed_by_user = attach_number_of_transcriptions(documents_transcribed_by_user)
+    done_documents = attach_number_of_transcriptions(done_documents)
+    open_documents_with_transcription = attach_number_of_transcriptions(open_documents_with_transcription)
+    open_documents_without_transcription = attach_number_of_transcriptions(open_documents_without_transcription)
+    open_documents = attach_number_of_transcriptions(open_documents)
 
     return dict(project=project, timestring=timestring, data_fields_for_project=data_fields_for_project,
                 documents_transcribed_by_user=documents_transcribed_by_user, header_image=header_image,
                 done_documents=done_documents, open_documents_with_transcription=open_documents_with_transcription,
                 open_documents_without_transcription=open_documents_without_transcription,
                 closed_documents=closed_documents, open_documents=open_documents)
+
+def attach_number_of_transcriptions(documents):
+    for document in documents:
+        document.number_of_transcriptions = len(database.get_pending_transcriptions_for_document(document.id))
+    return documents
 
 
 def view_document():
@@ -524,6 +530,8 @@ def view_document():
     # If null doc, go back to the project
     if document is None:
         redirect(URL('projects', 'project', args=[project_id]))
+
+    document.number_of_transcriptions = len(database.get_pending_transcriptions_for_document(document.id))
 
     # The form needs to be built dynamically to include all fields.
     form = None

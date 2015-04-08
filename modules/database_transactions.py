@@ -44,7 +44,7 @@ class DatabaseTransactions:
                          & (self.db.document_image.project_id == self.db.project.id)
                          & (self.db.transcription.document_id == self.db.document_image.id)
                          & (self.db.transcription.status == "Pending")
-                        & (self.db.project.status == "Open")).select(self.db.project.ALL)
+                        & (self.db.project.status == "Open")).select(self.db.project.ALL, distinct=True)
         return result
 
     def get_open_projects_without_transcriptions_for_user(self, user_id):
