@@ -1,4 +1,12 @@
 {{extend 'crowdscribe-layout.html'}}
 
+{{=form.custom.begin}}
 
-{{=form}}
+       <div> <label for='username'> Username: {{=form.custom.widget.username}} </label></div>
+       <div><label for='password'>Password: {{=form.custom.widget.password}}</label></div>
+       <div> <label for="confirm_password"> Confirm Password: <input type="password" name="confirm_password" id="confirm_password"></label> </div>
+       <button type="submit" class="btn btn-primary btn-large" value="Submit">
+            Register
+       </button>
+
+{{=form.custom.end}}
