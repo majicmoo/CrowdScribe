@@ -81,7 +81,7 @@ class DatabaseTransactions:
         index = random.randrange(0, len(projects)-1)
         return projects[index]
 
-    def get_number_of_transcribed_documents_in_project(self, project_id):
+    def get_number_of_transcribed_documents_for_project(self, project_id):
         documents = self.db(self.db.project.id == self.db.document_image.project_id).select()
         result = 0
         for document in documents:
