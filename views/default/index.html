@@ -1,21 +1,20 @@
 {{response.files.append(URL(r=request,c='static/css',f='index.css'))}}
 {{extend 'crowdscribe-layout.html'}}
-{{if featured_project is not None:}}
-<div class = "featured_project">
-  <img src="{{=URL('default','download',args = featured_project_image)}}"/>
-  <div class = "overlay">
-    <div class = "text">
 
-      <h1>Featured : {{=featured_project.name}}</h1>
-      <p>
-        {{=featured_project.description}}
-      </p>
-
+{{if featured_project:}}
+  <a href={{=URL('projects','project', args=[featured_project.id])}}>
+    <div class = "featured_project">
+      <img src="{{=URL('default','download',args = featured_project_image)}}"/>
+      <div class = "overlay">
+        <div class = "text">
+          <h1>Featured : {{=featured_project.name}}</h1>
+          <p>
+            {{=featured_project.description}}
+          </p>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
-{{pass}}
-
+  </a>
 {{pass}}
 
 <div class="padded_container form_container no_bottom_padding">

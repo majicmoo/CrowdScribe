@@ -89,6 +89,10 @@ body, html{
 				width:150px;
 			}
 
+			a:hover, a:focus{
+				opacity:.6;
+			}
+
 			.selected a{
 				/* A button is highlighted in green and bolded to signify it is the element associated with the current page */
 				color:$logo_color;
@@ -149,9 +153,10 @@ body, html{
 					}
 
 					.search_button{
+						box-shadow:none;
 						position:absolute;
 						top:8px;
-						right:-35px;
+						right:-75px;
 						background-color: Transparent;
 				    background-repeat:no-repeat;
 						background-image:none;
@@ -302,13 +307,17 @@ body, html{
 	padding:$padding;
 
 	$boxwidth : 230px;
-	$boxheight: 300px;
+	$boxheight: 350px;
 
 	.project{
+
+		$totalheight:370px;
+		$btnheight:40px;
+		$txtheight:160px;
+
 		float:left;
 		min-width:$boxwidth;
-		min-height:$boxheight;
-		height:$boxheight;
+		height:$totalheight+$padding*2;
 		width:100%/$numprojectsinrow;
 
 		padding:$padding;
@@ -326,12 +335,6 @@ body, html{
 			color:white;
 		}
 
-		// a:focus{
-		// 	border-color: rgba(229, 103, 23, 1);
-	  //   box-shadow:  4px 4px 0px 0px rgba(50, 50, 50, 1);
-	  //   outline: 0 none;
-		// }
-
 		.content{
 			border-radius:10px;
 			border-style: solid;
@@ -339,7 +342,7 @@ body, html{
 			border-color:white;
 
 			position:relative;
-			height:100%;
+			height:$totalheight;
 			background-color:$med_grey;
 			overflow:hidden;
 
@@ -350,9 +353,9 @@ body, html{
 			.overlay{
 				position:absolute;
 				width:100%;
-				height:40%;
-				top:60%;
-				background:rgba(255, 255, 255, .9);
+				height:$txtheight;
+				top:$totalheight - $txtheight;
+				background:rgba(255, 255, 255, 1);
 				color:black;
 
 				.text{
@@ -360,9 +363,23 @@ body, html{
 				  -moz-box-sizing: border-box;
 				  box-sizing: border-box;
 					padding:10px;
+					height:$txtheight;
+
+					.project_button{
+						margin-top:10px;
+						// background:$logo_color;
+						height:$btnheight;
+						border-radius:5px;
+
+						button{
+							width:100%;
+							height:100%;
+							// background:$logo_color;
+						}
+					}
 
 					h1{
-						margin-top:0;
+						margin-bottom:10px;
 						font-size:20px;
 						line-height:20px;
 					}

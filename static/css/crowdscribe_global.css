@@ -52,6 +52,8 @@ body, html {
     .navbar .navbar-inner .nav .create_project {
       /* List object widths are set manually for consistency and readability */
       width: 150px; }
+    .navbar .navbar-inner .nav a:hover, .navbar .navbar-inner .nav a:focus {
+      opacity: .6; }
     .navbar .navbar-inner .nav .selected a {
       /* A button is highlighted in green and bolded to signify it is the element associated with the current page */
       color: #69c72a;
@@ -91,9 +93,10 @@ body, html {
           margin: 12.5px 10px 12.5px 10px;
           width: 200px; }
         .navbar .navbar-inner .nav .search .search_form .search_button {
+          box-shadow: none;
           position: absolute;
           top: 8px;
-          right: -35px;
+          right: -75px;
           background-color: Transparent;
           background-repeat: no-repeat;
           background-image: none;
@@ -191,8 +194,7 @@ body, html {
   .projects .project {
     float: left;
     min-width: 230px;
-    min-height: 300px;
-    height: 300px;
+    height: 390px;
     width: 33.33333%;
     padding: 10px;
     overflow: hidden;
@@ -211,7 +213,7 @@ body, html {
       border-width: 3px;
       border-color: white;
       position: relative;
-      height: 100%;
+      height: 370px;
       background-color: #999999;
       overflow: hidden; }
       .projects .project .content img {
@@ -219,17 +221,25 @@ body, html {
       .projects .project .content .overlay {
         position: absolute;
         width: 100%;
-        height: 40%;
-        top: 60%;
-        background: rgba(255, 255, 255, 0.9);
+        height: 160px;
+        top: 210px;
+        background: white;
         color: black; }
         .projects .project .content .overlay .text {
           -webkit-box-sizing: border-box;
           -moz-box-sizing: border-box;
           box-sizing: border-box;
-          padding: 10px; }
+          padding: 10px;
+          height: 160px; }
+          .projects .project .content .overlay .text .project_button {
+            margin-top: 10px;
+            height: 40px;
+            border-radius: 5px; }
+            .projects .project .content .overlay .text .project_button button {
+              width: 100%;
+              height: 100%; }
           .projects .project .content .overlay .text h1 {
-            margin-top: 0;
+            margin-bottom: 10px;
             font-size: 20px;
             line-height: 20px; }
 
