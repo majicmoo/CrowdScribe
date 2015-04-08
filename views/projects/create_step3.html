@@ -55,29 +55,49 @@
 
   </div>
 
-  <h3>Current Fields ({{=len(fields_added)}})</h3>
-  <p>Fugiat culpa proident magna amet esse consequat eiusmod elit proident laborum.</p>
+  <div class="rounded_form">
 
-  <div class="fields">
-    {{for field in fields_added:}}
-      <!-- {{=field.name}}
-      {{=field.short_description}} -->
-      {{include "subviews/field-display.html"}}
-    {{pass}}
+    <h3>Current Fields ({{=len(fields_added)}})</h3>
+    <p>Fugiat culpa proident magna amet esse consequat eiusmod elit proident laborum.</p>
+
+    <div class="fields">
+      {{for field in fields_added:}}
+        <!-- {{=field.name}}
+        {{=field.short_description}} -->
+        {{include "subviews/field-display.html"}}
+      {{pass}}
+    </div>
+
   </div>
 
-  <h3>Current Documents ({{=len(documents_added)}})</h3>
-  <p>Fugiat culpa proident magna amet esse consequat eiusmod elit proident laborum.</p>
+  <div class="rounded_form">
 
-</div>
+    <h3>Current Documents ({{=len(documents_added)}})</h3>
+    <p>Fugiat culpa proident magna amet esse consequat eiusmod elit proident laborum.</p>
 
-<div class="documents">
-  {{for document in documents_added:}}
-    {{include "subviews/document-create-display.html"}}
+
+
+  {{if documents_added:}}
+    <div class="documents no_left_right_padding">
+      {{for document in documents_added:}}
+        {{include "subviews/document-create-display.html"}}
+      {{pass}}
+    </div>
   {{pass}}
+
+  </div>
+
 </div>
 
-<div class="padded_container form_container less_top_padding no_bottom_padding">
-  {{=review_project_form}}
+<div class="padded_container form_container less_top_padding">
+
+  <div class="forward_back_buttons">
+
+    {{=go_to_step_2_form}}
+    {{=review_project_form}}
+
+  </div>
+
   {{=clear_project}}
+
 </div>

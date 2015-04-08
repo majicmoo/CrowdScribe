@@ -30,75 +30,81 @@
 
 <div class="padded_container form_container less_top_padding">
   <h1>Create Project (Step 1 of 4)</h1>
-  <h3>Basic Details</h3>
 
-  {{=form.custom.begin}}
+  <div class="rounded_form no_top_bottom_padding">
+    <h3>Basic Details</h3>
 
-      <!-- <h4> Project Title</h4> -->
-      <label for="project_name">Project Title</label>
-      <p>
-        Please enter a short title for your project that describes the general content of the documents you want transcribed.
-      </p>
+    {{=form.custom.begin}}
 
-      {{=form.custom.widget.name}}
+        <!-- <h4> Project Title</h4> -->
+        <label for="project_name">Project Title</label>
+        <p>
+          Please enter a short title for your project that describes the general content of the documents you want transcribed.
+        </p>
 
-      <label for="project_description">Project Description</label>
-      <p>
-        Ut elit cillum qui et officia consequat reprehenderit excepteur incididunt fugiat qui. Aliqua esse dolor velit excepteur ea aliquip Lorem anim minim ut. Sunt quis deserunt velit ipsum labore adipisicing. Elit amet qui aliqua fugiat consequat laboris nisi eiusmod culpa.
-      </p>
-      <div> {{=form.custom.widget.description}}</div>
+        {{=form.custom.widget.name}}
 
-      <label for="project_tag">Category</label>
-      <p>
-        Ut elit cillum qui et officia consequat reprehenderit excepteur incididunt fugiat qui. Aliqua esse dolor velit excepteur ea aliquip Lorem anim minim ut. Sunt quis deserunt velit ipsum labore adipisicing. Elit amet qui aliqua fugiat consequat laboris nisi eiusmod culpa.
-      </p>
-      <div>{{=form.custom.widget.tag}}</div>
+        <label for="project_description">Project Description</label>
+        <p>
+          Ut elit cillum qui et officia consequat reprehenderit excepteur incididunt fugiat qui. Aliqua esse dolor velit excepteur ea aliquip Lorem anim minim ut. Sunt quis deserunt velit ipsum labore adipisicing. Elit amet qui aliqua fugiat consequat laboris nisi eiusmod culpa.
+        </p>
+        <div> {{=form.custom.widget.description}}</div>
 
-      <label for="unknown_checkbox_container">Time Period</label>
-      <p>
-        Mention that SPACE toggles checkboxes. reprehenderit excepteur incididunt fugiat qui. Aliqua esse dolor velit excepteur ea aliquip Lorem anim minim ut. Sunt quis deserunt velit ipsum labore adipisicing. Elit amet qui aliqua fugiat consequat laboris nisi eiusmod culpa.
-      </p>
-      <div>
-          <label class="checkbox"  for="unknown"> <span id="unknown_checkbox_container"> Unknown Time Period</span>
-                          <input type="checkbox" name="unknown" id="unknown_checkbox" value="yes"
-                      {{if pd:}} {{if pd['unknown']== 'checked':}} checked {{pass}} {{pass}}>
-          </label>
-      </div>
-      <div id="time_period_container">
+        <label for="project_tag">Category</label>
+        <p>
+          Ut elit cillum qui et officia consequat reprehenderit excepteur incididunt fugiat qui. Aliqua esse dolor velit excepteur ea aliquip Lorem anim minim ut. Sunt quis deserunt velit ipsum labore adipisicing. Elit amet qui aliqua fugiat consequat laboris nisi eiusmod culpa.
+        </p>
+        <div>{{=form.custom.widget.tag}}</div>
 
-        <div class="date">
+        <label for="unknown_checkbox_container">Time Period</label>
+        <p>
+          Mention that SPACE toggles checkboxes. reprehenderit excepteur incididunt fugiat qui. Aliqua esse dolor velit excepteur ea aliquip Lorem anim minim ut. Sunt quis deserunt velit ipsum labore adipisicing. Elit amet qui aliqua fugiat consequat laboris nisi eiusmod culpa.
+        </p>
+        <label class="checkbox"  for="unknown">
+          <span id="unknown_checkbox_container"> Unknown Time Period</span>
+          <input type="checkbox" name="unknown" id="unknown_checkbox" value="yes" {{if pd:}} {{if pd['unknown']== 'checked':}} checked {{pass}} {{pass}}>
+        </label>
 
-          <label class ="" for="start_date"> Start Date:</label>
-          <div class="float_left">
-            {{=form.custom.widget.time_period_start_date}}
+        <div id="time_period_container">
+
+          <div class="date">
+
+            <label class ="" for="start_date"> Start Date:</label>
+            <div class="float_left">
+              {{=form.custom.widget.time_period_start_date}}
+            </div>
+            <label for="start_date_adbc">Start Era:</label>
+            <select id = "start_date_adbc" class="float_left input-small" name="start_era">
+                <option {{if pd:}}{{if pd['start_era'] == "AD":}} selected{{pass}}{{pass}}>AD</option>
+                <option {{if pd:}}{{if pd['start_era'] == "BC":}} selected{{pass}}{{pass}}>BC</option>
+            </select>
+
           </div>
-          <label for="start_date_adbc">Start Time Domain:</label>
-          <select id = "start_date_adbc" class="float_left input-small" name="start_era">
-              <option {{if pd:}}{{if pd['start_era'] == "AD":}} selected{{pass}}{{pass}}>AD</option>
-              <option {{if pd:}}{{if pd['start_era'] == "BC":}} selected{{pass}}{{pass}}>BC</option>
-          </select>
+
+          <div class="date">
+
+            <label for="end_date"> End Date:</label>
+            <div class="float_left">
+              {{=form.custom.widget.time_period_end_date}}
+            </div>
+            <label for="start_date_adbc">End Era:</label>
+            <select id = "end_date_adbc" class="float_left input-small" name="end_era">
+                <option {{if pd:}}{{if pd['end_era'] == "AD":}} selected{{pass}}{{pass}}>AD</option>
+                <option {{if pd:}}{{if pd['end_era'] == "BC":}} selected{{pass}}{{pass}}>BC</option>
+            </select>
+
+          </div>
 
         </div>
 
-        <div class="date">
 
-          <label for="end_date"> End Date:</label>
-          <div class="float_left">
-            {{=form.custom.widget.time_period_end_date}}
-          </div>
-          <label for="start_date_adbc">End Time Domain:</label>
-          <select id = "end_date_adbc" class="float_left input-small" name="end_era">
-              <option {{if pd:}}{{if pd['end_era'] == "AD":}} selected{{pass}}{{pass}}>AD</option>
-              <option {{if pd:}}{{if pd['end_era'] == "BC":}} selected{{pass}}{{pass}}>BC</option>
-          </select>
+  </div>
 
-        </div>
-
-      </div>
-
-    <button type="submit" class="btn btn-primary btn-large" value="Continue to Step 2" value="Submit">
+  <div class="forward_back_buttons">
+    <button type="submit" class="btn btn-success btn-large full_btn btn-left" value="Continue to Step 2" value="Submit">
         Continue to Step 2 <i class='icon-arrow-right icon-white'> </i>
     </button>
+  </div>
 
   {{=form.custom.end}}
 

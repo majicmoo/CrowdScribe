@@ -160,6 +160,12 @@ def view_individual_transcription():
     return dict(transcription=transcription, transcribed_fields=transcribed_fields,
                 document_transcription_was_made_on=document_transcription_was_made_on)
 
+def attach_header_image_to_projects(projects):
+    for project in projects:
+        project.header_image = database.get_document_for_project_header(project.id).image
+
+    return projects
+
 @auth.requires_login(otherwise=URL('user', 'login'))
 def manage_projects():
     user_id = auth._get_user_id()
@@ -168,6 +174,7 @@ def manage_projects():
 
     # Have Transcriptions and open Projects
     open_projects_with_transcriptions = database.get_open_projects_with_transcriptions_for_user(user_id)
+    open_projects_with_transcriptions = attach_header_image_to_projects(open_projects_with_transcriptions)
 
     # No Transcriptions and open Projects
     open_projects_without_transcriptions = database.get_open_projects_without_transcriptions_for_user(user_id)
@@ -175,10 +182,10 @@ def manage_projects():
     # All documents transcribed - closed
     closed_projects = database.get_closed_projects_for_user(user_id)
 
-    return dict(under_review_projects=under_review_projects,
-                open_projects_with_transcriptions=open_projects_with_transcriptions,
-                open_projects_without_transcriptions=open_projects_without_transcriptions,
-                closed_projects=closed_projects)
+    return dict(under_review_projects=attach_header_image_to_projects(under_review_projects),
+                open_projects_with_transcriptions=attach_header_image_to_projects(open_projects_with_transcriptions),
+                open_projects_without_transcriptions=attach_header_image_to_projects(open_projects_without_transcriptions),
+                closed_projects=attach_header_image_to_projects(closed_projects))
 
 
 def place_project_under_review():

@@ -208,19 +208,20 @@ def create_step2():
     step_available = check_if_steps_available(project_id)
 
     # This form will allow for the create wizard to be reset
-    clear_project = FORM(DIV(BUTTON("Clear Project", _type='submit', _class='btn btn-danger btn-block',
+    clear_project = FORM(DIV(BUTTON("Clear Project", _type='submit', _class='btn btn-danger btn-block clear-button',
                                     _onclick="return confirm('Clearing a project will wipe all of your progress."
                                              " Continue?');")))
 
     # This form allows documents to be added
     add_image_form = SQLFORM(db.document_image, submit_button="Add Document")
 
-    # This form allows for the wizard to progress to step 3
-    go_to_step_3_form = FORM(DIV(BUTTON("Continue to Step 3", I(_class='icon-arrow-right icon-white'),
-                                        _type='submit', _class='btn btn-primary btn-block btn-large')))
     # This form allows for the wizard to go back to step 1
-    go_to_step_1_form = FORM(DIV(BUTTON("Back to Step 1", I(_class='icon-arrow-left icon-white'),
-                                        _type='submit', _class='btn btn-primary btn-block btn-large')))
+    go_to_step_1_form = FORM(BUTTON("Back to Step 1", I(_class='icon-arrow-left icon-white'),
+                                        _type='submit', _class='btn btn-primary btn-block btn-large btn-left'))
+    # This form allows for the wizard to progress to step 3
+    go_to_step_3_form = FORM(BUTTON("Continue to Step 3", I(_class='icon-arrow-right icon-white'),
+                                        _type='submit', _class='btn btn-success btn-block btn-large'))
+
 
     # Process add image form
     if add_image_form.validate(formname="form_one", onvalidation=validate_add_image_form):
@@ -294,11 +295,11 @@ def create_step3():
 
     # Form that moves you forward to the review step
     review_project_form = FORM(DIV(BUTTON("Review Project", I(_class='icon-arrow-right icon-white'),
-                                          _type='submit', _class='btn btn-primary btn-block btn-large')))
+                                          _type='submit', _class='btn btn-success btn-block btn-large')))
 
     # Form that allows you to move back to step 2
     go_to_step_2_form = FORM(DIV(BUTTON("Back to Step 2", I(_class='icon-arrow-left icon-white'),
-                                        _type='submit', _class='btn btn-primary btn-block btn-large')))
+                                        _type='submit', _class='btn btn-primary btn-block btn-large btn-left')))
 
     # Forms that resets project wizard
     clear_project = FORM(DIV(BUTTON("Clear Project", _type='submit', _class='btn btn-danger btn-block',

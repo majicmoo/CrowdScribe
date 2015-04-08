@@ -77,22 +77,37 @@
 
   </div>
 
-  <h3>Current Documents ({{=len(documents_added)}})</h3>
-  <p>Fugiat culpa proident magna amet esse consequat eiusmod elit proident laborum.</p>
+  <div class="rounded_form">
 
-</div>
+    <h3>Current Documents ({{=len(documents_added)}})</h3>
+    <p>Created documents can be viewed and deleted below.</p>
 
-<div class="documents">
-  {{for document in documents_added:}}
-    {{include "subviews/document-display-delete.html"}}
-  {{pass}}
+
+
+    {{if documents_added:}}
+      <div class="documents no_left_right_padding">
+        {{for document in documents_added:}}
+          {{include "subviews/document-display-delete.html"}}
+        {{pass}}
+      </div>
+    {{pass}}
+
+    </div>
+
 </div>
 
 <!-- {{=add_image_form.errors}} -->
 <!-- {{=go_to_step_3_form.errors}} -->
 
 <div class="padded_container form_container less_top_padding">
-  {{=go_to_step_3_form}}
+
+  <div class="forward_back_buttons">
+
+    {{=go_to_step_1_form}}
+    {{=go_to_step_3_form}}
+
+  </div>
+
   {{=clear_project}}
-  <!-- <input type="submit" value="Continue to Step 3" class="btn"> -->
+
 </div>

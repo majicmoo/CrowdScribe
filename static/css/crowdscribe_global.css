@@ -132,6 +132,8 @@ body, html {
   .padded_container label {
     font-size: 17.5px;
     font-weight: bold; }
+  .padded_container .checkbox {
+    font-size: 14.5px; }
 
 .less_top_padding {
   padding-top: 10px; }
@@ -139,6 +141,20 @@ body, html {
 .no_bottom_padding {
   padding-bottom: 0; }
 
+.no_top_bottom_padding {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important; }
+
+.form_container .rounded_form {
+  margin-top: 10px;
+  border-radius: 5px;
+  border-style: solid;
+  border-color: #c8c8c8;
+  border-width: 1px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  padding: 10px; }
 .form_container .btn {
   width: 100%; }
 .form_container .string, .form_container .text, .form_container select, .form_container .password {
@@ -152,6 +168,24 @@ body, html {
   /* Safari 5.1+, Chrome 10+, Firefox 29+, Opera 7+, IE 8+, Android 4.0+, iOS any */ }
 .form_container .string, .form_container .password {
   height: 30px; }
+.form_container .forward_back_buttons {
+  margin: 10px 0 10px 0;
+  height: 40px; }
+  .form_container .forward_back_buttons form {
+    padding: 0;
+    margin: 0; }
+  .form_container .forward_back_buttons button {
+    height: 40px;
+    width: 49%;
+    float: left;
+    margin-left: 2%; }
+  .form_container .forward_back_buttons .full_btn {
+    height: 40px;
+    width: 100%; }
+  .form_container .forward_back_buttons .btn-left {
+    margin: 0; }
+.form_container .clear-button {
+  margin-top: 10px; }
 
 .form_nav {
   height: 30px;
@@ -231,17 +265,26 @@ body, html {
           box-sizing: border-box;
           padding: 10px;
           height: 160px; }
+          .projects .project .content .overlay .text .split {
+            width: 50%;
+            float: left; }
           .projects .project .content .overlay .text .project_button {
             margin-top: 10px;
             height: 40px;
             border-radius: 5px; }
             .projects .project .content .overlay .text .project_button button {
-              width: 100%;
               height: 100%; }
           .projects .project .content .overlay .text h1 {
             margin-bottom: 10px;
             font-size: 20px;
             line-height: 20px; }
+          .projects .project .content .overlay .text p {
+            height: 60px; }
+
+.no_left_right_padding {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  padding-bottom: 0 !important; }
 
 .documents {
   overflow: auto;

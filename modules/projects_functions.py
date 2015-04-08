@@ -3,6 +3,12 @@ import database_transactions as database_transactions
 db = current.db
 database = database_transactions.DatabaseTransactions(db)
 
+def attach_header_image_to_projects(projects):
+    for project in projects:
+        project.header_image = database.get_document_for_project_header(project.id).image
+
+    return projects
+
 def check_if_steps_available(project_id):
 
     step2_available = False

@@ -1,7 +1,7 @@
 <!-- This is used throughout the site to display projects in an adaptive frame -->
 <div class="project">
 
-	<a href={{=URL('projects','project', args=[project.id])}}>
+	<!-- <a href={{=URL('projects','project', args=[project.id])}}> -->
 		<div class="content">
 
 			<img src="{{=URL('default','download',args = project.header_image)}}"/>
@@ -10,12 +10,40 @@
 				<div class="text">
 					<h1>{{=project.name}}</h1>
 					<p>{{=project.description[0:100]}}...</p>
-					<div class="project_button">
-						<button class="btn btn-success" type="button" alt="View {{=project.name}}">View Project</button>
-					</div>
+
+					<!-- If Current User Owns the project -->
+					{{if auth.user.id == project.author_id:}}
+
+						<div class="project_button">
+
+							<!-- Under Review so show Reopen Button -->
+							{{if project.status == "Under Review":}}
+
+								{{=A(BUTTON('Reopen Project',_class="btn btn-success"), callback= URL('reopen_project_for_transcriptions',
+						        vars= dict(project_id=project.id)), _class="split")}}
+
+							{{else:}}
+
+								{{=A(BUTTON('Close for review',_class="btn btn-success"), callback= URL('place_project_under_review',
+										vars= dict(project_id=project.id)), _class="split")}}
+
+							{{pass}}
+
+							{{=A(BUTTON('View Project',_class="btn btn-success split"), _href= URL('projects','project', args=[project.id]))}}
+
+						</div>
+
+					{{else:}}
+
+						<div class="project_button">
+							<form><button class="btn btn-success" type="button" alt="View {{=project.name}}" onclick="window.location.href='{{=URL('projects','project', args=[project.id])}}'">View Project</button></form>
+						</div>
+
+					{{pass}}
+
 				</div>
 			</div>
 
 		</div>
-	</a>
+	<!-- </a> -->
 </div>

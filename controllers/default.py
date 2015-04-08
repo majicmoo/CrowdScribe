@@ -24,7 +24,6 @@ def index():
     if len(latest_projects) == 0:
         latest_projects = []
         featured_project = None
-        #print featured_project
         featured_project_image = None
     else:
         # Featured Project
