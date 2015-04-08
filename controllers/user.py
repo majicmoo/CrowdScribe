@@ -11,7 +11,7 @@ def register():
     if auth.is_logged_in():
         redirect(URL(c='user',f='profile'))
 
-    form = SQLFORM.factory(db.auth_user, formstyle="divs")
+    form = SQLFORM(db.auth_user, formstyle="divs")
 
     # Placeholder Values
     #form.custom.widget.first_name["_placeholder"] = "Enter First Name"
@@ -20,33 +20,27 @@ def register():
     form.custom.widget.username["_placeholder"] = "Enter Unique Username"
     form.custom.widget.password["_placeholder"] = "Enter Password"
 
-    if form.validate(onvalidation=validate_register_form):
+    if form.validate(formname="form_one", onvalidation=validate_register_form):
         userid = auth.get_or_create_user(form.vars)
         auth.login_bare(request.vars.username, request.vars.password)
         redirect(URL('user','profile'))
+
     elif form.errors:
+        print form.errors
+        validate_register_form(form)
         response.flash = 'One or more of your form fields has an error. Please see below for more information'
 
     return dict(form = form)
 
 def validate_register_form(form):
 
+    # Validates if field is empty
     empty_validator = IS_NOT_EMPTY(error_message=T("must not be empty"))
 
-    if empty_validator(request.vars.first_name)[1] is not None:
-        form.errors.first_name = "First Name " + empty_validator(request.vars.first_name)[1]
+    # Validates if password is the same as confirm password
+    confirm_password_validator = IS_EQUAL_TO(request.vars.password, error_message="Password is not the same as confirm password")
 
-    if empty_validator(request.vars.last_name)[1] is not None:
-        form.errors.last_name = "Last Name " + empty_validator(request.vars.last_name)[1]
-
-    email_validator = IS_EMAIL(error_message="Email is not in correct format")
-
-    if empty_validator(request.vars.email)[1] is not None:
-        form.errors.email = "Email " + empty_validator(request.vars.email)[1]
-    else:
-        if email_validator(request.vars.email)[1] is not None:
-            form.errors.email = email_validator(request.vars.email)[1]
-
+    # Validates if username already exists
     username_validator = IS_NOT_IN_DB(db, 'auth_user.username', error_message="Username has already been taken")
 
     if empty_validator(request.vars.username)[1] is not None:
@@ -55,11 +49,13 @@ def validate_register_form(form):
         if username_validator(request.vars.username)[1] is not None:
             form.errors.username = username_validator(request.vars.username)[1]
 
-
     if empty_validator(request.vars.password)[1] is not None:
         form.errors.password = "Password " + empty_validator(request.vars.password)[1]
 
-
+    print request.vars
+    if confirm_password_validator(request.vars.confirm_password)[1] is not None:
+        print "here"
+        form.errors.password = confirm_password_validator(request.vars.confirm_password)[1]
 
 
 

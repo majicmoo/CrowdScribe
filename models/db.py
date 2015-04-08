@@ -87,6 +87,11 @@ plugins = PluginManager()
 ## create all tables needed by auth if not custom tables
 auth.define_tables(username=True, signature=False)
 
+
+db.auth_user.first_name.readable = db.auth_user.first_name.writable = False
+db.auth_user.last_name.readable = db.auth_user.last_name.writable = False
+db.auth_user.email.readable = db.auth_user.email.writable = False
+
 from gluon import current
 current.db = db
 
