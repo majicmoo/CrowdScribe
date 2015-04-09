@@ -22,38 +22,48 @@
     {{if auth._get_user_id() == project.author_id:}}
 
         <!--Open Documents With Transcription: Project owner -->
-        <h3>Open Documents With Transcription</h3>
-        {{for document in open_documents_with_transcription:}}
-            {{include "subviews/document-display-owner.html"}}
+        {{if open_documents_with_transcription:}}
+          <h3>Open Documents With Transcription</h3>
+          {{for document in open_documents_with_transcription:}}
+              {{include "subviews/document-display-owner.html"}}
+          {{pass}}
         {{pass}}
 
-        <h3>Open Documents Without Transcription</h3>
-        <!--Open Documents Without Transcription: Project owner -->
-        {{for document in open_documents_without_transcription:}}
-            {{include "subviews/document-display-owner.html"}}
+        {{if open_documents_without_transcription:}}
+          <h3>Open Documents Without Transcription</h3>
+          <!--Open Documents Without Transcription: Project owner -->
+          {{for document in open_documents_without_transcription:}}
+              {{include "subviews/document-display-owner.html"}}
+          {{pass}}
         {{pass}}
 
-        <h3>Closed Documents</h3>
-        <!--Closed Documents: Project owner -->
-        {{for document in closed_documents:}}
-            {{include "subviews/document-display-owner.html"}}
+        {{if closed_documents:}}
+          <h3>Closed Documents</h3>
+          <!--Closed Documents: Project owner -->
+          {{for document in closed_documents:}}
+              {{include "subviews/document-display-owner.html"}}
+          {{pass}}
         {{pass}}
 
     <!--Not Project Owner-->
     {{else:}}
 
+      {{if open_documents:}}
         <!--Open Documents : Not project owner -->
         <h3>Open Documents</h3>
         {{for document in open_documents:}}
             {{include "subviews/document-display.html"}}
         {{pass}}
+      {{pass}}
 
     {{pass}}
 
-    <!--Done Documents : Everyone-->
-    <h3>Done Documents</h3>
-    {{for document in done_documents:}}
-        {{include "subviews/document-display.html"}}
+    {{if done_documents:}}
+      <!--Done Documents : Everyone-->
+      <h3>Done Documents</h3>
+      {{for document in done_documents:}}
+          {{include "subviews/document-display.html"}}
+      {{pass}}
     {{pass}}
 
 </div>

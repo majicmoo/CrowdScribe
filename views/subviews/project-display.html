@@ -12,7 +12,6 @@
 					<p>{{=project.description[0:100]}}...</p>
 
 					<!-- If Current User Owns the project -->
-                    {{print project.author_id}}
 					{{if auth._get_user_id() == project.author_id:}}
 
 						<div class="project_button">
