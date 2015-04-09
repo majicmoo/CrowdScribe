@@ -507,6 +507,7 @@ def project():
 
 def attach_number_of_transcriptions(documents):
     for document in documents:
+        print document
         document.number_of_transcriptions = len(database.get_pending_transcriptions_for_document(document.id))
     return documents
 
@@ -514,7 +515,7 @@ def attach_number_of_transcriptions(documents):
 def view_document():
     # Remove if project data not required in page
     project_id = request.args(0)
-    project = database.get_open_project(project_id)
+    project = database.get_project(project_id)
 
     # Page Title
     response.title = project.name
@@ -526,10 +527,14 @@ def view_document():
     # Get Doc from URL args
     document_id = request.args(1)
     document = database.get_document(document_id)
+    accepted_transcription_with_fields = None
 
     # If null doc, go back to the project
     if document is None:
         redirect(URL('projects', 'project', args=[project_id]))
+    elif document.status == "Closed":
+        accepted_transcription = database.get_accepted_transcription_for_document(document.id)
+        accepted_transcription_with_fields = database.get_transcribed_fields_for_transcription(accepted_transcription.id)
 
     document.number_of_transcriptions = len(database.get_pending_transcriptions_for_document(document.id))
 
@@ -596,7 +601,8 @@ def view_document():
 
     image = URL('default', 'download', args=document.image)
 
-    return dict(project=project, document=document, image=image, form=form, transcription=transcription)
+    return dict(project=project, document=document, image=image, form=form, transcription=transcription,
+                accepted_transcription_with_fields = accepted_transcription_with_fields)
 
 
 @auth.requires_login(otherwise=URL('user', 'login'))

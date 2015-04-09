@@ -170,7 +170,7 @@ class DatabaseTransactions:
         result = self.db((self.db.project.id == self.db.document_image.project_id)
                     & (self.db.document_image.id == self.db.transcription.document_id)
                     & (self.db.project.id == project_id)
-                    & (self.db.transcription.author_id == user_id)).select()
+                    & (self.db.transcription.author_id == user_id)).select(self.db.document_image.ALL, distinct=True)
         return result
 
     def get_document_for_project_header(self, project_id):
@@ -226,6 +226,11 @@ class DatabaseTransactions:
     def get_pending_transcriptions_for_document(self, document_id):
         result = self.db((self.db.transcription.document_id == document_id)
                     & (self.db.transcription.status == "Pending")).select()
+        return result
+
+    def get_accepted_transcription_for_document(self, document_id):
+        result = self.db((self.db.transcription.document_id == document_id)
+                    & (self.db.transcription.status == "Accepted")).select().first()
         return result
 
 
