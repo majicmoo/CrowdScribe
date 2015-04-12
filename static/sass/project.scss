@@ -166,16 +166,60 @@
   background:red;
 }
 
+$borderradius:15px;
+
+#doc_submit, #doc_controls{
+  background:white;
+  display:block;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  padding:10px;
+  border-style: solid;
+  border-color:$light_grey;
+  border-width: 1px;
+}
+
+#doc_submit{
+
+  margin-bottom:20px;
+  border-bottom-left-radius:$borderradius;
+  border-bottom-right-radius:$borderradius;
+  border-top:none;
+
+  form{
+    margin:0;
+  }
+}
+
+#doc_controls{
+  margin-top:20px;
+  border-top-left-radius:$borderradius;
+  border-top-right-radius:$borderradius;
+  border-bottom:none;
+
+  h4{
+    margin-top:0;
+  }
+
+  button{
+    margin-top:10px;
+  }
+}
+
 #doc_display{
   /* This is used to display the document and transcription fields in either horizontal or portrait fashion */
   /* This can easily be toggled with a button at the top of the page which is widely accesible */
 
   // background:red;
   display:block;
-  margin:10px 0 20px 0;
   position:absolute;
   width:100%;
   position:relative;
+
+  border-style: solid;
+  border-color:$light_grey;
+  border-width: 1px;
 
   &:after {
     content: "";
@@ -212,12 +256,6 @@
     clear:both;
   }
 
-  // background:$med_grey;
-
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-
   position:relative;
   overflow:hidden;
 }
@@ -245,6 +283,10 @@
   &.portrait{
     width:100%;
     left:0;
+  }
+
+  &.disabled{
+    overflow:hidden;
   }
 
   // position:relative;
@@ -281,7 +323,7 @@
       color:white;
       margin:0 auto 0 auto;
       margin-top:10px;
-  		border-radius:5px;
+  		border-radius:$borderradius;
   		border-style: solid;
   		border-color:$med_grey;
   		border-width: 1px;

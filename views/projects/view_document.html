@@ -16,31 +16,35 @@
   <h4>Document Description</h4>
   <p>{{=document.description}}</p>
 
-  <button id="toggle_button">Toggle</button>
+  <div id="doc_controls">
+    <h4>Transcription Instructions</h4>
+    <p>Ex occaecat reprehenderit laboris consequat ex. Commodo tempor do proident in velit officia. Eu et eu cupidatat consectetur enim consequat. You can toggle the way you view the document and transcription form with the button below.</p>
+
+    <button id="toggle_button" class="btn">Toggle View</button>
+  </div>
 
   <div id="doc_display">
     <!-- Maybe highlight that image can be opened in new tab for zooming etc -->
     <div id="document_viewer" class="landscape">
-          <a href="{{=image}}" class="docGal" title="document"><img src="{{=image}}" alt="document"/></a>
+          <!-- <a href="{{=image}}" class="docGal" title="document"><img src="{{=image}}" alt="document"/></a> -->
+          <img src="{{=image}}" alt="document"/>
     </div>
 
     {{if form:}}
-      <div id="transcription_form_holder" class="landscape">
+      <div id="transcription_form_holder" class="{{="disabled" if response.message else ""}} landscape">
 
-        {{for field in form:}}
-          {{=field}}
-        {{pass}}
+        <!-- If there is an overlay, the form should be disabled to prevent TABBING into it -->
+        <fieldset {{="disabled" if response.message else ""}}>
 
-        {{if form:}}
-          {{=form.custom.begin}}
-            <input class="btn btn-primary" type="submit" value="Submit">
-          {{=form.custom.end}}
-        {{pass}}
+          {{for field in form:}}
+            {{=field}}
+          {{pass}}
 
+        </fieldset>
 
     {{pass}}
 
-    {{if response_message:}}
+    {{if response.message:}}
         <div class="unavailable_overlay">
           <div class="notice">{{=response.message}}</div>
         </div>
@@ -54,11 +58,15 @@
     {{pass}} -->
   </div>
 
-  {{if form:}}
-    {{=form.custom.begin}}
-      <input class="btn btn-primary" type="submit" value="Submit">
-    {{=form.custom.end}}
-  {{pass}}
+  <div id="doc_submit">
+
+    {{if form:}}
+      {{=form.custom.begin}}
+        <input class="btn btn-primary" type="submit" value="Submit Transcription">
+      {{=form.custom.end}}
+    {{pass}}
+
+  </div>
 
 </div>
 
