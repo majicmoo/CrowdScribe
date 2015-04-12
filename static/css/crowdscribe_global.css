@@ -225,6 +225,10 @@ body, html {
     .form_nav .inner .rightmost {
       border-right: 0; }
 
+.no-left-right-padding {
+  padding-left: 0 !important;
+  padding-right: 0 !important; }
+
 .projects {
   overflow: auto;
   padding: 10px; }
