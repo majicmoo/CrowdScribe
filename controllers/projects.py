@@ -464,6 +464,11 @@ def view_document():
             db.transcribed_field.insert(data_field_id=data_field.id, transcription_id=transcription_id,
                                         information=form.vars[data_field.name])
 
+        session.flash = "Succesful Transcription!"
+        session.flash_class = "alert-success"
+
+        redirect(URL('projects','view_document', args=[project.id, document.id]))
+
     image = URL('default', 'download', args=document.image)
 
     return dict(project=project, document=document, image=image, form=form, transcription=transcription,

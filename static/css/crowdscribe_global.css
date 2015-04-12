@@ -382,8 +382,8 @@ body, html {
       border-radius: 0;
       height: 100%; }
 
-/* The message tag is used across all pages, and shows a message at the top when desired by the controller */
 #message {
+  /* The message tag is used across all pages, and shows a message at the top when desired by the controller */
   min-width: 1000px;
   width: 100%;
   height: 30px;
@@ -404,3 +404,7 @@ body, html {
     color: white;
     text-decoration: none;
     position: relative; }
+
+.alert {
+  border-radius: 0;
+  margin: 0; }
