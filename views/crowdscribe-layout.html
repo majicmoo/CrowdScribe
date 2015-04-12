@@ -17,7 +17,6 @@
         <meta name="application-name" content="{{=request.application}}" />
 
         {{
-        response.files.insert(0,URL('static','css/web2py.css'))
         response.files.insert(1,URL('static','css/bootstrap.min.css'))
         response.files.insert(2,URL('static','css/bootstrap-responsive.min.css'))
         response.files.insert(3,URL('static','css/web2py_bootstrap.css'))
@@ -35,7 +34,7 @@
 
 <body>
 
-  <div class="navbar">
+  <nav class="navbar">
     <div class="navbar-inner" role="navigation">
 
       <ul class="nav">
@@ -112,7 +111,7 @@
         {{pass}}
 
     </div>
-  </div>
+  </nav>
 
   <!-- {{=response.flash}} -->
 

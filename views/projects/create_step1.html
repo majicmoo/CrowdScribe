@@ -31,7 +31,7 @@
 <div class="padded_container form_container less_top_padding">
   <h1>Create Project (Step 1 of 4)</h1>
 
-  <div class="rounded_form no_top_bottom_padding">
+  <div class="border-box-sizing rounded_bordered_container no_top_bottom_padding">
     <h3>Basic Details</h3>
 
     {{=form.custom.begin}}
@@ -70,11 +70,11 @@
           <div class="date">
 
             <label class ="" for="start_date"> Start Date:</label>
-            <div class="float_left">
+            <div class="no_margin">
               {{=form.custom.widget.time_period_start_date}}
             </div>
             <label for="start_date_adbc">Start Era:</label>
-            <select id = "start_date_adbc" class="float_left input-small" name="start_era">
+            <select id = "start_date_adbc" class="no_margin input-small" name="start_era">
                 <option {{if pd:}}{{if pd['start_era'] == "AD":}} selected{{pass}}{{pass}}>AD</option>
                 <option {{if pd:}}{{if pd['start_era'] == "BC":}} selected{{pass}}{{pass}}>BC</option>
             </select>
@@ -84,11 +84,11 @@
           <div class="date">
 
             <label for="end_date"> End Date:</label>
-            <div class="float_left">
+            <div class="no_margin">
               {{=form.custom.widget.time_period_end_date}}
             </div>
             <label for="start_date_adbc">End Era:</label>
-            <select id = "end_date_adbc" class="float_left input-small" name="end_era">
+            <select id = "end_date_adbc" class="no_margin input-small" name="end_era">
                 <option {{if pd:}}{{if pd['end_era'] == "AD":}} selected{{pass}}{{pass}}>AD</option>
                 <option {{if pd:}}{{if pd['end_era'] == "BC":}} selected{{pass}}{{pass}}>BC</option>
             </select>

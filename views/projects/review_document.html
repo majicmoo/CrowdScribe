@@ -1,30 +1,70 @@
+{{response.files.append(URL(r=request,c='static/css',f='project.css'))}}
 {{extend 'crowdscribe-layout.html'}}
 
-<h2> Project</h2>
-{{=project.name}}
+<div class="padded_container form_container no_bottom_padding">
+  <h1>Reviewing Document for {{=project.name}}</h1>
+  <h3>{{=project.tag}} {{=timestring}}</h3>
 
-<h2> Document</h2>
-    <img width="500" height="350" src="{{=URL('default','download',args = document.image)}}" />
+  <h4>Document Description</h4>
+  <p>{{=document.description}}</p>
 
-{{i=1}}
-{{for transcription in transcribed_fields_for_transcriptions:}}
-        <div>
-        <h3> Transcription {{=i}}</h3>
-        {{for field in transcription: }}
-            <div>
-                <b>{{=field.data_field.name}}:</b>
-                {{=field.transcribed_field.information}}
-            </div>
-            <br>
+  <div id="doc_controls">
+    <h4>Review Instructions</h4>
+    <p>Ex occaecat reprehenderit laboris consequat ex. Commodo tempor do proident in velit officia. Eu et eu cupidatat consectetur enim consequat. You can toggle the way you view the document and transcription form with the button below.</p>
+
+    <button id="toggle_button" class="btn">Toggle View</button>
+  </div>
+
+  <div id="doc_display" class="border-box-sizing">
+    <!-- Maybe highlight that image can be opened in new tab for zooming etc -->
+    <div id="document_viewer" class="landscape">
+          <img src="{{=URL('default','download',args = document.image)}}" alt="document"/>
+    </div>
+
+
+      <div id="transcription_form_holder" class="{{="disabled" if response.message else ""}} landscape">
+
+        {{i=1}}
+        {{for transcription in transcribed_fields_for_transcriptions:}}
+                <div>
+                <h3> Transcription {{=i}}</h3>
+                {{for field in transcription: }}
+                    <div>
+                        <b>{{=field.data_field.name}}:</b>
+                        {{=field.transcribed_field.information}}
+                    </div>
+                    <br>
+                {{pass}}
+                {{=A(BUTTON('Accept',_class="btn btn-success"), callback= URL('accept_transcription',
+                vars= dict(document_id=document.id, transcription_id=field.transcribed_field.transcription_id,
+                    project_id=project.id)))}}
+                </div>
+                {{i = i + 1}}
         {{pass}}
-        {{=A(BUTTON('Accept',_class="btn btn-success"), callback= URL('accept_transcription',
-        vars= dict(document_id=document.id, transcription_id=field.transcribed_field.transcription_id,
-            project_id=project.id)))}}
+
+
+
+    {{if response.message:}}
+        <div class="unavailable_overlay">
+          <div class="notice">{{=response.message}}</div>
         </div>
-        {{i = i + 1}}
-{{pass}}
+
+    {{pass}}
+    </div>
+
+</div>
+
+
 <br>
 <div>
 {{=A(BUTTON('Reject All',_class="btn btn-danger btn-large"), callback= URL('reject_all_transcriptions',
 vars= dict(document_id=document.id)))}}
 </div>
+
+<script>
+  $("#toggle_button").click(function(){
+    $("#document_viewer")          .toggleClass('portrait').toggleClass('landscape');
+    $("#transcription_form_holder").toggleClass('portrait').toggleClass('landscape');
+  })
+
+</script>

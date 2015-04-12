@@ -383,7 +383,7 @@ def view_document():
     project = database.get_project(project_id)
 
     # Page Title
-    response.title = project.name
+    response.title = project.name + ' | Document'
 
     # Redirect if null project.
     if project is None:
@@ -487,11 +487,13 @@ def view_document():
 
 @auth.requires_login(otherwise=URL('user', 'login'))
 def review_document():
+
     # Current Project
     project_id = request.args(0)
     project = database.get_project(project_id)
-    # Page Title
-    response.title = project.name
+
+    response.title = project.name + ' | Review'
+
     # Current Document
     document_id = request.args(1)
     document = database.get_document(document_id)
@@ -500,6 +502,7 @@ def review_document():
         # Redirect if project is none
         redirect(URL('default', 'index'))
     if project.status != 'Under Review':
+        session.flash = "A project must be 'Closed for Review' before you can assess it's transcriptions. You can close them in your Project Manager."
         redirect(URL('projects', 'project', args=[project_id]))
     # Check Project Belongs to Current User
     if project.author_id != auth._get_user_id():
@@ -513,8 +516,10 @@ def review_document():
         transcribed_fields_for_transcriptions.append(database.get_transcribed_fields_for_transcription(
             transcription.id))
 
+
+
     return dict(project=project, document=document, transcriptions=transcriptions, database=database,
-                transcribed_fields_for_transcriptions=transcribed_fields_for_transcriptions)
+                transcribed_fields_for_transcriptions=transcribed_fields_for_transcriptions, timestring = project_timestring(project))
 
 def delete_field():
     db((db.data_field.id == request.vars.field_id)).delete()
