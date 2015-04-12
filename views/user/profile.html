@@ -1,6 +1,39 @@
-{{response.files.append(URL(r=request,c='static/css',f='profile.css'))}}
+{{response.files.append(URL(r=request,c='static/css',f='user.css'))}}
 {{extend 'crowdscribe-layout.html'}}
 
-Hi {{=auth.user.username}}
+<div class="padded_container form_container">
 
-<a href="{{=URL('user','manage_projects')}}">Manage Projects</a>
+  <h1>{{=auth.user.username}}'s Profile</h1>
+
+  <p>
+    Do elit consectetur non officia elit magna. Duis aliqua proident consequat fugiat sint magna eu sint incididunt eu aliqua. Et irure tempor consequat pariatur proident et consectetur non aliqua voluptate dolor est amet. Ad reprehenderit id reprehenderit ullamco magna. Ut elit sit mollit aute dolor culpa incididunt duis officia sunt laborum. Incididunt ad irure sit tempor aliquip dolor reprehenderit duis laborum. Ullamco exercitation labore duis adipisicing reprehenderit. Deserunt in incididunt exercitation et sunt duis consequat in. Esse et exercitation laborum non aute exercitation exercitation magna aute ea exercitation mollit.
+  </p>
+
+  <div id="button_container">
+    <a href="{{=URL('user','manage_projects')}}">
+      <div class="manage_projects border-box-sizing">
+        <div class="content">
+          <h2>Manage Projects</h2>
+          <p>
+            You have 8 projects with document transcriptions awaiting review.
+          </p>
+        </div>
+      </div>
+    </a>
+
+    <div class="spacer"></div>
+
+    <a href="{{=URL('user','manage_projects')}}">
+      <div class="manage_projects border-box-sizing">
+        <div class="content">
+          <h2>View Transcriptions</h2>
+          <p>
+            View transcriptions you have made to projects, and their status.
+          </p>
+        </div>
+      </div>
+    </a>
+
+  </div>
+
+</div>

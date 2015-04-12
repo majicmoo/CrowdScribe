@@ -1,5 +1,67 @@
 @import 'colors';
 
+#button_container{
+
+	a{
+		text-decoration:none;
+  	color:inherit;
+		display:block;
+	}
+
+	a:hover, a:focus{
+		opacity:.6;
+	}
+
+	$btnwidth:49%;
+	$btnheight:200px;
+
+	.spacer{
+		width:100% - $btnwidth * 2;
+		height:$btnheight;
+		float:left;
+	}
+
+	.manage_projects{
+		width: $btnwidth;
+	  height: $btnheight;
+	  // display: block;
+	  background: $logo_color;
+		text-align:center;
+
+		float:left;
+
+		border-radius:10px;
+
+		&:before{
+      content: '';
+      display: inline-block;
+      height: 100%;
+      vertical-align: middle;
+      margin-right: -0.25em; /* Adjusts for spacing */
+    }
+
+		.content{
+			display: inline-block;
+			vertical-align: middle;
+
+			// background:red;
+			width:300px;
+			overflow:hidden;
+
+			p{
+				text-align:center;
+			}
+
+			h2{
+				color:white;
+			}
+		}
+
+
+	}
+
+}
+
 .login{
 
 	#loginform{

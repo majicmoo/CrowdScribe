@@ -11,6 +11,9 @@ def create_step1():
     # Set Page Title
     response.title = "Create - Step 1"
 
+    # Set response flash display to error
+    session.flash_class = "alert-error"
+
     # Retrieve project and set session project variable to allow for prepopulating.
     project_id = None
     project_being_edited = None
@@ -117,6 +120,8 @@ def create_step2():
         db.document_image.insert(description=request.vars.description, status="Open", project_id=project_id,
                                  image=add_image_form.vars.image)
         session.project_being_created = project_id
+        session.flash_class = "alert-success"
+        response.flash = "Succesfully Added Document!"
 
     # Process form allowing you to move to step 3
     if go_to_step_3_form.process(formname="form_two").accepted:
@@ -351,10 +356,7 @@ def project():
     header_image = URL('default', 'download', args=database.get_document_for_project_header(project.id).image)
 
     # Time String
-    timestring = ''
-    if project.time_period_start_date:
-        timestring = '('+projects_module.convert_integer_to_date_string(project.time_period_start_date) + " - " +\
-                     projects_module.convert_integer_to_date_string(project.time_period_end_date)+')'
+    timestring = project_timestring(project)
 
     documents_transcribed_by_user = projects_module.attach_number_of_transcriptions(documents_transcribed_by_user)
     done_documents = projects_module.attach_number_of_transcriptions(done_documents)
@@ -368,7 +370,12 @@ def project():
                 open_documents_without_transcription=open_documents_without_transcription,
                 closed_documents=closed_documents, open_documents=open_documents)
 
-
+def project_timestring(project):
+    if project.time_period_start_date:
+        timestring = '('+projects_module.convert_integer_to_date_string(project.time_period_start_date) + " - " +\
+                     projects_module.convert_integer_to_date_string(project.time_period_end_date)+')'
+        return timestring
+    return ''
 
 def view_document():
     # Remove if project data not required in page
@@ -471,8 +478,11 @@ def view_document():
 
     image = URL('default', 'download', args=document.image)
 
+    # Time String
+    timestring = project_timestring(project)
+
     return dict(project=project, document=document, image=image, form=form, transcription=transcription,
-                accepted_transcription_with_fields = accepted_transcription_with_fields, response_message = response_message)
+                accepted_transcription_with_fields = accepted_transcription_with_fields, response_message = response_message, timestring = timestring)
 
 
 @auth.requires_login(otherwise=URL('user', 'login'))

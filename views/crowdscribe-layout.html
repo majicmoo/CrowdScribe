@@ -36,7 +36,7 @@
 <body>
 
   <div class="navbar">
-    <div class="navbar-inner">
+    <div class="navbar-inner" role="navigation">
 
       <ul class="nav">
 
@@ -57,7 +57,7 @@
 
         <li class="noline search">
           <form class = "search_form" action="{{=URL('search','search_results')}}" method="GET">
-            <input type="search" name="quicksearch" class="search-query" placeholder="Search Projects">
+            <input type="search" name="quicksearch" class="search-query" placeholder="Search Projects" role="search">
             <button type="submit" class = "search_button" alt = 'Begin Search Button'>
               <i class="icon-search"></i>
             </button>
@@ -140,7 +140,7 @@
       }
   </script>
 
-	<div class="content_container">
+	<div class="content_container" role="main">
       {{include}}
   </div>
 
