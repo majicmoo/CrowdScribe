@@ -405,62 +405,69 @@ def view_document():
     # Transcriptions by the current user for this doc
     transcription = None
 
+    response_message = None
+
     # If you are the owner, you cannot transcribe the document. Gives link to review transcriptions.
     if project.author_id == auth._get_user_id() and not transcriptions:
-        response.message = 'You are the owner of this project and cannot transcribe its documents. It currently has' \
+        response_message = 'You are the owner of this project and cannot transcribe its documents. It currently has' \
                            ' 0 transcriptions available for review.'
+        response.message = response_message
 
     elif project.author_id == auth._get_user_id() and transcriptions:
         msgstring = 'You are the owner of this project and cannot transcribe its documents. Click here to review the ' \
                     + str(len(transcriptions)) + ' transcription' + ('s' if len(transcriptions) > 1 else '') +\
                     ' made.'
+        response_message = msgstring
         response.message = A(msgstring, _href=URL('projects', 'review_document', args=[project.id, document.id]))
 
     # Need an account to login
     elif auth._get_user_id() is None:
-        response.message = A("Please login to transcribe.", _href=URL('user', 'login'))
+        response_message = "Please login to transcribe."
+        response.message = A(response_message, _href=URL('user', 'login'))
 
     # If user has already provided a transcription
     elif database.document_has_already_been_transcribed_by_user(document_id, auth._get_user_id()):
         transcription = database.document_transcribed_by_user(document_id, auth._get_user_id())
-        response.message = A("You have already transcribed this document. Only 1 transcription can be added per user.")
+        response_message = "You have already transcribed this document. Only 1 transcription can be added per user."
+        response.message = response_message
 
     # If doc is no longer accepting transcriptions
     elif document.status == 'Done':
-        response.message = A("This document has already received the maximum number of transcriptions allowed")
+        response_message = "This document has already received the maximum number of transcriptions allowed"
+        response.message = response_message
 
     # Display transcription submission form if document image is open for transcriptions and
     # user is authorised to make a submission (ie registered user, not project creator and has not already made
     # transcription for document image)
-    else:
-        # Create dynamic form according to number of data_fields
+
+    # Create dynamic form according to number of data_fields
+    for data_field in database.get_data_fields_for_project(project_id):
+        fields += [Field(data_field.name, 'text',
+                         comment=T(data_field.short_description), label=T(data_field.name))]
+
+    form = SQLFORM.factory(*fields, formstyle='bootstrap', _class='customer form-horizontal', table_name='customer')
+
+    if form.process().accepted:
+
+        # Check if document currently has 2 transcriptions or more and if so mark document as done before adding
+        #  new transcription
+        if len(database.get_transcriptions_for_document(document_id)) >= 2:
+            document.update_record(status="Done")
+
+        # Insert new transcription record to insert transcribed fields
+        transcription_id = db.transcription.insert(document_id=document_id,
+                                                   author_id=auth._get_user_id(),
+                                                   status='Pending', date_created=request.now)
+
+        # Inserts each transcribed field in db
         for data_field in database.get_data_fields_for_project(project_id):
-            fields += [Field(data_field.name, 'text',
-                             comment=T(data_field.short_description), label=T(data_field.name))]
-
-        form = SQLFORM.factory(*fields, formstyle='bootstrap', _class='customer form-horizontal', table_name='customer')
-
-        if form.process().accepted:
-
-            # Check if document currently has 2 transcriptions or more and if so mark document as done before adding
-            #  new transcription
-            if len(database.get_transcriptions_for_document(document_id)) >= 2:
-                document.update_record(status="Done")
-
-            # Insert new transcription record to insert transcribed fields
-            transcription_id = db.transcription.insert(document_id=document_id,
-                                                       author_id=auth._get_user_id(),
-                                                       status='Pending', date_created=request.now)
-
-            # Inserts each transcribed field in db
-            for data_field in database.get_data_fields_for_project(project_id):
-                db.transcribed_field.insert(data_field_id=data_field.id, transcription_id=transcription_id,
-                                            information=form.vars[data_field.name])
+            db.transcribed_field.insert(data_field_id=data_field.id, transcription_id=transcription_id,
+                                        information=form.vars[data_field.name])
 
     image = URL('default', 'download', args=document.image)
 
     return dict(project=project, document=document, image=image, form=form, transcription=transcription,
-                accepted_transcription_with_fields = accepted_transcription_with_fields)
+                accepted_transcription_with_fields = accepted_transcription_with_fields, response_message = response_message)
 
 
 @auth.requires_login(otherwise=URL('user', 'login'))

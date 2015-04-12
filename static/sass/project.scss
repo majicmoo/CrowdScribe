@@ -51,51 +51,6 @@
   }
 }
 
-.document_viewer{
-  margin-top:10px;
-  width:400px;
-  height:600px;
-  background:$med_grey;
-
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-  // padding:10px;
-  position:relative;
-  overflow:hidden;
-
-  margin-left:auto;
-  margin-right:auto;
-
-  .document_viewer_inner{
-    height:100%;
-    background:white;
-  }
-}
-
-.transcription_form_holder{
-  margin:20px 0 20px 0;
-  // max-height:500px;
-  background:$light_grey;
-  overflow:scroll;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-  padding:10px;
-
-  h1, p{
-    margin-bottom:10px;
-  }
-
-  textarea{
-    resize: none;
-    width:100%;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-  }
-}
-
 .documents{
 
 	$padding : 10px;
@@ -205,4 +160,144 @@
 			color:black;
 		}
 	}
+}
+
+.portrait{
+  background:red;
+}
+
+#doc_display{
+  /* This is used to display the document and transcription fields in either horizontal or portrait fashion */
+  /* This can easily be toggled with a button at the top of the page which is widely accesible */
+
+  // background:red;
+  display:block;
+  margin:10px 0 20px 0;
+  position:absolute;
+  width:100%;
+  position:relative;
+
+  &:after {
+    content: "";
+    clear: both;
+    display: table;
+  }
+}
+
+#document_viewer{
+
+  $landscapewidth:50%;
+  $landscapeheight:auto;
+
+  $portraitwidth:100%;
+  $portraitheight:auto;
+
+  display:block;
+  position:absolute;
+
+  &.landscape{
+
+    background:blue;
+    width:$landscapewidth;
+    height:$landscapeheight;
+    float:left;
+  }
+
+  &.portrait{
+    background:green;
+    margin-left:auto;
+    margin-right:auto;
+    width:$portraitwidth;
+    height:$portraitheight;
+    clear:both;
+  }
+
+  // background:$med_grey;
+
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+
+  position:relative;
+  overflow:hidden;
+}
+
+#transcription_form_holder{
+
+  display:block;
+  background:$light_grey;
+
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  padding:10px;
+
+  &.landscape{
+    position:absolute;
+    width:50%;
+    float:left;
+    height:100%;
+    left:50%;
+    overflow:scroll;
+    max-height:100%;
+  }
+
+  &.portrait{
+    width:100%;
+    left:0;
+  }
+
+  // position:relative;
+
+  .unavailable_overlay{
+
+    position:absolute;
+    width:100%;
+    height:100%;
+    top:0;
+    left:0;
+    background:rgba(0,0,0,.7);
+    text-align: center;
+
+    &:before{
+      content: '';
+      display: inline-block;
+      height: 100%;
+      vertical-align: middle;
+      margin-right: -0.25em; /* Adjusts for spacing */
+    }
+
+    .notice{
+
+      display: inline-block;
+      vertical-align: middle;
+
+      width:200px;
+      // height:100px;
+      background:rgba(0,0,0,.5);
+      text-align:center;
+      padding:20px;
+      overflow:hidden;
+      color:white;
+      margin:0 auto 0 auto;
+      margin-top:10px;
+  		border-radius:5px;
+  		border-style: solid;
+  		border-color:$med_grey;
+  		border-width: 1px;
+      font-size:20px;
+    }
+  }
+
+  h1, p{
+    margin-bottom:10px;
+  }
+
+  textarea{
+    resize: none;
+    width:100%;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+  }
 }

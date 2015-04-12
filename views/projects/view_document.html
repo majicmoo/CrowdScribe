@@ -12,22 +12,60 @@
 <div class="padded_container form_container no_bottom_padding">
   <h1>{{=project.name}}</h1>
   <h3>{{=project.tag}} (12-14 AD)</h3>
+
+  <h4>Document Description</h4>
   <p>{{=document.description}}</p>
 
-  <!-- Maybe highlight that image can be opened in new tab for zooming etc -->
-  <div class="document_viewer">
-        <a href="{{=image}}" class="docGal" title="document"><img src="{{=image}}" alt="document"/></a>
+  <button id="toggle_button">Toggle</button>
+
+  <div id="doc_display">
+    <!-- Maybe highlight that image can be opened in new tab for zooming etc -->
+    <div id="document_viewer" class="landscape">
+          <a href="{{=image}}" class="docGal" title="document"><img src="{{=image}}" alt="document"/></a>
+    </div>
+
+    {{if form:}}
+      <div id="transcription_form_holder" class="landscape">
+
+        {{for field in form:}}
+          {{=field}}
+        {{pass}}
+
+        {{if form:}}
+          {{=form.custom.begin}}
+            <input class="btn btn-primary" type="submit" value="Submit">
+          {{=form.custom.end}}
+        {{pass}}
+
+
+    {{pass}}
+
+    {{if response_message:}}
+        <div class="unavailable_overlay">
+          <div class="notice">{{=response.message}}</div>
+        </div>
+      </div>
+    {{pass}}
+
+    <!-- If user has provided a transcription, show this transcription below -->
+    <!-- {{if transcription:}}
+      <h3>Your Transcription</h3>
+      {{=transcription}}
+    {{pass}} -->
   </div>
 
   {{if form:}}
-    <div class="transcription_form_holder">
-      {{=form}}
-    </div>
+    {{=form.custom.begin}}
+      <input class="btn btn-primary" type="submit" value="Submit">
+    {{=form.custom.end}}
   {{pass}}
 
-  <!-- If user has provided a transcription, show this transcription below -->
-  {{if transcription:}}
-    <h3>Your Transcription</h3>
-    {{=transcription}}
-  {{pass}}
 </div>
+
+<script>
+  $("#toggle_button").click(function(){
+    $("#document_viewer")          .toggleClass('portrait').toggleClass('landscape');
+    $("#transcription_form_holder").toggleClass('portrait').toggleClass('landscape');
+  })
+
+</script>

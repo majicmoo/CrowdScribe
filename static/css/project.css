@@ -36,39 +36,6 @@
       width: 300px;
       height: 40px; }
 
-.document_viewer {
-  margin-top: 10px;
-  width: 400px;
-  height: 600px;
-  background: #999999;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-  position: relative;
-  overflow: hidden;
-  margin-left: auto;
-  margin-right: auto; }
-  .document_viewer .document_viewer_inner {
-    height: 100%;
-    background: white; }
-
-.transcription_form_holder {
-  margin: 20px 0 20px 0;
-  background: #c8c8c8;
-  overflow: scroll;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-  padding: 10px; }
-  .transcription_form_holder h1, .transcription_form_holder p {
-    margin-bottom: 10px; }
-  .transcription_form_holder textarea {
-    resize: none;
-    width: 100%;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box; }
-
 .documents {
   overflow: auto;
   padding: 10px; }
@@ -134,3 +101,98 @@
             height: 100%; }
     .documents .document a {
       color: black; }
+
+.portrait {
+  background: red; }
+
+#doc_display {
+  /* This is used to display the document and transcription fields in either horizontal or portrait fashion */
+  /* This can easily be toggled with a button at the top of the page which is widely accesible */
+  display: block;
+  margin: 10px 0 20px 0;
+  position: absolute;
+  width: 100%;
+  position: relative; }
+  #doc_display:after {
+    content: "";
+    clear: both;
+    display: table; }
+
+#document_viewer {
+  display: block;
+  position: absolute;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  position: relative;
+  overflow: hidden; }
+  #document_viewer.landscape {
+    background: blue;
+    width: 50%;
+    height: auto;
+    float: left; }
+  #document_viewer.portrait {
+    background: green;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    height: auto;
+    clear: both; }
+
+#transcription_form_holder {
+  display: block;
+  background: #c8c8c8;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  padding: 10px; }
+  #transcription_form_holder.landscape {
+    position: absolute;
+    width: 50%;
+    float: left;
+    height: 100%;
+    left: 50%;
+    overflow: scroll;
+    max-height: 100%; }
+  #transcription_form_holder.portrait {
+    width: 100%;
+    left: 0; }
+  #transcription_form_holder .unavailable_overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.7);
+    text-align: center; }
+    #transcription_form_holder .unavailable_overlay:before {
+      content: '';
+      display: inline-block;
+      height: 100%;
+      vertical-align: middle;
+      margin-right: -0.25em;
+      /* Adjusts for spacing */ }
+    #transcription_form_holder .unavailable_overlay .notice {
+      display: inline-block;
+      vertical-align: middle;
+      width: 200px;
+      background: rgba(0, 0, 0, 0.5);
+      text-align: center;
+      padding: 20px;
+      overflow: hidden;
+      color: white;
+      margin: 0 auto 0 auto;
+      margin-top: 10px;
+      border-radius: 5px;
+      border-style: solid;
+      border-color: #999999;
+      border-width: 1px;
+      font-size: 20px; }
+  #transcription_form_holder h1, #transcription_form_holder p {
+    margin-bottom: 10px; }
+  #transcription_form_holder textarea {
+    resize: none;
+    width: 100%;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box; }
