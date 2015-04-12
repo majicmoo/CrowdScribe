@@ -23,7 +23,7 @@
     <button id="toggle_button" class="btn">Toggle View</button>
   </div>
 
-  <div id="doc_display">
+  <div id="doc_display" class="border-box-sizing">
     <!-- Maybe highlight that image can be opened in new tab for zooming etc -->
     <div id="document_viewer" class="landscape">
           <!-- <a href="{{=image}}" class="docGal" title="document"><img src="{{=image}}" alt="document"/></a> -->
@@ -48,8 +48,9 @@
         <div class="unavailable_overlay">
           <div class="notice">{{=response.message}}</div>
         </div>
-      </div>
+
     {{pass}}
+    </div>
 
     <!-- If user has provided a transcription, show this transcription below -->
     <!-- {{if transcription:}}

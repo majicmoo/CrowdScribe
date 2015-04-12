@@ -445,7 +445,7 @@ def view_document():
         fields += [Field(data_field.name, 'text',
                          comment=T(data_field.short_description), label=T(data_field.name))]
 
-    form = SQLFORM.factory(*fields, formstyle='bootstrap', _class='customer form-horizontal', table_name='customer')
+    form = SQLFORM.factory(*fields, formstyle='bootstrap', _class='customer form-horizontal', table_name='customer', buttons=[])
 
     if form.process().accepted:
 
