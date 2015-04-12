@@ -65,7 +65,7 @@ def create_step1():
             project_id = db.project.insert(name=request.vars.name, author_id=auth._get_user_id(),
                                            status="Being Created", description=request.vars.description,
                                            tag=request.vars.tag, time_period_start_date=start_date,
-                                           time_period_end_date=end_date)
+                                           time_period_end_date=end_date, date_created=request.now)
 
         session.project_being_created = project_id
         redirect(URL('projects', 'create_step2'))
@@ -245,7 +245,7 @@ def create_step4():
 
     if publish_project_form.process(formname="form_one").accepted:
         project = database.get_project(project_id)
-        project.update_record(status="Open")
+        project.update_record(status="Open", date_created=request.now)
         session.project_being_created = None
         redirect(URL('projects', 'project', args=[project.id]))
 
@@ -450,7 +450,7 @@ def view_document():
             # Insert new transcription record to insert transcribed fields
             transcription_id = db.transcription.insert(document_id=document_id,
                                                        author_id=auth._get_user_id(),
-                                                       status='Pending')
+                                                       status='Pending', date_created=request.now)
 
             # Inserts each transcribed field in db
             for data_field in database.get_data_fields_for_project(project_id):

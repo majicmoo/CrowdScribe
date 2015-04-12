@@ -19,7 +19,8 @@ def index():
     response.title = "CrowdScribe"
 
     # NOT REALLY LATEST PROJECTS
-    latest_projects = database.get_open_projects()
+    latest_projects = database.get_latest_projects()
+    most_transcribed_projects = database.get_most_transcribed_projects()
 
     if len(latest_projects) == 0:
         latest_projects = []
@@ -33,7 +34,7 @@ def index():
     latest_projects = attach_header_image_to_projects(latest_projects)
 
     return dict(latest_projects = latest_projects, featured_project = featured_project,
-                featured_project_image = featured_project_image)
+                featured_project_image = featured_project_image, most_transcribed_projects=most_transcribed_projects)
 
 def attach_header_image_to_projects(projects):
     for project in projects:

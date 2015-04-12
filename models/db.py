@@ -26,7 +26,8 @@ if not request.env.web2py_runtime_gae:
                     Field('description', type='text'),
                     Field('tag', requires=IS_IN_SET(options)),
                     Field('time_period_start_date', 'integer'),
-                    Field('time_period_end_date', 'integer'))
+                    Field('time_period_end_date', 'integer'),
+                    Field('date_created', 'datetime'))
 
     db.define_table('document_image',
                     Field('description', type='text'),
@@ -42,7 +43,8 @@ if not request.env.web2py_runtime_gae:
     db.define_table('transcription',
                     Field('document_id', 'reference document_image'),
                     Field('author_id', 'reference auth_user'),
-                    Field('status'))
+                    Field('status'),
+                    Field('date_created', 'datetime'))
 
     db.define_table('transcribed_field',
                     Field('data_field_id', 'reference data_field'),
