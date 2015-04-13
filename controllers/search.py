@@ -1,6 +1,11 @@
+from gluon import *
 import database_transactions as database_transactions
 database = database_transactions.DatabaseTransactions(db)
-from gluon import *
+import search_functions as search_functions
+import general_functions as general_functions
+general_module = general_functions.GeneralFunctions(database, db)
+search_module = search_functions.SearchFunctions(database, db)
+
 
 def search_results():
 
@@ -44,30 +49,30 @@ def search_results():
     # Filter excludes results which do not include any keywords in either project title or description
     if searchstr is not None:
         keywords = searchstr.split(' ')
-        projects.exclude(lambda project: search_project_for_keywords(keywords, project))
+        projects.exclude(lambda project: search_module.search_project_for_keywords(keywords, project))
 
     ###Filter by category###
     if (request.vars.category != 'All') and (request.vars.category is not None):
         projects.exclude(lambda project: str(request.vars.tag) != str(project.tag))
 
     ###Filter by date###
-    if not empty_date_field(request.vars.start_date):
-        start_date = convert_date_to_integer(request.vars.start_date, request.vars.start_era)
+    if not search_module.empty_date_field(request.vars.start_date):
+        start_date = general_module.convert_date_to_integer(request.vars.start_date, request.vars.start_era)
         advanced.vars.start_date = request.vars.start_date
         advanced.vars.start_era = request.vars.start_era
     else:
         # Ensures all dates pass (if validation is fixed)
         start_date = -2016
 
-    if not empty_date_field(request.vars.end_date):
-        end_date = convert_date_to_integer(request.vars.end_date, request.vars.end_era)
+    if not search_module.empty_date_field(request.vars.end_date):
+        end_date = general_module.convert_date_to_integer(request.vars.end_date, request.vars.end_era)
         advanced.vars.end_date = request.vars.end_date
         advanced.vars.end_era = request.vars.end_era
     else:
         # Ensures all dates pass (if validation is fixed)
         end_date = 2016
 
-    if not empty_date_field(request.vars.start_date) or not empty_date_field(request.vars.end_date):
+    if not search_module.empty_date_field(request.vars.start_date) or not search_module.empty_date_field(request.vars.end_date):
         # Excludes unknown dates
         if request.vars.include_unknown_date != "on":
             # Exclude if end_date is before project's start date, start_date after project's end date or if project dates are none
@@ -99,63 +104,15 @@ def search_results():
     request.vars = {}
     
     #Does not validate
-    if advanced.process(onvalidation=date_validator).accepted:
+    if advanced.process(onvalidation=search_module.date_validator).accepted:
         #advanced.vars=request.vars
         redirect(URL('search', vars=advanced.vars))
     elif advanced.errors:
         response.flash='errors'
 
-    projects = attach_header_image_to_projects(projects)
+    projects = general_module.attach_header_image_to_projects(projects)
 
     return dict(advanced=advanced, projects=projects)
 
 
-def attach_header_image_to_projects(projects):
-    for project in projects:
-        project.header_image = database.get_document_for_project_header(project.id).image
 
-    return projects
-
-
-def search_project_for_keywords(keywords, project):
-    exclude = True
-    
-    # Search project for keywords. If word is found, project is not excluded
-    for word in keywords:
-        if (word.upper() in project.name.upper()) or (word.upper() in project.description.upper()):
-            exclude = False
-            break
-        
-    return exclude
-
-
-def convert_date_to_integer(date, era):
-    if era =="BC":
-        return -int(date)
-    else:
-        return int(date)
-    
-def empty_date_field(date):
-    if (date is not None or date == "") and (date is None or date != ""):
-        #Date field has content
-        return False
-    else:
-        return True
-
-def date_validator(advanced):
-    #Checks start date is after 2015 BC
-    if not empty_date_field(advanced.vars.start_date):
-        if convert_date_to_integer(advanced.vars.start_date) < -2015:
-            advanced.errors.start_date = 'Start date must be after 2015 BC'
-            
-    #Checks end date is before 2015 AD
-    if not empty_date_field(advanced.vars.end_date):
-        if convert_date_to_integer(advanced.vars.end_date) > 2015:
-            advanced.errors.end_date = 'End date must be before 2015 AD'        
-            
-    #Check that start date is before end date if there are entries for both dates
-    if not empty_date_field(advanced.vars.start_date) and not empty_date_field(advanced.vars.end_date):
-        start = convert_date_to_integer(advanced.vars.start_date, advanced.vars.start_era)
-        end = convert_date_to_integer(advanced.vars.end_date, advanced.vars.end_era)
-        if start > end:
-            advanced.errors.end_date = 'The End Date of the time period must be later than the Start Date'

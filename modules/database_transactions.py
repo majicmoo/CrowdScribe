@@ -12,7 +12,7 @@ class DatabaseTransactions:
         result = self.db(self.db.auth_user.id == user_id).select().first()
         return result
 
-    ########################################## Get Projects#########################################
+    ########################################## Get Projects##########################################################
     def get_project(self, project_id):
         result = self.db(self.db.project.id == project_id).select().first()
         return result
@@ -105,7 +105,7 @@ class DatabaseTransactions:
 
         return result
 
-    ########################################## Get Documents#########################################
+    ########################################## Get Documents#########################################################
     def get_document(self, document_id):
         result = self.db(self.db.document_image.id == document_id).select().first()
         return result
@@ -209,7 +209,7 @@ class DatabaseTransactions:
                         & (self.db.transcription.id == transcription_id)).select(self.db.document_image.ALL, distinct=True)
 
 
-   ########################################## Get Transcriptions#########################################
+   ########################################## Get Transcriptions####################################################
     def get_pending_transcriptions_for_user(self, user_id):
         result = self.db((self.db.transcription.author_id == user_id)
                         & (self.db.transcription.document_id == self.db.document_image.id)
@@ -251,18 +251,18 @@ class DatabaseTransactions:
         return result
 
 
-    ########################################## Get Data Fields#########################################
+    ########################################## Get Data Fields####################################################
     def get_data_fields_for_project(self, project_id):
         result = self.db(self.db.data_field.project_id == project_id).select()
         return result
 
-    ########################################## Get Transcribed Fields#########################################
+    ########################################## Get Transcribed Fields#############################################
     def get_transcribed_fields_for_transcription(self, transcription_id):
         result = self.db((self.db.transcribed_field.transcription_id == transcription_id)
                     & (self.db.transcribed_field.data_field_id == self.db.data_field.id)).select()
         return result
 
-    ########################################## Other##########################################################
+    ########################################## Other##############################################################
     def project_can_be_closed_for_review(self, project_id):
         done_documents = self.get_done_documents_for_project(project_id)
         if len(done_documents) > 0:

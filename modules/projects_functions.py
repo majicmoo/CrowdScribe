@@ -1,17 +1,14 @@
 from gluon import *
 import database_transactions as database_transactions
+import general_functions as general_functions
 
 class ProjectFunctions:
 
     def __init__(self, database, db):
         self.database=database
         self.db = db
+        self.general_module = general_functions.GeneralFunctions(database, db)
 
-    def attach_header_image_to_projects(self, projects):
-        for project in projects:
-            project.header_image = self.database.get_document_for_project_header(project.id).image
-
-        return projects
 
     def check_if_steps_available(self, project_id):
 
@@ -37,17 +34,6 @@ class ProjectFunctions:
 
         return result
 
-    def convert_date_to_integer(self, date, era):
-        if era =="BC":
-            return -int(date)
-        else:
-            return int(date)
-
-    def convert_integer_to_date_string(self, date):
-        if date < 0:
-            return str(abs(date)) + "BC"
-        else:
-            return str(abs(date)) + "AD"
 
     def retrieve_prepopulated_data_for_create_step_1(self, project_being_edited):
         if project_being_edited == None:
@@ -101,7 +87,7 @@ class ProjectFunctions:
                 if date_validator(current.request.vars.time_period_start_date)[1] is not None:
                     form.errors.time_period_start_date = date_validator(current.request.vars.time_period_start_date)[1]
                 else:
-                    start_date = self.convert_date_to_integer(current.request.vars.time_period_start_date, current.request.vars.start_era)
+                    start_date = self.general_module.convert_date_to_integer(current.request.vars.time_period_start_date, current.request.vars.start_era)
             else:
                 form.errors.time_period_start_date = "Start Date must not be empty"
 
@@ -109,7 +95,7 @@ class ProjectFunctions:
                 if date_validator(current.request.vars.time_period_end_date)[1] is not None:
                     form.errors.time_period_end_date = date_validator(current.request.vars.time_period_end_date)[1]
                 else:
-                    end_date = self.convert_date_to_integer(current.request.vars.time_period_end_date, current.request.vars.end_era)
+                    end_date = self.general_module.convert_date_to_integer(current.request.vars.time_period_end_date, current.request.vars.end_era)
 
             else:
                 form.errors.time_period_end_date = "End Date must not be empty"
@@ -145,7 +131,6 @@ class ProjectFunctions:
             print document
             document.number_of_transcriptions = len(self.database.get_pending_transcriptions_for_document(document.id))
         return documents
-
 
 
     def if_none_convert_to_empty_list(self, array):

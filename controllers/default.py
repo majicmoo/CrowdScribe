@@ -1,6 +1,10 @@
+from gluon import *
 import database_transactions as database_transactions
 database = database_transactions.DatabaseTransactions(db)
-from gluon import *
+import search_functions as search_functions
+import general_functions as general_functions
+general_module = general_functions.GeneralFunctions(database, db)
+
 
 def index():
 

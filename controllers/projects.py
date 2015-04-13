@@ -1,7 +1,9 @@
 import database_transactions as database_transactions
 import projects_functions as projects_functions
+import general_functions as general_functions
 database = database_transactions.DatabaseTransactions(db)
 projects_module = projects_functions.ProjectFunctions(database, db)
+general_module = general_functions.GeneralFunctions(database, db)
 
 
 @auth.requires_login(otherwise=URL('user', 'login',
@@ -55,8 +57,8 @@ def create_step1():
             start_date = None
             end_date = None
         else:
-            start_date = projects_module.convert_date_to_integer(request.vars.time_period_start_date, request.vars.start_era)
-            end_date = projects_module.convert_date_to_integer(request.vars.time_period_end_date, request.vars.end_era)
+            start_date = general_module.convert_date_to_integer(request.vars.time_period_start_date, request.vars.start_era)
+            end_date = general_module.convert_date_to_integer(request.vars.time_period_end_date, request.vars.end_era)
 
         # If project record has already been created, just update
         if project_id and project_being_edited:
@@ -262,8 +264,8 @@ def create_step4():
     project = database.get_project(project_id)
     timestring = ''
     if project.time_period_start_date:
-        timestring = '('+projects_module.convert_integer_to_date_string(project.time_period_start_date) + " - " +\
-                     projects_module.convert_integer_to_date_string(project.time_period_end_date)+')'
+        timestring = '('+general_module.convert_integer_to_date_string(project.time_period_start_date) + " - " +\
+                     general_module.convert_integer_to_date_string(project.time_period_end_date)+')'
 
     header_image = URL('default', 'download', args=database.get_document_for_project_header(project.id).image)
 
@@ -372,8 +374,8 @@ def project():
 
 def project_timestring(project):
     if project.time_period_start_date:
-        timestring = '('+projects_module.convert_integer_to_date_string(project.time_period_start_date) + " - " +\
-                     projects_module.convert_integer_to_date_string(project.time_period_end_date)+')'
+        timestring = '('+general_module.convert_integer_to_date_string(project.time_period_start_date) + " - " +\
+                     general_module.convert_integer_to_date_string(project.time_period_end_date)+')'
         return timestring
     return ''
 
