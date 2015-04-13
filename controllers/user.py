@@ -26,7 +26,6 @@ def register():
         redirect(URL('user','profile'))
 
     elif form.errors:
-        print form.errors
         validate_register_form(form)
         response.flash = 'One or more of your form fields has an error. Please see below for more information'
 

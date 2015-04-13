@@ -74,8 +74,8 @@ def create_step1():
 
         session.project_being_created = project_id
         redirect(URL('projects', 'create_step2'))
-    else:
-        pass
+    elif form.errors:
+        projects_module.validate_create_step1(form)
 
     if clear_project.validate(formname="form_two"):
         # If clear project button is pressed, reset project wizard
@@ -124,6 +124,8 @@ def create_step2():
         session.project_being_created = project_id
         session.flash_class = "alert-success"
         response.flash = "Succesfully Added Document!"
+    elif add_image_form.errors:
+        projects_module.validate_add_image_form(add_image_form)
 
     # Process form allowing you to move to step 3
     if go_to_step_3_form.process(formname="form_two").accepted:
@@ -194,6 +196,8 @@ def create_step3():
                              project_id=project_id)
         db.commit()
         session.project_being_created = project_id
+    elif add_fields_form.errors:
+        projects_module.validate_add_field_form(add_fields_form)
 
     # Move project forward to review when button clicked
     if review_project_form.process(formname="form_two").accepted:
