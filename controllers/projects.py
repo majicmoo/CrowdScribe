@@ -303,8 +303,6 @@ def create_step4():
     done_documents = database.get_done_documents_for_project(project_id)
     done_documents = projects_module.if_none_convert_to_empty_list(done_documents)
 
-    done_documents = database.get_done_documents_for_project(project_id)
-    done_documents = projects_module.if_none_convert_to_empty_list(done_documents)
 
     return dict(project=project_being_edited, timestring=timestring, documents_for_project=documents_added,
                 publish_project_form=publish_project_form, clear_project=clear_project, header_image=header_image,
@@ -362,7 +360,7 @@ def project():
     header_image = URL('default', 'download', args=database.get_document_for_project_header(project.id).image)
 
     # Time String
-    timestring = project_timestring(project)
+    timestring = projects_module.project_timestring(project)
 
     documents_transcribed_by_user = projects_module.attach_number_of_transcriptions(documents_transcribed_by_user)
     done_documents = projects_module.attach_number_of_transcriptions(done_documents)
@@ -370,18 +368,14 @@ def project():
     open_documents_without_transcription = projects_module.attach_number_of_transcriptions(open_documents_without_transcription)
     open_documents = projects_module.attach_number_of_transcriptions(open_documents)
 
+    project.fraction_transcribed_string = projects_module.construct_number_of_transcribed_documents_string(project.id)
+
     return dict(project=project, timestring=timestring, data_fields_for_project=data_fields_for_project,
                 documents_transcribed_by_user=documents_transcribed_by_user, header_image=header_image,
                 done_documents=done_documents, open_documents_with_transcription=open_documents_with_transcription,
                 open_documents_without_transcription=open_documents_without_transcription,
                 closed_documents=closed_documents, open_documents=open_documents)
 
-def project_timestring(project):
-    if project.time_period_start_date:
-        timestring = '('+general_module.convert_integer_to_date_string(project.time_period_start_date) + " - " +\
-                     general_module.convert_integer_to_date_string(project.time_period_end_date)+')'
-        return timestring
-    return ''
 
 def view_document():
     # Remove if project data not required in page
@@ -485,7 +479,8 @@ def view_document():
     image = URL('default', 'download', args=document.image)
 
     # Time String
-    timestring = project_timestring(project)
+    timestring = projects_module.project_timestring(project)
+    project.fraction_transcribed_string = projects_module.construct_number_of_transcribed_documents_string(project.id)
 
     return dict(project=project, document=document, image=image, form=form, transcription=transcription,
                 accepted_transcription_with_fields = accepted_transcription_with_fields, response_message = response_message, timestring = timestring)
@@ -525,7 +520,8 @@ def review_document():
 
 
     return dict(project=project, document=document, transcriptions=transcriptions, database=database,
-                transcribed_fields_for_transcriptions=transcribed_fields_for_transcriptions, timestring = project_timestring(project))
+                transcribed_fields_for_transcriptions=transcribed_fields_for_transcriptions,
+                timestring = projects_module.project_timestring(project))
 
 def delete_field():
     db((db.data_field.id == request.vars.field_id)).delete()

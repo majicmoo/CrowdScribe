@@ -138,3 +138,15 @@ class ProjectFunctions:
             return []
         else:
             return array
+
+    def project_timestring(self, project):
+        if project.time_period_start_date:
+            timestring = '('+self.general_module.convert_integer_to_date_string(project.time_period_start_date) + " - " +\
+                         self.general_module.convert_integer_to_date_string(project.time_period_end_date)+')'
+            return timestring
+        return ''
+
+    def construct_number_of_transcribed_documents_string(self, project_id):
+        number_of_transcribed_documents = self.database.get_number_of_transcribed_documents_for_project(project_id)
+        number_documents = len(self.database.get_documents_for_project(project_id))
+        return str(number_of_transcribed_documents) + "/" + str(number_documents)
