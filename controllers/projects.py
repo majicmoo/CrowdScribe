@@ -274,35 +274,11 @@ def create_step4():
     header_image = URL('default', 'download', args=database.get_document_for_project_header(project.id).image)
 
     project_status = project.status
-    open_documents_with_transcription = []
-    open_documents_without_transcription = []
-    closed_documents = []
-    open_documents = []
+    open_documents_with_transcription = open_documents_without_transcription = closed_documents = open_documents \
+        = done_documents = []
 
-    if project.author_id == auth._get_user_id():
-        # Current user owns project
-        # List of documents that have transcription - open - less than 3 transcriptions
-        open_documents_with_transcription = database.get_open_documents_with_transcription_for_project(project_id)
-        open_documents_with_transcription = projects_module.if_none_convert_to_empty_list(open_documents_with_transcription)
-        # List of document that don't have a transcription - open
-        open_documents_without_transcription = database.get_open_documents_without_transcription_for_project(project_id)
-        open_documents_without_transcription = projects_module.if_none_convert_to_empty_list(open_documents_without_transcription)
-        # List of Complete Document - succesfully transcribed - closed
-        closed_documents = database.get_closed_documents_for_project(project_id)
-        closed_documents = projects_module.if_none_convert_to_empty_list(closed_documents)
-        # response.message = 'You own this project'
-    else:
-        # If not owner
-        # Project is not open, redirect
-        if project_status != 'Open':
-            redirect(URL('default', 'index'))
-        open_documents = database.get_open_documents_for_project(project_id)
-        open_documents = projects_module.if_none_convert_to_empty_list(open_documents)
-
-    # List of done documents - 3 or more transcriptions
-    done_documents = database.get_done_documents_for_project(project_id)
-    done_documents = projects_module.if_none_convert_to_empty_list(done_documents)
-
+    open_documents, open_documents_with_transcription, open_documents_without_transcription, done_documents, \
+    closed_documents = projects_module.set_up_project_page_based_on_user(project, auth)
 
     return dict(project=project_being_edited, timestring=timestring, documents_for_project=documents_added,
                 publish_project_form=publish_project_form, clear_project=clear_project, header_image=header_image,
@@ -321,31 +297,11 @@ def project():
 
     # Initialise Variables
     project_status = project.status
-    open_documents_with_transcription = open_documents_without_transcription = closed_documents = open_documents = []
+    open_documents_with_transcription = open_documents_without_transcription = closed_documents = open_documents\
+       = done_documents = []
 
-    if project.author_id == auth._get_user_id():
-        # Current user owns project
-        # List of documents that have transcription - open - less than 3 transcriptions
-        open_documents_with_transcription = database.get_open_documents_with_transcription_for_project(project_id)
-        open_documents_with_transcription = projects_module.if_none_convert_to_empty_list(open_documents_with_transcription)
-        # List of document that don't have a transcription - open
-        open_documents_without_transcription = database.get_open_documents_without_transcription_for_project(project_id)
-        open_documents_without_transcription = projects_module.if_none_convert_to_empty_list(open_documents_without_transcription)
-        # List of Complete Document - succesfully transcribed - closed
-        closed_documents = database.get_closed_documents_for_project(project_id)
-        closed_documents = projects_module.if_none_convert_to_empty_list(closed_documents)
-        response.message = 'You own this project'
-    else:
-        # If not owner
-        # Project is not open, redirect
-        if project_status != 'Open':
-            redirect(URL('default', 'index'))
-        open_documents = database.get_open_documents_for_project(project_id)
-        open_documents = projects_module.if_none_convert_to_empty_list(open_documents)
-
-    # List of done documents - 3 or more transcriptions
-    done_documents = database.get_done_documents_for_project(project_id)
-    done_documents = projects_module.if_none_convert_to_empty_list(done_documents)
+    open_documents, open_documents_with_transcription, open_documents_without_transcription, done_documents, \
+    closed_documents = projects_module.set_up_project_page_based_on_user(project, auth)
 
     # Page Title
     response.title = project.name
