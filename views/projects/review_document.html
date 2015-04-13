@@ -58,7 +58,7 @@
 <br>
 <div>
 {{=A(BUTTON('Reject All',_class="btn btn-danger btn-large"), callback= URL('reject_all_transcriptions',
-vars= dict(document_id=document.id)))}}
+vars= dict(document_id=document.id, project_id=project.id)))}}
 </div>
 
 <script>

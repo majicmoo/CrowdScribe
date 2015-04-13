@@ -546,14 +546,14 @@ def accept_transcription():
         db(db.project.id == request.vars.project_id).update(status="Closed")
         db.commit()
 
-    redirect(URL('default', 'index'), client_side=True)
+    redirect(URL('projects', 'project', args=request.vars.project_id), client_side=True)
 
 
 def reject_all_transcriptions():
     # Function for button which will reject all transcriptions for a given document
     db((db.transcription.document_id == request.vars.document_id)).update(status="Rejected")
     db.commit()
-    redirect(URL('default', 'index'), client_side=True)
+    redirect(URL('projects', 'project',args=request.vars.project_id ), client_side=True)
 
 
 def close_project_for_review():
