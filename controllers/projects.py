@@ -414,18 +414,26 @@ def review_document():
         redirect(URL('projects', 'project', args=[project_id]))
     # Get current transcriptions for Document
     transcriptions = database.get_pending_transcriptions_for_document(document_id)
-    print transcriptions
+    transcriptions = build_transcription_list(project, transcriptions)
 
-    transcribed_fields_for_transcriptions = []
-    for transcription in transcriptions:
-        transcribed_fields_for_transcriptions.append(database.get_transcribed_fields_for_transcription(
-            transcription.id))
-
-
-
-    return dict(project=project, document=document, transcriptions=transcriptions, database=database,
-                transcribed_fields_for_transcriptions=transcribed_fields_for_transcriptions,
+    return dict(project=project, document=document, transcriptions=transcriptions,
                 timestring = projects_module.project_timestring(project))
+
+def build_transcription_list(project, transcriptions):
+    i=1
+    transcriptions_list = []
+    for transcription in transcriptions:
+        transcription_dictionary = {}
+        transcription_dictionary['number'] = i
+        transcription_dictionary['transcription'] = database.get_transcribed_fields_for_transcription(transcription.id)
+        transcription_dictionary['button'] = A(BUTTON('Accept',_class="btn btn-success"), callback= URL('accept_transcription',
+                vars= dict(document_id=transcription.document_id, transcription_id=transcription.id,
+                    project_id=project.id)))
+        transcriptions_list.append(transcription_dictionary)
+        i += 1
+
+    return transcriptions_list
+
 
 def delete_field():
     db((db.data_field.id == request.vars.field_id)).delete()
