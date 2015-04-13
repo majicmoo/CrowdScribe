@@ -300,7 +300,7 @@ def view_document():
     # Get Doc from URL args
     document_id = request.args(1)
     document = database.get_document(document_id)
-    accepted_transcription_with_fields = None
+    accepted_transcription_with_fields = accepted_transcription =  None
 
     # If null doc, go back to the project
     if document is None:
@@ -315,7 +315,7 @@ def view_document():
     form = None
     fields = []
     # All transcriptions for this doc
-    transcriptions = database.get_transcriptions_for_document(document_id)
+    transcriptions = database.get_pending_transcriptions_for_document(document_id)
     # Transcriptions by the current user for this doc
     transcription = None
     response_message = None
@@ -332,6 +332,11 @@ def view_document():
                     ' made.'
         response_message = msgstring
         response.message = A(msgstring, _href=URL('projects', 'review_document', args=[project.id, document.id]))
+
+    elif project.author_id == auth._get_user_id() and accepted_transcription:
+        response_message = 'You are the owner of this project and have accepted a transcription for this document.' \
+                           ' This document is now closed' 
+        response.message = response_message
 
     # Need an account to login
     elif auth._get_user_id() is None:
