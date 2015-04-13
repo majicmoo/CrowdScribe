@@ -1,4 +1,5 @@
 from gluon import *
+from gluon import BUTTON
 import database_transactions as database_transactions
 import general_functions as general_functions
 
@@ -181,3 +182,19 @@ class ProjectFunctions:
 
         return (open_documents, open_documents_with_transcription, open_documents_without_transcription, done_documents,
         closed_documents)
+
+    def check_if_step1_was_skipped_and_redirect_if_so(self, session):
+        if session.project_being_created is not None:
+            project_id = session.project_being_created
+            project_being_edited = self.database.get_project(project_id)
+            return (project_id, project_being_edited)
+        else:
+            redirect(URL('projects', 'create_step1'))
+
+    def create_clear_project_form(self):
+        return FORM(DIV(BUTTON("Clear Project", _type='submit', _class='btn btn-danger btn-block',
+                                    _onclick="return confirm('Clearing a project will wipe all of your progress."
+                                             " Continue?');")))
+
+
+

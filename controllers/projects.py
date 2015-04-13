@@ -30,9 +30,7 @@ def create_step1():
     form = SQLFORM(db.project, submit_button="Continue to Step 2")
 
     # This form will allow for the create wizard to be reset
-    clear_project = FORM(DIV(BUTTON("Clear Project", _type='submit', _class='btn btn-primary btn-block btn-danger',
-                                    _onclick="return confirm('Clearing a project will wipe all "
-                                             "of your progress. Continue?');")))
+    clear_project = projects_module.create_clear_project_form()
 
     # Data needed to prepopulate form is retrieved
     prepopulation_data = projects_module.retrieve_prepopulated_data_for_create_step_1(project_being_edited)
@@ -94,17 +92,14 @@ def create_step2():
     response.title = "Create - Step 2"
 
     # Retrieve project and set session project variable to allow for prepopulating.
-    project_id = None
-    if session.project_being_created is not None:
-        project_id = session.project_being_created
+    project_id, project_being_edited = projects_module.check_if_step1_was_skipped_and_redirect_if_so(session)
+
 
     # Calls function that checks whether steps in the creation process should be navigatable to.
     step_available = projects_module.check_if_steps_available(project_id)
 
     # This form will allow for the create wizard to be reset
-    clear_project = FORM(DIV(BUTTON("Clear Project", _type='submit', _class='btn btn-danger btn-block clear-button',
-                                    _onclick="return confirm('Clearing a project will wipe all of your progress."
-                                             " Continue?');")))
+    clear_project = projects_module.create_clear_project_form()
 
     # This form allows documents to be added
     add_image_form = SQLFORM(db.document_image, submit_button="Add Document")
@@ -149,12 +144,10 @@ def create_step2():
     # Retrieve documents that project already has.
     documents_added = database.get_documents_for_project(project_id)
 
-    # Use the project name to clarify to the user that they are still working on their setup
-    project = database.get_project(project_id)
 
     return dict(add_image_form=add_image_form, go_to_step_3_form=go_to_step_3_form,
                 go_to_step_1_form=go_to_step_1_form, documents_added=documents_added, clear_project=clear_project,
-                step_available=step_available, project_name=project.name)
+                step_available=step_available, project_name=project_being_edited.name)
 
 
 
@@ -167,9 +160,7 @@ def create_step3():
     response.title = "Create - Step 3"
 
     # Retrieve project and set session project variable to allow for prepopulating.
-    project_id = None
-    if session.project_being_created is not None:
-        project_id = session.project_being_created
+    project_id, project_being_edited = projects_module.check_if_step1_was_skipped_and_redirect_if_so(session)
 
     # Calls function that checks whether steps in the creation process should be navigatable to.
     step_available = projects_module.check_if_steps_available(project_id)
@@ -186,9 +177,7 @@ def create_step3():
                                         _type='submit', _class='btn btn-primary btn-block btn-large btn-left')))
 
     # Forms that resets project wizard
-    clear_project = FORM(DIV(BUTTON("Clear Project", _type='submit', _class='btn btn-danger btn-block',
-                                    _onclick="return confirm('Clearing a project will wipe all of your progress."
-                                             " Continue?');")))
+    clear_project = projects_module.create_clear_project_form()
 
     # Process form that allows fields to be added.
     if add_fields_form.process(formname="form_one", onvalidate=projects_module.validate_add_field_form).accepted:
@@ -221,12 +210,10 @@ def create_step3():
     documents_added = database.get_documents_for_project(project_id)
     fields_added = database.get_data_fields_for_project(project_id)
 
-    # Retrieve project
-    project = database.get_project(project_id)
 
     return dict(documents_added=documents_added, add_fields_form=add_fields_form, fields_added=fields_added,
                 review_project_form=review_project_form, go_to_step_2_form=go_to_step_2_form,
-                clear_project=clear_project, step_available=step_available, project_name=project.name)
+                clear_project=clear_project, step_available=step_available, project_name=project_being_edited.name)
 
 
 
@@ -238,17 +225,10 @@ def create_step4():
     # Page Title
     response.title = "Create - Review"
 
-    project_id = None
-    if session.project_being_created is not None:
-        project_id = session.project_being_created
-    else:
-        redirect(URL('projects', 'create_step1'))
+    project_id, project_being_edited = projects_module.check_if_step1_was_skipped_and_redirect_if_so(session)
 
-    clear_project = FORM(DIV(BUTTON("Clear Project", _type='submit', _class='btn btn-danger btn-block',
-                                    _onclick="return confirm('Clearing a project will wipe all of your progress."
-                                             " Continue?');")))
+    clear_project = projects_module.create_clear_project_form()
 
-    project_being_edited = database.get_project(project_id)
     documents_added = database.get_documents_for_project(project_id)
 
     publish_project_form = FORM(DIV(BUTTON("Publish Project", I(_class='icon-arrow-right icon-white'),
@@ -266,16 +246,8 @@ def create_step4():
 
     # Time String
     project = database.get_project(project_id)
-    timestring = ''
-    if project.time_period_start_date:
-        timestring = '('+general_module.convert_integer_to_date_string(project.time_period_start_date) + " - " +\
-                     general_module.convert_integer_to_date_string(project.time_period_end_date)+')'
-
+    timestring = projects_module.project_timestring(project)
     header_image = URL('default', 'download', args=database.get_document_for_project_header(project.id).image)
-
-    project_status = project.status
-    open_documents_with_transcription = open_documents_without_transcription = closed_documents = open_documents \
-        = done_documents = []
 
     open_documents, open_documents_with_transcription, open_documents_without_transcription, done_documents, \
     closed_documents = projects_module.set_up_project_page_based_on_user(project, auth)
@@ -296,10 +268,6 @@ def project():
         redirect(URL('default', 'index'))
 
     # Initialise Variables
-    project_status = project.status
-    open_documents_with_transcription = open_documents_without_transcription = closed_documents = open_documents\
-       = done_documents = []
-
     open_documents, open_documents_with_transcription, open_documents_without_transcription, done_documents, \
     closed_documents = projects_module.set_up_project_page_based_on_user(project, auth)
 
@@ -362,12 +330,10 @@ def view_document():
     # The form needs to be built dynamically to include all fields.
     form = None
     fields = []
-
     # All transcriptions for this doc
     transcriptions = database.get_transcriptions_for_document(document_id)
     # Transcriptions by the current user for this doc
     transcription = None
-
     response_message = None
 
     # If you are the owner, you cannot transcribe the document. Gives link to review transcriptions.
@@ -418,8 +384,7 @@ def view_document():
             document.update_record(status="Done")
 
         # Insert new transcription record to insert transcribed fields
-        transcription_id = db.transcription.insert(document_id=document_id,
-                                                   author_id=auth._get_user_id(),
+        transcription_id = db.transcription.insert(document_id=document_id, author_id=auth._get_user_id(),
                                                    status='Pending', date_created=request.now)
 
         # Inserts each transcribed field in db
@@ -429,7 +394,6 @@ def view_document():
 
         session.flash = "Succesful Transcription!"
         session.flash_class = "alert-success"
-
         redirect(URL('projects','view_document', args=[project.id, document.id]))
 
     image = URL('default', 'download', args=document.image)
