@@ -154,7 +154,8 @@ class DatabaseTransactions:
     def get_documents_with_transcription_for_project(self, project_id):
         result = self.db((self.db.document_image.project_id == self.db.project.id)
                     & (self.db.document_image.id == self.db.transcription.document_id)
-                    & (self.db.transcription.status == 'Pending')).select(self.db.document_image.ALL, distinct=True)
+                    & (self.db.transcription.status == 'Pending')
+                    &(self.db.document_image.project_id == project_id)).select(self.db.document_image.ALL, distinct=True)
         return result
 
     def get_successfully_transcribed_documents_for_project(self, project_id):
