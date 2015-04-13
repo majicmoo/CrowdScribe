@@ -27,12 +27,14 @@
   {{pass}}
 </div>
 
+<div class="line_seperator"></div>
+
 <div class="padded_container form_container no_bottom_padding">
-  <h1>Latest Projects</h1>
+  <h1>Most Transcribed Projects</h1>
 </div>
 
 <div class="projects">
-  {{for project in latest_projects:}}
+  {{for project in most_transcribed_projects:}}
     {{include "subviews/project-display.html"}}
   {{pass}}
 </div>

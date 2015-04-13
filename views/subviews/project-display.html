@@ -1,23 +1,30 @@
 <!-- This is used throughout the site to display projects in an adaptive frame -->
-<div class="project">
+<div class="project border-box-sizing">
 
 	<!-- <a href={{=URL('projects','project', args=[project.id])}}> -->
-		<div class="content">
+		<div class="content border-box-sizing">
 
-			<img src="{{=URL('default','download',args = project.header_image)}}"/>
+			<div class="img_container_crop">
+				<img src="{{=URL('default','download',args = project.header_image)}}"/>
+			</div>
+
+
 
 			<div class = "overlay">
-				<div class="text">
-					<h1>{{=project.name}}</h1>
+				<div class="text border-box-sizing">
+					<h3>{{=project.name}}</h3>
+					<h5>(100AD - 200AD)</h5>
+					<div class="tag">
+						{{=project.tag}}
+					</div>
 					<p>{{=project.description[0:100]}}...</p>
 
 					<!-- If Current User Owns the project -->
-					{{if auth._get_user_id() == project.author_id:}}
 
 						<div class="project_button">
 
 							<!-- Under Review so show Reopen Button -->
-							{{if project.status == "Under Review":}}
+							<!-- {{if project.status == "Under Review":}}
 
 								{{=A(BUTTON('Reopen Project',_class="btn btn-success"), callback= URL('reopen_project_for_transcriptions',
 						        vars= dict(project_id=project.id)), _class="split")}}
@@ -27,19 +34,13 @@
 								{{=A(BUTTON('Close for review',_class="btn btn-success"), callback= URL('place_project_under_review',
 										vars= dict(project_id=project.id)), _class="split")}}
 
-							{{pass}}
+							{{pass}} -->
 
-							{{=A(BUTTON('View Project',_class="btn btn-success split"), _href= URL('projects','project', args=[project.id]))}}
+
 
 						</div>
 
-					{{else:}}
-
-						<div class="project_button">
-							<form><button class="btn btn-success" type="button" alt="View {{=project.name}}" onclick="window.location.href='{{=URL('projects','project', args=[project.id])}}'">View Project</button></form>
-						</div>
-
-					{{pass}}
+						{{=A(BUTTON('View Project',_class="btn btn-success"), _href= URL('projects','project', args=[project.id]))}}
 
 				</div>
 			</div>
