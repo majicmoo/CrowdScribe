@@ -150,3 +150,34 @@ class ProjectFunctions:
         number_of_transcribed_documents = self.database.get_number_of_transcribed_documents_for_project(project_id)
         number_documents = len(self.database.get_documents_for_project(project_id))
         return str(number_of_transcribed_documents) + "/" + str(number_documents)
+
+    def set_up_project_page_based_on_user(self, project, auth):
+        open_documents_with_transcription = open_documents_without_transcription = closed_documents = open_documents\
+        = done_documents = []
+
+        if project.author_id == auth._get_user_id():
+            # Current user owns project
+            # List of documents that have transcription - open - less than 3 transcriptions
+            open_documents_with_transcription = self.database.get_open_documents_with_transcription_for_project(project.id)
+            open_documents_with_transcription = self.if_none_convert_to_empty_list(open_documents_with_transcription)
+            # List of document that don't have a transcription - open
+            open_documents_without_transcription = self.database.get_open_documents_without_transcription_for_project(project.id)
+            open_documents_without_transcription = self.if_none_convert_to_empty_list(open_documents_without_transcription)
+            # List of Complete Document - succesfully transcribed - closed
+            closed_documents = self.database.get_closed_documents_for_project(project.id)
+            closed_documents = self.if_none_convert_to_empty_list(closed_documents)
+            # response.message = 'You own this project'
+        else:
+            # If not owner
+            # Project is not open, redirect
+            if project.status != 'Open':
+                redirect(URL('default', 'index'))
+            open_documents = self.database.get_open_documents_for_project(project.id)
+            open_documents = self.if_none_convert_to_empty_list(open_documents)
+
+        # List of done documents - 3 or more transcriptions
+        done_documents = self.database.get_done_documents_for_project(project.id)
+        done_documents = self.if_none_convert_to_empty_list(done_documents)
+
+        return (open_documents, open_documents_with_transcription, open_documents_without_transcription, done_documents,
+        closed_documents)
