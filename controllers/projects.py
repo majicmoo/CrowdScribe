@@ -17,11 +17,7 @@ def create_step1():
     session.flash_class = "alert-error"
 
     # Retrieve project and set session project variable to allow for prepopulating.
-    project_id = None
-    project_being_edited = None
-    if session.project_being_created is not None:
-        project_id = session.project_being_created
-        project_being_edited = database.get_project(project_id)
+    project_id, project_being_edited = projects_module.check_if_come_back_from_future_step(session)
 
     # Calls function that checks whether steps in the creation process should be navigatable to.
     step_available = projects_module.check_if_steps_available(project_id)
@@ -51,12 +47,7 @@ def create_step1():
     if form.validate(formname="form_one", onvalidation=projects_module.validate_create_step1):
 
         # If unknown select box was selected then make start_date and end_date none, otherwise make them correct format
-        if request.vars.unknown == "yes":
-            start_date = None
-            end_date = None
-        else:
-            start_date = general_module.convert_date_to_integer(request.vars.time_period_start_date, request.vars.start_era)
-            end_date = general_module.convert_date_to_integer(request.vars.time_period_end_date, request.vars.end_era)
+        start_date, end_date = projects_module.process_start_and_end_dates()
 
         # If project record has already been created, just update
         if project_id and project_being_edited:
@@ -94,7 +85,6 @@ def create_step2():
     # Retrieve project and set session project variable to allow for prepopulating.
     project_id, project_being_edited = projects_module.check_if_step1_was_skipped_and_redirect_if_so(session)
 
-
     # Calls function that checks whether steps in the creation process should be navigatable to.
     step_available = projects_module.check_if_steps_available(project_id)
 
@@ -105,11 +95,9 @@ def create_step2():
     add_image_form = SQLFORM(db.document_image, submit_button="Add Document")
 
     # This form allows for the wizard to go back to step 1
-    go_to_step_1_form = FORM(BUTTON("Back to Step 1", I(_class='icon-arrow-left icon-white'),
-                                        _type='submit', _class='btn btn-primary btn-block btn-large btn-left'))
+    go_to_step_1_form = projects_module.create_previous_step_form("Go Back to Step 1")
     # This form allows for the wizard to progress to step 3
-    go_to_step_3_form = FORM(BUTTON("Continue to Step 3", I(_class='icon-arrow-right icon-white'),
-                                        _type='submit', _class='btn btn-success btn-block btn-large'))
+    go_to_step_3_form = projects_module.create_next_step_form("Continue to Step 3")
 
 
     # Process add image form
@@ -168,13 +156,11 @@ def create_step3():
     # Creates form that allows fields to be added
     add_fields_form = SQLFORM.factory(db.data_field, submit_button="Add field")
 
-    # Form that moves you forward to the review step
-    review_project_form = FORM(DIV(BUTTON("Review Project", I(_class='icon-arrow-right icon-white'),
-                                          _type='submit', _class='btn btn-success btn-block btn-large')))
 
     # Form that allows you to move back to step 2
-    go_to_step_2_form = FORM(DIV(BUTTON("Back to Step 2", I(_class='icon-arrow-left icon-white'),
-                                        _type='submit', _class='btn btn-primary btn-block btn-large btn-left')))
+    go_to_step_2_form = projects_module.create_previous_step_form("Go Back to Step 2")
+    # Form that moves you forward to the review step
+    review_project_form = projects_module.create_next_step_form("Review Project")
 
     # Forms that resets project wizard
     clear_project = projects_module.create_clear_project_form()
@@ -226,13 +212,10 @@ def create_step4():
     response.title = "Create - Review"
 
     project_id, project_being_edited = projects_module.check_if_step1_was_skipped_and_redirect_if_so(session)
-
-    clear_project = projects_module.create_clear_project_form()
-
     documents_added = database.get_documents_for_project(project_id)
 
-    publish_project_form = FORM(DIV(BUTTON("Publish Project", I(_class='icon-arrow-right icon-white'),
-                                           _type='submit', _class='btn btn-primary btn-block btn-large')))
+    clear_project = projects_module.create_clear_project_form()
+    publish_project_form = projects_module.create_next_step_form("Publish Project")
 
     if publish_project_form.process(formname="form_one").accepted:
         project = database.get_project(project_id)
@@ -286,11 +269,12 @@ def project():
     # Time String
     timestring = projects_module.project_timestring(project)
 
-    documents_transcribed_by_user = projects_module.attach_number_of_transcriptions(documents_transcribed_by_user)
-    done_documents = projects_module.attach_number_of_transcriptions(done_documents)
-    open_documents_with_transcription = projects_module.attach_number_of_transcriptions(open_documents_with_transcription)
-    open_documents_without_transcription = projects_module.attach_number_of_transcriptions(open_documents_without_transcription)
-    open_documents = projects_module.attach_number_of_transcriptions(open_documents)
+    all_documents = [documents_transcribed_by_user, done_documents, open_documents_with_transcription,
+                     open_documents_without_transcription, open_documents]
+
+    documents_transcribed_by_user, done_documents, open_documents_with_transcription, \
+    open_documents_without_transcription, open_documents = \
+        projects_module.attach_number_of_transcriptions_to_lists_of_documents(all_documents)
 
     project.fraction_transcribed_string = projects_module.construct_number_of_transcribed_documents_string(project.id)
 

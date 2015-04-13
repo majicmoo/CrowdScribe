@@ -133,6 +133,11 @@ class ProjectFunctions:
             document.number_of_transcriptions = len(self.database.get_pending_transcriptions_for_document(document.id))
         return documents
 
+    def attach_number_of_transcriptions_to_lists_of_documents(self, all_lists):
+        for single_list in all_lists:
+            single_list = self.attach_number_of_transcriptions(single_list)
+        return all_lists
+
 
     def if_none_convert_to_empty_list(self, array):
         if array is None:
@@ -191,10 +196,37 @@ class ProjectFunctions:
         else:
             redirect(URL('projects', 'create_step1'))
 
+    def check_if_come_back_from_future_step(self, session):
+        project_id = None
+        project_being_edited = None
+        if session.project_being_created is not None:
+            project_id = session.project_being_created
+            project_being_edited = self.database.get_project(project_id)
+        return (project_id, project_being_edited)
+
+
     def create_clear_project_form(self):
         return FORM(DIV(BUTTON("Clear Project", _type='submit', _class='btn btn-danger btn-block',
                                     _onclick="return confirm('Clearing a project will wipe all of your progress."
                                              " Continue?');")))
+
+    def create_next_step_form(self, message):
+        return FORM(BUTTON(message, I(_class='icon-arrow-right icon-white'),
+                                        _type='submit', _class='btn btn-success btn-block btn-large'))
+
+    def create_previous_step_form(self, message):
+        return FORM(BUTTON(message, I(_class='icon-arrow-left icon-white'),
+                                        _type='submit', _class='btn btn-primary btn-block btn-large btn-left'))
+
+    def process_start_and_end_dates(self):
+        if current.request.vars.unknown == "yes":
+            start_date = None
+            end_date = None
+        else:
+            start_date = self.general_module.convert_date_to_integer(current.request.vars.time_period_start_date, current.request.vars.start_era)
+            end_date = self.general_module.convert_date_to_integer(current.request.vars.time_period_end_date, current.request.vars.end_era)
+
+        return (start_date, end_date)
 
 
 
