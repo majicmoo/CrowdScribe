@@ -26,7 +26,8 @@ form {
   width: 96%;
   height: 2px;
   background: rgba(0, 0, 0, 0.1);
-  margin: 10px 2% 10px 2%; }
+  margin: 10px 2% 10px 2%;
+  clear: both; }
 
 .border-box-sizing {
   -webkit-box-sizing: border-box;

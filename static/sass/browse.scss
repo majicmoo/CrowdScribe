@@ -1,0 +1,36 @@
+@import 'colors';
+
+.category_holder{
+
+  display:block;
+  overflow:hidden;
+
+  a{
+    display:block;
+  }
+
+  .category_button{
+    $numbuttons : 7;
+    $height:50px;
+    width:100% / $numbuttons;
+    height:$height;
+
+    float:left;
+
+    padding:5px;
+
+    .content{
+      line-height:$height - 10px;
+      text-align:center;
+      border-radius:5px;
+      font-size:13px;
+      font-weight:bold;
+      background:$light_grey;
+      color:black;
+    }
+
+    &:hover, &:focus{
+      opacity:.5;
+    }
+  }
+}
