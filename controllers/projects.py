@@ -229,7 +229,7 @@ def create_step4():
 
     # Time String
     project = database.get_project(project_id)
-    timestring = projects_module.project_timestring(project)
+    timestring = general_module.construct_project_timestring(project)
     header_image = URL('default', 'download', args=database.get_document_for_project_header(project.id).image)
 
     open_documents, open_documents_with_transcription, open_documents_without_transcription, done_documents, \
@@ -267,7 +267,7 @@ def project():
     header_image = URL('default', 'download', args=database.get_document_for_project_header(project.id).image)
 
     # Time String
-    timestring = projects_module.project_timestring(project)
+    timestring = general_module.construct_project_timestring(project)
 
     all_documents = [documents_transcribed_by_user, done_documents, open_documents_with_transcription,
                      open_documents_without_transcription, open_documents]
@@ -276,7 +276,7 @@ def project():
     open_documents_without_transcription, open_documents = \
         projects_module.attach_number_of_transcriptions_to_lists_of_documents(all_documents)
 
-    project.fraction_transcribed_string = projects_module.construct_number_of_transcribed_documents_string(project.id)
+    project.fraction_transcribed_string = general_module.construct_number_of_transcribed_documents_string(project.id)
 
     return dict(project=project, timestring=timestring, data_fields_for_project=data_fields_for_project,
                 documents_transcribed_by_user=documents_transcribed_by_user, header_image=header_image,
@@ -388,8 +388,8 @@ def view_document():
     image = URL('default', 'download', args=document.image)
 
     # Time String
-    timestring = projects_module.project_timestring(project)
-    project.fraction_transcribed_string = projects_module.construct_number_of_transcribed_documents_string(project.id)
+    timestring = general_module.construct_project_timestring(project)
+    project.fraction_transcribed_string = general_module.construct_number_of_transcribed_documents_string(project.id)
 
     return dict(project=project, document=document, image=image, form=form, transcription=transcription,
                 accepted_transcription_with_fields = accepted_transcription_with_fields, response_message = response_message, timestring = timestring)
@@ -419,25 +419,10 @@ def review_document():
         redirect(URL('projects', 'project', args=[project_id]))
     # Get current transcriptions for Document
     transcriptions = database.get_pending_transcriptions_for_document(document_id)
-    transcriptions = build_transcription_list(project, transcriptions)
+    transcriptions = projects_module.build_transcription_list(project, transcriptions)
 
     return dict(project=project, document=document, transcriptions=transcriptions,
-                timestring = projects_module.project_timestring(project))
-
-def build_transcription_list(project, transcriptions):
-    i=1
-    transcriptions_list = []
-    for transcription in transcriptions:
-        transcription_dictionary = {}
-        transcription_dictionary['number'] = i
-        transcription_dictionary['transcription'] = database.get_transcribed_fields_for_transcription(transcription.id)
-        transcription_dictionary['button'] = A(BUTTON('Accept',_class="btn btn-success"), callback= URL('accept_transcription',
-                vars= dict(document_id=transcription.document_id, transcription_id=transcription.id,
-                    project_id=project.id)))
-        transcriptions_list.append(transcription_dictionary)
-        i += 1
-
-    return transcriptions_list
+                timestring = general_module.construct_project_timestring(project))
 
 
 def delete_field():
