@@ -35,6 +35,10 @@
             vars= dict(project_id=project.id)), _class="split")}}
       {{pass}}
 
+      <!-- If the project is closed -->
+      {{if project.status == "Closed":}}
+        <p>You are the owner of this project : It is currently <b>Closed</b>. You have accepted transcriptions for every document, and the project is now only visible to you. You can still view your documents and the transcriptions you have accepted.</p>
+      {{pass}}
 
     </div>
   </div>
@@ -77,7 +81,7 @@
 
         <!--Closed Documents: Project owner -->
         {{if closed_documents:}}
-          <h3>Closed Documents</h3>
+          <h4>Closed Documents</h4>
           <p>
             Irure elit nisi officia voluptate reprehenderit est cillum culpa.
           </p>
