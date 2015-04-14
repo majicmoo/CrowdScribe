@@ -370,22 +370,41 @@ def view_document():
 
     if form.process().accepted:
 
-        # Check if document currently has 2 transcriptions or more and if so mark document as done before adding
-        #  new transcription
-        if len(database.get_transcriptions_for_document(document_id)) >= 2:
-            document.update_record(status="Done")
-
-        # Insert new transcription record to insert transcribed fields
-        transcription_id = db.transcription.insert(document_id=document_id, author_id=auth._get_user_id(),
-                                                   status='Pending', date_created=request.now)
-
-        # Inserts each transcribed field in db
+        # Checks that at least one field has an entry
+        field_entry_exists = False
         for data_field in database.get_data_fields_for_project(project_id):
-            db.transcribed_field.insert(data_field_id=data_field.id, transcription_id=transcription_id,
-                                        information=form.vars[data_field.name])
+            print form.vars[data_field.name]
+            if form.vars[data_field.name] != '':
+                field_entry_exists = True
+                break
 
-        session.flash = "Succesful Transcription!"
-        session.flash_class = "alert-success"
+        if field_entry_exists == True:
+            # Check if document currently has 2 transcriptions or more and if so mark document as done before adding
+            # new transcription
+            if len(database.get_transcriptions_for_document(document_id)) >= 2:
+                document.update_record(status="Done")
+    
+            # Insert new transcription record to insert transcribed fields
+            transcription_id = db.transcription.insert(document_id=document_id, author_id=auth._get_user_id(),
+                                                       status='Pending', date_created=request.now)
+    
+            # Inserts each transcribed field in db
+            for data_field in database.get_data_fields_for_project(project_id):
+
+                # If no entry for a field, put as None in db to leave out in review_document view 
+                field_entry = None
+                if form.vars[data_field.name] != '':
+                    field_entry = form.vars[data_field.name]
+
+                db.transcribed_field.insert(data_field_id=data_field.id, transcription_id=transcription_id,
+                                            information=field_entry)
+
+            session.flash = "Succesful Transcription!"
+            session.flash_class = "alert-success"
+        else:
+            session.flash = "Please fill in at least one field."
+            session.flash_class = "alert-error"
+
         redirect(URL('projects','view_document', args=[project.id, document.id]))
 
     image = URL('default', 'download', args=document.image)
