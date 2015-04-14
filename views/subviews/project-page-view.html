@@ -7,7 +7,7 @@
     <h3>{{=project.tag}} </h3>
     <h4>{{=timestring}}</h4>
     <div id = "progress">
-      <h4>{{=project.fraction_transcribed_string}} Documents Transcribed</h4>
+      <h4> Documents Transcribed</h4>
     </div>
     Created by {{=project.author_id.username}}
   </div>
@@ -38,6 +38,10 @@
       <!-- If the project is closed -->
       {{if project.status == "Closed":}}
         <p>You are the owner of this project : It is currently <b>Closed</b>. You have accepted transcriptions for every document, and the project is now only visible to you. You can still view your documents and the transcriptions you have accepted.</p>
+      {{pass}}
+
+      {{if project.status == "Being Created":}}
+        <p>You are the owner of this project : It is currently <b>Being Created</b>. Once you have reviewed it you can publish it below.</p>
       {{pass}}
 
     </div>

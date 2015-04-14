@@ -17,24 +17,37 @@
   </a>
 {{pass}}
 
-<div class="padded_container form_container no_bottom_padding">
-  <h1>Latest Projects</h1>
-</div>
+{{if latest_projects:}}
+  <div class="padded_container form_container no_bottom_padding">
+    <h1>Latest Projects</h1>
+  </div>
 
-<div class="projects">
-  {{for project in latest_projects:}}
-    {{include "subviews/project-display.html"}}
-  {{pass}}
-</div>
+  <div class="projects">
+    {{for project in latest_projects:}}
+      {{include "subviews/project-display.html"}}
+    {{pass}}
+  </div>
+{{pass}}
 
-<div class="line_seperator"></div>
+{{if most_transcribed_projects:}}
+  <div class="line_seperator"></div>
 
-<div class="padded_container form_container no_bottom_padding">
-  <h1>Most Transcribed Projects</h1>
-</div>
+  <div class="padded_container form_container no_bottom_padding">
+    <h1>Most Transcribed Projects</h1>
+  </div>
 
-<div class="projects">
-  {{for project in most_transcribed_projects:}}
-    {{include "subviews/project-display.html"}}
-  {{pass}}
-</div>
+  <div class="projects">
+    {{for project in most_transcribed_projects:}}
+      {{include "subviews/project-display.html"}}
+    {{pass}}
+  </div>
+{{pass}}
+
+{{if not latest_projects and not most_transcribed_projects:}}
+  <div class="padded_container form_container no_bottom_padding">
+    <h1>Currently No Projects</h1>
+    <p>
+      Non nisi duis ex sint excepteur aliquip sint occaecat dolor irure sit proident excepteur tempor.
+    </p>
+  </div>
+{{pass}}
