@@ -135,7 +135,7 @@
   position: relative;
   overflow: hidden; }
   #document_viewer.landscape {
-    background: blue;
+    background: #999999;
     width: 50%;
     height: auto;
     float: left; }
