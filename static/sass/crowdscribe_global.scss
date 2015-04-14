@@ -403,17 +403,23 @@ $seperator-margin:20px;
 	$boxwidth : 230px;
 	$boxheight: 400px;
 
+	$innerpadding:10px;
+	$imgheight:200px;
+	$txtheight:300px;
+	$btnheight:40px;
+	$totalheight:410px;
+
+	.manager{
+		// height:$totalheight + $padding*2 + $btnheight !important;
+	}
+
 	.project{
 
-		$innerpadding:10px;
-		$imgheight:200px;
-		$txtheight:300px;
-		$btnheight:40px;
-		$totalheight:410px;
+		display:block;
 
 		float:left;
 		min-width:$boxwidth;
-		height:$totalheight + $padding*2;
+		// height:$totalheight + $padding*2;
 		width:100%/$numprojectsinrow;
 
 		padding:$padding;
@@ -428,12 +434,8 @@ $seperator-margin:20px;
 
 		.content{
 			border-radius:10px;
-			// border-style: solid;
-			// border-width: 1px;
-			// border-color:rgba(255, 255, 255, .5);
-
 			position:relative;
-			height:$totalheight;
+			// height:$totalheight;
 			background-color:white;
 			overflow:hidden;
 
@@ -459,14 +461,14 @@ $seperator-margin:20px;
 			.overlay{
 				position:relative;
 				width:100%;
-				height:$txtheight;
+				// height:$txtheight;
 				color:black;
 
 				.text{
 
 					padding:5px 10px 10px 10px;
 
-					height:$txtheight;
+					// height:$txtheight;
 
 					h3{
 						line-height:35px;

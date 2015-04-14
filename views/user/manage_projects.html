@@ -17,7 +17,7 @@
 
 {{if under_review_projects:}}
 
-  <div class="padded_container form_container no_bottom_padding">
+  <div class="padded_container form_container no_bottom_padding no_top_padding">
     <h2>Projects Under Review</h2>
     <p>
       Consectetur officia excepteur est laborum ipsum fugiat nisi exercitation laborum ad et ad labore duis.
@@ -26,7 +26,7 @@
 
   <div class="projects">
     {{for project in under_review_projects:}}
-      {{include "subviews/project-display.html"}}
+      {{include "subviews/project-display-close.html"}}
     {{pass}}
   </div>
 
@@ -35,7 +35,7 @@
 {{pass}}
 
 {{if open_projects_with_transcriptions:}}
-  <div class="padded_container form_container no_bottom_padding">
+  <div class="padded_container form_container no_bottom_padding no_top_padding">
     <h2>Open Projects with Transcriptions</h2>
     <p>
       Consectetur officia excepteur est laborum ipsum fugiat nisi exercitation laborum ad et ad labore duis.
@@ -44,7 +44,7 @@
 
   <div class="projects">
     {{for project in open_projects_with_transcriptions:}}
-      {{include "subviews/project-display.html"}}
+      {{include "subviews/project-display-close.html"}}
     {{pass}}
   </div>
 
@@ -52,7 +52,7 @@
 {{pass}}
 
 {{if open_projects_without_transcriptions:}}
-  <div class="padded_container form_container no_bottom_padding">
+  <div class="padded_container form_container no_bottom_padding no_top_padding">
     <h2>Open Projects without Transcriptions</h2>
     <p>
       Consectetur officia excepteur est laborum ipsum fugiat nisi exercitation laborum ad et ad labore duis.
@@ -61,7 +61,7 @@
 
   <div class="projects">
     {{for project in open_projects_without_transcriptions:}}
-      {{include "subviews/project-display.html"}}
+      {{include "subviews/project-display-close.html"}}
     {{pass}}
   </div>
 
@@ -69,7 +69,7 @@
 {{pass}}
 
 {{if closed_projects:}}
-  <div class="padded_container form_container no_bottom_padding">
+  <div class="padded_container form_container no_bottom_padding no_top_padding">
     <h2>Closed Projects</h2>
     <p>
       Consectetur officia excepteur est laborum ipsum fugiat nisi exercitation laborum ad et ad labore duis.
@@ -78,7 +78,7 @@
 
   <div class="projects">
     {{for project in closed_projects:}}
-      {{include "subviews/project-display.html"}}
+      {{include "subviews/project-display-close.html"}}
     {{pass}}
   </div>
 {{pass}}
