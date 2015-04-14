@@ -39,68 +39,51 @@
 .documents {
   overflow: auto;
   padding: 10px; }
-  .documents h3 {
-    clear: both; }
+  .documents h4, .documents p {
+    margin-left: 10px; }
   .documents .document {
     float: left;
-    min-width: 260px;
-    min-height: 300px;
-    height: 300px;
-    width: 50%;
+    min-width: 230px;
+    height: 420px;
+    width: 33.33333%;
     padding: 10px;
     overflow: hidden;
-    position: relative;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box; }
-    .documents .document .content {
-      height: 100%;
-      background-color: #999999;
-      border-radius: 10px;
-      border-style: solid;
-      border-width: 3px;
-      border-color: white; }
-      .documents .document .content .left {
-        float: left;
-        width: 45%;
-        height: 100%;
-        overflow: hidden; }
-        .documents .document .content .left img {
-          height: 300px;
-          width: auto;
-          max-width: none;
-          min-width: 100%; }
-      .documents .document .content .right {
-        float: left;
-        width: 55%;
-        height: 100%; }
-        .documents .document .content .right .top {
-          text-align: left;
-          height: 0;
-          -webkit-box-sizing: border-box;
-          -moz-box-sizing: border-box;
-          box-sizing: border-box;
-          overflow: hidden; }
-        .documents .document .content .right .center {
-          background: white;
-          height: 80%;
-          -webkit-box-sizing: border-box;
-          -moz-box-sizing: border-box;
-          box-sizing: border-box;
-          padding: 8px;
-          overflow: hidden; }
-        .documents .document .content .right .bottom {
-          -webkit-box-sizing: border-box;
-          -moz-box-sizing: border-box;
-          box-sizing: border-box;
-          padding: 13px;
-          height: 20%;
-          text-align: center; }
-          .documents .document .content .right .bottom .btn-group {
-            width: 100%;
-            height: 100%; }
+    position: relative; }
     .documents .document a {
-      color: black; }
+      display: block;
+      color: white; }
+    .documents .document .content {
+      border-radius: 10px;
+      position: relative;
+      height: 400px;
+      background-color: white;
+      overflow: hidden;
+      padding: 10px; }
+      .documents .document .content .img_container_crop {
+        overflow: hidden;
+        width: 100%;
+        height: 200px;
+        text-align: center; }
+        .documents .document .content .img_container_crop img {
+          position: relative;
+          min-height: 200px;
+          min-width: 100%; }
+      .documents .document .content .text_description {
+        position: relative;
+        width: 100%;
+        color: black;
+        padding: 5px 10px 10px 10px;
+        height: 100px; }
+        .documents .document .content .text_description h3 {
+          line-height: 35px; }
+        .documents .document .content .text_description h3, .documents .document .content .text_description h5 {
+          margin: 0; }
+        .documents .document .content .text_description button {
+          width: 100%;
+          margin-top: 5px; }
+        .documents .document .content .text_description p {
+          overflow: hidden;
+          height: 100px; }
 
 .portrait {
   background: red; }

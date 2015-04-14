@@ -54,111 +54,94 @@
 .documents{
 
 	$padding : 10px;
-	$numprojectsinrow : 2;
+	$numprojectsinrow : 3;
 
 	overflow:auto;
 
 	padding:$padding;
 
-	$boxwidth : 260px;
-	$boxheight: 300px;
+	$boxwidth : 230px;
+	$boxheight: 400px;
 
-	$imgwidth : 55%;
-	$descwidth : 35%;
-	$deletewidth : 100% - $descwidth - $imgwidth;
-
-  h3{
-    clear:both;
+  h4, p{
+    margin-left:10px;
   }
 
 	.document{
+
+		$innerpadding:10px;
+		$imgheight:200px;
+		$txtheight:100px;
+		$btnheight:40px;
+		$totalheight:400px;
+
 		float:left;
 		min-width:$boxwidth;
-		min-height:$boxheight;
-		height:$boxheight;
+		height:$totalheight + $padding*2;
 		width:100%/$numprojectsinrow;
 
 		padding:$padding;
 		overflow: hidden;
 
 		position:relative;
-		-webkit-box-sizing: border-box;
-	  -moz-box-sizing: border-box;
-	  box-sizing: border-box;
-
-		.content{
-			height:100%;
-			background-color:$med_grey;
-
-      border-radius:10px;
-      border-style: solid;
-      border-width: 3px;
-      border-color:white;
-
-      .left{
-        float:left;
-        width:45%;
-        height:100%;
-        // background:red;
-        overflow:hidden;
-
-        img{
-          height:$boxheight;
-          width:auto;
-          max-width:none;
-          min-width:100%;
-        }
-      }
-
-      .right{
-        float:left;
-        width:55%;
-        height:100%;
-
-        .top{
-          text-align:left;
-          height:0;
-
-          -webkit-box-sizing: border-box;
-      	  -moz-box-sizing: border-box;
-      	  box-sizing: border-box;
-          // padding:8px;
-          overflow:hidden;
-        }
-
-        .center{
-          background:white;
-          height:80%;
-          -webkit-box-sizing: border-box;
-      	  -moz-box-sizing: border-box;
-      	  box-sizing: border-box;
-          padding:8px;
-          overflow:hidden;
-        }
-
-        .bottom{
-
-          -webkit-box-sizing: border-box;
-      	  -moz-box-sizing: border-box;
-      	  box-sizing: border-box;
-
-          padding:13px;
-
-          // background:red;
-          height:20%;
-          text-align:center;
-
-          .btn-group{
-            width:100%;
-            height:100%;
-          }
-        }
-      }
-		}
 
 		a{
-			color:black;
+			display:block;
+			color:white;
 		}
+
+		.content{
+			border-radius:10px;
+
+			position:relative;
+			height:$totalheight;
+			background-color:white;
+			overflow:hidden;
+
+			padding:$innerpadding;
+
+			.img_container_crop{
+				overflow:hidden;
+				width:100%;
+				height:$imgheight;
+				text-align:center;
+				img{
+					position:relative;
+					min-height:$imgheight;
+					min-width:100%;
+				}
+			}
+
+			.text_description{
+				position:relative;
+				width:100%;
+				color:black;
+
+					padding:5px 10px 10px 10px;
+
+					height:$txtheight;
+
+					h3{
+						line-height:35px;
+					}
+
+					h3,h5{
+						margin:0;
+					}
+
+					button{
+						width:100%;
+						margin-top:5px;
+					}
+
+          p{
+            overflow:hidden;
+
+    				height:$txtheight;
+          }
+			}
+		}
+
 	}
 }
 

@@ -3,11 +3,4 @@
     <h4>{{=field.name}}</h4>
 		<p>{{=field.short_description}}</p>
   </div>
-
-  <div class="field_right">
-    {{=A(BUTTON('Delete',_class="btn btn-danger"), callback= URL('delete_field',
-    vars= dict(field_id=field.id)))}}
-  </div>
-
-
 </div>

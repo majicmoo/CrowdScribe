@@ -62,9 +62,7 @@
 
     <div class="fields">
       {{for field in fields_added:}}
-        <!-- {{=field.name}}
-        {{=field.short_description}} -->
-        {{include "subviews/field-display.html"}}
+        {{include "subviews/field-display-delete.html"}}
       {{pass}}
     </div>
 
