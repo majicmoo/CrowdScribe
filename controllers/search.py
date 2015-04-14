@@ -110,7 +110,7 @@ def search_results():
     elif advanced.errors:
         response.flash='errors'
 
-    projects = general_module.attach_header_image_to_projects(projects)
+    projects = general_module.attach_all_information_to_projects(projects)
 
     return dict(advanced=advanced, projects=projects)
 

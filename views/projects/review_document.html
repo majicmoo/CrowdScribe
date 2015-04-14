@@ -2,6 +2,12 @@
 {{extend 'crowdscribe-layout.html'}}
 
 <div class="padded_container form_container no_bottom_padding">
+
+  <ul class="breadcrumb">
+    <li><a href="{{=URL('projects','project', args=[project.id])}}">{{=project.name}}</a> <span class="divider">/</span></li>
+    <li class="active">Reviewing Document</li>
+  </ul>
+
   <h1>Reviewing Document for {{=project.name}}</h1>
   <h3>{{=project.tag}} {{=timestring}}</h3>
 

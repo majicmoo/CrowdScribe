@@ -10,6 +10,12 @@
 <script type="text/javascript" src={{=URL("static","js/zoomimage/layout.js")}}></script>
 
 <div class="padded_container form_container no_bottom_padding">
+
+  <ul class="breadcrumb">
+    <li><a href="{{=URL('projects','project', args=[project.id])}}">{{=project.name}}</a> <span class="divider">/</span></li>
+    <li class="active">Document</li>
+  </ul>
+
   <h1>{{=project.name}}</h1>
   <h3>{{=project.tag}} {{=timestring}}</h3>
 

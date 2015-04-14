@@ -1,9 +1,27 @@
 {{extend 'crowdscribe-layout.html'}}
 
+<div class="padded_container form_container no_bottom_padding">
+
+  <ul class="breadcrumb">
+    <li><a href="{{=URL('user','profile')}}">Profile</a> <span class="divider">/</span></li>
+    <li class="active">Project Manager</li>
+  </ul>
+
+  <h1>Project Manager</h1>
+  <p>
+    Consectetur officia excepteur est laborum ipsum fugiat nisi exercitation laborum ad et ad labore duis.
+  </p>
+</div>
+
+<div class="line_seperator"></div>
+
 {{if under_review_projects:}}
 
   <div class="padded_container form_container no_bottom_padding">
-    <h1>Projects Under Review</h1>
+    <h2>Projects Under Review</h2>
+    <p>
+      Consectetur officia excepteur est laborum ipsum fugiat nisi exercitation laborum ad et ad labore duis.
+    </p>
   </div>
 
   <div class="projects">
@@ -18,7 +36,10 @@
 
 {{if open_projects_with_transcriptions:}}
   <div class="padded_container form_container no_bottom_padding">
-    <h1>Open Projects with Transcriptions</h1>
+    <h2>Open Projects with Transcriptions</h2>
+    <p>
+      Consectetur officia excepteur est laborum ipsum fugiat nisi exercitation laborum ad et ad labore duis.
+    </p>
   </div>
 
   <div class="projects">
@@ -32,7 +53,10 @@
 
 {{if open_projects_without_transcriptions:}}
   <div class="padded_container form_container no_bottom_padding">
-    <h1>Open Projects without Transcriptions</h1>
+    <h2>Open Projects without Transcriptions</h2>
+    <p>
+      Consectetur officia excepteur est laborum ipsum fugiat nisi exercitation laborum ad et ad labore duis.
+    </p>
   </div>
 
   <div class="projects">
@@ -46,7 +70,10 @@
 
 {{if closed_projects:}}
   <div class="padded_container form_container no_bottom_padding">
-    <h1>Closed Projects</h1>
+    <h2>Closed Projects</h2>
+    <p>
+      Consectetur officia excepteur est laborum ipsum fugiat nisi exercitation laborum ad et ad labore duis.
+    </p>
   </div>
 
   <div class="projects">
