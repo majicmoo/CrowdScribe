@@ -381,7 +381,8 @@ def view_document():
     if form.process().accepted:
 
         # Check if document currently has 2 transcriptions or more and if so mark document as done before adding
-        #  new transcription
+        # new transcription
+
         if len(database.get_transcriptions_for_document(document_id)) >= 2:
             document.update_record(status="Done")
 

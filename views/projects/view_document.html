@@ -36,16 +36,16 @@
           <img src="{{=image}}" alt="document"/>
     </div>
 
+    {{=form.custom.begin}}
+
     <div id="transcription_form_holder" class="{{="disabled" if response.message else ""}} landscape">
       {{if form and not accepted_transcription_with_fields:}}
 
           <!-- If there is an overlay, the form should be disabled to prevent TABBING into it -->
           <fieldset {{="disabled" if response.message else ""}}>
-
-            {{for field in form:}}
-              {{=field}}
-            {{pass}}
-
+              {{for field in form:}}
+                {{=field}}
+              {{pass}}
           </fieldset>
 
       {{elif accepted_transcription_with_fields:}}
@@ -76,14 +76,14 @@
   <div id="doc_submit">
 
     {{if form and not response.message and not accepted_transcription_with_fields:}}
-      {{=form.custom.begin}}
         <input class="btn btn-primary" type="submit" value="Submit Transcription">
-      {{=form.custom.end}}
     {{elif accepted_transcription_with_fields:}}
       <input class="btn btn-primary" type="submit" value="Transcription Already Accepted" disabled>
     {{elif response.message:}}
       <input class="btn btn-primary" type="submit" value="Cannot Currently Submit Transcription" disabled>
     {{pass}}
+
+    {{=form.custom.end}}
 
   </div>
 
