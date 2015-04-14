@@ -15,6 +15,10 @@
 
 					{{=A(BUTTON('View Document',_class="btn btn-success"), _href= URL('projects','view_document', args=[project.id, document.id]))}}
 
+					{{if project.status == "Under Review" and document.status == "Open":}}
+						{{=A(BUTTON('Review Document Transcriptions',_class="btn btn-info"), _href= URL('projects','review_document', args=[project.id, document.id]))}}
+					{{pass}}
+
 				</div>
 			</div>
 

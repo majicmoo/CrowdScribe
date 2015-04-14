@@ -340,7 +340,7 @@ def view_document():
 
     elif project.author_id == auth._get_user_id() and accepted_transcription:
         response_message = 'You are the owner of this project and have accepted a transcription for this document. ' \
-                           'This document is now closed'
+                           'This document is now closed and its transcription is available below.'
         response.message = response_message
 
     # Need an account to login
@@ -361,6 +361,11 @@ def view_document():
     elif document.status == 'Done':
         response_message = "This document has already received the maximum number of transcriptions allowed"
         response.message = response_message
+
+    elif project.status != 'Open':
+        response_message = "This project and document are closed for review."
+        session.flash = response_message
+        redirect(URL('default','index'))
 
     # Display transcription submission form if document image is open for transcriptions and
     # user is authorised to make a submission (ie registered user, not project creator and has not already made
@@ -456,7 +461,7 @@ def accept_transcription():
         db(db.project.id == request.vars.project_id).update(status="Closed")
         db.commit()
 
-    redirect(URL('projects', 'project', args=request.vars.project_id), client_side=True)
+    redirect(URL('projects','view_document', args=[request.vars.project_id, request.vars.document_id]), client_side=True)
 
 
 def reject_all_transcriptions():

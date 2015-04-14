@@ -77,7 +77,7 @@
 
 		float:left;
 		min-width:$boxwidth;
-		height:$totalheight + $padding*2;
+		// height:$totalheight + $padding*2;
 		width:100%/$numprojectsinrow;
 
 		padding:$padding;
@@ -94,7 +94,7 @@
 			border-radius:10px;
 
 			position:relative;
-			height:$totalheight;
+			// height:$totalheight;
 			background-color:white;
 			overflow:hidden;
 
@@ -119,7 +119,7 @@
 
 					padding:5px 10px 10px 10px;
 
-					height:$txtheight;
+					// height:$txtheight;
 
 					h3{
 						line-height:35px;

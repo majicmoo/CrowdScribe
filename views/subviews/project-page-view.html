@@ -69,6 +69,7 @@
           {{for document in open_documents_with_transcription:}}
               {{include "subviews/document-display.html"}}
           {{pass}}
+          <div class="line_seperator"></div>
         {{pass}}
 
         <!--Open Documents Without Transcription: Project owner -->
@@ -81,6 +82,7 @@
           {{for document in open_documents_without_transcription:}}
               {{include "subviews/document-display.html"}}
           {{pass}}
+          <div class="line_seperator"></div>
         {{pass}}
 
         <!--Closed Documents: Project owner -->

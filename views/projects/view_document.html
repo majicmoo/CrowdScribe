@@ -80,7 +80,7 @@
         <input class="btn btn-primary" type="submit" value="Submit Transcription">
       {{=form.custom.end}}
     {{elif accepted_transcription_with_fields:}}
-      <input class="btn btn-primary" type="submit" value="Transcription Accepted" disabled>
+      <input class="btn btn-primary" type="submit" value="Transcription Already Accepted" disabled>
     {{elif response.message:}}
       <input class="btn btn-primary" type="submit" value="Cannot Currently Submit Transcription" disabled>
     {{pass}}

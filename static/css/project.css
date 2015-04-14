@@ -44,7 +44,6 @@
   .documents .document {
     float: left;
     min-width: 230px;
-    height: 420px;
     width: 33.33333%;
     padding: 10px;
     overflow: hidden;
@@ -55,7 +54,6 @@
     .documents .document .content {
       border-radius: 10px;
       position: relative;
-      height: 400px;
       background-color: white;
       overflow: hidden;
       padding: 10px; }
@@ -72,8 +70,7 @@
         position: relative;
         width: 100%;
         color: black;
-        padding: 5px 10px 10px 10px;
-        height: 100px; }
+        padding: 5px 10px 10px 10px; }
         .documents .document .content .text_description h3 {
           line-height: 35px; }
         .documents .document .content .text_description h3, .documents .document .content .text_description h5 {
