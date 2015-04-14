@@ -32,7 +32,6 @@ class GeneralFunctions:
 
         return projects
 
-
     def convert_date_to_integer(self, date, era):
         if era =="BC":
             return -int(date)

@@ -341,7 +341,10 @@ def view_document():
     # Need an account to login
     elif auth._get_user_id() is None:
         response_message = "Please login to transcribe."
-        response.message = A(response_message, _href=URL('user', 'login'))
+        args = str(project_id) + '-' + str(document_id)
+        response.message = A(response_message, _href=URL('user', 'login', vars=dict(controller_after_login='projects',
+                                                                                    page_after_login='view_document',
+                                                                                    args_after_login=args)))
 
     # If user has already provided a transcription
     elif database.document_has_already_been_transcribed_by_user(document_id, auth._get_user_id()):
