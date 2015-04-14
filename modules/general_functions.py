@@ -25,3 +25,11 @@ class GeneralFunctions:
         else:
             return str(abs(date)) + "AD"
 
+    def limit_list_of_projects(self, projects, number):
+        if len(projects) < 6:
+            projects = projects[0:len(projects)]
+        else:
+            projects = projects[0:number]
+
+        return projects
+

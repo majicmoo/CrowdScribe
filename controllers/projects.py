@@ -334,8 +334,8 @@ def view_document():
         response.message = A(msgstring, _href=URL('projects', 'review_document', args=[project.id, document.id]))
 
     elif project.author_id == auth._get_user_id() and accepted_transcription:
-        response_message = 'You are the owner of this project and have accepted a transcription for this document.' \
-                           ' This document is now closed' 
+        response_message = 'You are the owner of this project and have accepted a transcription for this document. ' \
+                           'This document is now closed'
         response.message = response_message
 
     # Need an account to login
