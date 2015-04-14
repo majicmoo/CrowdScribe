@@ -463,7 +463,12 @@ def reject_all_transcriptions():
 
 def close_project_for_review():
     # Function for button which will close a project for review
-    # FIXME: May need some validation depending on how it is implemented
     db((db.project.id == request.vars.project_id)).update(status="Under Review")
+    db.commit()
+    redirect(URL('projects', 'project', args=request.vars.project_id), client_side=True)
+
+def reopen_project():
+    # Function for button which will close a project for review
+    db((db.project.id == request.vars.project_id)).update(status="Open")
     db.commit()
     redirect(URL('projects', 'project', args=request.vars.project_id), client_side=True)
