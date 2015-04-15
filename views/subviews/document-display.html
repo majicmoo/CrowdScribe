@@ -1,28 +1,26 @@
-<div class="document">
+<!-- This is used throughout the site to display projects in an adaptive frame -->
+<div class="document border-box-sizing">
 
-  <!-- <a href={{=URL('default','index')}}> -->
-    <div class="content">
-      <div class="left">
-        <img src="{{=URL('default','download',args = document.image)}}"/>
-      </div>
-      <div class="right">
-        <div class="top"></h1>
-          <h1>{{=document.status}}</h1>
-        </div>
-        <div class="center">
-          <p>
-            {{=document.description}}
-          </p>
-        </div>
-        <div class="bottom">
-            <div class="btn-group" role="group" aria-label="...">
-              <a href="{{=URL('projects','view_document', args=[project.id, document.id])}}"
-                 class="btn btn-info" role="button">Link Button</a>
-              <!-- <button type="button" class="btn btn-default">View</button>
-              <button type="button" class="btn btn-default">Transcribe</button> -->
-            </div>
-        </div>
-      </div>
-  	</div>
-  <!-- </a> -->
+		<div class="content border-box-sizing">
+
+			<div class="img_container_crop">
+				<img src="{{=URL('default','download',args = document.image)}}"/>
+			</div>
+
+			<div class = "overlay">
+				<div class="text_description border-box-sizing">
+
+          <h4>Document Description</h4>
+					<p>{{=document.description}}</p>
+
+					{{=A(BUTTON('View Document',_class="btn btn-success"), _href= URL('projects','view_document', args=[project.id, document.id]))}}
+
+					{{if project.status == "Under Review" and document.status == "Open":}}
+						{{=A(BUTTON('Review Document Transcriptions',_class="btn btn-info"), _href= URL('projects','review_document', args=[project.id, document.id]))}}
+					{{pass}}
+
+				</div>
+			</div>
+
+		</div>
 </div>

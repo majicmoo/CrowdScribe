@@ -2,6 +2,12 @@
 {{extend 'crowdscribe-layout.html'}}
 
 <div class="padded_container form_container no_bottom_padding">
+
+  <ul class="breadcrumb">
+    <li><a href="{{=URL('projects','project', args=[project.id])}}">{{=project.name}}</a> <span class="divider">/</span></li>
+    <li class="active">Reviewing Document</li>
+  </ul>
+
   <h1>Reviewing Document for {{=project.name}}</h1>
   <h3>{{=project.tag}} {{=timestring}}</h3>
 
@@ -34,7 +40,7 @@
                     </div>
                     <br>
                 {{pass}}
-                {{=transcription['button']))}}
+                {{=transcription['button']}}
                 </div>
         {{pass}}
 
@@ -50,9 +56,8 @@
 
 </div>
 
+<div id="doc_submit">
 
-<br>
-<div>
 {{=A(BUTTON('Reject All',_class="btn btn-danger btn-large"), callback= URL('reject_all_transcriptions',
 vars= dict(document_id=document.id, project_id=project.id)))}}
 </div>

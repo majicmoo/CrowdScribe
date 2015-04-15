@@ -235,11 +235,16 @@ def create_step4():
     open_documents, open_documents_with_transcription, open_documents_without_transcription, done_documents, \
     closed_documents = projects_module.set_up_project_page_based_on_user(project, auth)
 
+    project.fraction_transcribed_string = general_module.construct_number_of_transcribed_documents_string(project.id)
+
+
+    data_fields_for_project = database.get_data_fields_for_project(project.id)
+
     return dict(project=project_being_edited, timestring=timestring, documents_for_project=documents_added,
                 publish_project_form=publish_project_form, clear_project=clear_project, header_image=header_image,
                 done_documents=done_documents, open_documents_with_transcription=open_documents_with_transcription,
                 open_documents_without_transcription=open_documents_without_transcription,
-                closed_documents=closed_documents, open_documents=open_documents)
+                closed_documents=closed_documents, open_documents=open_documents, data_fields_for_project=data_fields_for_project)
 
 
 def project():
@@ -321,12 +326,12 @@ def view_document():
     response_message = None
 
     # If you are the owner, you cannot transcribe the document. Gives link to review transcriptions.
-    if project.author_id == auth._get_user_id() and not transcriptions:
+    if project.author_id == auth._get_user_id() and not transcriptions and not accepted_transcription:
         response_message = 'You are the owner of this project and cannot transcribe its documents. It currently has' \
                            ' 0 transcriptions available for review.'
         response.message = response_message
 
-    elif project.author_id == auth._get_user_id() and transcriptions:
+    elif project.author_id == auth._get_user_id() and transcriptions and not accepted_transcription:
         msgstring = 'You are the owner of this project and cannot transcribe its documents. Click here to review the ' \
                     + str(len(transcriptions)) + ' transcription' + ('s' if len(transcriptions) > 1 else '') +\
                     ' made.'
@@ -335,7 +340,7 @@ def view_document():
 
     elif project.author_id == auth._get_user_id() and accepted_transcription:
         response_message = 'You are the owner of this project and have accepted a transcription for this document. ' \
-                           'This document is now closed'
+                           'This document is now closed and its transcription is available below.'
         response.message = response_message
 
     # Need an account to login
@@ -356,6 +361,11 @@ def view_document():
     elif document.status == 'Done':
         response_message = "This document has already received the maximum number of transcriptions allowed"
         response.message = response_message
+
+    elif project.status != 'Open':
+        response_message = "This project and document are closed for review."
+        session.flash = response_message
+        redirect(URL('default','index'))
 
     # Display transcription submission form if document image is open for transcriptions and
     # user is authorised to make a submission (ie registered user, not project creator and has not already made
@@ -470,7 +480,7 @@ def accept_transcription():
         db(db.project.id == request.vars.project_id).update(status="Closed")
         db.commit()
 
-    redirect(URL('projects', 'project', args=request.vars.project_id), client_side=True)
+    redirect(URL('projects','view_document', args=[request.vars.project_id, request.vars.document_id]), client_side=True)
 
 
 def reject_all_transcriptions():
@@ -482,7 +492,12 @@ def reject_all_transcriptions():
 
 def close_project_for_review():
     # Function for button which will close a project for review
-    # FIXME: May need some validation depending on how it is implemented
     db((db.project.id == request.vars.project_id)).update(status="Under Review")
+    db.commit()
+    redirect(URL('projects', 'project', args=request.vars.project_id), client_side=True)
+
+def reopen_project():
+    # Function for button which will close a project for review
+    db((db.project.id == request.vars.project_id)).update(status="Open")
     db.commit()
     redirect(URL('projects', 'project', args=request.vars.project_id), client_side=True)

@@ -7,15 +7,54 @@
     <h3>{{=project.tag}} </h3>
     <h4>{{=timestring}}</h4>
     <div id = "progress">
-      <h4>4/5 Documents Transcribed</h4>
+      <h4> Documents Transcribed</h4>
     </div>
+    Created by {{=project.author_id.username}}
   </div>
 
 </div>
 
+{{if auth._get_user_id() == project.author_id:}}
+  <div class="padded_container form_container no_bottom_padding">
+    <div class="rounded_bordered_container no_margin">
+      <h4>Project Management</h4>
+
+      <!-- If the project is under review show an option to reopen it -->
+      {{if project.status == "Open":}}
+        <p>You are the owner of this project : It is currently <b>Open</b>. It is viewable by the public and its documents can receive transcriptions. You cannot review transcriptions whilst a project is open.</p>
+        {{=A(BUTTON('Close For Transcription Review',_class="btn btn-info"),
+            callback= URL('close_project_for_review',
+            vars= dict(project_id=project.id)))}}
+      {{pass}}
+
+      <!-- If the project is under review show an option to reopen it -->
+      {{if project.status == "Under Review":}}
+        <p>You are the owner of this project : It is currently <b>Under Review</b>. It is unavailable to the public and documents can not currently receive transcriptions. You can review transcriptions for a document below.</p>
+        {{=A(BUTTON('Open Project For Transcriptions',_class="btn btn-info"),
+            callback= URL('reopen_project',
+            vars= dict(project_id=project.id)), _class="split")}}
+      {{pass}}
+
+      <!-- If the project is closed -->
+      {{if project.status == "Closed":}}
+        <p>You are the owner of this project : It is currently <b>Closed</b>. You have accepted transcriptions for every document, and the project is now only visible to you. You can still view your documents and the transcriptions you have accepted.</p>
+      {{pass}}
+
+      {{if project.status == "Being Created":}}
+        <p>You are the owner of this project : It is currently <b>Being Created</b>. Once you have reviewed it you can publish it below.</p>
+      {{pass}}
+
+    </div>
+  </div>
+{{pass}}
+
 <div class="padded_container form_container no_bottom_padding">
+  <h4>Description</h4>
   <p>{{=project.description}}</p>
 </div>
+
+<div class="line_seperator"></div>
+
 <div class="documents">
 
     <!--Project Owner-->
@@ -23,25 +62,38 @@
 
         <!--Open Documents With Transcription: Project owner -->
         {{if open_documents_with_transcription:}}
-          <h3>Open Documents With Transcription</h3>
+          <h4>Open Documents With Transcription</h4>
+          <p>
+            Irure elit nisi officia voluptate reprehenderit est cillum culpa.
+          </p>
           {{for document in open_documents_with_transcription:}}
-              {{include "subviews/document-display-owner.html"}}
+              {{include "subviews/document-display.html"}}
           {{pass}}
+          <div class="line_seperator"></div>
         {{pass}}
 
+        <!--Open Documents Without Transcription: Project owner -->
         {{if open_documents_without_transcription:}}
-          <h3>Open Documents Without Transcription</h3>
-          <!--Open Documents Without Transcription: Project owner -->
+          <h4>Open Documents Without Transcription</h4>
+          <p>
+            Irure elit nisi officia voluptate reprehenderit est cillum culpa.
+          </p>
+
           {{for document in open_documents_without_transcription:}}
-              {{include "subviews/document-display-owner.html"}}
+              {{include "subviews/document-display.html"}}
           {{pass}}
+          <div class="line_seperator"></div>
         {{pass}}
 
+        <!--Closed Documents: Project owner -->
         {{if closed_documents:}}
-          <h3>Closed Documents</h3>
-          <!--Closed Documents: Project owner -->
+          <h4>Closed Documents</h4>
+          <p>
+            Irure elit nisi officia voluptate reprehenderit est cillum culpa.
+          </p>
+
           {{for document in closed_documents:}}
-              {{include "subviews/document-display-owner.html"}}
+              {{include "subviews/document-display.html"}}
           {{pass}}
         {{pass}}
 
@@ -50,7 +102,10 @@
 
       {{if open_documents:}}
         <!--Open Documents : Not project owner -->
-        <h3>Open Documents</h3>
+        <h4>Open Documents</h4>
+        <p>
+          Irure elit nisi officia voluptate reprehenderit est cillum culpa.
+        </p>
         {{for document in open_documents:}}
             {{include "subviews/document-display.html"}}
         {{pass}}
@@ -66,4 +121,21 @@
       {{pass}}
     {{pass}}
 
+</div>
+
+<div class="line_seperator"></div>
+
+<div class="padded_container form_container no_top_padding">
+  <h4>Fields for Transcription</h4>
+  <p>
+    Irure elit nisi officia voluptate reprehenderit est cillum culpa.
+  </p>
+
+  <div class="fields">
+    {{for field in data_fields_for_project:}}
+      <!-- {{=field.name}}
+      {{=field.short_description}} -->
+      {{include "subviews/field-display.html"}}
+    {{pass}}
+  </div>
 </div>

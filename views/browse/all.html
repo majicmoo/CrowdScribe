@@ -1,7 +1,25 @@
+{{response.files.append(URL(r=request,c='static/css',f='browse.css'))}}
 {{extend 'crowdscribe-layout.html'}}
 
 <div class="padded_container form_container no_bottom_padding">
-  <h1>Categories</h1>
+  <h2>Categories</h2>
+
+  <!-- Loop through all categories numerically. Need the index for the link redirect -->
+  <div class = "category_holder">
+    {{for category in categories:}}
+      <a href = "{{=URL('browse','category',args = categories.index(category))}}">
+        <div class = "category_button border-box-sizing">
+          <div class="content">
+            {{=category}}
+          </div>
+        </div>
+      </a>
+    {{pass}}
+  </div>
+
+  <div class="line_seperator"></div>
+
+  <h2>All Projects</h2>
 
   <div class=" no-left-right-padding projects">
     {{for project in allprojects:}}
