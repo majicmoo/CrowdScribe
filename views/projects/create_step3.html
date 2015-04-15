@@ -36,7 +36,8 @@
   <div class="add_new_field_form border-box-sizing rounded_bordered_container top_margin">
 
     <h4>Add New Field</h4>
-    <p>Fugiat culpa proident magna amet esse consequat eiusmod elit proident laborum.</p>
+    <p>A field is a particular area or section of your project documents that you would like transcribed. This could be, for example, a title, company name, signatory and so on. Fields are uniform across all documents for a project.</p>
+    <p>You can use the 'Field Description' to give more detail into what exactly you are looking to have transcribed. For instance, 'Text on the logo in the bottom right of the document.' or 'All signatories across whole document.'</p>
 
     {{=add_fields_form.custom.begin}}
 
@@ -59,7 +60,7 @@
   <div class="border-box-sizing rounded_bordered_container">
 
     <h3>Current Fields ({{=len(fields_added)}})</h3>
-    <p>Fugiat culpa proident magna amet esse consequat eiusmod elit proident laborum.</p>
+    <p>Created fields can be viewed and deleted below.</p>
 
     <div class="fields">
       {{for field in fields_added:}}
@@ -72,7 +73,7 @@
   <div class="border-box-sizing rounded_bordered_container">
 
     <h3>Current Documents ({{=len(documents_added)}})</h3>
-    <p>Fugiat culpa proident magna amet esse consequat eiusmod elit proident laborum.</p>
+    <p>The the documents you have added to your project.</p>
 
 
 
