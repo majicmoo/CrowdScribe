@@ -66,6 +66,34 @@
 
 }
 
+#user_form{
+	display:block;
+	overflow:hidden;
+
+	$inputwidth:400px;
+	$labelwidth:200px;
+
+	.user_field{
+
+		label{
+			display: inline-block;
+    	width:$labelwidth;
+		}
+
+		input{
+			width:$inputwidth;
+			margin:0 0 10px 0;
+		}
+		#confirm_password{
+			width:$inputwidth - 14px;
+		}
+	}
+	button{
+		margin:5px 0 10px 0;
+		width:$labelwidth + $inputwidth;
+	}
+}
+
 .login{
 
 	#loginform{

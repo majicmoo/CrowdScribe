@@ -2,29 +2,30 @@
 {{extend 'crowdscribe-layout.html'}}
 
 <div class="padded_container form_container">
-  <div class='login'>
 
-  	<div id='loginform'>
+  <div id = "user_form" class="rounded_bordered_container no_margin">
 
-  		<h1>Sign In</h1>
+    <h1>Login</h1>
 
-  		{{=form.custom.begin}}
+    {{=form.custom.begin}}
 
-  			{{=form.custom.widget.username}}
+    <div class="user_field">
+      <label for='auth_user_username'>Username</label>
+      {{=form.custom.widget.username}}
+    </div>
 
-  			{{=form.custom.widget.password}}
+    <div class="user_field">
+      <label for='auth_user_username'>Password</label>
+      {{=form.custom.widget.password}}
+    </div>
 
-  		<div id='submitcontainer'>
-  		{{=form.custom.submit}}
-  		</div>
+    <button type="submit" class="btn btn-success btn-large" value="Submit">
+         Log In
+    </button>
 
-  		{{=form.custom.end}}
+    {{=form.custom.end}}
 
-  		<p>Don't have an account? Sign up <a href="{{=URL(c="user",f="register")}}">here</a>.</p>
-
-  	</div>
-
-
+    <p>Don't have an account? Sign up <a href="{{=URL(c="user",f="register")}}">here</a>.</p>
 
   </div>
 </div>
