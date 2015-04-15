@@ -67,8 +67,7 @@ class DatabaseTransactions:
         return result
 
     def get_projects_for_tag(self, tag):
-        # FIXME: Should this only be open projects?
-        result = self.db(self.db.project.tag == tag).select()
+        result = self.db((self.db.project.tag == tag) & (self.db.project.status == "Open")).select()
         return result
 
     def get_projects_for_keyword(self, keyword):

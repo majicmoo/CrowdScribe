@@ -32,6 +32,15 @@ form{
 
 /* Site-Wide Utility Classes */
 
+.line_seperator{
+	$spacing:2%;
+	width:100% - $spacing*2;
+	height:2px;
+	background:rgba(0, 0, 0, .1);
+	margin:10px $spacing 10px $spacing;
+	clear:both;
+}
+
 $seperator-margin:20px;
 
 .border-box-sizing{
@@ -254,6 +263,10 @@ $seperator-margin:20px;
 	padding-bottom:0;
 }
 
+.no_top_padding{
+	padding-top:0;
+}
+
 .no_top_bottom_padding{
 	padding-top:0 !important;
 	padding-bottom:0 !important;
@@ -388,87 +401,88 @@ $seperator-margin:20px;
 	padding:$padding;
 
 	$boxwidth : 230px;
-	$boxheight: 350px;
+	$boxheight: 400px;
+
+	$innerpadding:10px;
+	$imgheight:200px;
+	$txtheight:300px;
+	$btnheight:40px;
+	$totalheight:410px;
+
+	.manager{
+		// height:$totalheight + $padding*2 + $btnheight !important;
+	}
 
 	.project{
 
-		$totalheight:370px;
-		$btnheight:40px;
-		$txtheight:160px;
+		display:block;
 
 		float:left;
 		min-width:$boxwidth;
-		height:$totalheight+$padding*2;
+		// height:$totalheight + $padding*2;
 		width:100%/$numprojectsinrow;
 
 		padding:$padding;
 		overflow: hidden;
 
 		position:relative;
-		-webkit-box-sizing: border-box;
-	  -moz-box-sizing: border-box;
-	  box-sizing: border-box;
 
 		a{
-			width:100%;
-			height:100%;
 			display:block;
 			color:white;
 		}
 
 		.content{
 			border-radius:10px;
-			border-style: solid;
-			border-width: 3px;
-			border-color:white;
-
 			position:relative;
-			height:$totalheight;
-			background-color:$med_grey;
+			// height:$totalheight;
+			background-color:white;
 			overflow:hidden;
 
-			img{
-				position:absolute;
+			padding:$innerpadding;
+
+			.img_container_crop{
+				overflow:hidden;
+				width:100%;
+				height:$imgheight;
+				text-align:center;
+				img{
+					position:relative;
+					min-height:$imgheight;
+					min-width:100%;
+				}
+			}
+
+			.tag{
+				color:rgba(0, 0, 0, .7);
+
 			}
 
 			.overlay{
-				position:absolute;
+				position:relative;
 				width:100%;
-				height:$txtheight;
-				top:$totalheight - $txtheight;
-				background:rgba(255, 255, 255, 1);
+				// height:$txtheight;
 				color:black;
 
 				.text{
-					-webkit-box-sizing: border-box;
-				  -moz-box-sizing: border-box;
-				  box-sizing: border-box;
-					padding:10px;
-					height:$txtheight;
 
-					.split{
-						width:50% !important;
-						float:left;
+					padding:5px 10px 10px 10px;
+
+					// height:$txtheight;
+
+					h3{
+						line-height:35px;
 					}
 
-					.project_button{
-						margin-top:10px;
-						// background:$logo_color;
-						height:$btnheight;
-						border-radius:5px;
-
-						button{
-							width:100%;
-							height:100%;
-							// background:$logo_color;
-						}
+					h3,h5{
+						margin:0;
 					}
 
-					h1{
-						margin-bottom:10px;
-						font-size:20px;
-						line-height:20px;
+					button{
+						width:100%;
+						margin-top:5px;
 					}
+
 
 					p{
 						height:60px;

@@ -1,36 +1,40 @@
-#button_container a {
-  text-decoration: none;
-  color: inherit;
-  display: block; }
-#button_container a:hover, #button_container a:focus {
-  opacity: .6; }
-#button_container .spacer {
-  width: 2%;
-  height: 200px;
-  float: left; }
-#button_container .manage_projects {
-  width: 49%;
-  height: 200px;
-  background: #69c72a;
-  text-align: center;
-  float: left;
-  border-radius: 10px; }
-  #button_container .manage_projects:before {
-    content: '';
-    display: inline-block;
-    height: 100%;
-    vertical-align: middle;
-    margin-right: -0.25em;
-    /* Adjusts for spacing */ }
-  #button_container .manage_projects .content {
-    display: inline-block;
-    vertical-align: middle;
-    width: 300px;
-    overflow: hidden; }
-    #button_container .manage_projects .content p {
-      text-align: center; }
-    #button_container .manage_projects .content h2 {
-      color: white; }
+#button_container {
+  display: block;
+  overflow: hidden;
+  margin-top: 10px; }
+  #button_container a {
+    text-decoration: none;
+    color: inherit;
+    display: block; }
+  #button_container a:hover, #button_container a:focus {
+    opacity: .6; }
+  #button_container .spacer {
+    width: 2%;
+    height: 200px;
+    float: left; }
+  #button_container .manage_projects {
+    width: 49%;
+    height: 200px;
+    background: #69c72a;
+    text-align: center;
+    float: left;
+    border-radius: 10px; }
+    #button_container .manage_projects:before {
+      content: '';
+      display: inline-block;
+      height: 100%;
+      vertical-align: middle;
+      margin-right: -0.25em;
+      /* Adjusts for spacing */ }
+    #button_container .manage_projects .content {
+      display: inline-block;
+      vertical-align: middle;
+      width: 300px;
+      overflow: hidden; }
+      #button_container .manage_projects .content p {
+        text-align: center; }
+      #button_container .manage_projects .content h2 {
+        color: white; }
 
 .login #loginform {
   /* The short login form */

@@ -229,17 +229,22 @@ def create_step4():
 
     # Time String
     project = database.get_project(project_id)
-    timestring = projects_module.project_timestring(project)
+    timestring = general_module.construct_project_timestring(project)
     header_image = URL('default', 'download', args=database.get_document_for_project_header(project.id).image)
 
     open_documents, open_documents_with_transcription, open_documents_without_transcription, done_documents, \
     closed_documents = projects_module.set_up_project_page_based_on_user(project, auth)
 
+    project.fraction_transcribed_string = general_module.construct_number_of_transcribed_documents_string(project.id)
+
+
+    data_fields_for_project = database.get_data_fields_for_project(project.id)
+
     return dict(project=project_being_edited, timestring=timestring, documents_for_project=documents_added,
                 publish_project_form=publish_project_form, clear_project=clear_project, header_image=header_image,
                 done_documents=done_documents, open_documents_with_transcription=open_documents_with_transcription,
                 open_documents_without_transcription=open_documents_without_transcription,
-                closed_documents=closed_documents, open_documents=open_documents)
+                closed_documents=closed_documents, open_documents=open_documents, data_fields_for_project=data_fields_for_project)
 
 
 def project():
@@ -267,7 +272,7 @@ def project():
     header_image = URL('default', 'download', args=database.get_document_for_project_header(project.id).image)
 
     # Time String
-    timestring = projects_module.project_timestring(project)
+    timestring = general_module.construct_project_timestring(project)
 
     all_documents = [documents_transcribed_by_user, done_documents, open_documents_with_transcription,
                      open_documents_without_transcription, open_documents]
@@ -276,7 +281,7 @@ def project():
     open_documents_without_transcription, open_documents = \
         projects_module.attach_number_of_transcriptions_to_lists_of_documents(all_documents)
 
-    project.fraction_transcribed_string = projects_module.construct_number_of_transcribed_documents_string(project.id)
+    project.fraction_transcribed_string = general_module.construct_number_of_transcribed_documents_string(project.id)
 
     return dict(project=project, timestring=timestring, data_fields_for_project=data_fields_for_project,
                 documents_transcribed_by_user=documents_transcribed_by_user, header_image=header_image,
@@ -300,7 +305,7 @@ def view_document():
     # Get Doc from URL args
     document_id = request.args(1)
     document = database.get_document(document_id)
-    accepted_transcription_with_fields = None
+    accepted_transcription_with_fields = accepted_transcription =  None
 
     # If null doc, go back to the project
     if document is None:
@@ -315,28 +320,36 @@ def view_document():
     form = None
     fields = []
     # All transcriptions for this doc
-    transcriptions = database.get_transcriptions_for_document(document_id)
+    transcriptions = database.get_pending_transcriptions_for_document(document_id)
     # Transcriptions by the current user for this doc
     transcription = None
     response_message = None
 
     # If you are the owner, you cannot transcribe the document. Gives link to review transcriptions.
-    if project.author_id == auth._get_user_id() and not transcriptions:
+    if project.author_id == auth._get_user_id() and not transcriptions and not accepted_transcription:
         response_message = 'You are the owner of this project and cannot transcribe its documents. It currently has' \
                            ' 0 transcriptions available for review.'
         response.message = response_message
 
-    elif project.author_id == auth._get_user_id() and transcriptions:
+    elif project.author_id == auth._get_user_id() and transcriptions and not accepted_transcription:
         msgstring = 'You are the owner of this project and cannot transcribe its documents. Click here to review the ' \
                     + str(len(transcriptions)) + ' transcription' + ('s' if len(transcriptions) > 1 else '') +\
                     ' made.'
         response_message = msgstring
         response.message = A(msgstring, _href=URL('projects', 'review_document', args=[project.id, document.id]))
 
+    elif project.author_id == auth._get_user_id() and accepted_transcription:
+        response_message = 'You are the owner of this project and have accepted a transcription for this document. ' \
+                           'This document is now closed and its transcription is available below.'
+        response.message = response_message
+
     # Need an account to login
     elif auth._get_user_id() is None:
         response_message = "Please login to transcribe."
-        response.message = A(response_message, _href=URL('user', 'login'))
+        args = str(project_id) + '-' + str(document_id)
+        response.message = A(response_message, _href=URL('user', 'login', vars=dict(controller_after_login='projects',
+                                                                                    page_after_login='view_document',
+                                                                                    args_after_login=args)))
 
     # If user has already provided a transcription
     elif database.document_has_already_been_transcribed_by_user(document_id, auth._get_user_id()):
@@ -348,6 +361,11 @@ def view_document():
     elif document.status == 'Done':
         response_message = "This document has already received the maximum number of transcriptions allowed"
         response.message = response_message
+
+    elif project.status != 'Open':
+        response_message = "This project and document are closed for review."
+        session.flash = response_message
+        redirect(URL('default','index'))
 
     # Display transcription submission form if document image is open for transcriptions and
     # user is authorised to make a submission (ie registered user, not project creator and has not already made
@@ -363,7 +381,8 @@ def view_document():
     if form.process().accepted:
 
         # Check if document currently has 2 transcriptions or more and if so mark document as done before adding
-        #  new transcription
+        # new transcription
+
         if len(database.get_transcriptions_for_document(document_id)) >= 2:
             document.update_record(status="Done")
 
@@ -383,8 +402,8 @@ def view_document():
     image = URL('default', 'download', args=document.image)
 
     # Time String
-    timestring = projects_module.project_timestring(project)
-    project.fraction_transcribed_string = projects_module.construct_number_of_transcribed_documents_string(project.id)
+    timestring = general_module.construct_project_timestring(project)
+    project.fraction_transcribed_string = general_module.construct_number_of_transcribed_documents_string(project.id)
 
     return dict(project=project, document=document, image=image, form=form, transcription=transcription,
                 accepted_transcription_with_fields = accepted_transcription_with_fields, response_message = response_message, timestring = timestring)
@@ -414,18 +433,11 @@ def review_document():
         redirect(URL('projects', 'project', args=[project_id]))
     # Get current transcriptions for Document
     transcriptions = database.get_pending_transcriptions_for_document(document_id)
-    print transcriptions
+    transcriptions = projects_module.build_transcription_list(project, transcriptions)
 
-    transcribed_fields_for_transcriptions = []
-    for transcription in transcriptions:
-        transcribed_fields_for_transcriptions.append(database.get_transcribed_fields_for_transcription(
-            transcription.id))
+    return dict(project=project, document=document, transcriptions=transcriptions,
+                timestring = general_module.construct_project_timestring(project))
 
-
-
-    return dict(project=project, document=document, transcriptions=transcriptions, database=database,
-                transcribed_fields_for_transcriptions=transcribed_fields_for_transcriptions,
-                timestring = projects_module.project_timestring(project))
 
 def delete_field():
     db((db.data_field.id == request.vars.field_id)).delete()
@@ -450,7 +462,7 @@ def accept_transcription():
         db(db.project.id == request.vars.project_id).update(status="Closed")
         db.commit()
 
-    redirect(URL('projects', 'project', args=request.vars.project_id), client_side=True)
+    redirect(URL('projects','view_document', args=[request.vars.project_id, request.vars.document_id]), client_side=True)
 
 
 def reject_all_transcriptions():
@@ -462,7 +474,12 @@ def reject_all_transcriptions():
 
 def close_project_for_review():
     # Function for button which will close a project for review
-    # FIXME: May need some validation depending on how it is implemented
     db((db.project.id == request.vars.project_id)).update(status="Under Review")
+    db.commit()
+    redirect(URL('projects', 'project', args=request.vars.project_id), client_side=True)
+
+def reopen_project():
+    # Function for button which will close a project for review
+    db((db.project.id == request.vars.project_id)).update(status="Open")
     db.commit()
     redirect(URL('projects', 'project', args=request.vars.project_id), client_side=True)

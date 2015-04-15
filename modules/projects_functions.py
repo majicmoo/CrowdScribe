@@ -145,17 +145,13 @@ class ProjectFunctions:
         else:
             return array
 
-    def project_timestring(self, project):
+    def construct_project_timestring(self, project):
         if project.time_period_start_date:
             timestring = '('+self.general_module.convert_integer_to_date_string(project.time_period_start_date) + " - " +\
                          self.general_module.convert_integer_to_date_string(project.time_period_end_date)+')'
             return timestring
         return ''
 
-    def construct_number_of_transcribed_documents_string(self, project_id):
-        number_of_transcribed_documents = self.database.get_number_of_transcribed_documents_for_project(project_id)
-        number_documents = len(self.database.get_documents_for_project(project_id))
-        return str(number_of_transcribed_documents) + "/" + str(number_documents)
 
     def set_up_project_page_based_on_user(self, project, auth):
         open_documents_with_transcription = open_documents_without_transcription = closed_documents = open_documents\
@@ -228,5 +224,20 @@ class ProjectFunctions:
 
         return (start_date, end_date)
 
+
+    def build_transcription_list(self, project, transcriptions):
+        i=1
+        transcriptions_list = []
+        for transcription in transcriptions:
+            transcription_dictionary = {}
+            transcription_dictionary['number'] = i
+            transcription_dictionary['transcription'] = self.database.get_transcribed_fields_for_transcription(transcription.id)
+            transcription_dictionary['button'] = A(BUTTON('Accept',_class="btn btn-success"), callback= URL('accept_transcription',
+                    vars= dict(document_id=transcription.document_id, transcription_id=transcription.id,
+                        project_id=project.id)))
+            transcriptions_list.append(transcription_dictionary)
+            i += 1
+
+        return transcriptions_list
 
 

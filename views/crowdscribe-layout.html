@@ -48,7 +48,7 @@
         <li class="{{= 'selected' if request.function == 'index' else ''}}">
           <a href="{{=URL('default','index')}}">Home</a>
         </li>
-        <li class="{{= 'selected' if request.function == 'browse' else ''}}">
+        <li class="{{= 'selected' if request.controller == 'browse' else ''}}">
           <a href="{{=URL('browse','all')}}">Browse</a>
         </li>
 

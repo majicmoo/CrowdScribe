@@ -1,18 +1,22 @@
-<div class="document_delete">
+<div class="document border-box-sizing">
 
-    <div class="content">
+		<div class="content border-box-sizing">
 
-      <div class="crop">
-        <img src="{{=URL('default','download',args = document.image)}}" alt="{{=document.description}}"/>
-      </div>
+			<div class="img_container_crop">
+				<img src="{{=URL('default','download',args = document.image)}}"/>
+			</div>
 
-      <div class="doc_desc">
-        {{=document.description}}
-      </div>
-      <div class="doc_delete">
-      {{=A(BUTTON('Delete',_class="btn btn-danger"), callback= URL('delete_document',
-        vars= dict(document_id=document.id)))}}
-      </div>
-  	</div>
+			<div class = "overlay">
+				<div class="text_description border-box-sizing">
 
+          <h4>Document Description</h4>
+					<p>{{=document.description}}</p>
+
+          {{=A(BUTTON('Delete Document',_class="btn btn-danger"), callback= URL('delete_document',
+            vars= dict(document_id=document.id)))}}
+
+				</div>
+			</div>
+
+		</div>
 </div>

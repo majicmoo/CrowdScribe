@@ -66,10 +66,13 @@ def login():
         request.vars.args_after_login = request.vars.args_after_login.split('-')
         auth.settings.login_next = URL(request.vars.controller_after_login, request.vars.page_after_login,
                                        args=request.vars.args_after_login)
+        print"Got here!"
     elif request.vars.controller_after_login and request.vars.page_after_login:
         auth.settings.login_next = URL(request.vars.controller_after_login, request.vars.page_after_login)
+        print"or here!"
     else:
         auth.settings.login_next = URL('default', 'index')
+        print"even here!"
 
     #auth.settings.login_userfield = 'username'
     # if request.vars.username and not IS_EMAIL()(request.vars.username)[1]:
