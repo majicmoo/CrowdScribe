@@ -73,11 +73,12 @@
 
 .add_new_document_form{
 
+  $containerformheight:465px;
   $formheight:420px;
   $headerheight:90px;
 
   width:100%;
-  height:$formheight;
+  height:$containerformheight;
   background-color:$lightest_grey;
 
   margin-bottom:10px;

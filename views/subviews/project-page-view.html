@@ -64,7 +64,7 @@
         {{if open_documents_with_transcription:}}
           <h4>Open Documents With Transcription</h4>
           <p>
-            Irure elit nisi officia voluptate reprehenderit est cillum culpa.
+            These documents are currently available for the public to transcribe, and have one or more transcription already.
           </p>
           {{for document in open_documents_with_transcription:}}
               {{include "subviews/document-display.html"}}
@@ -76,7 +76,7 @@
         {{if open_documents_without_transcription:}}
           <h4>Open Documents Without Transcription</h4>
           <p>
-            Irure elit nisi officia voluptate reprehenderit est cillum culpa.
+            These documents are currently available for the public to transcribe, and currently have zero transcriptions.
           </p>
 
           {{for document in open_documents_without_transcription:}}
@@ -89,7 +89,7 @@
         {{if closed_documents:}}
           <h4>Closed Documents</h4>
           <p>
-            Irure elit nisi officia voluptate reprehenderit est cillum culpa.
+            These documents are currently under review and cannot be viewed by the public, or have any transcriptions made on them.
           </p>
 
           {{for document in closed_documents:}}
@@ -104,7 +104,7 @@
         <!--Open Documents : Not project owner -->
         <h4>Open Documents</h4>
         <p>
-          Irure elit nisi officia voluptate reprehenderit est cillum culpa.
+          These documents are currently accepting transcriptions.
         </p>
         {{for document in open_documents:}}
             {{include "subviews/document-display.html"}}
@@ -116,6 +116,7 @@
     {{if done_documents:}}
       <!--Done Documents : Everyone-->
       <h3>Done Documents</h3>
+      These documents have had a transcription accepted.
       {{for document in done_documents:}}
           {{include "subviews/document-display.html"}}
       {{pass}}
@@ -128,7 +129,7 @@
 <div class="padded_container form_container no_top_padding">
   <h4>Fields for Transcription</h4>
   <p>
-    Irure elit nisi officia voluptate reprehenderit est cillum culpa.
+    Each document in this project is looking to have the following fields transcribed.
   </p>
 
   <div class="fields">

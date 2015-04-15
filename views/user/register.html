@@ -1,12 +1,39 @@
+{{response.files.append(URL(r=request,c='static/css',f='user.css'))}}
 {{extend 'crowdscribe-layout.html'}}
 
-{{=form.custom.begin}}
+<div class="padded_container form_container">
 
-       <div> <label for='username'> Username: {{=form.custom.widget.username}} </label></div>
-       <div><label for='password'>Password: {{=form.custom.widget.password}}</label></div>
-       <div> <label for="confirm_password"> Confirm Password: <input type="password" name="confirm_password" id="confirm_password"></label> </div>
-       <button type="submit" class="btn btn-primary btn-large" value="Submit">
-            Register
-       </button>
+  <div id = "user_form" class="rounded_bordered_container no_margin">
 
-{{=form.custom.end}}
+    <h1>Register</h1>
+    <p>
+      Enter your details below and press submit to register for CrowdScribe.
+    </p>
+
+    {{=form.custom.begin}}
+
+    <div class="user_field">
+      <label for='auth_user_username'>Username</label>
+      {{=form.custom.widget.username}}
+    </div>
+
+    <div class="user_field">
+      <label for='auth_user_password'>Password</label>
+      {{=form.custom.widget.password}}
+    </div>
+
+    <div class="user_field">
+      <label for='confirm_password'> Confirm Password</label>
+      <input type="password" name="confirm_password" placeholder="Confirm Password" id="confirm_password" class="">
+    </div>
+
+    <button type="submit" class="btn btn-success btn-large" value="Submit">
+         Submit Registration
+    </button>
+
+    {{=form.custom.end}}
+
+    <p>Already have an account? Log in <a title="Log in if you already have an account." href="{{=URL(c="user",f="login")}}">here</a>.</p>
+  </div>
+
+</div>

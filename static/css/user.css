@@ -36,6 +36,21 @@
       #button_container .manage_projects .content h2 {
         color: white; }
 
+#user_form {
+  display: block;
+  overflow: hidden; }
+  #user_form .user_field label {
+    display: inline-block;
+    width: 200px; }
+  #user_form .user_field input {
+    width: 400px;
+    margin: 0 0 10px 0; }
+  #user_form .user_field #confirm_password {
+    width: 386px; }
+  #user_form button {
+    margin: 5px 0 10px 0;
+    width: 600px; }
+
 .login #loginform {
   /* The short login form */
   width: 500px;

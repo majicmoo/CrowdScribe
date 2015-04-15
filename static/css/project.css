@@ -132,6 +132,7 @@
 #document_viewer {
   display: block;
   position: absolute;
+  text-align: center;
   position: relative;
   overflow: hidden; }
   #document_viewer.landscape {
@@ -140,9 +141,7 @@
     height: auto;
     float: left; }
   #document_viewer.portrait {
-    background: green;
-    margin-left: auto;
-    margin-right: auto;
+    background: #999999;
     width: 100%;
     height: auto;
     clear: both; }
