@@ -266,7 +266,7 @@ form {
       color: white;
       text-decoration: none; }
       .projects .project a:hover, .projects .project a:focus {
-        opacity: .7; }
+        opacity: .75; }
     .projects .project .content {
       border-radius: 10px;
       position: relative;

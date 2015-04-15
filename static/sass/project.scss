@@ -45,7 +45,7 @@
 
       position:relative;
 
-      width:300px;
+      max-width:500px;
       margin:0 auto 0 auto;
 
       h1{
@@ -124,11 +124,23 @@
 			border-radius:10px;
 
 			position:relative;
-			// height:$totalheight;
 			background-color:white;
 			overflow:hidden;
 
 			padding:$innerpadding;
+
+      .transcriptions_made{
+        $height:30px;
+        position:absolute;
+        background:rgba(255,255,255, .7);
+        width:100%;
+        top:0;
+        left:0;
+        height:$height;
+        line-height:$height;
+        font-weight:bold;
+        text-align:center;
+      }
 
 			.img_container_crop{
 				overflow:hidden;
@@ -136,7 +148,7 @@
 				height:$imgheight;
 				text-align:center;
 				img{
-					position:relative;
+					// position:relative;
 					min-height:$imgheight;
 					min-width:100%;
 				}

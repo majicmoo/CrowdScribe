@@ -27,7 +27,7 @@
       display: inline-block;
       vertical-align: middle;
       position: relative;
-      width: 300px;
+      max-width: 500px;
       margin: 0 auto 0 auto; }
       #project_header .overlay .header_content h1 {
         font-size: 45px; }
@@ -71,13 +71,22 @@
       background-color: white;
       overflow: hidden;
       padding: 10px; }
+      .documents .document .content .transcriptions_made {
+        position: absolute;
+        background: rgba(255, 255, 255, 0.7);
+        width: 100%;
+        top: 0;
+        left: 0;
+        height: 30px;
+        line-height: 30px;
+        font-weight: bold;
+        text-align: center; }
       .documents .document .content .img_container_crop {
         overflow: hidden;
         width: 100%;
         height: 200px;
         text-align: center; }
         .documents .document .content .img_container_crop img {
-          position: relative;
           min-height: 200px;
           min-width: 100%; }
       .documents .document .content .text_description {

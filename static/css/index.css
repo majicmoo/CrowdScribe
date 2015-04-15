@@ -6,7 +6,7 @@
   position: relative;
   display: block; }
   .featured_project:hover, .featured_project:focus {
-    opacity: .7; }
+    opacity: .75; }
   .featured_project img {
     position: absolute;
     width: 100%; }

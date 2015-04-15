@@ -61,12 +61,16 @@
 
 <div class="documents">
 
+  {{for document in open_documents:}}
+      {{=document}}
+  {{pass}}
+
     <!--Project Owner-->
     {{if auth._get_user_id() == project.author_id:}}
 
         <!--Open Documents With Transcription: Project owner -->
         {{if open_documents_with_transcription:}}
-          <h4>Open Documents With Transcription</h4>
+          <h4>Open Documents With Transcriptions</h4>
           <p>
             These documents are currently available for the public to transcribe, and have one or more transcription already.
           </p>

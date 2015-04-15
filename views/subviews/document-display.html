@@ -3,6 +3,11 @@
 
 		<div class="content border-box-sizing">
 
+			<!-- Show transcription count if the project owner is viewing -->
+			{{if auth._get_user_id() == project.author_id:}}
+				<div class = "transcriptions_made">{{=document.number_of_transcriptions}} Transcription(s) Available</div>
+			{{pass}}
+
 			<div class="img_container_crop">
 				<img src="{{=URL('default','download',args = document.image)}}"/>
 			</div>
