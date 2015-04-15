@@ -263,7 +263,10 @@ form {
     position: relative; }
     .projects .project a {
       display: block;
-      color: white; }
+      color: white;
+      text-decoration: none; }
+      .projects .project a:hover, .projects .project a:focus {
+        opacity: .7; }
     .projects .project .content {
       border-radius: 10px;
       position: relative;
@@ -285,16 +288,16 @@ form {
         position: relative;
         width: 100%;
         color: black; }
-        .projects .project .content .overlay .text {
+        .projects .project .content .overlay .text_container {
           padding: 5px 10px 10px 10px; }
-          .projects .project .content .overlay .text h3 {
+          .projects .project .content .overlay .text_container h3 {
             line-height: 35px; }
-          .projects .project .content .overlay .text h3, .projects .project .content .overlay .text h5 {
+          .projects .project .content .overlay .text_container h3, .projects .project .content .overlay .text_container h5 {
             margin: 0; }
-          .projects .project .content .overlay .text button {
+          .projects .project .content .overlay .text_container button {
             width: 100%;
             margin-top: 5px; }
-          .projects .project .content .overlay .text p {
+          .projects .project .content .overlay .text_container p {
             height: 60px; }
 
 .no_left_right_padding {

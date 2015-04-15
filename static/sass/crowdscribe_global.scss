@@ -430,6 +430,10 @@ $seperator-margin:20px;
 		a{
 			display:block;
 			color:white;
+			text-decoration: none;
+			&:hover, &:focus{
+				opacity:.7;
+			}
 		}
 
 		.content{
@@ -464,7 +468,7 @@ $seperator-margin:20px;
 				// height:$txtheight;
 				color:black;
 
-				.text{
+				.text_container{
 
 					padding:5px 10px 10px 10px;
 

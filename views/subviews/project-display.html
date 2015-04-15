@@ -1,25 +1,24 @@
 <!-- This is used throughout the site to display projects in an adaptive frame -->
 <div class="project border-box-sizing">
 
-		<div class="content border-box-sizing">
+		<a href="{{=URL('projects','project', args=[project.id])}}" class="content border-box-sizing">
 
 			<div class="img_container_crop">
 				<img src="{{=URL('default','download',args = project.header_image)}}"/>
 			</div>
 
 			<div class = "overlay">
-				<div class="text border-box-sizing">
+				<div class="text_container border-box-sizing">
 					<h3>{{=project.name[0:18]}}</h3>
-					<!-- <h5>{{=project.timestring}}</h5> -->
+					<h5>{{=project.timestring if project.timestring else "No Era Specified"}}</h5>
 					<div class="tag">
 						{{=project.tag}}
 					</div>
 					<p>{{=project.description[0:100]}}...</p>
 
-					{{=A(BUTTON('View Project',_class="btn btn-success"), _href= URL('projects','project', args=[project.id]))}}
+					{{=BUTTON('View Project',_class="btn btn-success")}}
 
 				</div>
 			</div>
-
-		</div>
+		</a>
 </div>

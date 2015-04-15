@@ -2,14 +2,18 @@
 
   <img src="{{=header_image}}"/>
 
-  <div class = "overlay">
-    <h1>{{=project.name}}</h1>
-    <h3>{{=project.tag}} </h3>
-    <h4>{{=timestring}}</h4>
-    <div id = "progress">
-      <h4> Documents Transcribed</h4>
+  <div class = "overlay border-box-sizing">
+    <div class = "header_content">
+      <h1>{{=project.name}}</h1>
+      <h3>{{=project.tag}} </h3>
+      {{if timestring:}}<h4>{{=timestring}}</h4>{{pass}}
+      <div id = "progress">
+        <h4>{{=project.fraction_transcribed_string}} Documents Transcribed</h4>
+      </div>
+      <div>
+        Created by {{=project.author_id.username}}
+      </div>
     </div>
-    Created by {{=project.author_id.username}}
   </div>
 
 </div>
