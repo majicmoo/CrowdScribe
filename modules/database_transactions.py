@@ -175,6 +175,7 @@ class DatabaseTransactions:
                     & (self.db.transcription.author_id == user_id)).select()
         return True if result else False
 
+    # FIXME: BAD NAMING ALSO CAN PROBABLY BE HANDELED BY ANOTHER FUNCTION
     def document_transcribed_by_user(self, document_id, user_id):
         result = self.db((self.db.document_image.id == self.db.transcription.document_id)
                     & (self.db.document_image.id == document_id)
@@ -204,6 +205,7 @@ class DatabaseTransactions:
         return result
 
     def get_document_for_transcription(self, transcription_id):
+        #FIXME: Doesn't work
         result = self.db((self.db.transcription.document_id == self.db.document_image.id)
                         & (self.db.document_image.project_id == self.db.project.id)
                         & (self.db.transcription.id == transcription_id)).select(self.db.document_image.ALL, distinct=True)

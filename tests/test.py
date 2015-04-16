@@ -392,8 +392,67 @@ class TestDatabaseTransactions(unittest.TestCase):
         transcribed = database.document_has_already_been_transcribed_by_user(self.document_two, self.user_two)
         self.assertFalse(transcribed)
 
+    #FIXME: ...
     def test_document_transcribed_by_user(self):
         pass
+
+    def test_get_documents_with_transcription_for_project_and_transcription_author(self):
+        documents = database.get_documents_with_transcription_for_project_and_transcription_author(self.project_one, self.user_two)
+        self.assertEquals(len(documents), 1)
+
+        documents = database.get_documents_with_transcription_for_project_and_transcription_author(self.project_two, self.user_two)
+        self.assertEquals(len(documents), 0)
+
+        documents = database.get_documents_with_transcription_for_project_and_transcription_author(self.project_two, self.user_one)
+        self.assertEquals(len(documents), 0)
+
+    def test_get_document_for_project_header(self):
+        document = database.get_document_for_project_header(self.project_one)
+        self.assertEquals(document,self.document_one)
+
+        document = database.get_document_for_project_header(self.project_two)
+        self.assertEquals(document, None)
+
+    def test_get_documents_with_no_transcriptions_for_project(self):
+        documents = database.get_documents_with_no_transcriptions_for_project(self.project_one)
+        self.assertEquals(len(documents), 2)
+
+        documents = database.get_documents_with_no_transcriptions_for_project(self.project_two)
+        self.assertEquals(len(documents), 0)
+
+    def test_get_document_for_transcription(self):
+        document = database.get_document_for_transcription(self.transcription_one)
+        self.assertEquals(document, self.document_one)
+        document = database.get_document_for_transcription(self.transcription_two)
+        self.assertEquals(document, self.document_one)
+
+    def test_get_pending_transcriptions_for_user(self):
+        transcriptions = database.get_pending_transcriptions_for_user(self.user_one)
+        self.assertEquals(len(transcriptions), 0)
+        transcriptions = database.get_pending_transcriptions_for_user(self.user_two)
+        self.assertEquals(len(transcriptions), 1)
+
+    def test_get_accepted_transcriptions_for_user(self):
+        transcriptions = database.get_accepted_transcriptions_for_user(self.user_one)
+        self.assertEquals(len(transcriptions), 0)
+        transcriptions = database.get_accepted_transcriptions_for_user(self.user_two)
+        self.assertEquals(len(transcriptions), 1)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     # FIXME
