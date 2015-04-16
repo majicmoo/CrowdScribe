@@ -77,6 +77,8 @@ class TestDatabaseTransactions(unittest.TestCase):
                                                         status=self.pending_status)
         self.transcription_two =  self.add_transcription(document_id=self.document_one, author_id=self.user_two,
                                                          status=self.accepted_status)
+        self.transcription_three =  self.add_transcription(document_id=self.document_one, author_id=self.user_two,
+                                                         status=self.rejected_status)
         # Create transcription field
         self.transcription_field_one = self.add_transcription_field(data_field_id=self.data_field_one,
                                                                     transcription_id=self.transcription_one,
@@ -438,17 +440,59 @@ class TestDatabaseTransactions(unittest.TestCase):
         transcriptions = database.get_accepted_transcriptions_for_user(self.user_two)
         self.assertEquals(len(transcriptions), 1)
 
+    def test_get_rejected_transcriptions_for_user(self):
+        transcriptions = database.get_rejected_transcriptions_for_user(self.user_one)
+        self.assertEquals(len(transcriptions), 0)
+        transcriptions = database.get_rejected_transcriptions_for_user(self.user_two)
+        self.assertEquals(len(transcriptions), 1)
 
+    def test_get_transcription(self):
+        for transcription in self.transcriptions:
+            temp = database.get_transcription(transcription.id)
+            self.assertEquals(temp, transcription)
 
+    def test_get_transcriptions_for_document(self):
+        transcriptions = database.get_transcriptions_for_document(self.document_one)
+        self.assertEquals(len(transcriptions), 3)
+        transcriptions = database.get_transcriptions_for_document(self.document_two)
+        self.assertEquals(len(transcriptions), 0)
 
+    def test_get_pending_transcriptions_for_document(self):
+        transcriptions = database.get_pending_transcriptions_for_document(self.document_one)
+        self.assertEquals(len(transcriptions), 1)
+        transcriptions = database.get_pending_transcriptions_for_document(self.document_two)
+        self.assertEquals(len(transcriptions), 0)
 
+    def test_get_accepted_transcription_for_document(self):
+        transcription = database.get_accepted_transcription_for_document(self.document_one)
+        self.assertEquals(transcription, self.transcription_two)
+        transcription = database.get_accepted_transcription_for_document(self.document_two)
+        self.assertEquals(transcription, None)
 
+    def test_get_data_fields_for_project(self):
+        total_number_of_data_fields = 0
+        for project in self.projects:
+            data_fields = database.get_data_fields_for_project(project)
+            for data_field in data_fields:
+                total_number_of_data_fields += 1
+                self.assertEquals(data_field.project_id, self.project_one)
+        self.assertEquals(total_number_of_data_fields, len(self.fields))
 
+    def test_get_transcribed_fields_for_transcription(self):
+        total_number_of_transcribed_fields = 0
+        for transcription in self.transcriptions:
+            transcribed_fields = database.get_transcribed_fields_for_transcription(transcription)
+            for transcribed_field in transcribed_fields:
+                # Check right transcription ID
+                self.assertEquals(transcribed_field.transcribed_field.transcription_id, transcription)
+                total_number_of_transcribed_fields += 1
+        self.assertEquals(len(self.transcription_fields), total_number_of_transcribed_fields)
 
-
-
-
-
+    def test_project_can_be_closed_for_review(self):
+        close_project = database.project_can_be_closed_for_review(self.project_one)
+        self.assertTrue(close_project)
+        close_project = database.project_can_be_closed_for_review(self.project_two)
+        self.assertFalse(close_project)
 
 
 
@@ -467,31 +511,12 @@ class TestDatabaseTransactions(unittest.TestCase):
         #
         # self.assertEquals(total_number_of_transcriptions, len(self.transcriptions))
 
-    def test_get_transcribed_fields_for_transcription(self):
-        total_number_of_transcribed_fields = 0
-        for transcription in self.transcriptions:
-            transcribed_fields = database.get_transcribed_fields_for_transcription(transcription)
-            for transcribed_field in transcribed_fields:
-                # Check right transcription ID
-                self.assertEquals(transcribed_field.transcribed_field.transcription_id, transcription)
-                total_number_of_transcribed_fields += 1
-        self.assertEquals(len(self.transcription_fields), total_number_of_transcribed_fields)
-
-    def test_get_data_fields_for_project(self):
-        total_number_of_data_fields = 0
-        for project in self.projects:
-            data_fields = database.get_data_fields_for_project(project)
-            for data_field in data_fields:
-                total_number_of_data_fields += 1
-                self.assertEquals(data_field.project_id, self.project_one)
-        self.assertEquals(total_number_of_data_fields, len(self.fields))
 
 
-    def test_get_transcriptions_for_document(self):
-        for document in self.documents:
-            transcriptions = database.get_transcriptions_for_document(document)
-            for transcription in transcriptions:
-                self.assertEquals(transcription.document_id, self.document_one)
+
+
+
+
 
 
 

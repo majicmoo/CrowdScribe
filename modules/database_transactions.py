@@ -208,7 +208,8 @@ class DatabaseTransactions:
         #FIXME: Doesn't work
         result = self.db((self.db.transcription.document_id == self.db.document_image.id)
                         & (self.db.document_image.project_id == self.db.project.id)
-                        & (self.db.transcription.id == transcription_id)).select(self.db.document_image.ALL, distinct=True)
+                        & (self.db.transcription.id == transcription_id)).select(self.db.document_image.ALL, distinct=True).first()
+        return result
 
 
    ########################################## Get Transcriptions####################################################
@@ -235,7 +236,7 @@ class DatabaseTransactions:
 
 
     def get_transcription(self, transcription_id):
-        result = self.db((self.db.transcription.id == transcription_id)).select()
+        result = self.db((self.db.transcription.id == transcription_id)).select().first()
         return result
 
     def get_transcriptions_for_document(self, document_id):
