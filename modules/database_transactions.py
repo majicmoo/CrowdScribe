@@ -99,7 +99,7 @@ class DatabaseTransactions:
         for project in all_projects:
             project.number_transcribed = self.get_number_of_transcribed_documents_for_project(project.id)
 
-        all_projects.sort(lambda project: project.number_transcribed, reverse=True)
+        all_projects = all_projects.sort(lambda project: project.number_transcribed, reverse=True)
         result=all_projects
 
         return result
