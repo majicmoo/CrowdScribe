@@ -206,7 +206,7 @@ class ProjectFunctions:
 
 
     def create_clear_project_form(self):
-        return FORM(DIV(BUTTON("Clear Project", _type='submit', _class='btn btn-danger btn-block',
+        return FORM(DIV(BUTTON("Clear Project ", I(_class='icon-trash icon-white'), _type='submit', _class='btn btn-danger btn-block',
                                     _onclick="return confirm('Clearing a project will wipe all of your progress."
                                              " Continue?');")))
 

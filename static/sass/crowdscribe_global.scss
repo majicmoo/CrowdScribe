@@ -5,6 +5,23 @@
  * the site. This means quicker loading and less I/O. It is loaded in crowdscribe-layout.html
  */
 
+.skip_to_content{
+	position:absolute;
+	top:0;
+	left:0;
+	background:red;
+	opacity:0;
+	padding:10px;
+	z-index:10000;
+	pointer-events: none;
+	text-decoration:none;
+
+	&:focus{
+		opacity:1;
+	}
+
+}
+
 /* Global Text Formatting */
 /* This can be overwritten in view specific css files */
 
