@@ -13,7 +13,7 @@ def search_results():
     response.title = "Search Results"    
     
     # Lists for SELECT() helper in advanced search form
-    tags = ["All", "Sport", "Theatre", "Military", "Journal Entries", "Architecture", "Citizen Information",
+    current.tags = ["All", "Sport", "Theatre", "Military", "Journal Entries", "Architecture", "Citizen Information",
            "Religion", "Art", "Literature", "Finance", "Scientific", "Media", "Music", "Other"]
     eras = ['BC','AD']
     orders = ['Alphabetical', 'Earliest', 'Latest']

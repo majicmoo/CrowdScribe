@@ -97,6 +97,7 @@ auth.settings.controller = 'user'
 
 from gluon import current
 current.db = db
+current.tags = options
 
 
 ## configure email

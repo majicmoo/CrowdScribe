@@ -243,6 +243,6 @@ class ProjectFunctions:
             i += 1
 
         return transcriptions_list
-    
+
 
 
