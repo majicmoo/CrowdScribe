@@ -216,7 +216,7 @@ class ProjectFunctions:
 
     def create_previous_step_form(self, message):
         return FORM(BUTTON(message, I(_class='icon-arrow-left icon-white'),
-                                        _type='submit', _class='btn btn-primary btn-block btn-large btn-left'))
+                                        _type='submit', _class='btn btn-info btn-block btn-large btn-left'))
 
     def process_start_and_end_dates(self):
         if current.request.vars.unknown == "yes":
@@ -243,6 +243,3 @@ class ProjectFunctions:
             i += 1
 
         return transcriptions_list
-
-
-

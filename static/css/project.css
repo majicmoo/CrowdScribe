@@ -55,6 +55,8 @@
   padding: 10px; }
   .documents h4, .documents p {
     margin-left: 10px; }
+  .documents .line_seperator {
+    margin: 10px 10px 10px 10px; }
   .documents .document {
     float: left;
     min-width: 230px;

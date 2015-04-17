@@ -7,7 +7,7 @@ general_module = general_functions.GeneralFunctions(database, db)
 def register():
 
     # Window Title
-    response.title = 'Register'
+    response.title = 'CrowdScribe | Register'
 
     # Allow registered users to create accounts in debug mode for quicker testing
     if auth.is_logged_in():
@@ -62,7 +62,7 @@ def validate_register_form(form):
 
 def login():
     # Window Title
-    response.title = 'Login'
+    response.title = 'CrowdScribe | Login'
 
     if request.vars.controller_after_login and request.vars.page_after_login and request.vars.args_after_login:
         request.vars.args_after_login = request.vars.args_after_login.split('-')
@@ -119,7 +119,7 @@ def profile():
         redirect(URL('default','index'))
 
     user = database.get_user(user_id)
-    response.title = user.username
+    response.title = 'CrowdScribe | ' + user.username
 
     # Alerts
     # Number of Closed Projects that belong to user
@@ -180,6 +180,8 @@ def manage_projects():
     user_id = auth._get_user_id()
     # Under Review Projects
     under_review_projects = database.get_under_review_projects_for_user(user_id)
+
+    response.title = 'CrowdScribe | Manage Projects'
 
     # Have Transcriptions and open Projects
     open_projects_with_transcriptions = database.get_open_projects_with_transcriptions_for_user(user_id)

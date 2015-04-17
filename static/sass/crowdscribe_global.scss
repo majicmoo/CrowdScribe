@@ -34,7 +34,7 @@ form{
 
 .line_seperator{
 	$spacing:2%;
-	width:100% - $spacing*2;
+	// width:100% - $spacing*2;
 	height:2px;
 	background:rgba(0, 0, 0, .1);
 	margin:10px $spacing 10px $spacing;
@@ -178,7 +178,7 @@ $seperator-margin:20px;
 			$searchwidth : 200px;
 
 			.search{
-				width:500px;
+				width:330px;
 				height:50px;
 				position:relative;
 

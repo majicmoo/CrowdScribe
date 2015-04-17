@@ -10,6 +10,7 @@
 			<div class = "overlay">
 				<div class="text_container border-box-sizing">
 					<h3>{{=project.name[0:18]}}</h3>
+					<h4>{{=project.timestring if project.timestring else "No Era Specified"}}</h4>
 					<h5>{{=project.timestring if project.timestring else "No Era Specified"}}</h5>
 					<div class="tag">
 						{{=project.tag}}
@@ -26,7 +27,7 @@
 
 					{{elif project.status == "Open":}}
 
-						{{=A('Close for review',_class="btn btn-info", callback= URL('place_project_under_review',
+						{{=A('Place under Review',_class="btn btn-info", callback= URL('place_project_under_review',
 								vars= dict(project_id=project.id)))}}
 
 					{{pass}}

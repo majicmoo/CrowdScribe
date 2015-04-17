@@ -36,7 +36,7 @@
   #button_container .manage_projects {
     width: 49%;
     height: 200px;
-    background: #69c72a;
+    background: #5cb3d9;
     text-align: center;
     float: left;
     border-radius: 10px; }
@@ -103,7 +103,7 @@
     -webkit-border-radius: 5px;
     border-radius: 5px;
     color: white;
-    background-color: #69c72a;
+    background-color: #5cb3d9;
     font-size: 18px;
     text-shadow: none; }
   .login #loginform .error {

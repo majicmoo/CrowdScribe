@@ -11,7 +11,7 @@ general_module = general_functions.GeneralFunctions(database, db)
 def create_step1():
 
     # Set Page Title
-    response.title = "Create - Step 1"
+    response.title = "CrowdScribe | Create Project Step 1"
 
     # Set response flash display to error
     session.flash_class = "alert-error"
@@ -81,7 +81,7 @@ def create_step1():
 def create_step2():
 
     # Set Page Title
-    response.title = "Create - Step 2"
+    response.title = "CrowdScribe | Create Project Step 2"
 
     # Retrieve project and set session project variable to allow for prepopulating.
     project_id, project_being_edited = projects_module.check_if_step1_was_skipped_and_redirect_if_so(session)
@@ -147,7 +147,7 @@ def create_step2():
 def create_step3():
 
     # Set Page Title
-    response.title = "Create - Step 3"
+    response.title = "CrowdScribe | Create Project Step 3"
 
     # Retrieve project and set session project variable to allow for prepopulating.
     project_id, project_being_edited = projects_module.check_if_step1_was_skipped_and_redirect_if_so(session)
@@ -212,7 +212,7 @@ def create_step3():
 def create_step4():
 
     # Page Title
-    response.title = "Create - Review"
+    response.title = "CrowdScribe | Create Project Preview"
 
     project_id, project_being_edited = projects_module.check_if_step1_was_skipped_and_redirect_if_so(session)
     documents_added = database.get_documents_for_project(project_id)
@@ -263,7 +263,7 @@ def project():
     closed_documents = projects_module.set_up_project_page_based_on_user(project, auth)
 
     # Page Title
-    response.title = project.name
+    response.title = "CrowdScribe | " + project.name
 
     # documents_for_project = database.get_open_documents_for_project(project.id)
     data_fields_for_project = database.get_data_fields_for_project(project.id)
@@ -299,7 +299,7 @@ def view_document():
     project = database.get_project(project_id)
 
     # Page Title
-    response.title = project.name + ' | Document'
+    response.title = "CrowdScribe | " + project.name + ' Document'
 
     # Redirect if null project.
     if project is None:
@@ -446,7 +446,7 @@ def review_document():
     project_id = request.args(0)
     project = database.get_project(project_id)
 
-    response.title = project.name + ' | Review'
+    response.title = "CrowdScribe | " + project.name + ' Document Review'
 
     # Current Document
     document_id = request.args(1)

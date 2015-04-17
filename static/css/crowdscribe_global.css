@@ -23,7 +23,6 @@ form {
 
 /* Site-Wide Utility Classes */
 .line_seperator {
-  width: 96%;
   height: 2px;
   background: rgba(0, 0, 0, 0.1);
   margin: 10px 2% 10px 2%;
@@ -87,7 +86,7 @@ form {
       opacity: .4; }
     .navbar .navbar-inner .nav .selected a {
       /* A button is highlighted in green and bolded to signify it is the element associated with the current page */
-      color: #69c72a;
+      color: #5cb3d9;
       font-weight: bold; }
     .navbar .navbar-inner .nav .noline a {
       /* Used to more visually seperate items */
@@ -112,7 +111,7 @@ form {
         font-family: "Myriad Pro", "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
         border-right: thin solid #c8c8c8; }
     .navbar .navbar-inner .nav .search {
-      width: 500px;
+      width: 330px;
       height: 50px;
       position: relative;
       text-align: left; }
@@ -252,7 +251,7 @@ form {
     .form_nav .inner .highlighted {
       opacity: 1;
       font-weight: bold;
-      background: #69c72a;
+      background: #5cb3d9;
       color: white; }
     .form_nav .inner .rightmost {
       border-right: 0; }

@@ -21,9 +21,9 @@
 					<p>{{=document.description}}</p>
 
 					{{if document.status != "Closed" and project.status != "Being Created":}}
-						{{=A('View or Transcribe Document',_class="btn btn-success", _href= URL('projects','view_document', args=[project.id, document.id]))}}
+						{{=A('View or Transcribe Document',_class="btn btn-info", _href= URL('projects','view_document', args=[project.id, document.id]))}}
 					{{elif project.status != "Being Created":}}
-						{{=A('View Transcribed Document',_class="btn btn-success", _href= URL('projects','view_document', args=[project.id, document.id]))}}
+						{{=A('View Transcribed Document',_class="btn btn-info", _href= URL('projects','view_document', args=[project.id, document.id]))}}
 					{{pass}}
 
 					{{if project.status == "Under Review" and (document.status == "Open" or document.status == "Done"):}}
