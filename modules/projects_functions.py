@@ -117,6 +117,10 @@ class ProjectFunctions:
         if image_validator(current.request.vars.image)[1] is not None:
             form.errors.image = image_validator(current.request.vars.image)[1]
 
+        check_image_format_validator = IS_IMAGE(error_message=("Only images may be uploaded"))
+        if check_image_format_validator(current.request.vars.image)[1] is not None:
+            form.errors.image = check_image_format_validator(current.request.vars.image)[1]
+
 
 
     def validate_add_field_form(self, form):
@@ -239,5 +243,6 @@ class ProjectFunctions:
             i += 1
 
         return transcriptions_list
+    
 
 

@@ -69,6 +69,7 @@ def create_step1():
     if clear_project.validate(formname="form_two"):
         # If clear project button is pressed, reset project wizard
         session.project_being_created = None
+        db((db.project.author_id == auth._get_user_id()) &(db.project.status == "Being Created")).delete()
         redirect(URL('projects', 'create_step1'))
 
     return dict(form=form, clear_project=clear_project, project_being_edited=project_being_edited,
@@ -127,6 +128,7 @@ def create_step2():
     # If clear project button is pressed, reset project wizard
     if clear_project.validate(formname="form_four"):
         session.project_being_created = None
+        db((db.project.author_id == auth._get_user_id()) &(db.project.status == "Being Created")).delete()
         redirect(URL('projects', 'create_step1'))
 
     # Retrieve documents that project already has.
@@ -190,6 +192,7 @@ def create_step3():
     # Reset Project wizard when button clicked.
     if clear_project.validate(formname="form_four"):
         session.project_being_created = None
+        db((db.project.author_id == auth._get_user_id()) &(db.project.status == "Being Created")).delete()
         redirect(URL('projects', 'create_step1'))
 
     # Retrieve document and fields added to project
@@ -225,6 +228,7 @@ def create_step4():
 
     if clear_project.validate(formname="form_two"):
         session.project_being_created = None
+        db((db.project.author_id == auth._get_user_id()) &(db.project.status == "Being Created")).delete()
         redirect(URL('projects', 'create_step1'))
 
     # Time String
