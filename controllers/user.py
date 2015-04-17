@@ -1,6 +1,8 @@
 import database_transactions as database_transactions
 database = database_transactions.DatabaseTransactions(db)
-
+import search_functions as search_functions
+import general_functions as general_functions
+general_module = general_functions.GeneralFunctions(database, db)
 
 def register():
 
@@ -184,10 +186,10 @@ def manage_projects():
     # All documents transcribed - closed
     closed_projects = database.get_closed_projects_for_user(user_id)
 
-    return dict(under_review_projects=attach_header_image_to_projects(under_review_projects),
-                open_projects_with_transcriptions=attach_header_image_to_projects(open_projects_with_transcriptions),
-                open_projects_without_transcriptions=attach_header_image_to_projects(open_projects_without_transcriptions),
-                closed_projects=attach_header_image_to_projects(closed_projects))
+    return dict(under_review_projects=general_module.attach_all_information_to_projects(under_review_projects),
+                open_projects_with_transcriptions=general_module.attach_all_information_to_projects(open_projects_with_transcriptions),
+                open_projects_without_transcriptions=general_module.attach_all_information_to_projects(open_projects_without_transcriptions),
+                closed_projects=general_module.attach_all_information_to_projects(closed_projects))
 
 
 def place_project_under_review():

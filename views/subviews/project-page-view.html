@@ -1,6 +1,6 @@
 <div id = "project_header">
 
-  <img src="{{=header_image}}"/>
+  <img src="{{=header_image}}" alt = "Header image for {{=project.name}}"/>
 
   <div class = "overlay border-box-sizing">
     <div class = "header_content">
@@ -11,14 +11,18 @@
         <h4>{{=project.fraction_transcribed_string}} Documents Transcribed</h4>
       </div>
       <div>
-        Created by {{=project.author_id.username}}
+        {{if auth._get_user_id() == project.author_id:}}
+          You are this projects owner, <b>{{=project.author_id.username}}</b>. It is currently <b>{{=project.status}}</b>.
+        {{else:}}
+          Created by {{=project.author_id.username}}
+        {{pass}}
       </div>
     </div>
   </div>
 
 </div>
 
-{{if auth._get_user_id() == project.author_id:}}
+{{if auth._get_user_id() == project.author_id and project.status != "Being Created":}}
   <div class="padded_container form_container no_bottom_padding">
     <div class="rounded_bordered_container no_margin">
       <h4>Project Management</h4>
@@ -44,10 +48,6 @@
         <p>You are the owner of this project : It is currently <b>Closed</b>. You have accepted transcriptions for every document, and the project is now only visible to you. You can still view your documents and the transcriptions you have accepted.</p>
       {{pass}}
 
-      {{if project.status == "Being Created":}}
-        <p>You are the owner of this project : It is currently <b>Being Created</b>. Once you have reviewed it you can publish it below.</p>
-      {{pass}}
-
     </div>
   </div>
 {{pass}}
@@ -60,10 +60,6 @@
 <div class="line_seperator"></div>
 
 <div class="documents">
-
-  {{for document in open_documents:}}
-      {{=document}}
-  {{pass}}
 
     <!--Project Owner-->
     {{if auth._get_user_id() == project.author_id:}}
@@ -97,7 +93,7 @@
         {{if closed_documents:}}
           <h4>Closed Documents</h4>
           <p>
-            These documents are currently under review and cannot be viewed by the public, or have any transcriptions made on them.
+            These documents have accepted transcriptions and cannot be viewed by the public, or have any more transcriptions made on them.
           </p>
 
           {{for document in closed_documents:}}
@@ -122,9 +118,10 @@
     {{pass}}
 
     {{if done_documents:}}
+      <div class="line_seperator"></div>
       <!--Done Documents : Everyone-->
-      <h3>Done Documents</h3>
-      These documents have had a transcription accepted.
+      <h4>Documents Under Review</h4>
+      <p>These documents currently have the maximum number of transcriptions.</p>
       {{for document in done_documents:}}
           {{include "subviews/document-display.html"}}
       {{pass}}

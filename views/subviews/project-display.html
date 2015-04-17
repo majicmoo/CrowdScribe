@@ -4,7 +4,7 @@
 		<a href="{{=URL('projects','project', args=[project.id])}}" class="content border-box-sizing">
 
 			<div class="img_container_crop">
-				<img src="{{=URL('default','download',args = project.header_image)}}"/>
+				<img src="{{=URL('default','download',args = project.header_image)}}" alt = "{{=project.name}} Image"/>
 			</div>
 
 			<div class = "overlay">
@@ -16,7 +16,7 @@
 					</div>
 					<p>{{=project.description[0:100]}}...</p>
 
-					{{=BUTTON('View Project',_class="btn btn-success")}}
+					{{=DIV('View Project',_class="btn btn-success")}}
 
 				</div>
 			</div>

@@ -171,11 +171,13 @@
 
 #transcription_form_holder {
   display: block;
-  background: #c8c8c8;
+  background: white;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   padding: 10px; }
+  #transcription_form_holder .transcription_field {
+    background: #e6e6e6; }
   #transcription_form_holder.landscape {
     position: absolute;
     width: 50%;

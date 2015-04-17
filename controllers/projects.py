@@ -235,8 +235,7 @@ def create_step4():
     open_documents, open_documents_with_transcription, open_documents_without_transcription, done_documents, \
     closed_documents = projects_module.set_up_project_page_based_on_user(project, auth)
 
-    project.fraction_transcribed_string = general_module.construct_number_of_transcribed_documents_string(project.id)
-
+    project_being_edited.fraction_transcribed_string = general_module.construct_number_of_transcribed_documents_string(project.id)
 
     data_fields_for_project = database.get_data_fields_for_project(project.id)
 
@@ -345,11 +344,13 @@ def view_document():
 
     # Need an account to login
     elif auth._get_user_id() is None:
-        response_message = "Please login to transcribe."
         args = str(project_id) + '-' + str(document_id)
-        response.message = A(response_message, _href=URL('user', 'login', vars=dict(controller_after_login='projects',
+        response_message = A("Please login to transcribe this document.", _href=URL('user', 'login', vars=dict(controller_after_login='projects',
                                                                                     page_after_login='view_document',
                                                                                     args_after_login=args)))
+        # response.message = A(response_message, _href=URL('user', 'login', vars=dict(controller_after_login='projects',
+        #                                                                             page_after_login='view_document',
+        #                                                                             args_after_login=args)))
 
     # If user has already provided a transcription
     elif database.document_has_already_been_transcribed_by_user(document_id, auth._get_user_id()):
@@ -372,11 +373,14 @@ def view_document():
     # transcription for document image)
 
     # Create dynamic form according to number of data_fields
+    data_fields = []
     for data_field in database.get_data_fields_for_project(project_id):
+        data_fields.append(data_field.name)
         fields += [Field(data_field.name, 'text',
                          comment=T(data_field.short_description), label=T(data_field.name))]
 
-    form = SQLFORM.factory(*fields, formstyle='bootstrap', _class='customer form-horizontal', table_name='customer', buttons=[])
+    form = SQLFORM.factory(*fields, formstyle='divs', table_name='transcription', buttons=[])
+
 
     if form.process().accepted:
 
@@ -393,15 +397,15 @@ def view_document():
             # new transcription
             if len(database.get_transcriptions_for_document(document_id)) >= 2:
                 document.update_record(status="Done")
-    
+
             # Insert new transcription record to insert transcribed fields
             transcription_id = db.transcription.insert(document_id=document_id, author_id=auth._get_user_id(),
                                                        status='Pending', date_created=request.now)
-    
+
             # Inserts each transcribed field in db
             for data_field in database.get_data_fields_for_project(project_id):
 
-                # If no entry for a field, put as None in db to leave out in review_document view 
+                # If no entry for a field, put as None in db to leave out in review_document view
                 field_entry = None
                 if form.vars[data_field.name] != '':
                     field_entry = form.vars[data_field.name]
@@ -424,7 +428,8 @@ def view_document():
     project.fraction_transcribed_string = general_module.construct_number_of_transcribed_documents_string(project.id)
 
     return dict(project=project, document=document, image=image, form=form, transcription=transcription,
-                accepted_transcription_with_fields = accepted_transcription_with_fields, response_message = response_message, timestring = timestring)
+                accepted_transcription_with_fields = accepted_transcription_with_fields, response_message = response_message,
+                timestring = timestring, overlay_message = response_message, data_fields = data_fields)
 
 
 @auth.requires_login(otherwise=URL('user', 'login'))
@@ -486,6 +491,7 @@ def accept_transcription():
 def reject_all_transcriptions():
     # Function for button which will reject all transcriptions for a given document
     db((db.transcription.document_id == request.vars.document_id)).update(status="Rejected")
+    db(db.document_image.id == request.vars.document_id).update(status='Open')
     db.commit()
     redirect(URL('projects', 'project',args=request.vars.project_id ), client_side=True)
 

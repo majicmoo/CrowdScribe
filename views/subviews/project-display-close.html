@@ -1,49 +1,37 @@
 <!-- This is used throughout the site to display projects in an adaptive frame -->
-<div class="project border-box-sizing manager">
+<div class="project border-box-sizing">
 
-		<div class="content border-box-sizing ">
+		<div class="content border-box-sizing">
 
 			<div class="img_container_crop">
 				<img src="{{=URL('default','download',args = project.header_image)}}"/>
 			</div>
 
-
-
 			<div class = "overlay">
-				<div class="text border-box-sizing">
-					<h3>{{=project.name}}</h3>
-					<h5>(100AD - 200AD)</h5>
+				<div class="text_container border-box-sizing">
+					<h3>{{=project.name[0:18]}}</h3>
+					<h5>{{=project.timestring if project.timestring else "No Era Specified"}}</h5>
 					<div class="tag">
 						{{=project.tag}}
 					</div>
 					<p>{{=project.description[0:100]}}...</p>
 
-					<!-- If Current User Owns the project -->
+					{{=A('View Project', _class="btn btn-success", _href= URL('projects','project', args=[project.id]))}}
 
-						<div class="project_button">
+					<!-- You can also place the project under review, or reopen it -->
+					{{if project.status == "Under Review":}}
 
-							<!-- Under Review so show Reopen Button -->
+						{{=A('Reopen Project',_class="btn btn-info", callback= URL('reopen_project_for_transcriptions',
+								vars= dict(project_id=project.id)))}}
 
+					{{elif project.status == "Open":}}
 
-						</div>
+						{{=A('Close for review',_class="btn btn-info", callback= URL('place_project_under_review',
+								vars= dict(project_id=project.id)))}}
 
-						{{=A(BUTTON('View Project',_class="btn btn-success"), _href= URL('projects','project', args=[project.id]))}}
-
-						<!-- You can also place the project under review, or reopen it -->
-						{{if project.status == "Under Review":}}
-
-							{{=A(BUTTON('Reopen Project',_class="btn btn-info"), callback= URL('reopen_project_for_transcriptions',
-									vars= dict(project_id=project.id)), _class="split")}}
-
-						{{elif project.status == "Open":}}
-
-							{{=A(BUTTON('Close for review',_class="btn btn-info"), callback= URL('place_project_under_review',
-									vars= dict(project_id=project.id)), _class="split")}}
-
-						{{pass}}
+					{{pass}}
 
 				</div>
 			</div>
-
 		</div>
 </div>

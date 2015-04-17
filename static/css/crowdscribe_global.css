@@ -84,7 +84,7 @@ form {
       /* List object widths are set manually for consistency and readability */
       width: 150px; }
     .navbar .navbar-inner .nav a:hover, .navbar .navbar-inner .nav a:focus {
-      opacity: .6; }
+      opacity: .4; }
     .navbar .navbar-inner .nav .selected a {
       /* A button is highlighted in green and bolded to signify it is the element associated with the current page */
       color: #69c72a;
@@ -112,10 +112,18 @@ form {
         font-family: "Myriad Pro", "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
         border-right: thin solid #c8c8c8; }
     .navbar .navbar-inner .nav .search {
-      width: 200px;
+      width: 500px;
       height: 50px;
-      position: relative; }
+      position: relative;
+      text-align: left; }
+      .navbar .navbar-inner .nav .search label {
+        line-height: 30px;
+        font-size: 16px;
+        font-family: "Myriad Pro", "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
+        margin: 12.5px 0 12.5px 10px;
+        display: inline-block; }
       .navbar .navbar-inner .nav .search .search_form {
+        display: inline-block;
         position: absolute;
         width: 200px;
         margin: 0; }
@@ -285,7 +293,6 @@ form {
       .projects .project .content .tag {
         color: rgba(0, 0, 0, 0.7); }
       .projects .project .content .overlay {
-        position: relative;
         width: 100%;
         color: black; }
         .projects .project .content .overlay .text_container {
@@ -294,8 +301,9 @@ form {
             line-height: 35px; }
           .projects .project .content .overlay .text_container h3, .projects .project .content .overlay .text_container h5 {
             margin: 0; }
-          .projects .project .content .overlay .text_container button {
+          .projects .project .content .overlay .text_container .btn {
             width: 100%;
+            box-sizing: border-box;
             margin-top: 5px; }
           .projects .project .content .overlay .text_container p {
             height: 60px; }
