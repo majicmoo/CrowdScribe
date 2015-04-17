@@ -172,7 +172,8 @@ class DatabaseTransactions:
     def document_has_already_been_transcribed_by_user(self, document_id, user_id):
         result = self.db((self.db.document_image.id == self.db.transcription.document_id)
                     & (self.db.document_image.id == document_id)
-                    & (self.db.transcription.author_id == user_id)).select()
+                    & (self.db.transcription.author_id == user_id)
+                    & (self.db.transcription.status == "Pending")).select()
         return True if result else False
 
     def document_transcribed_by_user(self, document_id, user_id):
