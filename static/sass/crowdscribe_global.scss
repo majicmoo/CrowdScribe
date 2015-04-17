@@ -66,6 +66,12 @@ $seperator-margin:20px;
 	box-sizing: border-box;
 }
 
+.error_container{
+	border-color:red !important;
+	border-width: 2px !important;
+	color:red;
+}
+
 .rounded_bordered_container{
   border-radius:5px;
   border-style: solid;
@@ -382,6 +388,10 @@ $seperator-margin:20px;
 			height:100%;
 			float:left;
 			text-decoration: none;
+
+			&:focus{
+				opacity:.5;
+			}
 		}
 
 		.stage{
@@ -411,6 +421,10 @@ $seperator-margin:20px;
 			background:$logo_color;
 			color:white;
 			//rgb(70, 70, 70);
+
+			&:hover{
+				opacity:.5;
+			}
 		}
 
 		.rightmost{
@@ -682,7 +696,7 @@ $seperator-margin:20px;
 	background-color:#64B58B;
 
 	#centeredmessage{
-		width:1000px;
+		// width:1000px;
 		height:$messageheight;
 		margin-left:auto;
 		margin-right:auto;

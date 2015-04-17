@@ -18,19 +18,20 @@
     <h4>Transcription Instructions</h4>
     <p>To transcribe a document simply enter your transcription for each field in the corresponding form and press 'Submit Transcription'. At least one field must be filled out to submit.</p>
     <p>To view the document in a larger format press the 'Toggle View' button to switch between portrait and landscape mode.</p>
-    <button id="toggle_button" class="btn">Toggle View</button>
+    <button id="toggle_button" class="btn">Toggle Document View Layout</button>
   </div>
 
   {{=form.custom.begin}}
 
   <div id="doc_display" class="border-box-sizing">
     <!-- Maybe highlight that image can be opened in new tab for zooming etc -->
+
     <div id="document_viewer" class="landscape">
-          <!-- <a href="{{=image}}" class="docGal" title="document"><img src="{{=image}}" alt="document"/></a> -->
           <img src="{{=image}}" alt="document"/>
     </div>
 
     <div id="transcription_form_holder" class="{{="disabled" if response.message else ""}} landscape">
+
       <h4>{{=len(data_fields) }} Fields for transcription</h4>
 
       {{if form and not accepted_transcription_with_fields and not user_submitted_transcription_with_fields:}}
@@ -92,22 +93,20 @@
   <div id="doc_submit">
 
     {{if form and not response.message and not accepted_transcription_with_fields:}}
-        <input class="btn btn-primary" type="submit" value="Submit Transcription", onClick="return confirm('Are you sure you want to submit this transcription? You can only transcribe a project once.');">
+        <input class="btn btn-success" type="submit" value="Submit Transcription", onClick="return confirm('Are you sure you want to submit this transcription? You can only transcribe a project once.');">
     {{elif accepted_transcription_with_fields:}}
       <input class="btn btn-primary" type="submit" value="Transcription Already Accepted" disabled>
     {{elif response.message:}}
       <input class="btn btn-primary" type="submit" value="Cannot Currently Submit Transcription" disabled>
     {{pass}}
 
-    {{=form.custom.end}}
-
-    <!-- return FORM(DIV(BUTTON("Clear Project", _type='submit', _class='btn btn-danger btn-block',
-                                    _onclick="return confirm('Clearing a project will wipe all of your progress."
-                                             " Continue?');"))) -->
-
   </div>
 
+  {{=form.custom.end}}
+
 </div>
+
+<!-- This simple script is used to change the layout for easier transcription. Without any javascript the document will simply display in portrait mode, not affecting accesibility. -->
 
 <script>
   $("#toggle_button").click(function(){

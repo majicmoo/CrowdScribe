@@ -335,11 +335,12 @@ def view_document():
         response.message = response_message
 
     elif project.author_id == auth._get_user_id() and transcriptions and not accepted_transcription:
-        msgstring = 'You are the owner of this project and cannot transcribe its documents. Click here to review the ' \
+        msgstring = 'You are the owner of this project and cannot transcribe its documents. It currently has ' \
                     + str(len(transcriptions)) + ' transcription' + ('s' if len(transcriptions) > 1 else '') +\
-                    ' made.'
+                    ' available for review. You must put a project under review before transcriptions can be accepted.'
         response_message = msgstring
-        response.message = A(msgstring, _href=URL('projects', 'review_document', args=[project.id, document.id]))
+        response.message = msgstring
+        # A(msgstring, _href=URL('projects', 'review_document', args=[project.id, document.id]))
 
     elif project.author_id == auth._get_user_id() and accepted_transcription:
         response_message = 'You are the owner of this project and have accepted a transcription for this document. ' \
@@ -507,10 +508,12 @@ def close_project_for_review():
     # Function for button which will close a project for review
     db((db.project.id == request.vars.project_id)).update(status="Under Review")
     db.commit()
+    session.flash = "Project Closed for Transcription Review"
     redirect(URL('projects', 'project', args=request.vars.project_id), client_side=True)
 
 def reopen_project():
     # Function for button which will close a project for review
     db((db.project.id == request.vars.project_id)).update(status="Open")
     db.commit()
+    session.flash = "Project Reopened to Public"
     redirect(URL('projects', 'project', args=request.vars.project_id), client_side=True)

@@ -46,6 +46,11 @@ form {
   -moz-box-sizing: border-box;
   box-sizing: border-box; }
 
+.error_container {
+  border-color: red !important;
+  border-width: 2px !important;
+  color: red; }
+
 .rounded_bordered_container {
   border-radius: 5px;
   border-style: solid;
@@ -250,6 +255,8 @@ form {
       height: 100%;
       float: left;
       text-decoration: none; }
+      .form_nav .inner a:focus {
+        opacity: .5; }
     .form_nav .inner .stage {
       background: #999999;
       line-height: 30px;
@@ -266,6 +273,8 @@ form {
       font-weight: bold;
       background: #5cb3d9;
       color: white; }
+      .form_nav .inner .highlighted:hover {
+        opacity: .5; }
     .form_nav .inner .rightmost {
       border-right: 0; }
 
@@ -362,7 +371,6 @@ form {
   height: 30px;
   background-color: #64B58B; }
   #message #centeredmessage {
-    width: 1000px;
     height: 30px;
     margin-left: auto;
     margin-right: auto;
