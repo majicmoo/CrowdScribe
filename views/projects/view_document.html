@@ -33,7 +33,7 @@
     <div id="transcription_form_holder" class="{{="disabled" if response.message else ""}} landscape">
       <h4>{{=len(data_fields) }} Fields for transcription</h4>
 
-      {{if form and not accepted_transcription_with_fields:}}
+      {{if form and not accepted_transcription_with_fields and not user_submitted_transcription_with_fields:}}
 
           <!-- If there is an overlay, the form should be disabled to prevent TABBING into it -->
           <fieldset {{="disabled" if overlay_message else ""}}>
@@ -57,11 +57,26 @@
 
         <h3>Accepted Transcription</h3>
 
+
         {{for field in accepted_transcription_with_fields:}}
         <h4>{{=field.data_field.name}}</h4>
         <p>
 
-          {{=field.data_field.short_description}}
+          {{=field.transcribed_field.information}}
+        </p>
+
+        {{pass}}
+
+      {{elif user_submitted_transcription_with_fields:}}
+
+        <h3>Your Transcription</h3>
+
+
+        {{for field in user_submitted_transcription_with_fields:}}
+        <h4>{{=field.data_field.name}}</h4>
+        <p>
+
+          {{=field.transcribed_field.information}}
         </p>
 
         {{pass}}

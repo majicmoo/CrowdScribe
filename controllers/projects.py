@@ -358,9 +358,7 @@ def view_document():
 
     # If user has already provided a transcription
     elif database.document_has_already_been_transcribed_by_user(document_id, auth._get_user_id()):
-        transcription = database.document_transcribed_by_user(document_id, auth._get_user_id())
-        response_message = "You have already transcribed this document. Only 1 transcription can be added per user."
-        response.message = response_message
+        response.message = "You have already transcribed this document. Only 1 transcription can be added per user. Your transcription is shown below."
 
     # If doc is no longer accepting transcriptions
     elif document.status == 'Done':
@@ -431,9 +429,14 @@ def view_document():
     timestring = general_module.construct_project_timestring(project)
     project.fraction_transcribed_string = general_module.construct_number_of_transcribed_documents_string(project.id)
 
+    user_submitted_transcription = database.get_transcriptions_for_user_and_document(document.id, auth._get_user_id())
+    user_submitted_transcription_with_fields = None
+    if user_submitted_transcription:
+        user_submitted_transcription_with_fields = database.get_transcribed_fields_for_transcription(user_submitted_transcription.id)
+
     return dict(project=project, document=document, image=image, form=form, transcription=transcription,
                 accepted_transcription_with_fields = accepted_transcription_with_fields, response_message = response_message,
-                timestring = timestring, overlay_message = response_message, data_fields = data_fields)
+                timestring = timestring, overlay_message = response_message, data_fields = data_fields, user_submitted_transcription_with_fields = user_submitted_transcription_with_fields)
 
 
 @auth.requires_login(otherwise=URL('user', 'login'))

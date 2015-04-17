@@ -241,6 +241,10 @@ class DatabaseTransactions:
         result = self.db((self.db.transcription.document_id == document_id)).select()
         return result
 
+    def get_transcriptions_for_user_and_document(self, document_id, user_id):
+        result = self.db((self.db.transcription.document_id == document_id) & (self.db.transcription.author_id == user_id)).select().first()
+        return result
+
     def get_pending_transcriptions_for_document(self, document_id):
         result = self.db((self.db.transcription.document_id == document_id)
                     & (self.db.transcription.status == "Pending")).select()

@@ -124,23 +124,28 @@ def profile():
     # Alerts
     # Number of Closed Projects that belong to user
     closed_projects = database.get_closed_projects_for_user(user_id)
-    if closed_projects is None:
-        no_of_closed_projects = 0
-    else:
-        no_of_closed_projects = len(closed_projects)
+    no_of_closed_projects = len(closed_projects)
+
+    under_review_projects = database.get_under_review_projects_for_user(user_id)
+    no_of_under_review_projects = len(under_review_projects)
+
+    open_projects_with_transcriptions = database.get_open_projects_with_transcriptions_for_user(user_id)
 
     # Number of transcriptions user has made awaiting approval
     no_of_transcriptions_awaiting_approval = 0
-    for closed_project in closed_projects:
+    for closed_project in open_projects_with_transcriptions:
         documents = database.get_documents_with_transcription_for_project(closed_project)
         for document in documents:
             transcriptions = database.get_transcriptions_for_document(document)
             for i in transcriptions:
                 no_of_transcriptions_awaiting_approval += 1
 
-    response.closed_project_alert = 'You have', no_of_closed_projects, 'projects that are currently closed for review.'
-    response.transcriptions_alert = 'You have', no_of_transcriptions_awaiting_approval, 'transcriptions awaiting approval.'
-    return dict()
+    num_user_projects = len(database.get_projects_for_user(user_id))
+
+    manager_strings = [str(no_of_under_review_projects)+' are currently under review.', str(no_of_transcriptions_awaiting_approval)+' transcriptions awaiting review across '+str(len(open_projects_with_transcriptions))+' projects.', str(no_of_closed_projects)+' have had transcriptions accepted for all their documents.']
+    num_projects_string = 'You have created '+str(num_user_projects)+' projects.'
+
+    return dict(manager_strings = manager_strings, num_projects_string = num_projects_string)
 
 @auth.requires_login(otherwise=URL('user', 'login'))
 def view_own_transcriptions():

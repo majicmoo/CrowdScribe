@@ -1,5 +1,53 @@
 @import 'colors';
 
+.transcriptions{
+
+	$padding : 10px;
+	$numprojectsinrow : 3;
+
+	overflow:auto;
+
+	padding:$padding;
+
+	$boxwidth : 230px;
+	$boxheight: 400px;
+
+	.transcription{
+		$innerpadding:10px;
+		$imgheight:200px;
+		$txtheight:100px;
+		$btnheight:40px;
+		$totalheight:400px;
+
+		float:left;
+		min-width:$boxwidth;
+		// height:$totalheight + $padding*2;
+		width:100%/$numprojectsinrow;
+
+		padding:$padding;
+		overflow: hidden;
+
+		position:relative;
+
+		.content{
+			border-radius:10px;
+
+			position:relative;
+			background-color:white;
+			overflow:hidden;
+
+			padding:$innerpadding;
+
+			a{
+				box-sizing: border-box;
+				width:100%;
+				margin-top:5px;
+			}
+		}
+	}
+
+}
+
 #button_container{
 
 	display:block;
@@ -47,10 +95,11 @@
 		.content{
 			display: inline-block;
 			vertical-align: middle;
-
-			// background:red;
-			width:300px;
 			overflow:hidden;
+
+			ul{
+				text-align:left;
+			}
 
 			p{
 				text-align:center;

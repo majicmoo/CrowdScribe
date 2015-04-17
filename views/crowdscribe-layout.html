@@ -86,7 +86,7 @@
 
           <li class="{{= 'selected' if request.function == 'profile' else ''}}">
               <a href="{{=URL(c="user",f="profile")}}">
-                  Profile
+                  {{=auth.user.username}}
               </a>
           </li>
 
@@ -98,6 +98,16 @@
 
         {{else:}}
           <!-- Not Logged In -->
+
+          <li class="{{= 'selected create_project' if request.function == 'create_step1' or
+                                                      request.function == 'create_step2' or
+                                                      request.function == 'create_step3' or
+                                                      request.function == 'create_step4'
+                                                      else 'create_project'}}">
+              <a href="{{=URL(c="projects",f="create_step1")}}">
+                  Create Project
+              </a>
+          </li>
 
           <li class="{{= 'selected' if request.function == 'register' else ''}}">
               <a href="{{=URL(c="user",f="register")}}">
@@ -123,11 +133,13 @@
   <!-- This is a centered message to be displayed permanently across certain pages if set in the controller -->
   <!-- It is used in the project display/edit pages to show the status and options a user has -->
   <!-- A background colour can be dynamically set from the controller -->
-  <div id="message" style="background-color:{{=response.messagecolour if response.messagecolour else "#69c72a"}}">
-      <div id="centeredmessage">
-          {{=response.message}}
-      </div>
-  </div>
+  {{if response.message:}}
+    <div id="message" style="background-color:{{=response.messagecolour if response.messagecolour else "#69c72a"}}">
+        <div id="centeredmessage">
+            {{=response.message}}
+        </div>
+    </div>
+  {{pass}}
 
   {{if response.flash:}}
   <div class="alert {{=session.flash_class}}">

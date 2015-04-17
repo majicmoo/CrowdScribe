@@ -1,3 +1,24 @@
+.transcriptions {
+  overflow: auto;
+  padding: 10px; }
+  .transcriptions .transcription {
+    float: left;
+    min-width: 230px;
+    width: 33.33333%;
+    padding: 10px;
+    overflow: hidden;
+    position: relative; }
+    .transcriptions .transcription .content {
+      border-radius: 10px;
+      position: relative;
+      background-color: white;
+      overflow: hidden;
+      padding: 10px; }
+      .transcriptions .transcription .content a {
+        box-sizing: border-box;
+        width: 100%;
+        margin-top: 5px; }
+
 #button_container {
   display: block;
   overflow: hidden;
@@ -29,8 +50,9 @@
     #button_container .manage_projects .content {
       display: inline-block;
       vertical-align: middle;
-      width: 300px;
       overflow: hidden; }
+      #button_container .manage_projects .content ul {
+        text-align: left; }
       #button_container .manage_projects .content p {
         text-align: center; }
       #button_container .manage_projects .content h2 {
