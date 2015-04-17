@@ -187,6 +187,9 @@ form {
   padding-top: 0 !important;
   padding-bottom: 0 !important; }
 
+.form_container #textarea_feedback {
+  margin-bottom: 10px;
+  font-size: 12px; }
 .form_container .btn {
   width: 100%; }
 .form_container .string, .form_container .text, .form_container select, .form_container .password {

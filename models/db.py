@@ -23,7 +23,7 @@ if not request.env.web2py_runtime_gae:
                     Field('name'),
                     Field('author_id', 'reference auth_user', writable=False, readable=False),
                     Field('status'),
-                    Field('description', type='text'),
+                    Field('description', type='text', length=500),
                     Field('tag', requires=IS_IN_SET(options)),
                     Field('time_period_start_date', 'integer'),
                     Field('time_period_end_date', 'integer'),

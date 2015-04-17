@@ -73,7 +73,7 @@
       padding: 10px; }
       .documents .document .content .transcriptions_made {
         position: absolute;
-        background: rgba(255, 255, 255, 0.7);
+        background: rgba(255, 255, 255, 0.85);
         width: 100%;
         top: 0;
         left: 0;
@@ -98,7 +98,8 @@
           line-height: 35px; }
         .documents .document .content .text_description h3, .documents .document .content .text_description h5 {
           margin: 0; }
-        .documents .document .content .text_description button {
+        .documents .document .content .text_description a {
+          box-sizing: border-box;
           width: 100%;
           margin-top: 5px; }
         .documents .document .content .text_description p {

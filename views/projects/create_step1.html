@@ -47,6 +47,7 @@
           Please enter a brief description of the project you are creating. This could include the intended use of the transcriptions and the style of transcription you are looking for to aid transcribers.
         </p>
         <div> {{=form.custom.widget.description}}</div>
+        <div id="textarea_feedback"></div>
 
         <label for="project_tag">Category</label>
         <div>{{=form.custom.widget.tag}}</div>
@@ -108,3 +109,20 @@
 
 
 </div>
+
+<script>
+	// This jQuery checks the character count for elements that have a specific requirement and displays them
+
+	$(document).ready(function() {
+	    var text_max = 500;
+      var text_length = $('#project_description').val().length;
+      $('#textarea_feedback').html((text_max-text_length) + ' characters remaining');
+
+	    $('#project_description').keyup(function() {
+	        var text_length = $('#project_description').val().length;
+
+	        $('#textarea_feedback').html((text_max-text_length) + ' characters remaining');
+	    });
+	});
+
+</script>

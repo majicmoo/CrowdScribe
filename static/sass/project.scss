@@ -132,7 +132,7 @@
       .transcriptions_made{
         $height:30px;
         position:absolute;
-        background:rgba(255,255,255, .7);
+        background:rgba(255,255,255, .85);
         width:100%;
         top:0;
         left:0;
@@ -171,7 +171,8 @@
 						margin:0;
 					}
 
-					button{
+					a{
+            box-sizing: border-box;
 						width:100%;
 						margin-top:5px;
 					}
