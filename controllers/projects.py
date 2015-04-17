@@ -395,7 +395,7 @@ def view_document():
         if field_entry_exists == True:
             # Check if document currently has 2 transcriptions or more and if so mark document as done before adding
             # new transcription
-            if len(database.get_transcriptions_for_document(document_id)) >= 2:
+            if len(database.get_pending_transcriptions_for_document(document_id)) >= 2:
                 document.update_record(status="Done")
 
             # Insert new transcription record to insert transcribed fields
