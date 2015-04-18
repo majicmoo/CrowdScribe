@@ -204,13 +204,11 @@ class TestDatabaseTransactions(unittest.TestCase):
         self.assertEquals(closed_projects_counted_for_user, closed_projects_counted)
 
     def test_get_projects_for_tag(self):
-        total_number_of_projects_found = 0
-        for tag in self.tags:
-            projects = database.get_projects_for_tag(tag)
-            for project in projects:
-                self.assertEquals(project.tag, tag)
-                total_number_of_projects_found += 1
-        self.assertEquals(total_number_of_projects_found, len(self.projects))
+        projects = database.get_projects_for_tag(self.tag_one)
+        self.assertEquals(len(projects), 1)
+        projects = database.get_projects_for_tag(self.tag_two)
+        self.assertEquals(len(projects), 2)
+
 
     def test_get_projects_for_keyword(self):
         total_number_of_open_projects_found_by_a = 0
@@ -248,16 +246,14 @@ class TestDatabaseTransactions(unittest.TestCase):
         self.assertTrue(is_project)
 
     def test_get_number_of_transcribed_documents_for_project(self):
-        #FIXME: DATABASE TRANSACTION BROKE
-        # # 2 transcriptions for document on project 1
-        # number_of_transcribed_documents = database.get_number_of_transcribed_documents_for_project(self.project_one)
-        # self.assertEquals(1, len(number_of_transcribed_documents))
-        #
-        #
-        # # Project 3 has no transcriptions
-        #
-        #
-        pass
+        # 2 transcriptions for document on project 1
+        number_of_transcribed_documents = database.get_number_of_transcribed_documents_for_project(self.project_one)
+        self.assertEquals(1, number_of_transcribed_documents)
+
+        # Project 3 has no transcriptions
+        number_of_transcribed_documents = database.get_number_of_transcribed_documents_for_project(self.project_three)
+        self.assertEquals(0, number_of_transcribed_documents)
+
 
     def test_get_document(self):
         number_of_documents = 0
