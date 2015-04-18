@@ -85,6 +85,7 @@ class TestDatabaseTransactions(unittest.TestCase):
                                                                     information='test')
         test_db.commit()
 
+    # database transactions
     def test_get_user(self):
         number_of_users = 0
         for user in self.users:
@@ -491,10 +492,6 @@ class TestDatabaseTransactions(unittest.TestCase):
         self.assertFalse(close_project)
 
 
-
-
-
-
     # FIXME
     def test_get_transcriptions_by_user(self):
         pass
@@ -508,17 +505,6 @@ class TestDatabaseTransactions(unittest.TestCase):
         # self.assertEquals(total_number_of_transcriptions, len(self.transcriptions))
 
 
-
-
-
-
-
-
-
-
-
-
-
     def test_get_documents_for_a_project_that_have_transcription(self):
         # FIXME: Not sure if the database transaction works for this one
         pass
@@ -529,9 +515,7 @@ class TestDatabaseTransactions(unittest.TestCase):
         #     self.assertTrue(self.exists(i.transcription.id))
 
 
-
-
-##########################
+    # SETUP #######################################################################################
     def add_user(self, username):
         user = test_db.auth_user.insert(username=username)
         self.users.append(user)
