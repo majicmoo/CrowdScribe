@@ -9,7 +9,7 @@ general_module = general_functions.GeneralFunctions(database, db)
 @auth.requires_login(otherwise=URL('user', 'login',
                      vars=dict(controller_after_login='projects', page_after_login='create_step1')))
 def create_step1():
-
+    # Controller for step 1 of the create project wizard
     # Set Page Title
     response.title = "CrowdScribe | Create Project Step 1"
 
@@ -76,7 +76,7 @@ def create_step1():
 @auth.requires_login(otherwise=URL('user', 'login',
                      vars=dict(controller_after_login='projects', page_after_login='create_step1')))
 def create_step2():
-
+    # Controller for step 2 of the create project wizard
     # Set Page Title
     response.title = "CrowdScribe | Create Project Step 2"
 
@@ -142,7 +142,7 @@ def create_step2():
 @auth.requires_login(otherwise=URL('user', 'login',
                      vars=dict(controller_after_login='projects', page_after_login='create_step1')))
 def create_step3():
-
+    # Controller for step 3 of the create project wizard
     # Set Page Title
     response.title = "CrowdScribe | Create Project Step 3"
 
@@ -203,7 +203,7 @@ def create_step3():
 @auth.requires_login(otherwise=URL('user', 'login',
                      vars=dict(controller_after_login='projects', page_after_login='create_step1')))
 def create_step4():
-
+    # Controller for step 4 of the create project wizard
     # Page Title
     response.title = "CrowdScribe | Create Project Preview"
 
@@ -244,6 +244,7 @@ def create_step4():
 
 
 def project():
+    # Controller for project
     project_id = request.args(0)
     project = database.get_project(project_id)
 
@@ -290,6 +291,7 @@ def project():
 
 
 def view_document():
+    # Controller for viewing a document, user can also make a transcription on this page.
     # Remove if project data not required in page
     project_id = request.args(0)
     project = database.get_project(project_id)
@@ -415,7 +417,7 @@ def view_document():
                 db.transcribed_field.insert(data_field_id=data_field.id, transcription_id=transcription_id,
                                             information=field_entry)
 
-            session.flash = "Succesful Transcription!"
+            session.flash = "Transcription submitted successfully"
             session.flash_class = "alert-success"
         else:
             session.flash = "Please fill in at least one field."
@@ -425,10 +427,11 @@ def view_document():
 
     image = URL('default', 'download', args=document.image)
 
-    # Time String
+    # Timestring for a project eg. (1900AD-2000AD)
     timestring = general_module.construct_project_timestring(project)
     project.fraction_transcribed_string = general_module.construct_number_of_transcribed_documents_string(project.id)
 
+    # Transcription submitted by user
     user_submitted_transcription = database.get_transcriptions_for_user_and_document(document.id, auth._get_user_id())
     user_submitted_transcription_with_fields = None
     if user_submitted_transcription:
@@ -441,7 +444,7 @@ def view_document():
 
 @auth.requires_login(otherwise=URL('user', 'login'))
 def review_document():
-
+    # Controller for owner of the project to review transcriptions on a document
     # Current Project
     project_id = request.args(0)
     project = database.get_project(project_id)
@@ -470,11 +473,13 @@ def review_document():
 
 
 def delete_field():
+    # Controller for button to delete field on create project page
     db((db.data_field.id == request.vars.field_id)).delete()
     current.db.commit()
     redirect(URL('projects', 'create_step3'), client_side=True)
 
 def delete_document():
+    # Controller for button to delete document on create project page
     db((db.document_image.id == request.vars.document_id)).delete()
     db.commit()
     redirect(URL('projects', 'create_step2'), client_side=True)
@@ -492,7 +497,8 @@ def accept_transcription():
         db(db.project.id == request.vars.project_id).update(status="Closed")
         db.commit()
 
-    redirect(URL('projects','view_document', args=[request.vars.project_id, request.vars.document_id]), client_side=True)
+    redirect(URL('projects', 'view_document', args=[request.vars.project_id, request.vars.document_id]),
+             client_side=True)
 
 
 def reject_all_transcriptions():
@@ -511,7 +517,7 @@ def close_project_for_review():
     redirect(URL('projects', 'project', args=request.vars.project_id), client_side=True)
 
 def reopen_project():
-    # Function for button which will close a project for review
+    # Function for button which will reopen a project
     db((db.project.id == request.vars.project_id)).update(status="Open")
     db.commit()
     session.flash = "Project Reopened to Public"

@@ -126,6 +126,11 @@ class ProjectFunctions:
 
     def validate_add_field_form(self, form):
 
+        alphanumeric_validator = IS_ALPHANUMERIC(error_message="Only letters and numbers allowed in field name")
+
+        if alphanumeric_validator(current.request.vars.name)[1] is not None:
+            form.errors.name = alphanumeric_validator(current.request.vars.name)[1]
+
         if (current.request.vars.short_description == "") or (current.request.vars.short_description is None):
             form.errors.short_description = "Description must not be empty"
 
