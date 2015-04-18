@@ -99,7 +99,7 @@ class DatabaseTransactions:
         for project in all_projects:
             project.number_transcribed = self.get_number_of_transcribed_documents_for_project(project.id)
 
-        all_projects.sort(lambda project: project.number_transcribed, reverse=True)
+        all_projects = all_projects.sort(lambda project: project.number_transcribed, reverse=True)
         result=all_projects
 
         return result
@@ -172,9 +172,11 @@ class DatabaseTransactions:
     def document_has_already_been_transcribed_by_user(self, document_id, user_id):
         result = self.db((self.db.document_image.id == self.db.transcription.document_id)
                     & (self.db.document_image.id == document_id)
-                    & (self.db.transcription.author_id == user_id)).select()
+                    & (self.db.transcription.author_id == user_id)
+                    & (self.db.transcription.status == "Pending")).select()
         return True if result else False
 
+    # FIXME: BAD NAMING ALSO CAN PROBABLY BE HANDELED BY ANOTHER FUNCTION
     def document_transcribed_by_user(self, document_id, user_id):
         result = self.db((self.db.document_image.id == self.db.transcription.document_id)
                     & (self.db.document_image.id == document_id)
@@ -204,9 +206,11 @@ class DatabaseTransactions:
         return result
 
     def get_document_for_transcription(self, transcription_id):
+        #FIXME: Doesn't work
         result = self.db((self.db.transcription.document_id == self.db.document_image.id)
                         & (self.db.document_image.project_id == self.db.project.id)
-                        & (self.db.transcription.id == transcription_id)).select(self.db.document_image.ALL, distinct=True)
+                        & (self.db.transcription.id == transcription_id)).select(self.db.document_image.ALL, distinct=True).first()
+        return result
 
 
    ########################################## Get Transcriptions####################################################
@@ -233,11 +237,15 @@ class DatabaseTransactions:
 
 
     def get_transcription(self, transcription_id):
-        result = self.db((self.db.transcription.id == transcription_id)).select()
+        result = self.db((self.db.transcription.id == transcription_id)).select().first()
         return result
 
     def get_transcriptions_for_document(self, document_id):
         result = self.db((self.db.transcription.document_id == document_id)).select()
+        return result
+
+    def get_transcriptions_for_user_and_document(self, document_id, user_id):
+        result = self.db((self.db.transcription.document_id == document_id) & (self.db.transcription.author_id == user_id)).select().first()
         return result
 
     def get_pending_transcriptions_for_document(self, document_id):

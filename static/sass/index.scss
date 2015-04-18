@@ -4,11 +4,16 @@
 
   $featuredheight : 300px;
 
+  &:hover, &:focus{
+    opacity:.75;
+  }
+
   width:100%;
   height:$featuredheight;
   background:$med_grey;
   overflow:hidden;
   position:relative;
+  display:block;
 
   img{
     position:absolute;
@@ -25,7 +30,7 @@
 
     .text{
       position:absolute;
-      background:$translucent_black;
+      background:rgba(0,0,0,.7);
       -webkit-box-sizing: border-box;
 		  -moz-box-sizing: border-box;
 		  box-sizing: border-box;

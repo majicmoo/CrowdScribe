@@ -77,12 +77,15 @@ class TestDatabaseTransactions(unittest.TestCase):
                                                         status=self.pending_status)
         self.transcription_two =  self.add_transcription(document_id=self.document_one, author_id=self.user_two,
                                                          status=self.accepted_status)
+        self.transcription_three =  self.add_transcription(document_id=self.document_one, author_id=self.user_two,
+                                                         status=self.rejected_status)
         # Create transcription field
         self.transcription_field_one = self.add_transcription_field(data_field_id=self.data_field_one,
                                                                     transcription_id=self.transcription_one,
                                                                     information='test')
         test_db.commit()
 
+    # database transactions
     def test_get_user(self):
         number_of_users = 0
         for user in self.users:
@@ -202,13 +205,11 @@ class TestDatabaseTransactions(unittest.TestCase):
         self.assertEquals(closed_projects_counted_for_user, closed_projects_counted)
 
     def test_get_projects_for_tag(self):
-        total_number_of_projects_found = 0
-        for tag in self.tags:
-            projects = database.get_projects_for_tag(tag)
-            for project in projects:
-                self.assertEquals(project.tag, tag)
-                total_number_of_projects_found += 1
-        self.assertEquals(total_number_of_projects_found, len(self.projects))
+        projects = database.get_projects_for_tag(self.tag_one)
+        self.assertEquals(len(projects), 1)
+        projects = database.get_projects_for_tag(self.tag_two)
+        self.assertEquals(len(projects), 2)
+
 
     def test_get_projects_for_keyword(self):
         total_number_of_open_projects_found_by_a = 0
@@ -246,16 +247,14 @@ class TestDatabaseTransactions(unittest.TestCase):
         self.assertTrue(is_project)
 
     def test_get_number_of_transcribed_documents_for_project(self):
-        #FIXME: DATABASE TRANSACTION BROKE
-        # # 2 transcriptions for document on project 1
-        # number_of_transcribed_documents = database.get_number_of_transcribed_documents_for_project(self.project_one)
-        # self.assertEquals(1, len(number_of_transcribed_documents))
-        #
-        #
-        # # Project 3 has no transcriptions
-        #
-        #
-        pass
+        # 2 transcriptions for document on project 1
+        number_of_transcribed_documents = database.get_number_of_transcribed_documents_for_project(self.project_one)
+        self.assertEquals(1, number_of_transcribed_documents)
+
+        # Project 3 has no transcriptions
+        number_of_transcribed_documents = database.get_number_of_transcribed_documents_for_project(self.project_three)
+        self.assertEquals(0, number_of_transcribed_documents)
+
 
     def test_get_document(self):
         number_of_documents = 0
@@ -392,8 +391,105 @@ class TestDatabaseTransactions(unittest.TestCase):
         transcribed = database.document_has_already_been_transcribed_by_user(self.document_two, self.user_two)
         self.assertFalse(transcribed)
 
+    #FIXME: ...
     def test_document_transcribed_by_user(self):
         pass
+
+    def test_get_documents_with_transcription_for_project_and_transcription_author(self):
+        documents = database.get_documents_with_transcription_for_project_and_transcription_author(self.project_one, self.user_two)
+        self.assertEquals(len(documents), 1)
+
+        documents = database.get_documents_with_transcription_for_project_and_transcription_author(self.project_two, self.user_two)
+        self.assertEquals(len(documents), 0)
+
+        documents = database.get_documents_with_transcription_for_project_and_transcription_author(self.project_two, self.user_one)
+        self.assertEquals(len(documents), 0)
+
+    def test_get_document_for_project_header(self):
+        document = database.get_document_for_project_header(self.project_one)
+        self.assertEquals(document,self.document_one)
+
+        document = database.get_document_for_project_header(self.project_two)
+        self.assertEquals(document, None)
+
+    def test_get_documents_with_no_transcriptions_for_project(self):
+        documents = database.get_documents_with_no_transcriptions_for_project(self.project_one)
+        self.assertEquals(len(documents), 2)
+
+        documents = database.get_documents_with_no_transcriptions_for_project(self.project_two)
+        self.assertEquals(len(documents), 0)
+
+    def test_get_document_for_transcription(self):
+        document = database.get_document_for_transcription(self.transcription_one)
+        self.assertEquals(document, self.document_one)
+        document = database.get_document_for_transcription(self.transcription_two)
+        self.assertEquals(document, self.document_one)
+
+    def test_get_pending_transcriptions_for_user(self):
+        transcriptions = database.get_pending_transcriptions_for_user(self.user_one)
+        self.assertEquals(len(transcriptions), 0)
+        transcriptions = database.get_pending_transcriptions_for_user(self.user_two)
+        self.assertEquals(len(transcriptions), 1)
+
+    def test_get_accepted_transcriptions_for_user(self):
+        transcriptions = database.get_accepted_transcriptions_for_user(self.user_one)
+        self.assertEquals(len(transcriptions), 0)
+        transcriptions = database.get_accepted_transcriptions_for_user(self.user_two)
+        self.assertEquals(len(transcriptions), 1)
+
+    def test_get_rejected_transcriptions_for_user(self):
+        transcriptions = database.get_rejected_transcriptions_for_user(self.user_one)
+        self.assertEquals(len(transcriptions), 0)
+        transcriptions = database.get_rejected_transcriptions_for_user(self.user_two)
+        self.assertEquals(len(transcriptions), 1)
+
+    def test_get_transcription(self):
+        for transcription in self.transcriptions:
+            temp = database.get_transcription(transcription.id)
+            self.assertEquals(temp, transcription)
+
+    def test_get_transcriptions_for_document(self):
+        transcriptions = database.get_transcriptions_for_document(self.document_one)
+        self.assertEquals(len(transcriptions), 3)
+        transcriptions = database.get_transcriptions_for_document(self.document_two)
+        self.assertEquals(len(transcriptions), 0)
+
+    def test_get_pending_transcriptions_for_document(self):
+        transcriptions = database.get_pending_transcriptions_for_document(self.document_one)
+        self.assertEquals(len(transcriptions), 1)
+        transcriptions = database.get_pending_transcriptions_for_document(self.document_two)
+        self.assertEquals(len(transcriptions), 0)
+
+    def test_get_accepted_transcription_for_document(self):
+        transcription = database.get_accepted_transcription_for_document(self.document_one)
+        self.assertEquals(transcription, self.transcription_two)
+        transcription = database.get_accepted_transcription_for_document(self.document_two)
+        self.assertEquals(transcription, None)
+
+    def test_get_data_fields_for_project(self):
+        total_number_of_data_fields = 0
+        for project in self.projects:
+            data_fields = database.get_data_fields_for_project(project)
+            for data_field in data_fields:
+                total_number_of_data_fields += 1
+                self.assertEquals(data_field.project_id, self.project_one)
+        self.assertEquals(total_number_of_data_fields, len(self.fields))
+
+    def test_get_transcribed_fields_for_transcription(self):
+        total_number_of_transcribed_fields = 0
+        for transcription in self.transcriptions:
+            transcribed_fields = database.get_transcribed_fields_for_transcription(transcription)
+            for transcribed_field in transcribed_fields:
+                # Check right transcription ID
+                self.assertEquals(transcribed_field.transcribed_field.transcription_id, transcription)
+                total_number_of_transcribed_fields += 1
+        self.assertEquals(len(self.transcription_fields), total_number_of_transcribed_fields)
+
+    def test_project_can_be_closed_for_review(self):
+        close_project = database.project_can_be_closed_for_review(self.project_one)
+        self.assertTrue(close_project)
+        close_project = database.project_can_be_closed_for_review(self.project_two)
+        self.assertFalse(close_project)
 
 
     # FIXME
@@ -408,36 +504,6 @@ class TestDatabaseTransactions(unittest.TestCase):
         #
         # self.assertEquals(total_number_of_transcriptions, len(self.transcriptions))
 
-    def test_get_transcribed_fields_for_transcription(self):
-        total_number_of_transcribed_fields = 0
-        for transcription in self.transcriptions:
-            transcribed_fields = database.get_transcribed_fields_for_transcription(transcription)
-            for transcribed_field in transcribed_fields:
-                # Check right transcription ID
-                self.assertEquals(transcribed_field.transcribed_field.transcription_id, transcription)
-                total_number_of_transcribed_fields += 1
-        self.assertEquals(len(self.transcription_fields), total_number_of_transcribed_fields)
-
-    def test_get_data_fields_for_project(self):
-        total_number_of_data_fields = 0
-        for project in self.projects:
-            data_fields = database.get_data_fields_for_project(project)
-            for data_field in data_fields:
-                total_number_of_data_fields += 1
-                self.assertEquals(data_field.project_id, self.project_one)
-        self.assertEquals(total_number_of_data_fields, len(self.fields))
-
-
-    def test_get_transcriptions_for_document(self):
-        for document in self.documents:
-            transcriptions = database.get_transcriptions_for_document(document)
-            for transcription in transcriptions:
-                self.assertEquals(transcription.document_id, self.document_one)
-
-
-
-
-
 
     def test_get_documents_for_a_project_that_have_transcription(self):
         # FIXME: Not sure if the database transaction works for this one
@@ -449,9 +515,7 @@ class TestDatabaseTransactions(unittest.TestCase):
         #     self.assertTrue(self.exists(i.transcription.id))
 
 
-
-
-##########################
+    # SETUP #######################################################################################
     def add_user(self, username):
         user = test_db.auth_user.insert(username=username)
         self.users.append(user)

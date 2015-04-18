@@ -9,9 +9,9 @@ general_module = general_functions.GeneralFunctions(database, db)
 @auth.requires_login(otherwise=URL('user', 'login',
                      vars=dict(controller_after_login='projects', page_after_login='create_step1')))
 def create_step1():
-
+    # Controller for step 1 of the create project wizard
     # Set Page Title
-    response.title = "Create - Step 1"
+    response.title = "CrowdScribe | Create Project Step 1"
 
     # Set response flash display to error
     session.flash_class = "alert-error"
@@ -30,9 +30,6 @@ def create_step1():
 
     # Data needed to prepopulate form is retrieved
     prepopulation_data = projects_module.retrieve_prepopulated_data_for_create_step_1(project_being_edited)
-
-    # Initialise select box for tag
-    form.vars.tag = "Sport"
 
     # Prepopulate form
     if prepopulation_data is not None:
@@ -69,6 +66,7 @@ def create_step1():
     if clear_project.validate(formname="form_two"):
         # If clear project button is pressed, reset project wizard
         session.project_being_created = None
+        db((db.project.author_id == auth._get_user_id()) &(db.project.status == "Being Created")).delete()
         redirect(URL('projects', 'create_step1'))
 
     return dict(form=form, clear_project=clear_project, project_being_edited=project_being_edited,
@@ -78,9 +76,9 @@ def create_step1():
 @auth.requires_login(otherwise=URL('user', 'login',
                      vars=dict(controller_after_login='projects', page_after_login='create_step1')))
 def create_step2():
-
+    # Controller for step 2 of the create project wizard
     # Set Page Title
-    response.title = "Create - Step 2"
+    response.title = "CrowdScribe | Create Project Step 2"
 
     # Retrieve project and set session project variable to allow for prepopulating.
     project_id, project_being_edited = projects_module.check_if_step1_was_skipped_and_redirect_if_so(session)
@@ -127,6 +125,7 @@ def create_step2():
     # If clear project button is pressed, reset project wizard
     if clear_project.validate(formname="form_four"):
         session.project_being_created = None
+        db((db.project.author_id == auth._get_user_id()) &(db.project.status == "Being Created")).delete()
         redirect(URL('projects', 'create_step1'))
 
     # Retrieve documents that project already has.
@@ -143,9 +142,9 @@ def create_step2():
 @auth.requires_login(otherwise=URL('user', 'login',
                      vars=dict(controller_after_login='projects', page_after_login='create_step1')))
 def create_step3():
-
+    # Controller for step 3 of the create project wizard
     # Set Page Title
-    response.title = "Create - Step 3"
+    response.title = "CrowdScribe | Create Project Step 3"
 
     # Retrieve project and set session project variable to allow for prepopulating.
     project_id, project_being_edited = projects_module.check_if_step1_was_skipped_and_redirect_if_so(session)
@@ -166,13 +165,11 @@ def create_step3():
     clear_project = projects_module.create_clear_project_form()
 
     # Process form that allows fields to be added.
-    if add_fields_form.process(formname="form_one", onvalidate=projects_module.validate_add_field_form).accepted:
+    if add_fields_form.validate(formname="form_one", onvalidation=projects_module.validate_add_field_form):
         db.data_field.insert(name=request.vars.name, short_description=request.vars.short_description,
                              project_id=project_id)
         db.commit()
         session.project_being_created = project_id
-    elif add_fields_form.errors:
-        projects_module.validate_add_field_form(add_fields_form)
 
     # Move project forward to review when button clicked
     if review_project_form.process(formname="form_two").accepted:
@@ -190,6 +187,7 @@ def create_step3():
     # Reset Project wizard when button clicked.
     if clear_project.validate(formname="form_four"):
         session.project_being_created = None
+        db((db.project.author_id == auth._get_user_id()) &(db.project.status == "Being Created")).delete()
         redirect(URL('projects', 'create_step1'))
 
     # Retrieve document and fields added to project
@@ -202,14 +200,12 @@ def create_step3():
                 clear_project=clear_project, step_available=step_available, project_name=project_being_edited.name)
 
 
-
-
 @auth.requires_login(otherwise=URL('user', 'login',
                      vars=dict(controller_after_login='projects', page_after_login='create_step1')))
 def create_step4():
-
+    # Controller for step 4 of the create project wizard
     # Page Title
-    response.title = "Create - Review"
+    response.title = "CrowdScribe | Create Project Preview"
 
     project_id, project_being_edited = projects_module.check_if_step1_was_skipped_and_redirect_if_so(session)
     documents_added = database.get_documents_for_project(project_id)
@@ -225,6 +221,7 @@ def create_step4():
 
     if clear_project.validate(formname="form_two"):
         session.project_being_created = None
+        db((db.project.author_id == auth._get_user_id()) &(db.project.status == "Being Created")).delete()
         redirect(URL('projects', 'create_step1'))
 
     # Time String
@@ -235,8 +232,7 @@ def create_step4():
     open_documents, open_documents_with_transcription, open_documents_without_transcription, done_documents, \
     closed_documents = projects_module.set_up_project_page_based_on_user(project, auth)
 
-    project.fraction_transcribed_string = general_module.construct_number_of_transcribed_documents_string(project.id)
-
+    project_being_edited.fraction_transcribed_string = general_module.construct_number_of_transcribed_documents_string(project.id)
 
     data_fields_for_project = database.get_data_fields_for_project(project.id)
 
@@ -248,6 +244,7 @@ def create_step4():
 
 
 def project():
+    # Controller for project
     project_id = request.args(0)
     project = database.get_project(project_id)
 
@@ -255,12 +252,15 @@ def project():
     if project is None:
         redirect(URL('default', 'index'))
 
+    if (project.status == "Closed") and (project.author_id != auth._get_user_id()):
+        redirect(URL('default', 'index'))
+
     # Initialise Variables
     open_documents, open_documents_with_transcription, open_documents_without_transcription, done_documents, \
     closed_documents = projects_module.set_up_project_page_based_on_user(project, auth)
 
     # Page Title
-    response.title = project.name
+    response.title = "CrowdScribe | " + project.name
 
     # documents_for_project = database.get_open_documents_for_project(project.id)
     data_fields_for_project = database.get_data_fields_for_project(project.id)
@@ -291,15 +291,19 @@ def project():
 
 
 def view_document():
+    # Controller for viewing a document, user can also make a transcription on this page.
     # Remove if project data not required in page
     project_id = request.args(0)
     project = database.get_project(project_id)
 
     # Page Title
-    response.title = project.name + ' | Document'
+    response.title = "CrowdScribe | " + project.name + ' Document'
 
     # Redirect if null project.
     if project is None:
+        redirect(URL('default', 'index'))
+
+    if (project.status == "Closed") and (project.author_id != auth._get_user_id()):
         redirect(URL('default', 'index'))
 
     # Get Doc from URL args
@@ -310,9 +314,10 @@ def view_document():
     # If null doc, go back to the project
     if document is None:
         redirect(URL('projects', 'project', args=[project_id]))
-    elif document.status == "Closed":
+    elif (document.status == "Closed") and (project.author_id == auth._get_user_id()) :
         accepted_transcription = database.get_accepted_transcription_for_document(document.id)
         accepted_transcription_with_fields = database.get_transcribed_fields_for_transcription(accepted_transcription.id)
+
 
     document.number_of_transcriptions = len(database.get_pending_transcriptions_for_document(document.id))
 
@@ -332,11 +337,12 @@ def view_document():
         response.message = response_message
 
     elif project.author_id == auth._get_user_id() and transcriptions and not accepted_transcription:
-        msgstring = 'You are the owner of this project and cannot transcribe its documents. Click here to review the ' \
+        msgstring = 'You are the owner of this project and cannot transcribe its documents. It currently has ' \
                     + str(len(transcriptions)) + ' transcription' + ('s' if len(transcriptions) > 1 else '') +\
-                    ' made.'
+                    ' available for review. You must put a project under review before transcriptions can be accepted.'
         response_message = msgstring
-        response.message = A(msgstring, _href=URL('projects', 'review_document', args=[project.id, document.id]))
+        response.message = msgstring
+        # A(msgstring, _href=URL('projects', 'review_document', args=[project.id, document.id]))
 
     elif project.author_id == auth._get_user_id() and accepted_transcription:
         response_message = 'You are the owner of this project and have accepted a transcription for this document. ' \
@@ -345,17 +351,17 @@ def view_document():
 
     # Need an account to login
     elif auth._get_user_id() is None:
-        response_message = "Please login to transcribe."
         args = str(project_id) + '-' + str(document_id)
-        response.message = A(response_message, _href=URL('user', 'login', vars=dict(controller_after_login='projects',
+        response_message = A("Please login to transcribe this document.", _href=URL('user', 'login', vars=dict(controller_after_login='projects',
                                                                                     page_after_login='view_document',
                                                                                     args_after_login=args)))
+        # response.message = A(response_message, _href=URL('user', 'login', vars=dict(controller_after_login='projects',
+        #                                                                             page_after_login='view_document',
+        #                                                                             args_after_login=args)))
 
     # If user has already provided a transcription
     elif database.document_has_already_been_transcribed_by_user(document_id, auth._get_user_id()):
-        transcription = database.document_transcribed_by_user(document_id, auth._get_user_id())
-        response_message = "You have already transcribed this document. Only 1 transcription can be added per user."
-        response.message = response_message
+        response.message = "You have already transcribed this document. Only 1 transcription can be added per user. Your transcription is shown below."
 
     # If doc is no longer accepting transcriptions
     elif document.status == 'Done':
@@ -372,11 +378,14 @@ def view_document():
     # transcription for document image)
 
     # Create dynamic form according to number of data_fields
+    data_fields = []
     for data_field in database.get_data_fields_for_project(project_id):
+        data_fields.append(data_field.name)
         fields += [Field(data_field.name, 'text',
                          comment=T(data_field.short_description), label=T(data_field.name))]
 
-    form = SQLFORM.factory(*fields, formstyle='bootstrap', _class='customer form-horizontal', table_name='customer', buttons=[])
+    form = SQLFORM.factory(*fields, formstyle='divs', table_name='transcription', buttons=[])
+
 
     if form.process().accepted:
 
@@ -391,17 +400,17 @@ def view_document():
         if field_entry_exists == True:
             # Check if document currently has 2 transcriptions or more and if so mark document as done before adding
             # new transcription
-            if len(database.get_transcriptions_for_document(document_id)) >= 2:
+            if len(database.get_pending_transcriptions_for_document(document_id)) >= 2:
                 document.update_record(status="Done")
-    
+
             # Insert new transcription record to insert transcribed fields
             transcription_id = db.transcription.insert(document_id=document_id, author_id=auth._get_user_id(),
                                                        status='Pending', date_created=request.now)
-    
+
             # Inserts each transcribed field in db
             for data_field in database.get_data_fields_for_project(project_id):
 
-                # If no entry for a field, put as None in db to leave out in review_document view 
+                # If no entry for a field, put as None in db to leave out in review_document view
                 field_entry = None
                 if form.vars[data_field.name] != '':
                     field_entry = form.vars[data_field.name]
@@ -409,7 +418,7 @@ def view_document():
                 db.transcribed_field.insert(data_field_id=data_field.id, transcription_id=transcription_id,
                                             information=field_entry)
 
-            session.flash = "Succesful Transcription!"
+            session.flash = "Transcription submitted successfully"
             session.flash_class = "alert-success"
         else:
             session.flash = "Please fill in at least one field."
@@ -419,22 +428,29 @@ def view_document():
 
     image = URL('default', 'download', args=document.image)
 
-    # Time String
+    # Timestring for a project eg. (1900AD-2000AD)
     timestring = general_module.construct_project_timestring(project)
     project.fraction_transcribed_string = general_module.construct_number_of_transcribed_documents_string(project.id)
 
+    # Transcription submitted by user
+    user_submitted_transcription = database.get_transcriptions_for_user_and_document(document.id, auth._get_user_id())
+    user_submitted_transcription_with_fields = None
+    if user_submitted_transcription:
+        user_submitted_transcription_with_fields = database.get_transcribed_fields_for_transcription(user_submitted_transcription.id)
+
     return dict(project=project, document=document, image=image, form=form, transcription=transcription,
-                accepted_transcription_with_fields = accepted_transcription_with_fields, response_message = response_message, timestring = timestring)
+                accepted_transcription_with_fields = accepted_transcription_with_fields, response_message = response_message,
+                timestring = timestring, overlay_message = response_message, data_fields = data_fields, user_submitted_transcription_with_fields = user_submitted_transcription_with_fields)
 
 
 @auth.requires_login(otherwise=URL('user', 'login'))
 def review_document():
-
+    # Controller for owner of the project to review transcriptions on a document
     # Current Project
     project_id = request.args(0)
     project = database.get_project(project_id)
 
-    response.title = project.name + ' | Review'
+    response.title = "CrowdScribe | " + project.name + ' Document Review'
 
     # Current Document
     document_id = request.args(1)
@@ -458,11 +474,13 @@ def review_document():
 
 
 def delete_field():
+    # Controller for button to delete field on create project page
     db((db.data_field.id == request.vars.field_id)).delete()
     current.db.commit()
     redirect(URL('projects', 'create_step3'), client_side=True)
 
 def delete_document():
+    # Controller for button to delete document on create project page
     db((db.document_image.id == request.vars.document_id)).delete()
     db.commit()
     redirect(URL('projects', 'create_step2'), client_side=True)
@@ -480,12 +498,14 @@ def accept_transcription():
         db(db.project.id == request.vars.project_id).update(status="Closed")
         db.commit()
 
-    redirect(URL('projects','view_document', args=[request.vars.project_id, request.vars.document_id]), client_side=True)
+    redirect(URL('projects', 'view_document', args=[request.vars.project_id, request.vars.document_id]),
+             client_side=True)
 
 
 def reject_all_transcriptions():
     # Function for button which will reject all transcriptions for a given document
     db((db.transcription.document_id == request.vars.document_id)).update(status="Rejected")
+    db(db.document_image.id == request.vars.document_id).update(status='Open')
     db.commit()
     redirect(URL('projects', 'project',args=request.vars.project_id ), client_side=True)
 
@@ -494,10 +514,12 @@ def close_project_for_review():
     # Function for button which will close a project for review
     db((db.project.id == request.vars.project_id)).update(status="Under Review")
     db.commit()
+    session.flash = "Project Closed for Transcription Review"
     redirect(URL('projects', 'project', args=request.vars.project_id), client_side=True)
 
 def reopen_project():
-    # Function for button which will close a project for review
+    # Function for button which will reopen a project
     db((db.project.id == request.vars.project_id)).update(status="Open")
     db.commit()
+    session.flash = "Project Reopened to Public"
     redirect(URL('projects', 'project', args=request.vars.project_id), client_side=True)

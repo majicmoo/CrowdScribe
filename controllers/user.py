@@ -1,25 +1,24 @@
 import database_transactions as database_transactions
 database = database_transactions.DatabaseTransactions(db)
-
+import search_functions as search_functions
+import general_functions as general_functions
+general_module = general_functions.GeneralFunctions(database, db)
 
 def register():
-
+    # Controller which allows a user to register on Crowdscribe
     # Window Title
-    response.title = 'Register'
+    response.title = 'CrowdScribe | Register'
 
     # Allow registered users to create accounts in debug mode for quicker testing
     if auth.is_logged_in():
         redirect(URL(c='user',f='profile'))
 
+    # Register form
     form = SQLFORM(db.auth_user, formstyle="divs")
-
-    # Placeholder Values
-    #form.custom.widget.first_name["_placeholder"] = "Enter First Name"
-    #form.custom.widget.last_name["_placeholder"] = "Enter Last Name"
-    #form.custom.widget.email["_placeholder"] = "Enter Email"
     form.custom.widget.username["_placeholder"] = "Enter Unique Username"
     form.custom.widget.password["_placeholder"] = "Enter Password"
 
+    # Validate register form
     if form.validate(formname="form_one", onvalidation=validate_register_form):
         userid = auth.get_or_create_user(form.vars)
         auth.login_bare(request.vars.username, request.vars.password)
@@ -32,7 +31,7 @@ def register():
     return dict(form = form)
 
 def validate_register_form(form):
-
+    # Validate register form based on conditions below
     # Validates if field is empty
     empty_validator = IS_NOT_EMPTY(error_message=T("must not be empty"))
 
@@ -42,6 +41,7 @@ def validate_register_form(form):
     # Validates if username already exists
     username_validator = IS_NOT_IN_DB(db, 'auth_user.username', error_message="Username has already been taken")
 
+    # Call validators
     if empty_validator(request.vars.username)[1] is not None:
         form.errors.username = "Username " + empty_validator(request.vars.username)[1]
     else:
@@ -51,94 +51,73 @@ def validate_register_form(form):
     if empty_validator(request.vars.password)[1] is not None:
         form.errors.password = "Password " + empty_validator(request.vars.password)[1]
 
-    print request.vars
     if confirm_password_validator(request.vars.confirm_password)[1] is not None:
-        print "here"
         form.errors.password = confirm_password_validator(request.vars.confirm_password)[1]
 
 
-
 def login():
+    # Controller for logging in an already registered user.
     # Window Title
-    response.title = 'Login'
+    response.title = 'CrowdScribe | Login'
 
+    # Redirects based on request arguments
     if request.vars.controller_after_login and request.vars.page_after_login and request.vars.args_after_login:
         request.vars.args_after_login = request.vars.args_after_login.split('-')
         auth.settings.login_next = URL(request.vars.controller_after_login, request.vars.page_after_login,
                                        args=request.vars.args_after_login)
-        print"Got here!"
     elif request.vars.controller_after_login and request.vars.page_after_login:
         auth.settings.login_next = URL(request.vars.controller_after_login, request.vars.page_after_login)
-        print"or here!"
     else:
         auth.settings.login_next = URL('default', 'index')
-        print"even here!"
 
-    #auth.settings.login_userfield = 'username'
-    # if request.vars.username and not IS_EMAIL()(request.vars.username)[1]:
-    # 	# If this doesnt work, check if its an email.
-    # 	auth.settings.login_userfield = 'email'
-    # 	request.vars.email = request.vars.username
-    # 	request.post_vars.email = request.vars.email
-    # 	request.vars.username = None
-    # 	request.post_vars.username = None
-    # if request.vars.controller_after_login and request.vars.page_after_login:
-    #     print URL(request.vars.controller_after_login, request.vars.page_after_login)
-    #
-    #     auth.settings.login_next = URL(request.vars.controller_after_login, request.vars.page_after_login)
-
+    # Login form
     form = auth.login(onaccept=remove_projects_being_created)
     form.custom.widget.username["_placeholder"] = "Username"
     form.custom.widget.password["_placeholder"] = "Password"
 
-    # FORM(LEGEND('Login'),
-    #             INPUT(_type='text', _name='username', _class = 'input-block-level', _placeholder='username',
-    #                   requires=IS_NOT_EMPTY( error_message=T("Please enter a username"))),
-    #             INPUT(_type='password',_name='password', _class = 'input-block-level', _placeholder='password',
-    #                   requires=IS_NOT_EMPTY(error_message=T("Please enter a password"))),
-    #             INPUT(_type='submit', _class='btn btn-primary', _value='Login'),
-    #             A('Register',_href=URL('register'), _role='button', _class='btn btn-info'))
-
-
-
-            # Checks whether user was sent to login form when trying to pledge. If true, the user is redirected back
-            # to the pledge they was trying to make.
-
     return dict(form=form)
 
 def remove_projects_being_created(form):
+    # Function to remove any projects that were previously being by user when re-logging in
     if auth._get_user_id():
         db((db.project.author_id == auth._get_user_id()) &(db.project.status == "Being Created")).delete()
 
 @auth.requires_login(otherwise=URL('user', 'login'))
 def profile():
+    # Controller for user profile
+    # Current users ID
     user_id = auth._get_user_id()
     if user_id is None:
         redirect(URL('default','index'))
-
+    # Current user
     user = database.get_user(user_id)
-    response.title = user.username
+    response.title = 'CrowdScribe | ' + user.username
 
     # Alerts
     # Number of Closed Projects that belong to user
     closed_projects = database.get_closed_projects_for_user(user_id)
-    if closed_projects is None:
-        no_of_closed_projects = 0
-    else:
-        no_of_closed_projects = len(closed_projects)
+    no_of_closed_projects = len(closed_projects)
+
+    under_review_projects = database.get_under_review_projects_for_user(user_id)
+    no_of_under_review_projects = len(under_review_projects)
+
+    open_projects_with_transcriptions = database.get_open_projects_with_transcriptions_for_user(user_id)
 
     # Number of transcriptions user has made awaiting approval
     no_of_transcriptions_awaiting_approval = 0
-    for closed_project in closed_projects:
+    for closed_project in open_projects_with_transcriptions:
         documents = database.get_documents_with_transcription_for_project(closed_project)
         for document in documents:
             transcriptions = database.get_transcriptions_for_document(document)
             for i in transcriptions:
                 no_of_transcriptions_awaiting_approval += 1
 
-    response.closed_project_alert = 'You have', no_of_closed_projects, 'projects that are currently closed for review.'
-    response.transcriptions_alert = 'You have', no_of_transcriptions_awaiting_approval, 'transcriptions awaiting approval.'
-    return dict()
+    num_user_projects = len(database.get_projects_for_user(user_id))
+
+    manager_strings = [str(no_of_under_review_projects)+' are currently under review.', str(no_of_transcriptions_awaiting_approval)+' transcriptions awaiting review across '+str(len(open_projects_with_transcriptions))+' projects.', str(no_of_closed_projects)+' have had transcriptions accepted for all their documents.']
+    num_projects_string = 'You have created '+str(num_user_projects)+' projects.'
+
+    return dict(manager_strings = manager_strings, num_projects_string = num_projects_string)
 
 @auth.requires_login(otherwise=URL('user', 'login'))
 def view_own_transcriptions():
@@ -174,6 +153,8 @@ def manage_projects():
     # Under Review Projects
     under_review_projects = database.get_under_review_projects_for_user(user_id)
 
+    response.title = 'CrowdScribe | Manage Projects'
+
     # Have Transcriptions and open Projects
     open_projects_with_transcriptions = database.get_open_projects_with_transcriptions_for_user(user_id)
     open_projects_with_transcriptions = attach_header_image_to_projects(open_projects_with_transcriptions)
@@ -184,10 +165,10 @@ def manage_projects():
     # All documents transcribed - closed
     closed_projects = database.get_closed_projects_for_user(user_id)
 
-    return dict(under_review_projects=attach_header_image_to_projects(under_review_projects),
-                open_projects_with_transcriptions=attach_header_image_to_projects(open_projects_with_transcriptions),
-                open_projects_without_transcriptions=attach_header_image_to_projects(open_projects_without_transcriptions),
-                closed_projects=attach_header_image_to_projects(closed_projects))
+    return dict(under_review_projects=general_module.attach_all_information_to_projects(under_review_projects),
+                open_projects_with_transcriptions=general_module.attach_all_information_to_projects(open_projects_with_transcriptions),
+                open_projects_without_transcriptions=general_module.attach_all_information_to_projects(open_projects_without_transcriptions),
+                closed_projects=general_module.attach_all_information_to_projects(closed_projects))
 
 
 def place_project_under_review():

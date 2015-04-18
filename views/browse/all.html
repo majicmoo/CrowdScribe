@@ -7,13 +7,12 @@
   <!-- Loop through all categories numerically. Need the index for the link redirect -->
   <div class = "category_holder">
     {{for category in categories:}}
-      <a href = "{{=URL('browse','category',args = categories.index(category))}}">
+
         <div class = "category_button border-box-sizing">
-          <div class="content">
+          <a href = "{{=URL('browse','category',args = categories.index(category))}}" class="content">
             {{=category}}
-          </div>
+          </a>
         </div>
-      </a>
     {{pass}}
   </div>
 

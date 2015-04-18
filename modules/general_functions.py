@@ -4,6 +4,7 @@ import database_transactions as database_transactions
 class GeneralFunctions:
 
     def __init__(self, database, db):
+        # database is database_transactions module
         self.database=database
         self.db = db
 

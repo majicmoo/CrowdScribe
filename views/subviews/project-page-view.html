@@ -1,20 +1,28 @@
 <div id = "project_header">
 
-  <img src="{{=header_image}}"/>
+  <img src="{{=header_image}}" alt = "Header image for {{=project.name}}"/>
 
-  <div class = "overlay">
-    <h1>{{=project.name}}</h1>
-    <h3>{{=project.tag}} </h3>
-    <h4>{{=timestring}}</h4>
-    <div id = "progress">
-      <h4> Documents Transcribed</h4>
+  <div class = "overlay border-box-sizing">
+    <div class = "header_content">
+      <h1>{{=project.name}}</h1>
+      <h3>{{=project.tag}} </h3>
+      {{if timestring:}}<h4>{{=timestring}}</h4>{{pass}}
+      <div id = "progress">
+        <h4>{{=project.fraction_transcribed_string}} Documents Transcribed</h4>
+      </div>
+      <div>
+        {{if auth._get_user_id() == project.author_id:}}
+          You are this projects owner, <b>{{=project.author_id.username}}</b>. It is currently <b>{{=project.status}}</b>.
+        {{else:}}
+          Created by {{=project.author_id.username}}
+        {{pass}}
+      </div>
     </div>
-    Created by {{=project.author_id.username}}
   </div>
 
 </div>
 
-{{if auth._get_user_id() == project.author_id:}}
+{{if auth._get_user_id() == project.author_id and project.status != "Being Created":}}
   <div class="padded_container form_container no_bottom_padding">
     <div class="rounded_bordered_container no_margin">
       <h4>Project Management</h4>
@@ -22,7 +30,7 @@
       <!-- If the project is under review show an option to reopen it -->
       {{if project.status == "Open":}}
         <p>You are the owner of this project : It is currently <b>Open</b>. It is viewable by the public and its documents can receive transcriptions. You cannot review transcriptions whilst a project is open.</p>
-        {{=A(BUTTON('Close For Transcription Review',_class="btn btn-info"),
+        {{=A(BUTTON('Place this Project under Review',_class="btn btn-danger"),
             callback= URL('close_project_for_review',
             vars= dict(project_id=project.id)))}}
       {{pass}}
@@ -30,7 +38,7 @@
       <!-- If the project is under review show an option to reopen it -->
       {{if project.status == "Under Review":}}
         <p>You are the owner of this project : It is currently <b>Under Review</b>. It is unavailable to the public and documents can not currently receive transcriptions. You can review transcriptions for a document below.</p>
-        {{=A(BUTTON('Open Project For Transcriptions',_class="btn btn-info"),
+        {{=A(BUTTON('Open Project For Transcriptions',_class="btn btn-success"),
             callback= URL('reopen_project',
             vars= dict(project_id=project.id)), _class="split")}}
       {{pass}}
@@ -38,10 +46,6 @@
       <!-- If the project is closed -->
       {{if project.status == "Closed":}}
         <p>You are the owner of this project : It is currently <b>Closed</b>. You have accepted transcriptions for every document, and the project is now only visible to you. You can still view your documents and the transcriptions you have accepted.</p>
-      {{pass}}
-
-      {{if project.status == "Being Created":}}
-        <p>You are the owner of this project : It is currently <b>Being Created</b>. Once you have reviewed it you can publish it below.</p>
       {{pass}}
 
     </div>
@@ -55,6 +59,20 @@
 
 <div class="line_seperator"></div>
 
+<div class="padded_container form_container no_bottom_padding no_top_padding">
+  <h4>Fields for Transcription</h4>
+  <p>Each document in this project is looking to have the following list of {{=len(data_fields_for_project)}} attributes transcribed. Further details can be found within each document.</p>
+  <ul>
+    {{for field in data_fields_for_project:}}
+      <li>
+        {{=field.name}}
+      </li>
+    {{pass}}
+  </ul>
+</div>
+
+<div class="line_seperator"></div>
+
 <div class="documents">
 
     <!--Project Owner-->
@@ -62,7 +80,7 @@
 
         <!--Open Documents With Transcription: Project owner -->
         {{if open_documents_with_transcription:}}
-          <h4>Open Documents With Transcription</h4>
+          <h4>Open Documents With Transcriptions</h4>
           <p>
             These documents are currently available for the public to transcribe, and have one or more transcription already.
           </p>
@@ -89,12 +107,13 @@
         {{if closed_documents:}}
           <h4>Closed Documents</h4>
           <p>
-            These documents are currently under review and cannot be viewed by the public, or have any transcriptions made on them.
+            These documents have accepted transcriptions and cannot be viewed by the public, or have any more transcriptions made on them.
           </p>
 
           {{for document in closed_documents:}}
               {{include "subviews/document-display.html"}}
           {{pass}}
+          <div class="line_seperator"></div>
         {{pass}}
 
     <!--Not Project Owner-->
@@ -109,34 +128,19 @@
         {{for document in open_documents:}}
             {{include "subviews/document-display.html"}}
         {{pass}}
+        <div class="line_seperator"></div>
       {{pass}}
 
     {{pass}}
 
     {{if done_documents:}}
+      <!-- <div class="line_seperator"></div> -->
       <!--Done Documents : Everyone-->
-      <h3>Done Documents</h3>
-      These documents have had a transcription accepted.
+      <h4>Documents Under Review</h4>
+      <p>These documents currently have the maximum number of transcriptions or are Under Review.</p>
       {{for document in done_documents:}}
           {{include "subviews/document-display.html"}}
       {{pass}}
     {{pass}}
 
-</div>
-
-<div class="line_seperator"></div>
-
-<div class="padded_container form_container no_top_padding">
-  <h4>Fields for Transcription</h4>
-  <p>
-    Each document in this project is looking to have the following fields transcribed.
-  </p>
-
-  <div class="fields">
-    {{for field in data_fields_for_project:}}
-      <!-- {{=field.name}}
-      {{=field.short_description}} -->
-      {{include "subviews/field-display.html"}}
-    {{pass}}
-  </div>
 </div>

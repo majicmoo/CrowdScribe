@@ -33,7 +33,21 @@
   <h1>Create Project (Step 3 of 4)</h1>
   <h3>Add Fields to {{=project_name}}</h3>
 
-  <div class="add_new_field_form border-box-sizing rounded_bordered_container top_margin">
+  {{if add_fields_form.errors:}}
+    <div class="border-box-sizing rounded_bordered_container no_bottom_padding error_container">
+      <h4>{{=len(add_fields_form.errors)}} Form Errors</h4>
+      <ul>
+        {{for error in add_fields_form.errors:}}
+          <li>
+            <a href="#project_{{=error}}" alt="Error, {{=add_fields_form.errors[error]}}">{{=add_fields_form.errors[error]}}</a>
+          </li>
+        {{pass}}
+      </ul>
+      {{add_fields_form.errors.clear()}}
+    </div>
+  {{pass}}
+
+  <div class="add_new_field_form border-box-sizing rounded_bordered_container">
 
     <h4>Add New Field</h4>
     <p>A field is a particular area or section of your project documents that you would like transcribed. This could be, for example, a title, company name, signatory and so on. Fields are uniform across all documents for a project.</p>

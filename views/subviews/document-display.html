@@ -3,8 +3,15 @@
 
 		<div class="content border-box-sizing">
 
+			<!-- Show transcription count if the project owner is viewing, the document isn't closed, and the project isnt being created -->
+			{{if auth._get_user_id() == project.author_id and document.status != "Closed" and project.status != "Being Created":}}
+				<div class = "transcriptions_made">{{=document.number_of_transcriptions}} Transcription(s) Available</div>
+			{{elif document.status == "Closed":}}
+				<div class = "transcriptions_made">Transcription Accepted</div>
+			{{pass}}
+
 			<div class="img_container_crop">
-				<img src="{{=URL('default','download',args = document.image)}}"/>
+				<img src="{{=URL('default','download',args = document.image)}}" alt = "Document Image for {{=project.name}}"/>
 			</div>
 
 			<div class = "overlay">
@@ -13,10 +20,10 @@
           <h4>Document Description</h4>
 					<p>{{=document.description}}</p>
 
-					{{=A(BUTTON('View Document',_class="btn btn-success"), _href= URL('projects','view_document', args=[project.id, document.id]))}}
-
-					{{if project.status == "Under Review" and document.status == "Open":}}
-						{{=A(BUTTON('Review Document Transcriptions',_class="btn btn-info"), _href= URL('projects','review_document', args=[project.id, document.id]))}}
+					{{if project.status == "Open":}}
+						{{=A('View or Transcribe Document',_class="btn btn-info", _href= URL('projects','view_document', args=[project.id, document.id]))}}
+					{{elif project.status == "Under Review" and (document.status == "Open" or document.status == "Done"):}}
+						{{=A('Review Document Transcriptions',_class="btn btn-info", _href= URL('projects','review_document', args=[project.id, document.id]))}}
 					{{pass}}
 
 				</div>

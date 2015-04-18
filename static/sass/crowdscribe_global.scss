@@ -5,6 +5,23 @@
  * the site. This means quicker loading and less I/O. It is loaded in crowdscribe-layout.html
  */
 
+.skip_to_content{
+	position:absolute;
+	top:0;
+	left:0;
+	background:red;
+	opacity:0;
+	padding:10px;
+	z-index:10000;
+	pointer-events: none;
+	text-decoration:none;
+
+	&:focus{
+		opacity:1;
+	}
+
+}
+
 /* Global Text Formatting */
 /* This can be overwritten in view specific css files */
 
@@ -34,7 +51,7 @@ form{
 
 .line_seperator{
 	$spacing:2%;
-	width:100% - $spacing*2;
+	// width:100% - $spacing*2;
 	height:2px;
 	background:rgba(0, 0, 0, .1);
 	margin:10px $spacing 10px $spacing;
@@ -47,6 +64,12 @@ $seperator-margin:20px;
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
+}
+
+.error_container{
+	border-color:red !important;
+	border-width: 2px !important;
+	color:red;
 }
 
 .rounded_bordered_container{
@@ -131,7 +154,7 @@ $seperator-margin:20px;
 			}
 
 			a:hover, a:focus{
-				opacity:.6;
+				opacity:.4;
 			}
 
 			.selected a{
@@ -178,11 +201,22 @@ $seperator-margin:20px;
 			$searchwidth : 200px;
 
 			.search{
-				width:$searchwidth;
+				width:330px;
 				height:50px;
 				position:relative;
 
+				// background:red;
+				text-align:left;
+				label{
+					line-height:30px;
+					font-size:16px;
+					font-family: "Myriad Pro", "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
+					margin:$margin 0 $margin 10px;
+					display:inline-block;
+				}
+
 				.search_form{
+					display:inline-block;
 					position:absolute;
 					width:$searchwidth;
 					margin:0;
@@ -274,6 +308,12 @@ $seperator-margin:20px;
 
 .form_container{
 
+	#textarea_feedback{
+		// font-weight:bold;
+		margin-bottom:10px;
+		font-size:12px;
+	}
+
 	.btn{
 		width:100%;
 	}
@@ -348,6 +388,10 @@ $seperator-margin:20px;
 			height:100%;
 			float:left;
 			text-decoration: none;
+
+			&:focus{
+				opacity:.5;
+			}
 		}
 
 		.stage{
@@ -377,6 +421,10 @@ $seperator-margin:20px;
 			background:$logo_color;
 			color:white;
 			//rgb(70, 70, 70);
+
+			&:hover{
+				opacity:.5;
+			}
 		}
 
 		.rightmost{
@@ -430,6 +478,10 @@ $seperator-margin:20px;
 		a{
 			display:block;
 			color:white;
+			text-decoration: none;
+			&:hover, &:focus{
+				opacity:.75;
+			}
 		}
 
 		.content{
@@ -459,12 +511,12 @@ $seperator-margin:20px;
 			}
 
 			.overlay{
-				position:relative;
+				// position:relative;
 				width:100%;
 				// height:$txtheight;
 				color:black;
 
-				.text{
+				.text_container{
 
 					padding:5px 10px 10px 10px;
 
@@ -478,8 +530,9 @@ $seperator-margin:20px;
 						margin:0;
 					}
 
-					button{
+					.btn{
 						width:100%;
+						box-sizing: border-box;
 						margin-top:5px;
 					}
 
@@ -643,7 +696,7 @@ $seperator-margin:20px;
 	background-color:#64B58B;
 
 	#centeredmessage{
-		width:1000px;
+		// width:1000px;
 		height:$messageheight;
 		margin-left:auto;
 		margin-right:auto;

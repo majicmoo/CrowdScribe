@@ -17,13 +17,13 @@ options = ["Sport", "Theatre", "Military", "Journal Entries", "Architecture", "C
            "Religion", "Art", "Literature", "Finance", "Scientific", "Media", "Music", "Other"]
 
 if not request.env.web2py_runtime_gae:
-    db = DAL('sqlite://crowdscribe.db', pool_size=1, check_reserved=['all'], lazy_tables=True)
+    db = DAL('sqlite://crowdscribe.db', pool_size=1, lazy_tables=True)
 
     db.define_table('project',
                     Field('name'),
                     Field('author_id', 'reference auth_user', writable=False, readable=False),
                     Field('status'),
-                    Field('description', type='text'),
+                    Field('description', type='text', length=500),
                     Field('tag', requires=IS_IN_SET(options)),
                     Field('time_period_start_date', 'integer'),
                     Field('time_period_end_date', 'integer'),
@@ -97,6 +97,7 @@ auth.settings.controller = 'user'
 
 from gluon import current
 current.db = db
+current.tags = options
 
 
 ## configure email

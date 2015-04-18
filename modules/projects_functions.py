@@ -117,14 +117,27 @@ class ProjectFunctions:
         if image_validator(current.request.vars.image)[1] is not None:
             form.errors.image = image_validator(current.request.vars.image)[1]
 
+        check_image_format_validator = IS_IMAGE(error_message=("Only images with a height larger \
+                                         than 400px and width larger than 450px may be uploaded"),minsize=(450, 400))
+        if check_image_format_validator(current.request.vars.image)[1] is not None:
+            form.errors.image = check_image_format_validator(current.request.vars.image)[1]
+
 
 
     def validate_add_field_form(self, form):
-        if (current.request.vars.name != "") and (current.request.vars.name is not None):
+
+        alphanumeric_validator = IS_ALPHANUMERIC(error_message="Only letters and numbers allowed in field name")
+
+        if alphanumeric_validator(current.request.vars.name)[1] is not None:
+            form.errors.name = alphanumeric_validator(current.request.vars.name)[1]
+
+        if (current.request.vars.short_description == "") or (current.request.vars.short_description is None):
+            form.errors.short_description = "Description must not be empty"
+
+        if (current.request.vars.name == "") or(current.request.vars.name is None):
             form.errors.name = "Name must not be empty"
 
-        if (current.request.vars.short_description != "") and (current.request.vars.short_description is not None):
-            form.errors.short_description = "Description must not be empty"
+        print form.errors
 
 
     def attach_number_of_transcriptions(self, documents):
@@ -202,7 +215,7 @@ class ProjectFunctions:
 
 
     def create_clear_project_form(self):
-        return FORM(DIV(BUTTON("Clear Project", _type='submit', _class='btn btn-danger btn-block',
+        return FORM(DIV(BUTTON("Clear Project ", I(_class='icon-trash icon-white'), _type='submit', _class='btn btn-danger btn-block',
                                     _onclick="return confirm('Clearing a project will wipe all of your progress."
                                              " Continue?');")))
 
@@ -212,7 +225,7 @@ class ProjectFunctions:
 
     def create_previous_step_form(self, message):
         return FORM(BUTTON(message, I(_class='icon-arrow-left icon-white'),
-                                        _type='submit', _class='btn btn-primary btn-block btn-large btn-left'))
+                                        _type='submit', _class='btn btn-info btn-block btn-large btn-left'))
 
     def process_start_and_end_dates(self):
         if current.request.vars.unknown == "yes":
@@ -239,5 +252,3 @@ class ProjectFunctions:
             i += 1
 
         return transcriptions_list
-
-

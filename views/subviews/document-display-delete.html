@@ -3,7 +3,7 @@
 		<div class="content border-box-sizing">
 
 			<div class="img_container_crop">
-				<img src="{{=URL('default','download',args = document.image)}}"/>
+				<img src="{{=URL('default','download',args = document.image)}}" alt = "Document Image"/>
 			</div>
 
 			<div class = "overlay">
@@ -12,7 +12,7 @@
           <h4>Document Description</h4>
 					<p>{{=document.description}}</p>
 
-          {{=A(BUTTON('Delete Document',_class="btn btn-danger"), callback= URL('delete_document',
+          {{=A('Delete Document', _class="btn btn-danger", callback= URL('delete_document',
             vars= dict(document_id=document.id)))}}
 
 				</div>
