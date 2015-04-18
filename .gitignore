@@ -2,6 +2,8 @@
 cache
 errors
 sessions
+databases
+uploads
  
 # inherit https://github.com/github/gitignore/blob/master/Python.gitignore
  
