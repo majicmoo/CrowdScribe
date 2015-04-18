@@ -300,11 +300,7 @@ def view_document():
     response.title = "CrowdScribe | " + project.name + ' Document'
 
     # Redirect if null project.
-    if project is None:
-        redirect(URL('default', 'index'))
-
-    if (project.status == "Closed") and (project.author_id != auth._get_user_id()):
-        redirect(URL('default', 'index'))
+    projects_module.redirect_if_project_closed_or_doesnt_exist(project, auth)
 
     # Get Doc from URL args
     document_id = request.args(1)
@@ -313,7 +309,7 @@ def view_document():
 
     # If null doc, go back to the project
     if document is None:
-        redirect(URL('projects', 'project', args=[project_id]))
+        redirect(URL('projects', 'project', args=[project.id]))
     elif (document.status == "Closed") and (project.author_id == auth._get_user_id()) :
         accepted_transcription = database.get_accepted_transcription_for_document(document.id)
         accepted_transcription_with_fields = database.get_transcribed_fields_for_transcription(accepted_transcription.id)
@@ -321,71 +317,18 @@ def view_document():
 
     document.number_of_transcriptions = len(database.get_pending_transcriptions_for_document(document.id))
 
-    # The form needs to be built dynamically to include all fields.
-    form = None
-    fields = []
     # All transcriptions for this doc
     transcriptions = database.get_pending_transcriptions_for_document(document_id)
     # Transcriptions by the current user for this doc
     transcription = None
-    response_message = None
 
-    # If you are the owner, you cannot transcribe the document. Gives link to review transcriptions.
-    if project.author_id == auth._get_user_id() and not transcriptions and not accepted_transcription:
-        response_message = 'You are the owner of this project and cannot transcribe its documents. It currently has' \
-                           ' 0 transcriptions available for review.'
-        response.message = response_message
 
-    elif project.author_id == auth._get_user_id() and transcriptions and not accepted_transcription:
-        msgstring = 'You are the owner of this project and cannot transcribe its documents. It currently has ' \
-                    + str(len(transcriptions)) + ' transcription' + ('s' if len(transcriptions) > 1 else '') +\
-                    ' available for review. You must put a project under review before transcriptions can be accepted.'
-        response_message = msgstring
-        response.message = msgstring
-        # A(msgstring, _href=URL('projects', 'review_document', args=[project.id, document.id]))
-
-    elif project.author_id == auth._get_user_id() and accepted_transcription:
-        response_message = 'You are the owner of this project and have accepted a transcription for this document. ' \
-                           'This document is now closed and its transcription is available below.'
-        response.message = response_message
-
-    # Need an account to login
-    elif auth._get_user_id() is None:
-        args = str(project_id) + '-' + str(document_id)
-        response_message = A("Please login to transcribe this document.", _href=URL('user', 'login', vars=dict(controller_after_login='projects',
-                                                                                    page_after_login='view_document',
-                                                                                    args_after_login=args)))
-        # response.message = A(response_message, _href=URL('user', 'login', vars=dict(controller_after_login='projects',
-        #                                                                             page_after_login='view_document',
-        #                                                                             args_after_login=args)))
-
-    # If user has already provided a transcription
-    elif database.document_has_already_been_transcribed_by_user(document_id, auth._get_user_id()):
-        response.message = "You have already transcribed this document. Only 1 transcription can be added per user. Your transcription is shown below."
-
-    # If doc is no longer accepting transcriptions
-    elif document.status == 'Done':
-        response_message = "This document has already received the maximum number of transcriptions allowed"
-        response.message = response_message
-
-    elif project.status != 'Open':
-        response_message = "This project and document are closed for review."
-        session.flash = response_message
-        redirect(URL('default','index'))
-
+    response_message, response.message, session.flash = projects_module.determine_document_response_message(document, project, auth, transcriptions, accepted_transcription)
     # Display transcription submission form if document image is open for transcriptions and
     # user is authorised to make a submission (ie registered user, not project creator and has not already made
     # transcription for document image)
 
-    # Create dynamic form according to number of data_fields
-    data_fields = []
-    for data_field in database.get_data_fields_for_project(project_id):
-        data_fields.append(data_field.name)
-        fields += [Field(data_field.name, 'text',
-                         comment=T(data_field.short_description), label=T(data_field.name))]
-
-    form = SQLFORM.factory(*fields, formstyle='divs', table_name='transcription', buttons=[])
-
+    fields, data_fields, form = projects_module.create_transcription_form(project)
 
     if form.process().accepted:
 
@@ -433,14 +376,13 @@ def view_document():
     project.fraction_transcribed_string = general_module.construct_number_of_transcribed_documents_string(project.id)
 
     # Transcription submitted by user
-    user_submitted_transcription = database.get_transcriptions_for_user_and_document(document.id, auth._get_user_id())
-    user_submitted_transcription_with_fields = None
-    if user_submitted_transcription:
-        user_submitted_transcription_with_fields = database.get_transcribed_fields_for_transcription(user_submitted_transcription.id)
+
+    user_submitted_transcription_with_fields = projects_module.get_users_transcription(document, auth)
 
     return dict(project=project, document=document, image=image, form=form, transcription=transcription,
                 accepted_transcription_with_fields = accepted_transcription_with_fields, response_message = response_message,
-                timestring = timestring, overlay_message = response_message, data_fields = data_fields, user_submitted_transcription_with_fields = user_submitted_transcription_with_fields)
+                timestring = timestring, overlay_message = response_message, data_fields = data_fields,
+                user_submitted_transcription_with_fields = user_submitted_transcription_with_fields)
 
 
 @auth.requires_login(otherwise=URL('user', 'login'))

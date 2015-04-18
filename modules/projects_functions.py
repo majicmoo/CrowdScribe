@@ -252,3 +252,113 @@ class ProjectFunctions:
             i += 1
 
         return transcriptions_list
+
+    def redirect_if_project_closed_or_doesnt_exist(self, project, auth):
+
+            # Redirect if null project.
+        if project is None:
+            redirect(URL('default', 'index'))
+
+        if (project.status == "Closed") and (project.author_id != auth._get_user_id()):
+            redirect(URL('default', 'index'))
+
+
+    def determine_document_response_message(self, document, project, auth, transcriptions, accepted_transcription):
+
+
+            response_message = None
+
+            # If you are the owner, you cannot transcribe the document. Gives link to review transcriptions.
+            if project.author_id == auth._get_user_id() and not transcriptions and not accepted_transcription:
+                response_message = 'You are the owner of this project and cannot transcribe its documents. It currently has' \
+                                   ' 0 transcriptions available for review.'
+                current.response.message = response_message
+
+            elif project.author_id == auth._get_user_id() and transcriptions and not accepted_transcription:
+                msgstring = 'You are the owner of this project and cannot transcribe its documents. It currently has ' \
+                            + str(len(transcriptions)) + ' transcription' + ('s' if len(transcriptions) > 1 else '') +\
+                            ' available for review. You must put a project under review before transcriptions can be accepted.'
+                response_message = msgstring
+                current.response.message = msgstring
+                # A(msgstring, _href=URL('projects', 'review_document', args=[project.id, document.id]))
+
+            elif project.author_id == auth._get_user_id() and accepted_transcription:
+                response_message = 'You are the owner of this project and have accepted a transcription for this document. ' \
+                                   'This document is now closed and its transcription is available below.'
+                current.response.message = response_message
+
+            # Need an account to login
+            elif auth._get_user_id() is None:
+                args = str(project.id) + '-' + str(document.id)
+                response_message = A("Please login to transcribe this document.", _href=URL('user', 'login', vars=dict(controller_after_login='projects',
+                                                                                            page_after_login='view_document',
+                                                                                            args_after_login=args)))
+                # response.message = A(response_message, _href=URL('user', 'login', vars=dict(controller_after_login='projects',
+                #                                                                             page_after_login='view_document',
+                #                                                                             args_after_login=args)))
+
+            # If user has already provided a transcription
+            elif self.database.document_has_already_been_transcribed_by_user(document.id, auth._get_user_id()):
+                current.response.message = "You have already transcribed this document. Only 1 transcription can be \
+                                            added per user. Your transcription is shown below."
+
+            # If doc is no longer accepting transcriptions
+            elif document.status == 'Done':
+                response_message = "This document has already received the maximum number of transcriptions allowed"
+                current.response.message = response_message
+
+            elif project.status != 'Open':
+                response_message = "This project and document are closed for review."
+                current.session.flash = response_message
+                redirect(URL('default','index'))
+
+            return (response_message, current.response.message, current.session.flash)
+
+    def create_transcription_form(self, project):
+
+        # The form needs to be built dynamically to include all fields.
+        fields = []
+
+        # Create dynamic form according to number of data_fields
+        data_fields = []
+        for data_field in self.database.get_data_fields_for_project(project.id):
+            data_fields.append(data_field.name)
+            fields += [Field(data_field.name, 'text',
+                             comment=data_field.short_description, label=data_field.name)]
+
+        form = SQLFORM.factory(*fields, formstyle='divs', table_name='transcription', buttons=[])
+
+        return (fields, data_fields, form)
+
+    def get_users_transcription(self, document, auth):
+
+        # Transcription submitted by user
+        user_submitted_transcription = self.database.get_transcriptions_for_user_and_document(document.id, auth._get_user_id())
+
+        if user_submitted_transcription:
+            user_submitted_transcription_with_fields = self.database.get_transcribed_fields_for_transcription(user_submitted_transcription.id)
+        else:
+            user_submitted_transcription_with_fields = None
+
+        return user_submitted_transcription_with_fields
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
