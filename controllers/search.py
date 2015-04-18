@@ -8,7 +8,7 @@ search_module = search_functions.SearchFunctions(database, db)
 
 
 def search_results():
-
+    # Controller for displaying users search results
     # Page Title
     response.title = "CrowdScribe | Search Results"
 

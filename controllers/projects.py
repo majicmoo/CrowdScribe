@@ -518,7 +518,7 @@ def close_project_for_review():
     redirect(URL('projects', 'project', args=request.vars.project_id), client_side=True)
 
 def reopen_project():
-    # Function for button which will close a project for review
+    # Function for button which will reopen a project
     db((db.project.id == request.vars.project_id)).update(status="Open")
     db.commit()
     session.flash = "Project Reopened to Public"
