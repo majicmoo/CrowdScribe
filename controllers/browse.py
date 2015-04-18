@@ -5,20 +5,20 @@ general_module = general_functions.GeneralFunctions(database, db)
 from gluon import *
 
 def all():
+    response.title = "CrowdScribe | Browse"
 
-    categories = ["Sport", "Theatre", "Military", "Journal Entries", "Architecture", "Citizen Information",
-               "Religion", "Art", "Literature", "Finance", "Scientific", "Media", "Music", "Other"]
+    categories = current.tags
+
     allprojects = general_module.attach_all_information_to_projects(database.get_open_projects())
 
     return dict(allprojects = allprojects, categories = categories)
 
 def category():
 
-
-    categories = ["Sport", "Theatre", "Military", "Journal Entries", "Architecture", "Citizen Information",
-               "Religion", "Art", "Literature", "Finance", "Scientific", "Media", "Music", "Other"]
+    categories = current.tags
     categoryid = int(request.args(0))
     category = categories[categoryid]
+    response.title = "CrowdScribe | Browsing "+category
     projects = database.get_projects_for_tag(category)
 
     if not(projects):

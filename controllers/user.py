@@ -1,11 +1,13 @@
 import database_transactions as database_transactions
 database = database_transactions.DatabaseTransactions(db)
-
+import search_functions as search_functions
+import general_functions as general_functions
+general_module = general_functions.GeneralFunctions(database, db)
 
 def register():
 
     # Window Title
-    response.title = 'Register'
+    response.title = 'CrowdScribe | Register'
 
     # Allow registered users to create accounts in debug mode for quicker testing
     if auth.is_logged_in():
@@ -60,7 +62,7 @@ def validate_register_form(form):
 
 def login():
     # Window Title
-    response.title = 'Login'
+    response.title = 'CrowdScribe | Login'
 
     if request.vars.controller_after_login and request.vars.page_after_login and request.vars.args_after_login:
         request.vars.args_after_login = request.vars.args_after_login.split('-')
@@ -117,28 +119,33 @@ def profile():
         redirect(URL('default','index'))
 
     user = database.get_user(user_id)
-    response.title = user.username
+    response.title = 'CrowdScribe | ' + user.username
 
     # Alerts
     # Number of Closed Projects that belong to user
     closed_projects = database.get_closed_projects_for_user(user_id)
-    if closed_projects is None:
-        no_of_closed_projects = 0
-    else:
-        no_of_closed_projects = len(closed_projects)
+    no_of_closed_projects = len(closed_projects)
+
+    under_review_projects = database.get_under_review_projects_for_user(user_id)
+    no_of_under_review_projects = len(under_review_projects)
+
+    open_projects_with_transcriptions = database.get_open_projects_with_transcriptions_for_user(user_id)
 
     # Number of transcriptions user has made awaiting approval
     no_of_transcriptions_awaiting_approval = 0
-    for closed_project in closed_projects:
+    for closed_project in open_projects_with_transcriptions:
         documents = database.get_documents_with_transcription_for_project(closed_project)
         for document in documents:
             transcriptions = database.get_transcriptions_for_document(document)
             for i in transcriptions:
                 no_of_transcriptions_awaiting_approval += 1
 
-    response.closed_project_alert = 'You have', no_of_closed_projects, 'projects that are currently closed for review.'
-    response.transcriptions_alert = 'You have', no_of_transcriptions_awaiting_approval, 'transcriptions awaiting approval.'
-    return dict()
+    num_user_projects = len(database.get_projects_for_user(user_id))
+
+    manager_strings = [str(no_of_under_review_projects)+' are currently under review.', str(no_of_transcriptions_awaiting_approval)+' transcriptions awaiting review across '+str(len(open_projects_with_transcriptions))+' projects.', str(no_of_closed_projects)+' have had transcriptions accepted for all their documents.']
+    num_projects_string = 'You have created '+str(num_user_projects)+' projects.'
+
+    return dict(manager_strings = manager_strings, num_projects_string = num_projects_string)
 
 @auth.requires_login(otherwise=URL('user', 'login'))
 def view_own_transcriptions():
@@ -174,6 +181,8 @@ def manage_projects():
     # Under Review Projects
     under_review_projects = database.get_under_review_projects_for_user(user_id)
 
+    response.title = 'CrowdScribe | Manage Projects'
+
     # Have Transcriptions and open Projects
     open_projects_with_transcriptions = database.get_open_projects_with_transcriptions_for_user(user_id)
     open_projects_with_transcriptions = attach_header_image_to_projects(open_projects_with_transcriptions)
@@ -184,10 +193,10 @@ def manage_projects():
     # All documents transcribed - closed
     closed_projects = database.get_closed_projects_for_user(user_id)
 
-    return dict(under_review_projects=attach_header_image_to_projects(under_review_projects),
-                open_projects_with_transcriptions=attach_header_image_to_projects(open_projects_with_transcriptions),
-                open_projects_without_transcriptions=attach_header_image_to_projects(open_projects_without_transcriptions),
-                closed_projects=attach_header_image_to_projects(closed_projects))
+    return dict(under_review_projects=general_module.attach_all_information_to_projects(under_review_projects),
+                open_projects_with_transcriptions=general_module.attach_all_information_to_projects(open_projects_with_transcriptions),
+                open_projects_without_transcriptions=general_module.attach_all_information_to_projects(open_projects_without_transcriptions),
+                closed_projects=general_module.attach_all_information_to_projects(closed_projects))
 
 
 def place_project_under_review():

@@ -2,6 +2,19 @@
  * This document is used for CSS that is used on the majority of pages throughout
  * the site. This means quicker loading and less I/O. It is loaded in crowdscribe-layout.html
  */
+.skip_to_content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: red;
+  opacity: 0;
+  padding: 10px;
+  z-index: 10000;
+  pointer-events: none;
+  text-decoration: none; }
+  .skip_to_content:focus {
+    opacity: 1; }
+
 /* Global Text Formatting */
 /* This can be overwritten in view specific css files */
 textarea {
@@ -23,7 +36,6 @@ form {
 
 /* Site-Wide Utility Classes */
 .line_seperator {
-  width: 96%;
   height: 2px;
   background: rgba(0, 0, 0, 0.1);
   margin: 10px 2% 10px 2%;
@@ -33,6 +45,11 @@ form {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box; }
+
+.error_container {
+  border-color: red !important;
+  border-width: 2px !important;
+  color: red; }
 
 .rounded_bordered_container {
   border-radius: 5px;
@@ -84,10 +101,10 @@ form {
       /* List object widths are set manually for consistency and readability */
       width: 150px; }
     .navbar .navbar-inner .nav a:hover, .navbar .navbar-inner .nav a:focus {
-      opacity: .6; }
+      opacity: .4; }
     .navbar .navbar-inner .nav .selected a {
       /* A button is highlighted in green and bolded to signify it is the element associated with the current page */
-      color: #69c72a;
+      color: #5cb3d9;
       font-weight: bold; }
     .navbar .navbar-inner .nav .noline a {
       /* Used to more visually seperate items */
@@ -112,10 +129,18 @@ form {
         font-family: "Myriad Pro", "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
         border-right: thin solid #c8c8c8; }
     .navbar .navbar-inner .nav .search {
-      width: 200px;
+      width: 330px;
       height: 50px;
-      position: relative; }
+      position: relative;
+      text-align: left; }
+      .navbar .navbar-inner .nav .search label {
+        line-height: 30px;
+        font-size: 16px;
+        font-family: "Myriad Pro", "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
+        margin: 12.5px 0 12.5px 10px;
+        display: inline-block; }
       .navbar .navbar-inner .nav .search .search_form {
+        display: inline-block;
         position: absolute;
         width: 200px;
         margin: 0; }
@@ -179,6 +204,9 @@ form {
   padding-top: 0 !important;
   padding-bottom: 0 !important; }
 
+.form_container #textarea_feedback {
+  margin-bottom: 10px;
+  font-size: 12px; }
 .form_container .btn {
   width: 100%; }
 .form_container .string, .form_container .text, .form_container select, .form_container .password {
@@ -227,6 +255,8 @@ form {
       height: 100%;
       float: left;
       text-decoration: none; }
+      .form_nav .inner a:focus {
+        opacity: .5; }
     .form_nav .inner .stage {
       background: #999999;
       line-height: 30px;
@@ -241,8 +271,10 @@ form {
     .form_nav .inner .highlighted {
       opacity: 1;
       font-weight: bold;
-      background: #69c72a;
+      background: #5cb3d9;
       color: white; }
+      .form_nav .inner .highlighted:hover {
+        opacity: .5; }
     .form_nav .inner .rightmost {
       border-right: 0; }
 
@@ -263,7 +295,10 @@ form {
     position: relative; }
     .projects .project a {
       display: block;
-      color: white; }
+      color: white;
+      text-decoration: none; }
+      .projects .project a:hover, .projects .project a:focus {
+        opacity: .75; }
     .projects .project .content {
       border-radius: 10px;
       position: relative;
@@ -282,19 +317,19 @@ form {
       .projects .project .content .tag {
         color: rgba(0, 0, 0, 0.7); }
       .projects .project .content .overlay {
-        position: relative;
         width: 100%;
         color: black; }
-        .projects .project .content .overlay .text {
+        .projects .project .content .overlay .text_container {
           padding: 5px 10px 10px 10px; }
-          .projects .project .content .overlay .text h3 {
+          .projects .project .content .overlay .text_container h3 {
             line-height: 35px; }
-          .projects .project .content .overlay .text h3, .projects .project .content .overlay .text h5 {
+          .projects .project .content .overlay .text_container h3, .projects .project .content .overlay .text_container h5 {
             margin: 0; }
-          .projects .project .content .overlay .text button {
+          .projects .project .content .overlay .text_container .btn {
             width: 100%;
+            box-sizing: border-box;
             margin-top: 5px; }
-          .projects .project .content .overlay .text p {
+          .projects .project .content .overlay .text_container p {
             height: 60px; }
 
 .no_left_right_padding {
@@ -336,7 +371,6 @@ form {
   height: 30px;
   background-color: #64B58B; }
   #message #centeredmessage {
-    width: 1000px;
     height: 30px;
     margin-left: auto;
     margin-right: auto;

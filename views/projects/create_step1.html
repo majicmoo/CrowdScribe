@@ -30,27 +30,40 @@
 
 <div class="padded_container form_container less_top_padding">
   <h1>Create Project (Step 1 of 4)</h1>
+  <h3>Basic Details</h3>
 
-  <div class="border-box-sizing rounded_bordered_container no_top_bottom_padding">
-    <h3>Basic Details</h3>
+  {{if form.errors:}}
+    <div class="border-box-sizing rounded_bordered_container no_bottom_padding error_container">
+      <h4>{{=len(form.errors)}} Form Errors</h4>
+      <ul>
+        {{for error in form.errors:}}
+          <li>
+            <a href="#project_{{=error}}" alt="Error, {{=form.errors[error]}}">{{=form.errors[error]}}</a>
+          </li>
+        {{pass}}
+      </ul>
+    </div>
+  {{pass}}
+
+  <div class="border-box-sizing rounded_bordered_container no_bottom_padding">
 
     {{=form.custom.begin}}
 
         <!-- <h4> Project Title</h4> -->
-        <label for="project_name">Project Title</label>
+        <label id = "project_name" for="project_name">Project Title*</label>
         <p>
-          Please enter a short title for your project that describes the general content of the documents you want transcribed.
+          This is what your project will be known as across CrowdScribe.
         </p>
-
         {{=form.custom.widget.name}}
 
-        <label for="project_description">Project Description</label>
+        <label aria-label="Project Description"  for="project_description">Project Description*</label>
         <p>
           Please enter a brief description of the project you are creating. This could include the intended use of the transcriptions and the style of transcription you are looking for to aid transcribers.
         </p>
         <div> {{=form.custom.widget.description}}</div>
+        <div id="textarea_feedback"></div>
 
-        <label for="project_tag">Category</label>
+        <label for="project_tag">Category*</label>
         <div>{{=form.custom.widget.tag}}</div>
 
         <label for="unknown_checkbox_container">Time Period</label>
@@ -67,7 +80,7 @@
 
           <div class="date">
 
-            <label class ="" for="start_date"> Start Date:</label>
+            <label for="project_time_period_start_date"> Start Date:</label>
             <div class="no_margin">
               {{=form.custom.widget.time_period_start_date}}
             </div>
@@ -81,11 +94,11 @@
 
           <div class="date">
 
-            <label for="end_date"> End Date:</label>
+            <label for="project_time_period_end_date"> End Date:</label>
             <div class="no_margin">
               {{=form.custom.widget.time_period_end_date}}
             </div>
-            <label for="start_date_adbc">End Era:</label>
+            <label for="end_date_adbc">End Era:</label>
             <select id = "end_date_adbc" class="no_margin input-small" name="end_era">
                 <option {{if pd:}}{{if pd['end_era'] == "AD":}} selected{{pass}}{{pass}}>AD</option>
                 <option {{if pd:}}{{if pd['end_era'] == "BC":}} selected{{pass}}{{pass}}>BC</option>
@@ -110,3 +123,20 @@
 
 
 </div>
+
+<script>
+	// This jQuery checks the character count for elements that have a specific requirement and displays them
+
+	$(document).ready(function() {
+	    var text_max = 500;
+      var text_length = $('#project_description').val().length;
+      $('#textarea_feedback').html((text_max-text_length) + ' characters remaining');
+
+	    $('#project_description').keyup(function() {
+	        var text_length = $('#project_description').val().length;
+
+	        $('#textarea_feedback').html((text_max-text_length) + ' characters remaining');
+	    });
+	});
+
+</script>

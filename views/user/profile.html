@@ -6,16 +6,24 @@
   <h1>{{=auth.user.username}}'s Profile</h1>
 
   <p>
-    Use the links below to manage your projects and transcriptions made.
+    Use the links below to manage your projects and view transcriptions made.
   </p>
 
   <div id="button_container" class="rounded_bordered_container">
     <a href="{{=URL('user','manage_projects')}}">
       <div class="manage_projects border-box-sizing">
         <div class="content">
-          <h2>Manage Projects</h2>
+          <h2 class="no_margin">Manage Projects</h2>
+          <h4 class="no_margin">{{=num_projects_string}}</h4>
           <p>
-            You have 8 projects with document transcriptions awaiting review.
+            <ul>
+              {{for string in manager_strings:}}
+                <li>
+                  {{=string}}
+                </li>
+              {{pass}}
+            </ul>
+
           </p>
         </div>
       </div>
@@ -23,7 +31,7 @@
 
     <div class="spacer"></div>
 
-    <a href="{{=URL('user','manage_projects')}}">
+    <a href="{{=URL('user','view_own_transcriptions')}}">
       <div class="manage_projects border-box-sizing">
         <div class="content">
           <h2>View Transcriptions</h2>

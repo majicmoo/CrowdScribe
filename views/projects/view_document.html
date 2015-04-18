@@ -1,14 +1,6 @@
 {{response.files.append(URL(r=request,c='static/css',f='project.css'))}}
 {{extend 'crowdscribe-layout.html'}}
 
-<script type="text/javascript" src={{=URL("static","js/zoomimage/jquery.js")}}></script>
-
-<link rel="stylesheet" media="screen" type="text/css" href={{=URL("static","css/zoomimage/zoomimage.css")}} />
-<script type="text/javascript" src={{=URL("static","js/zoomimage/eye.js")}}></script>
-<script type="text/javascript" src={{=URL("static","js/zoomimage/utils.js")}}></script>
-<script type="text/javascript" src={{=URL("static","js/zoomimage/zoomimage.js")}}></script>
-<script type="text/javascript" src={{=URL("static","js/zoomimage/layout.js")}}></script>
-
 <div class="padded_container form_container no_bottom_padding">
 
   <ul class="breadcrumb">
@@ -26,46 +18,71 @@
     <h4>Transcription Instructions</h4>
     <p>To transcribe a document simply enter your transcription for each field in the corresponding form and press 'Submit Transcription'. At least one field must be filled out to submit.</p>
     <p>To view the document in a larger format press the 'Toggle View' button to switch between portrait and landscape mode.</p>
-    <button id="toggle_button" class="btn">Toggle View</button>
+    <button id="toggle_button" class="btn">Toggle Document View Layout</button>
   </div>
+
+  {{=form.custom.begin}}
 
   <div id="doc_display" class="border-box-sizing">
     <!-- Maybe highlight that image can be opened in new tab for zooming etc -->
+
     <div id="document_viewer" class="landscape">
-          <!-- <a href="{{=image}}" class="docGal" title="document"><img src="{{=image}}" alt="document"/></a> -->
           <img src="{{=image}}" alt="document"/>
     </div>
 
-    {{=form.custom.begin}}
-
     <div id="transcription_form_holder" class="{{="disabled" if response.message else ""}} landscape">
-      {{if form and not accepted_transcription_with_fields:}}
+
+      <h4>{{=len(data_fields) }} Fields for transcription</h4>
+
+      {{if form and not accepted_transcription_with_fields and not user_submitted_transcription_with_fields:}}
 
           <!-- If there is an overlay, the form should be disabled to prevent TABBING into it -->
-          <fieldset {{="disabled" if response.message else ""}}>
-              {{for field in form:}}
-                {{=field}}
+          <fieldset {{="disabled" if overlay_message else ""}}>
+
+            <!-- We are aware that the IDs for these form fields are not HTML W3C compliant, as they can contain spaces. However this is a requirement of linking the form to the database -->
+            <!-- We felt it was a higher priority to provide screen reader accesibility with labels than break these by altering the name of the field -->
+
+              {{for field in data_fields:}}
+                <div class="rounded_bordered_container transcription_field">
+                  <!-- Fields are displayed as label, description, then edit. This means users with a screen reader will hear the label for the field, its description, and then 'edit', prompting them to start writing -->
+                  <label for ="transcription_{{=field}}">{{=field}}</label>
+                  <p><b>Field Description</b> : {{=form.custom.comment[field]}}</p>
+                  {{=form.custom.widget[field]}}
+
+                </div>
               {{pass}}
+
           </fieldset>
 
       {{elif accepted_transcription_with_fields:}}
 
         <h3>Accepted Transcription</h3>
 
+
         {{for field in accepted_transcription_with_fields:}}
         <h4>{{=field.data_field.name}}</h4>
         <p>
 
-          {{=field.data_field.short_description}}
+          {{=field.transcribed_field.information}}
         </p>
 
         {{pass}}
 
+      {{elif user_submitted_transcription_with_fields:}}
+
+        <h3>Your Transcription</h3>
+        {{for field in user_submitted_transcription_with_fields:}}
+          <h4>{{=field.data_field.name}}</h4>
+          <p>{{=field.transcribed_field.information}}</p>
+        {{pass}}
+
       {{pass}}
 
-      {{if response.message and not accepted_transcription_with_fields:}}
+      {{if overlay_message and not accepted_transcription_with_fields:}}
           <div class="unavailable_overlay">
-            <div class="notice">{{=response.message}}</div>
+            <div class="notice">
+              {{=overlay_message}}
+            </div>
           </div>
 
       {{pass}}
@@ -76,18 +93,20 @@
   <div id="doc_submit">
 
     {{if form and not response.message and not accepted_transcription_with_fields:}}
-        <input class="btn btn-primary" type="submit" value="Submit Transcription">
+        <input class="btn btn-success" type="submit" value="Submit Transcription", onClick="return confirm('Are you sure you want to submit this transcription? You can only transcribe a project once.');">
     {{elif accepted_transcription_with_fields:}}
       <input class="btn btn-primary" type="submit" value="Transcription Already Accepted" disabled>
     {{elif response.message:}}
       <input class="btn btn-primary" type="submit" value="Cannot Currently Submit Transcription" disabled>
     {{pass}}
 
-    {{=form.custom.end}}
-
   </div>
 
+  {{=form.custom.end}}
+
 </div>
+
+<!-- This simple script is used to change the layout for easier transcription. Without any javascript the document will simply display in portrait mode, not affecting accesibility. -->
 
 <script>
   $("#toggle_button").click(function(){

@@ -33,6 +33,20 @@
   <h1>Create Project (Step 2 of 4)</h1>
   <h3>Add Documents to {{=project_name}}</h3>
 
+  {{if add_image_form.errors:}}
+    <div class="border-box-sizing rounded_bordered_container no_bottom_padding error_container">
+      <h4>{{=len(add_image_form.errors)}} Form Errors</h4>
+      <ul>
+        {{for error in add_image_form.errors:}}
+          <li>
+            <a href="#project_{{=error}}" alt="Error, {{=add_image_form.errors[error]}}">{{=add_image_form.errors[error]}}</a>
+          </li>
+        {{pass}}
+      </ul>
+      {{add_image_form.errors.clear()}}
+    </div>
+  {{pass}}
+
   <div class="add_new_document_form border-box-sizing rounded_bordered_container">
     <h4>Add New Document</h4>
     <p>A project has a set of documents which you are requesting transcriptions for. These documents contain an image and a brief description of the document itself, such as place of origin, creator, publisher and so on. Any information you feel would be useful to a transcriber.</p>

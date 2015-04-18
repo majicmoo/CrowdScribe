@@ -5,21 +5,19 @@
   display:block;
   overflow:hidden;
 
-  a{
-    display:block;
-  }
+  $numbuttons : 7;
+  $height:50px;
 
   .category_button{
-    $numbuttons : 7;
-    $height:50px;
+
     width:100% / $numbuttons;
     height:$height;
 
     float:left;
-
     padding:5px;
 
     .content{
+      display:block;
       line-height:$height - 10px;
       text-align:center;
       border-radius:5px;
@@ -27,10 +25,13 @@
       font-weight:bold;
       background:$light_grey;
       color:black;
+      text-decoration:none;
+
+      &:hover, &:focus{
+        background:$logo_color;
+      }
     }
 
-    &:hover, &:focus{
-      opacity:.5;
-    }
+
   }
 }

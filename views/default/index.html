@@ -2,9 +2,8 @@
 {{extend 'crowdscribe-layout.html'}}
 
 {{if featured_project:}}
-  <a href={{=URL('projects','project', args=[featured_project.id])}}>
-    <div class = "featured_project">
-      <img src="{{=URL('default','download',args = featured_project_image)}}"/>
+  <a href={{=URL('projects','project', args=[featured_project.id])}} class = "featured_project">
+      <img src="{{=URL('default','download',args = featured_project_image)}}" alt="Featured Project Image"/>
       <div class = "overlay">
         <div class = "text">
           <h1>Featured : {{=featured_project.name}}</h1>
@@ -13,13 +12,15 @@
           </p>
         </div>
       </div>
-    </div>
   </a>
 {{pass}}
 
 {{if latest_projects:}}
   <div class="padded_container form_container no_bottom_padding">
     <h1>Latest Projects</h1>
+    <p>
+      The latest projects added to CrowdScribe.
+    </p>
   </div>
 
   <div class="projects">
@@ -34,6 +35,9 @@
 
   <div class="padded_container form_container no_bottom_padding">
     <h1>Most Transcribed Projects</h1>
+    <p>
+      Projects with the most accepted transcriptions.
+    </p>
   </div>
 
   <div class="projects">
@@ -47,7 +51,7 @@
   <div class="padded_container form_container no_bottom_padding">
     <h1>Currently No Projects</h1>
     <p>
-      Non nisi duis ex sint excepteur aliquip sint occaecat dolor irure sit proident excepteur tempor.
+      There are currently no projects publicly available on CrowdScribe. Please sign in and start creating!
     </p>
   </div>
 {{pass}}

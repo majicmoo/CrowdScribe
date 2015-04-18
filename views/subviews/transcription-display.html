@@ -1,0 +1,7 @@
+<div class="transcription border-box-sizing">
+  <div class="content border-box-sizing">
+    <h4>Transcription for {{=transcription.project.name}} Document</h4>
+    {{=A('View Transcription Made',_class="btn btn-info", _href= URL('projects','view_document', args=[transcription.project.id, transcription.transcription.document_id]))}}
+    {{=A('View Project',_class="btn btn-info", _href= URL('projects','project', args=[transcription.project.id]))}}
+  </div>
+</div>

@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 
+<html lang="en">
+
 <head>
-<title>{{=response.title or request.application}}</title>
+
 
   <meta charset="utf-8">
 
-        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> -->
 
         <title>{{=response.title or "CrowdScribe"}}</title>
         <meta name="description" content="">
@@ -34,6 +36,10 @@
 
 <body>
 
+  <a class="skip_to_content" href="#maincontent" alt="Skip Navigation">
+    Skip Navigation.
+  </a>
+
   <nav class="navbar">
     <div class="navbar-inner" role="navigation">
 
@@ -45,9 +51,9 @@
           </a>
         </li>
 
-        <li class="{{= 'selected' if request.function == 'index' else ''}}">
+        <!-- <li class="{{= 'selected' if request.function == 'index' else ''}}">
           <a href="{{=URL('default','index')}}">Home</a>
-        </li>
+        </li> -->
         <li class="{{= 'selected' if request.controller == 'browse' else ''}}">
           <a href="{{=URL('browse','all')}}">Browse</a>
         </li>
@@ -55,9 +61,10 @@
         <!-- Search -->
 
         <li class="noline search">
-          <form class = "search_form" action="{{=URL('search','search_results')}}" method="GET">
-            <input type="search" name="quicksearch" class="search-query" placeholder="Search Projects" role="search">
-            <button type="submit" class = "search_button" alt = 'Begin Search Button'>
+          <label for="search_input">Search</label>
+          <form id = "search" class = "search_form" action="{{=URL('search','search_results')}}" method="GET">
+            <input  aria-label="Type Search Term" id = "search_input" type="search" name="quicksearch" class="search-query" placeholder="Search Projects">
+            <button aria-label="Begin Search" type="submit" class = "search_button">
               <i class="icon-search"></i>
             </button>
           </form>
@@ -96,6 +103,16 @@
         {{else:}}
           <!-- Not Logged In -->
 
+          <li class="{{= 'selected create_project' if request.function == 'create_step1' or
+                                                      request.function == 'create_step2' or
+                                                      request.function == 'create_step3' or
+                                                      request.function == 'create_step4'
+                                                      else 'create_project'}}">
+              <a href="{{=URL(c="projects",f="create_step1")}}">
+                  Create Project
+              </a>
+          </li>
+
           <li class="{{= 'selected' if request.function == 'register' else ''}}">
               <a href="{{=URL(c="user",f="register")}}">
                   Register
@@ -110,6 +127,8 @@
 
         {{pass}}
 
+      </ul>
+
     </div>
   </nav>
 
@@ -118,11 +137,13 @@
   <!-- This is a centered message to be displayed permanently across certain pages if set in the controller -->
   <!-- It is used in the project display/edit pages to show the status and options a user has -->
   <!-- A background colour can be dynamically set from the controller -->
-  <div id="message" style="background-color:{{=response.messagecolour if response.messagecolour else "#69c72a"}}">
-      <div id="centeredmessage">
-          {{=response.message}}
-      </div>
-  </div>
+  {{if response.message:}}
+    <div id="message" style="background-color:{{=response.messagecolour if response.messagecolour else "#69c72a"}}">
+        <div id="centeredmessage">
+            {{=response.message}}
+        </div>
+    </div>
+  {{pass}}
 
   {{if response.flash:}}
   <div class="alert {{=session.flash_class}}">
@@ -139,7 +160,7 @@
       }
   </script>
 
-	<div class="content_container" role="main">
+	<div class="content_container" role="main" id="maincontent">
       {{include}}
   </div>
 

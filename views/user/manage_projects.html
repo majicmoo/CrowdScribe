@@ -18,7 +18,7 @@
 {{if under_review_projects:}}
 
   <div class="padded_container form_container no_bottom_padding no_top_padding">
-    <h2>Projects Under Review</h2>
+    <h2>{{=len(under_review_projects)}} Projects Under Review</h2>
     <p>
       These projects are currently unavailable to the public as you have marked them for review. You can view the project and accept or reject transcriptions for documents when a project is in this state.
     </p>
@@ -36,7 +36,7 @@
 
 {{if open_projects_with_transcriptions:}}
   <div class="padded_container form_container no_bottom_padding no_top_padding">
-    <h2>Open Projects with Transcriptions</h2>
+    <h2>{{=len(open_projects_with_transcriptions)}} Open Projects with Transcriptions</h2>
     <p>
       These projects are currently open to the public for transcription. Some of the documents in these projects have had transcriptions made for them.
     </p>
@@ -53,7 +53,7 @@
 
 {{if open_projects_without_transcriptions:}}
   <div class="padded_container form_container no_bottom_padding no_top_padding">
-    <h2>Open Projects without Transcriptions</h2>
+    <h2>{{=len(open_projects_without_transcriptions)}} Open Projects without Transcriptions</h2>
     <p>
       These projects are currently open to the public for transcription and have not yet had any transcriptions.
     </p>
@@ -70,7 +70,7 @@
 
 {{if closed_projects:}}
   <div class="padded_container form_container no_bottom_padding no_top_padding">
-    <h2>Closed Projects</h2>
+    <h2>{{=len(closed_projects)}} Closed Projects</h2>
     <p>
       These projects have had transcriptions accepted for all their documents and are no longer viewable by the public. You can still view this project and look at any accepted transcriptions.
     </p>

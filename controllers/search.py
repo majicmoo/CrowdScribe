@@ -10,10 +10,10 @@ search_module = search_functions.SearchFunctions(database, db)
 def search_results():
 
     # Page Title
-    response.title = "Search Results"    
-    
+    response.title = "CrowdScribe | Search Results"
+
     # Lists for SELECT() helper in advanced search form
-    tags = ["All", "Sport", "Theatre", "Military", "Journal Entries", "Architecture", "Citizen Information",
+    current.tags = ["All", "Sport", "Theatre", "Military", "Journal Entries", "Architecture", "Citizen Information",
            "Religion", "Art", "Literature", "Finance", "Scientific", "Media", "Music", "Other"]
     eras = ['BC','AD']
     orders = ['Alphabetical', 'Earliest', 'Latest']
@@ -22,7 +22,7 @@ def search_results():
     # Creates advanced search form
     advanced = FORM(
         INPUT(_name='advance', _id="advancetext"),
-        LABEL("Category", SELECT(tags, _name='tag', requires=IS_IN_SET(tags))),
+        LABEL("Category", SELECT(current.tags, _name='tag', requires=IS_IN_SET(current.tags))),
         LABEL("Start Date", INPUT(_name='start_date', _class='integer', requires=IS_EMPTY_OR(IS_INT_IN_RANGE(0,2016)))), #doesn't work atm
         SELECT(eras, _name='start_era', requires=IS_IN_SET(eras)),
         LABEL("End Date", INPUT(_name='end_date', _class='integer', requires=IS_EMPTY_OR(IS_INT_IN_RANGE(0,2016)))), #doesn't work atm
@@ -31,7 +31,7 @@ def search_results():
         LABEL("Sort by", SELECT(orders, _name='order', requires=IS_IN_SET(orders))),
         INPUT(_value='Refine search', _type='submit', _id="advancesubmit"), _method='GET'
     )
-    
+
     # Start with all open projects in the database as results
     projects = database.get_open_projects()
 
@@ -84,7 +84,7 @@ def search_results():
             # Exclude if end_date is before project's start date or start_date after project's end date
             projects.exclude(lambda project: (project.time_period_end_date < start_date) or
                 (end_date < project.time_period_start_date))
-            
+
     ###Order results###
     if request.vars.order == 'Earliest':
         # Order by earliest start date
@@ -102,7 +102,7 @@ def search_results():
     advanced.vars = request.vars
     """
     request.vars = {}
-    
+
     #Does not validate
     if advanced.process(onvalidation=search_module.date_validator).accepted:
         #advanced.vars=request.vars
@@ -113,6 +113,3 @@ def search_results():
     projects = general_module.attach_all_information_to_projects(projects)
 
     return dict(advanced=advanced, projects=projects)
-
-
-
