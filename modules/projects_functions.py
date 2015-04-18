@@ -124,11 +124,14 @@ class ProjectFunctions:
 
 
     def validate_add_field_form(self, form):
-        if (current.request.vars.name != "") and (current.request.vars.name is not None):
+
+        if (current.request.vars.short_description == "") or (current.request.vars.short_description is None):
+            form.errors.short_description = "Description must not be empty"
+
+        if (current.request.vars.name == "") or(current.request.vars.name is None):
             form.errors.name = "Name must not be empty"
 
-        if (current.request.vars.short_description != "") and (current.request.vars.short_description is not None):
-            form.errors.short_description = "Description must not be empty"
+        print form.errors
 
 
     def attach_number_of_transcriptions(self, documents):

@@ -168,13 +168,11 @@ def create_step3():
     clear_project = projects_module.create_clear_project_form()
 
     # Process form that allows fields to be added.
-    if add_fields_form.process(formname="form_one", onvalidate=projects_module.validate_add_field_form).accepted:
+    if add_fields_form.validate(formname="form_one", onvalidation=projects_module.validate_add_field_form):
         db.data_field.insert(name=request.vars.name, short_description=request.vars.short_description,
                              project_id=project_id)
         db.commit()
         session.project_being_created = project_id
-    elif add_fields_form.errors:
-        projects_module.validate_add_field_form(add_fields_form)
 
     # Move project forward to review when button clicked
     if review_project_form.process(formname="form_two").accepted:
@@ -203,8 +201,6 @@ def create_step3():
     return dict(documents_added=documents_added, add_fields_form=add_fields_form, fields_added=fields_added,
                 review_project_form=review_project_form, go_to_step_2_form=go_to_step_2_form,
                 clear_project=clear_project, step_available=step_available, project_name=project_being_edited.name)
-
-
 
 
 @auth.requires_login(otherwise=URL('user', 'login',
