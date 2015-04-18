@@ -379,8 +379,7 @@ def view_document():
     data_fields = []
     for data_field in database.get_data_fields_for_project(project_id):
         data_fields.append(data_field.name)
-        fields += [Field(data_field.name, 'text',
-                         comment=T(data_field.short_description), label=T(data_field.name))]
+        fields += [Field(data_field.name, 'text', comment=T(data_field.short_description), label=T(data_field.name))]
 
     form = SQLFORM.factory(*fields, formstyle='divs', table_name='transcription', buttons=[])
 
