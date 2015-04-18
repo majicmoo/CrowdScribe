@@ -254,6 +254,9 @@ def project():
     if project is None:
         redirect(URL('default', 'index'))
 
+    if (project.status == "Closed") and (project.author_id != auth._get_user_id()):
+        redirect(URL('default', 'index'))
+
     # Initialise Variables
     open_documents, open_documents_with_transcription, open_documents_without_transcription, done_documents, \
     closed_documents = projects_module.set_up_project_page_based_on_user(project, auth)
@@ -301,6 +304,9 @@ def view_document():
     if project is None:
         redirect(URL('default', 'index'))
 
+    if (project.status == "Closed") and (project.author_id != auth._get_user_id()):
+        redirect(URL('default', 'index'))
+
     # Get Doc from URL args
     document_id = request.args(1)
     document = database.get_document(document_id)
@@ -309,9 +315,10 @@ def view_document():
     # If null doc, go back to the project
     if document is None:
         redirect(URL('projects', 'project', args=[project_id]))
-    elif document.status == "Closed":
+    elif (document.status == "Closed") and (project.author_id == auth._get_user_id()) :
         accepted_transcription = database.get_accepted_transcription_for_document(document.id)
         accepted_transcription_with_fields = database.get_transcribed_fields_for_transcription(accepted_transcription.id)
+
 
     document.number_of_transcriptions = len(database.get_pending_transcriptions_for_document(document.id))
 
