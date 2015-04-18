@@ -62,10 +62,7 @@
 
         {{for field in accepted_transcription_with_fields:}}
         <h4>{{=field.data_field.name}}</h4>
-        <p>
-
-          {{=field.transcribed_field.information}}
-        </p>
+        <pre>{{=field.transcribed_field.information}}</pre>
 
         {{pass}}
 
@@ -74,7 +71,7 @@
         <h3>Your Transcription</h3>
         {{for field in user_submitted_transcription_with_fields:}}
           <h4>{{=field.data_field.name}}</h4>
-          <p>{{=field.transcribed_field.information}}</p>
+          <pre>{{=field.transcribed_field.information}}</pre>
         {{pass}}
 
       {{pass}}
