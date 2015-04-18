@@ -117,7 +117,8 @@ class ProjectFunctions:
         if image_validator(current.request.vars.image)[1] is not None:
             form.errors.image = image_validator(current.request.vars.image)[1]
 
-        check_image_format_validator = IS_IMAGE(error_message=("Only images may be uploaded"))
+        check_image_format_validator = IS_IMAGE(error_message=("Only images with a height larger \
+                                         than 400px and width larger than 450px may be uploaded"),minsize=(450, 400))
         if check_image_format_validator(current.request.vars.image)[1] is not None:
             form.errors.image = check_image_format_validator(current.request.vars.image)[1]
 

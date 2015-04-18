@@ -31,9 +31,6 @@ def create_step1():
     # Data needed to prepopulate form is retrieved
     prepopulation_data = projects_module.retrieve_prepopulated_data_for_create_step_1(project_being_edited)
 
-    # Initialise select box for tag
-    form.vars.tag = "Sport"
-
     # Prepopulate form
     if prepopulation_data is not None:
 
