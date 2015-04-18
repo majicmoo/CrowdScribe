@@ -3,7 +3,7 @@
 
 {{if featured_project:}}
   <a href={{=URL('projects','project', args=[featured_project.id])}} class = "featured_project">
-      <img src="{{=URL('default','download',args = featured_project_image)}}" alt="Featured Project Image"/>
+      <img src="{{=URL('default','download',args = featured_project_image)}}" alt="Featured Project Image for {{=featured_project.name}}"/>
       <div class = "overlay">
         <div class = "text">
           <h1>Featured : {{=featured_project.name}}</h1>

@@ -27,7 +27,7 @@
     <!-- Maybe highlight that image can be opened in new tab for zooming etc -->
 
     <div id="document_viewer" class="landscape">
-          <img src="{{=image}}" alt="document"/>
+          <img src="{{=image}}" alt="Document Image for {{=project.name}}"/>
     </div>
 
     <div id="transcription_form_holder" class="{{="disabled" if response.message else ""}} landscape">
@@ -45,9 +45,10 @@
               {{for field in data_fields:}}
                 <div class="rounded_bordered_container transcription_field">
                   <!-- Fields are displayed as label, description, then edit. This means users with a screen reader will hear the label for the field, its description, and then 'edit', prompting them to start writing -->
-                  <label for ="transcription_{{=field}}">{{=field}}</label>
+                  <label for ="transcription_{{=field.replace(" ", "")}}">{{=field}}</label>
                   <p><b>Field Description</b> : {{=form.custom.comment[field]}}</p>
-                  {{=form.custom.widget[field]}}
+                  <!-- {{=form.custom.widget[field]}} -->
+                  <textarea class="text" cols="40" id="transcription_{{=field.replace(" ", "")}}" name="{{=field}}" rows="10"></textarea>
 
                 </div>
               {{pass}}
@@ -93,7 +94,7 @@
   <div id="doc_submit">
 
     {{if form and not response.message and not accepted_transcription_with_fields:}}
-        <input class="btn btn-success" type="submit" value="Submit Transcription", onClick="return confirm('Are you sure you want to submit this transcription? You can only transcribe a project once.');">
+        <input class="btn btn-success" type="submit" value="Submit Transcription" onClick="return confirm('Are you sure you want to submit this transcription? You can only transcribe a project once.');">
     {{elif accepted_transcription_with_fields:}}
       <input class="btn btn-primary" type="submit" value="Transcription Already Accepted" disabled>
     {{elif response.message:}}

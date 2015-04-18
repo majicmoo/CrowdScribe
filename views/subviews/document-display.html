@@ -11,7 +11,7 @@
 			{{pass}}
 
 			<div class="img_container_crop">
-				<img src="{{=URL('default','download',args = document.image)}}" alt = "Image for Document of {{=project.name}}"/>
+				<img src="{{=URL('default','download',args = document.image)}}" alt = "Document Image for {{=project.name}}"/>
 			</div>
 
 			<div class = "overlay">
@@ -20,13 +20,9 @@
           <h4>Document Description</h4>
 					<p>{{=document.description}}</p>
 
-					{{if document.status != "Closed" and project.status != "Being Created":}}
+					{{if project.status == "Open":}}
 						{{=A('View or Transcribe Document',_class="btn btn-info", _href= URL('projects','view_document', args=[project.id, document.id]))}}
-					{{elif project.status != "Being Created":}}
-						{{=A('View Transcribed Document',_class="btn btn-info", _href= URL('projects','view_document', args=[project.id, document.id]))}}
-					{{pass}}
-
-					{{if project.status == "Under Review" and (document.status == "Open" or document.status == "Done"):}}
+					{{elif project.status == "Under Review" and (document.status == "Open" or document.status == "Done"):}}
 						{{=A('Review Document Transcriptions',_class="btn btn-info", _href= URL('projects','review_document', args=[project.id, document.id]))}}
 					{{pass}}
 
