@@ -17,7 +17,7 @@ options = ["Sport", "Theatre", "Military", "Journal Entries", "Architecture", "C
            "Religion", "Art", "Literature", "Finance", "Scientific", "Media", "Music", "Other"]
 
 if not request.env.web2py_runtime_gae:
-    db = DAL('sqlite://crowdscribe.db', pool_size=1, lazy_tables=True)
+    db = DAL('sqlite://crowdscribe.db', pool_size=1, check_reserved=['all'], lazy_tables=True)
 
     db.define_table('project',
                     Field('name'),
