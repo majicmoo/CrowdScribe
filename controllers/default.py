@@ -7,16 +7,17 @@ general_module = general_functions.GeneralFunctions(database, db)
 
 
 def index():
-
+    # Controller for the homepage of Crowdscribe
+    # Max number of projects to be displayed on homepage per section
     number_of_projects_for_each_section = 6
     # Page Title
     response.title = "CrowdScribe | Home"
-
-    # NOT REALLY LATEST PROJECTS
+    # Latest projects that have been created
     latest_projects = database.get_latest_projects()
+    # Projects with the most successfully transcribed documents
     most_transcribed_projects = database.get_most_transcribed_projects()
-
     if len(latest_projects) == 0:
+        # If there are no latest projects
         latest_projects = []
         featured_project = None
         featured_project_image = None
