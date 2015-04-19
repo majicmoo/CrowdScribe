@@ -121,9 +121,8 @@ def profile():
 
 @auth.requires_login(otherwise=URL('user', 'login'))
 def view_own_transcriptions():
-    user_id = auth._get_user_id()
     # Controller for transactions made by user
-
+    user_id = auth._get_user_id()
     pending_transcriptions = database.get_pending_transcriptions_for_user(user_id)
     accepted_transcriptions = database.get_accepted_transcriptions_for_user(user_id)
     rejected_transcriptions = database.get_rejected_transcriptions_for_user(user_id)
@@ -133,31 +132,26 @@ def view_own_transcriptions():
 
 @auth.requires_login(otherwise=URL('user', 'login'))
 def view_individual_transcription():
+    # Controller to view a transcription made by the current user
     transcription_id = request.args(0)
     transcription = database.get_transcription(transcription_id)
     transcribed_fields = database.get_transcribed_fields_for_transcription(transcription_id)
     document_transcription_was_made_on = database.get_document_for_transcription(transcription_id)
-
     return dict(transcription=transcription, transcribed_fields=transcribed_fields,
                 document_transcription_was_made_on=document_transcription_was_made_on)
 
-def attach_header_image_to_projects(projects):
-    for project in projects:
-        project.header_image = database.get_document_for_project_header(project.id).image
-
-    return projects
-
 @auth.requires_login(otherwise=URL('user', 'login'))
 def manage_projects():
+    # Controller to manage currently owned projects
     user_id = auth._get_user_id()
     # Under Review Projects
     under_review_projects = database.get_under_review_projects_for_user(user_id)
-
+    # Page title
     response.title = 'CrowdScribe | Manage Projects'
 
     # Have Transcriptions and open Projects
     open_projects_with_transcriptions = database.get_open_projects_with_transcriptions_for_user(user_id)
-    open_projects_with_transcriptions = attach_header_image_to_projects(open_projects_with_transcriptions)
+    open_projects_with_transcriptions = general_module.attach_header_image_to_projects(open_projects_with_transcriptions)
 
     # No Transcriptions and open Projects
     open_projects_without_transcriptions = database.get_open_projects_without_transcriptions_for_user(user_id)
@@ -172,11 +166,13 @@ def manage_projects():
 
 
 def place_project_under_review():
+    # Controller for button to place a project under review
     db((db.project.id==request.vars.project_id)).update(status="Under Review")
     db.commit()
     redirect(URL('user','manage_projects'), client_side=True)
 
 def reopen_project_for_transcriptions():
+    # Controller for button to reopen a project for transcriptions
     db((db.project.id==request.vars.project_id)).update(status="Open")
     db.commit()
     redirect(URL('user','manage_projects'), client_side=True)
