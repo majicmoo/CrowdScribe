@@ -71,6 +71,7 @@ class ProjectFunctions:
 
         if (current.request.vars.description == "") or (current.request.vars.description is None):
             form.errors.description = "Description must be entered"
+            print "ERROR ERROR ERROR"
 
         if (current.request.vars.tag == "") or (current.request.vars.tag is None):
             form.errors.tag = "Tag must be chosen"

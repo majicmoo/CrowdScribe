@@ -62,6 +62,8 @@ def create_step1():
         redirect(URL('projects', 'create_step2'))
     elif form.errors:
         projects_module.validate_create_step1(form)
+        response.flashcolour = "rgba(255, 0, 0, 0.7)"
+        response.flash = str(len(form.errors)) + " Errors in Form. Please correct these before submitting."
 
     if clear_project.validate(formname="form_two"):
         # If clear project button is pressed, reset project wizard
@@ -107,6 +109,8 @@ def create_step2():
         response.flash = "Succesfully Added Document!"
     elif add_image_form.errors:
         projects_module.validate_add_image_form(add_image_form)
+        response.flashcolour = "rgba(255, 0, 0, 0.7)"
+        response.flash = str(len(add_image_form.errors)) + " Errors in Form. Please correct these before submitting."
 
     # Process form allowing you to move to step 3
     if go_to_step_3_form.process(formname="form_two").accepted:
@@ -351,7 +355,7 @@ def view_document():
     # Need an account to login
     elif auth._get_user_id() is None:
         args = str(project_id) + '-' + str(document_id)
-        response_message = A("Please login to transcribe this document.", _href=URL('user', 'login', vars=dict(controller_after_login='projects',
+        response_message = A("An account is required to transcribe a document. Click here to login.", _href=URL('user', 'login', vars=dict(controller_after_login='projects',
                                                                                     page_after_login='view_document',
                                                                                     args_after_login=args)))
 

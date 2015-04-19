@@ -265,24 +265,9 @@ $seperator-margin:20px;
 					}
 
 					button{
-						// width:10px;
 						margin-top:0 !important;
-						// height:30px;
-						// width:30px;
-						// background:red;
 						float:left;
 						display:block;
-						// padding:0;
-						// box-shadow:none;
-						// position:absolute;
-						//
-						// background-color: Transparent;
-				    // background-repeat:no-repeat;
-						// background-image:none;
-				    // border: none;
-				    // cursor:pointer;
-				    // overflow: hidden;
-				    // // outline:none;
 					}
 				}
 			}
@@ -325,7 +310,14 @@ $seperator-margin:20px;
 	label{
 		font-size: 17.5px;
 		font-weight: bold;
+
 	}
+
+	#unknown_checkbox_container{
+		display:inline-block;
+		padding:0;
+	}
+
 
 	.checkbox{
 		font-size: 14.5px;
@@ -657,7 +649,7 @@ $seperator-margin:20px;
 	}
 }
 
-#message{
+.message{
 
 	/* The message tag is used across all pages, and shows a message at the top when desired by the controller */
 
@@ -669,7 +661,7 @@ $seperator-margin:20px;
 
 	background-color:#64B58B;
 
-	#centeredmessage{
+	.centeredmessage{
 		// width:1000px;
 		height:$messageheight;
 		margin-left:auto;

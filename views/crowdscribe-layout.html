@@ -141,18 +141,20 @@
   <!-- It is used in the project display/edit pages to show the status and options a user has -->
   <!-- A background colour can be dynamically set from the controller -->
   {{if response.message:}}
-    <div id="message" style="background-color:{{=response.messagecolour if response.messagecolour else "#69c72a"}}">
-        <div id="centeredmessage">
+    <div class="message" style="background-color:{{=response.messagecolour if response.messagecolour else "#5cb3d9"}}">
+        <div class="centeredmessage">
             {{=response.message}}
         </div>
     </div>
   {{pass}}
 
   {{if response.flash:}}
-  <div class="alert {{=session.flash_class}}">
-    <button type="button" class="close" data-dismiss="alert">&times;</button>
-    {{=response.flash}}
-  </div>
+    <div class="message" style="background-color:{{=response.flashcolour if response.flashcolour else "#5cb3d9"}}">
+      <div class="centeredmessage">
+        <!-- <button type="button" class="close" data-dismiss="alert">&times;</button> -->
+        {{=response.flash}}
+      </div>
+    </div>
   {{pass}}
 
   <!-- This small script (not worth externally linking) just checks to see if a message exists, if it doesnt, hide the message bar -->

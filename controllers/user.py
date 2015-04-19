@@ -60,6 +60,10 @@ def login():
     # Window Title
     response.title = 'CrowdScribe | Login'
 
+    if request.vars.page_after_login == 'create_step1' :
+        # response.messagecolour = "#F7EC4F"
+        response.message = 'Please login or register before creating a project.'
+
     # Redirects based on request arguments
     if request.vars.controller_after_login and request.vars.page_after_login and request.vars.args_after_login:
         request.vars.args_after_login = request.vars.args_after_login.split('-')
@@ -75,7 +79,7 @@ def login():
     form.custom.widget.username["_placeholder"] = "Username"
     form.custom.widget.password["_placeholder"] = "Password"
 
-    return dict(form=form)
+    return dict(form=form, after_login = request.vars.page_after_login)
 
 def remove_projects_being_created(form):
     # Function to remove any projects that were previously being by user when re-logging in
