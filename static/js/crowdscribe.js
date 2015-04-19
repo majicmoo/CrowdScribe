@@ -1,6 +1,3 @@
-
-//Exam Number: Y0071297
-
 $(document).ready(function(){
 
     function readURL(input) {
@@ -10,6 +7,7 @@ $(document).ready(function(){
 
         reader.onload = function (e) {
             $('#image_being_uploaded').attr('src', e.target.result);
+            $('#image_being_uploaded').attr('alt', "Preview of Uploaded Image")
         }
 
         reader.readAsDataURL(input.files[0]);
