@@ -1,19 +1,15 @@
-from gluon import *
-import database_transactions as database_transactions
-
 class GeneralFunctions:
 
     def __init__(self, database, db):
         # database is database_transactions module
-        self.database=database
+        self.database = database
         self.db = db
 
     def attach_all_information_to_projects(self, projects):
         # Attach a header image, time string and number of transcribed documents to each project in a list.
         projects = self.attach_header_image_to_projects(projects)
-        projects  = self.attach_time_string_to_projects(projects)
+        projects = self.attach_time_string_to_projects(projects)
         projects = self.attach_number_of_transcribed_documents_string_to_projects(projects)
-
         return projects
 
     def attach_header_image_to_projects(self, projects):
@@ -39,7 +35,7 @@ class GeneralFunctions:
 
     def convert_date_to_integer(self, date, era):
         # Convert a given date and era (eg. 1900 BC) to an integer. BC is negative, AD is positive
-        if era =="BC":
+        if era == "BC":
             return -int(date)
         else:
             return int(date)
@@ -73,4 +69,3 @@ class GeneralFunctions:
         number_of_transcribed_documents = self.database.get_number_of_transcribed_documents_for_project(project_id)
         number_documents = len(self.database.get_documents_for_project(project_id))
         return str(number_of_transcribed_documents) + "/" + str(number_documents)
-
