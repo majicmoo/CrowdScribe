@@ -30,11 +30,13 @@
           <img src="{{=image}}" alt="Document Image for {{=project.name}}"/>
     </div>
 
-    <div id="transcription_form_holder" class="{{="disabled" if response.message else ""}} landscape">
-
-      <h4>{{=len(data_fields) }} Fields for transcription</h4>
+    <div id="transcription_form_holder" class="{{="disabled" if overlay_message else ""}} landscape">
 
       {{if form and not accepted_transcription_with_fields and not user_submitted_transcription_with_fields:}}
+
+        <!-- This block handles the case where transcription is possible -->
+
+        <h4>{{=len(data_fields) }} Fields for transcription</h4>
 
           <!-- If there is an overlay, the form should be disabled to prevent TABBING into it -->
           <fieldset {{="disabled" if overlay_message else ""}}>
@@ -42,10 +44,10 @@
             <!-- We are aware that the IDs for these form fields are not HTML W3C compliant, as they can contain spaces. However this is a requirement of linking the form to the database -->
             <!-- We felt it was a higher priority to provide screen reader accesibility with labels than break these by altering the name of the field -->
 
-              {{for field in data_fields:}}
+              {{for index, field in enumerate(data_fields):}}
                 <div class="rounded_bordered_container transcription_field">
                   <!-- Fields are displayed as label, description, then edit. This means users with a screen reader will hear the label for the field, its description, and then 'edit', prompting them to start writing -->
-                  <label for ="transcription_{{=field.replace(" ", "")}}">{{=field}}</label>
+                  <label for ="transcription_{{=field.replace(" ", "")}}">Field {{=index+1}} : {{=field}}</label>
                   <p><b>Field Description</b> : {{=form.custom.comment[field]}}</p>
                   <!-- {{=form.custom.widget[field]}} -->
                   <textarea class="text" cols="40" id="transcription_{{=field.replace(" ", "")}}" name="{{=field}}" rows="10"></textarea>
@@ -57,22 +59,35 @@
 
       {{elif accepted_transcription_with_fields:}}
 
+        <!-- This handles the case where you (as an owner) have accepted a transcription -->
+
         <h3>Accepted Transcription</h3>
-
-
-        {{for field in accepted_transcription_with_fields:}}
-        <h4>{{=field.data_field.name}}</h4>
-        <pre>{{=field.transcribed_field.information}}</pre>
-
+        <ul class = "transcription_viewer">
+        {{for index, field in enumerate(accepted_transcription_with_fields):}}
+          <li class = "transcription rounded_bordered_container">
+            <h4>Field {{=index+1}} : {{=field.data_field.name}}</h4>
+            <p>Description : {{=field.data_field.short_description}}</p>
+            <h5>Your transcription:</h5>
+            <pre>{{=field.transcribed_field.information}}</pre>
+          </li>
         {{pass}}
+        </ul>
 
       {{elif user_submitted_transcription_with_fields:}}
 
+        <!-- This is the case where you (as a user) have submtited a transcription -->
+
         <h3>Your Transcription</h3>
-        {{for field in user_submitted_transcription_with_fields:}}
-          <h4>{{=field.data_field.name}}</h4>
-          <pre>{{=field.transcribed_field.information}}</pre>
+        <ul class = "transcription_viewer">
+        {{for index, field in enumerate(user_submitted_transcription_with_fields):}}
+          <li class = "transcription rounded_bordered_container">
+            <h4>Field {{=index+1}} : {{=field.data_field.name}}</h4>
+            <p>Description : {{=field.data_field.short_description}}</p>
+            <h5>Your transcription:</h5>
+            <pre>{{=field.transcribed_field.information}}</pre>
+          </li>
         {{pass}}
+        </ul>
 
       {{pass}}
 

@@ -131,14 +131,16 @@ def view_own_transcriptions():
                 rejected_transcriptions=rejected_transcriptions)
 
 @auth.requires_login(otherwise=URL('user', 'login'))
-def view_individual_transcription():
+def view_transcription():
     # Controller to view a transcription made by the current user
     transcription_id = request.args(0)
     transcription = database.get_transcription(transcription_id)
     transcribed_fields = database.get_transcribed_fields_for_transcription(transcription_id)
-    document_transcription_was_made_on = database.get_document_for_transcription(transcription_id)
+    document_for_transcription = database.get_document_for_transcription(transcription_id)
+    project_for_transcription = database.get_project(document_for_transcription.project_id)
     return dict(transcription=transcription, transcribed_fields=transcribed_fields,
-                document_transcription_was_made_on=document_transcription_was_made_on)
+                document_for_transcription = document_for_transcription,
+                project_for_transcription = project_for_transcription)
 
 @auth.requires_login(otherwise=URL('user', 'login'))
 def manage_projects():

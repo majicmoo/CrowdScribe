@@ -2,6 +2,9 @@
  * This document is used for CSS that is used on the majority of pages throughout
  * the site. This means quicker loading and less I/O. It is loaded in crowdscribe-layout.html
  */
+/* The skip to content div is included at the top left of every page. It is only accesible to keyboard users, and allows them to
+ skip straight to the main content. This is especially useful if screen reader users are navigating aroud multiple pages and don't want to
+ constantly hear the navigation bar read to them */
 .skip_to_content {
   position: absolute;
   top: 0;
@@ -70,7 +73,7 @@ form {
   /* Used to space inner content */
   padding: 0 40px 0 40px;
   /* Slight gradient to highlight features */
-  background-image: linear-gradient(to bottom, white, #f0f0f0);
+  background-image: linear-gradient(to bottom, #FFF, #f0f0f0);
   /* Some Bootstrap Overwrites */
   border: 0;
   border-bottom: 1px solid #e6e6e6;
@@ -337,6 +340,13 @@ form {
   padding-right: 0 !important;
   padding-bottom: 0 !important; }
 
+.transcription_viewer {
+  list-style-type: none;
+  margin: 0; }
+  .transcription_viewer .transcription pre {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    margin: 0; }
+
 .fields .field {
   width: 100%;
   background: #c8c8c8;
@@ -389,3 +399,5 @@ form {
 .alert {
   border-radius: 0;
   margin: 0; }
+
+/*# sourceMappingURL=crowdscribe_global.css.map */

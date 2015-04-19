@@ -1,0 +1,30 @@
+{{response.files.append(URL(r=request,c='static/css',f='user.css'))}}
+{{extend 'crowdscribe-layout.html'}}
+
+<div class="padded_container form_container no_bottom_padding">
+
+  <ul class="breadcrumb">
+    <li><a href="{{=URL('user','profile')}}">Profile</a> <span class="divider">/</span></li>
+    <li><a href="{{=URL('user','view_own_transcriptions')}}">Your Transcriptions</a> <span class="divider">/</span></li>
+    <li class="active">Transcription for {{=project_for_transcription.name}} Document</li>
+  </ul>
+
+  <h1>{{=transcription.status}} Transcription for <a href = "{{=URL('projects','view_document', args=[project_for_transcription.id, document_for_transcription.id])}}">{{=project_for_transcription.name}} Document</a></h1>
+  <p>
+    Below is the transcription you made towards this document.
+  </p>
+
+  <div class="line_seperator"></div>
+
+  <ul class = "transcription_viewer">
+  {{for index, field in enumerate(transcribed_fields):}}
+    <li class = "transcription rounded_bordered_container">
+      <h4>Field {{=index+1}} : {{=field.data_field.name}}</h4>
+      <p>Description : {{=field.data_field.short_description}}</p>
+      <h5>Your transcription:</h5>
+      <pre>{{=field.transcribed_field.information}}</pre>
+    </li>
+  {{pass}}
+  </ul>
+
+</div>
