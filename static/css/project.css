@@ -66,7 +66,10 @@
     position: relative; }
     .documents .document a {
       display: block;
-      color: white; }
+      color: black;
+      text-decoration: none; }
+      .documents .document a:hover, .documents .document a:focus {
+        opacity: .75; }
     .documents .document .content {
       border-radius: 10px;
       position: relative;
@@ -100,7 +103,7 @@
           line-height: 35px; }
         .documents .document .content .text_description h3, .documents .document .content .text_description h5 {
           margin: 0; }
-        .documents .document .content .text_description a {
+        .documents .document .content .text_description .btn {
           box-sizing: border-box;
           width: 100%;
           margin-top: 5px; }
@@ -234,3 +237,5 @@
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box; }
+
+/*# sourceMappingURL=project.css.map */

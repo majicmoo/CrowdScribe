@@ -270,6 +270,11 @@ class DatabaseTransactions:
                         & (self.db.transcription.status == "Rejected")).select()
         return result
 
+    def get_username_for_transcription(self, transcription_id):
+        transcription = self.get_transcription(transcription_id)
+        result = transcription.author_id.username
+        return result
+
 
     def get_transcription(self, transcription_id):
         # Get a transcription by its id

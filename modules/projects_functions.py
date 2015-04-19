@@ -215,7 +215,7 @@ class ProjectFunctions:
 
 
     def create_clear_project_form(self):
-        return FORM(DIV(BUTTON("Clear Project ", I(_class='icon-trash icon-white'), _type='submit', _class='btn btn-danger btn-block',
+        return FORM(DIV(BUTTON("Clear Project and Return to Step 1 ", I(_class='icon-trash icon-white'), _type='submit', _class='btn btn-danger btn-block',
                                     _onclick="return confirm('Clearing a project will wipe all of your progress."
                                              " Continue?');")))
 
@@ -244,10 +244,11 @@ class ProjectFunctions:
         for transcription in transcriptions:
             transcription_dictionary = {}
             transcription_dictionary['number'] = i
+            transcription_dictionary['user'] = self.database.get_username_for_transcription(transcription.id)
             transcription_dictionary['transcription'] = self.database.get_transcribed_fields_for_transcription(transcription.id)
-            transcription_dictionary['button'] = A(BUTTON('Accept',_class="btn btn-success"), callback= URL('accept_transcription',
+            transcription_dictionary['button'] = A(BUTTON('Accept '+transcription_dictionary['user']+'\'s Transcription and View Document',_class="btn btn-success"), callback= URL('accept_transcription',
                     vars= dict(document_id=transcription.document_id, transcription_id=transcription.id,
-                        project_id=project.id)))
+                        project_id=project.id)), _onclick = "return confirm('Are you sure you want to accept this transcription and reject all others?');")
             transcriptions_list.append(transcription_dictionary)
             i += 1
 

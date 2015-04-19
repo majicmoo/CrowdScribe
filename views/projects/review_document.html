@@ -31,20 +31,25 @@
 
       <div id="transcription_form_holder" class="{{="disabled" if response.message else ""}} landscape">
 
+        <ul class = "transcription_viewer">
         {{for transcription in transcriptions:}}
                 <div>
-                <h3> Transcription {{=transcription['number']}}</h3>
-                {{for field in transcription['transcription']: }}
-                    <div>
-                        <b>{{=field.data_field.name}}:</b>
-                        {{=field.transcribed_field.information}}
-                    </div>
-                    <br>
+                <h3> Transcription {{=transcription['number']}} by {{=transcription['user']}}</h3>
+                {{for index, field in enumerate(transcription['transcription']): }}
+                    <li class = "transcription margin_bottom">
+
+                          <h4>Field {{=index+1}} : {{=field.data_field.name}}</h4>
+                          <p>Description : {{=field.data_field.short_description}}</p>
+                          <pre>{{=field.transcribed_field.information}}</pre>
+
+
+                    </li>
                 {{pass}}
                 {{=transcription['button']}}
+                <div class="line_seperator"></div>
                 </div>
         {{pass}}
-
+        </ul>
 
 
     {{if response.message:}}
@@ -59,7 +64,7 @@
 
 <div id="doc_submit">
 
-{{=A(BUTTON('Reject All',_class="btn btn-danger btn-large"), callback= URL('reject_all_transcriptions',
+{{=A(BUTTON('Reject All and Return to Project',_class="btn btn-danger btn-large"), callback= URL('reject_all_transcriptions',
 vars= dict(document_id=document.id, project_id=project.id)))}}
 </div>
 

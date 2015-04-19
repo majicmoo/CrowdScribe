@@ -120,9 +120,13 @@
 
 		position:relative;
 
-		a{
+    a{
 			display:block;
-			color:white;
+			color:black;
+			text-decoration: none;
+			&:hover, &:focus{
+				opacity:.75;
+			}
 		}
 
 		.content{
@@ -176,7 +180,7 @@
 						margin:0;
 					}
 
-					a{
+					.btn{
             box-sizing: border-box;
 						width:100%;
 						margin-top:5px;

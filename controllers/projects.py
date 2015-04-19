@@ -345,9 +345,8 @@ def view_document():
         # A(msgstring, _href=URL('projects', 'review_document', args=[project.id, document.id]))
 
     elif project.author_id == auth._get_user_id() and accepted_transcription:
-        response_message = 'You are the owner of this project and have accepted a transcription for this document. ' \
+        response.message = 'You are the owner of this project and have accepted a transcription for this document. ' \
                            'This document is now closed and its transcription is available below.'
-        response.message = response_message
 
     # Need an account to login
     elif auth._get_user_id() is None:
@@ -355,9 +354,6 @@ def view_document():
         response_message = A("Please login to transcribe this document.", _href=URL('user', 'login', vars=dict(controller_after_login='projects',
                                                                                     page_after_login='view_document',
                                                                                     args_after_login=args)))
-        # response.message = A(response_message, _href=URL('user', 'login', vars=dict(controller_after_login='projects',
-        #                                                                             page_after_login='view_document',
-        #                                                                             args_after_login=args)))
 
     # If user has already provided a transcription
     elif database.document_has_already_been_transcribed_by_user(document_id, auth._get_user_id()):
@@ -464,6 +460,7 @@ def review_document():
     # Check Project Belongs to Current User
     if project.author_id != auth._get_user_id():
         redirect(URL('projects', 'project', args=[project_id]))
+
     # Get current transcriptions for Document
     transcriptions = database.get_pending_transcriptions_for_document(document_id)
     transcriptions = projects_module.build_transcription_list(project, transcriptions)

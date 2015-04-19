@@ -1,7 +1,8 @@
 <!-- This is used throughout the site to display projects in an adaptive frame -->
 <div class="document border-box-sizing">
 
-		<div class="content border-box-sizing">
+		<a href="{{=(URL('projects','view_document', args=[project.id, document.id]) if (project.status == 'Open' or project.status == 'Closed')
+						 else URL('projects','review_document', args=[project.id, document.id]))}}" class="content border-box-sizing">
 
 			<!-- Show transcription count if the project owner is viewing, the document isn't closed, and the project isnt being created -->
 			{{if auth._get_user_id() == project.author_id and document.status != "Closed" and project.status != "Being Created":}}
@@ -21,13 +22,14 @@
 					<p>{{=document.description}}</p>
 
 					{{if project.status == "Open":}}
-						{{=A('View or Transcribe Document',_class="btn btn-info", _href= URL('projects','view_document', args=[project.id, document.id]))}}
+						<div class="btn btn-info">View or Transcribe Document</div>
+					{{elif project.status == "Closed":}}
+						<div class="btn btn-info">View Transcribed Document</div>
 					{{elif project.status == "Under Review" and (document.status == "Open" or document.status == "Done"):}}
-						{{=A('Review Document Transcriptions',_class="btn btn-info", _href= URL('projects','review_document', args=[project.id, document.id]))}}
+						<div class="btn btn-info">Review Document Transcriptions</div>
 					{{pass}}
 
 				</div>
 			</div>
-
-		</div>
+		</a>
 </div>

@@ -100,6 +100,9 @@ $seperator-margin:20px;
 	$navheight : 55px;
 	$navmargin : 15px;
 
+	/* Prevents right hand side overflowing */
+	min-width:1100px;
+
 	.navbar-inner{
 
 		/* Used to space inner content */
@@ -133,7 +136,9 @@ $seperator-margin:20px;
 
 				/* Logo and Home Redirect */
 
-				width:160px;
+				// width:140px;
+				display:block;
+				width:auto;
 
 				a{
 					/* Produces square tabbing area on TAB key press */
@@ -146,9 +151,9 @@ $seperator-margin:20px;
 
 				img{
 					/* Image position is slightly adjusted to bring it in line with navigation items */
-					$buffer : 3px;
-					height:$navheight - $navmargin*2;
-					margin:$navmargin - $buffer 0 $navmargin 0;
+					$imgmargin : 13px;
+					height:$navheight - $imgmargin*2;
+					margin:$imgmargin 0 $imgmargin 0;
 				}
 			}
 
@@ -170,6 +175,10 @@ $seperator-margin:20px;
 			.noline a{
 				/* Used to more visually seperate items */
 				border-right: none;
+			}
+
+			.leftline a{
+				border-left: thin solid $light_grey;
 			}
 
 			$aheight:30px;
@@ -202,47 +211,78 @@ $seperator-margin:20px;
 				}
 			}
 
-			$searchwidth : 200px;
+			$searchwidth : 270px;
 
 			.search{
-				width:330px;
+				width:375px;
+				display:block;
 				height:50px;
 				position:relative;
 
-				// background:red;
+				background:$lightest_grey;
 				text-align:left;
+
+				$borderradius : 7px;
+				$heightnopadding : 30px;
+				$padding : 5px;
+				$margin : ($navheight - $heightnopadding - $padding*2) / 2;
+				$heightwithpadding : $heightnopadding + $padding;
+
+				margin: $margin 0 $margin 0;
+				padding:$padding $padding $padding $padding;
+				height : $heightnopadding;
+				border-radius:$borderradius;
+
+				margin-left:10px;
+
+
 				label{
-					line-height:30px;
+					line-height:$heightnopadding;
 					font-size:16px;
 					font-family: "Myriad Pro", "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
-					margin:$margin 0 $margin 10px;
-					display:inline-block;
+					margin:0 10px 0 10px;
+					width:auto;
+					float:left;
+					display:block;
+					// display:inline-block;
 				}
 
 				.search_form{
-					display:inline-block;
-					position:absolute;
-					width:$searchwidth;
+					// display:inline-block;
+					display:block;
+					float:left;
+					// position:absolute;
+					// width:$searchwidth;
 					margin:0;
 
 					.search-query{
 						/* Search Bar */
-						margin:$margin 10px $margin 10px;
-						width:$searchwidth;
+						// margin:$margin 10px $margin 10px;
+						// width:$searchwidth;
+						border-radius:$borderradius / 2;
+						float:left;
+						display:block;
 					}
 
-					.search_button{
-						box-shadow:none;
-						position:absolute;
-						top:8px;
-						right:-75px;
-						background-color: Transparent;
-				    background-repeat:no-repeat;
-						background-image:none;
-				    border: none;
-				    cursor:pointer;
-				    overflow: hidden;
-				    // outline:none;
+					button{
+						// width:10px;
+						margin-top:0 !important;
+						// height:30px;
+						// width:30px;
+						// background:red;
+						float:left;
+						display:block;
+						// padding:0;
+						// box-shadow:none;
+						// position:absolute;
+						//
+						// background-color: Transparent;
+				    // background-repeat:no-repeat;
+						// background-image:none;
+				    // border: none;
+				    // cursor:pointer;
+				    // overflow: hidden;
+				    // // outline:none;
 					}
 				}
 			}
@@ -562,6 +602,10 @@ $seperator-margin:20px;
 
 	list-style-type: none;
 	margin:0;
+
+	.margin_bottom{
+		margin-bottom:15px;
+	}
 
 	.transcription{
 		pre{
