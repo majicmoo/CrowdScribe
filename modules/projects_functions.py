@@ -12,7 +12,7 @@ class ProjectFunctions:
 
 
     def check_if_steps_available(self, project_id):
-
+        # Checks if steps within the create project wizard are currently available to the user
         step2_available = False
         step3_available = False
         step4_available = False
@@ -37,6 +37,7 @@ class ProjectFunctions:
 
 
     def retrieve_prepopulated_data_for_create_step_1(self, project_being_edited):
+        # Retreive the data to populate the create project wizard step one.
         if project_being_edited == None:
             return None
         else:
@@ -67,9 +68,7 @@ class ProjectFunctions:
 
 
     def validate_create_step1(self, form):
-
-        print current.request.vars
-
+        # Validator for step one of the create project wizard
         if (current.request.vars.name == "") or (current.request.vars.name == None):
             form.errors.name = "Name must be entered"
 
@@ -109,64 +108,56 @@ class ProjectFunctions:
 
 
     def validate_add_image_form(self, form):
-
+        # Validate the add document image form in step 2 of the create project wizard
         if (current.request.vars.description == "") or (current.request.vars.description is None):
             form.errors.description = "Description must not be empty"
-
+        # Validator for empty image
         image_validator = IS_NOT_EMPTY(error_message=("Image must not be left empty"))
         if image_validator(current.request.vars.image)[1] is not None:
             form.errors.image = image_validator(current.request.vars.image)[1]
-
+        # Validator for image format
         check_image_format_validator = IS_IMAGE(error_message=("Only images with a height larger \
                                          than 400px and width larger than 450px may be uploaded"),minsize=(450, 400))
         if check_image_format_validator(current.request.vars.image)[1] is not None:
             form.errors.image = check_image_format_validator(current.request.vars.image)[1]
 
-
-
     def validate_add_field_form(self, form):
-
+        # Validate the add field form in step 3 of the create project wizard.
         alphanumeric_validator = IS_ALPHANUMERIC(error_message="Only letters and numbers allowed in field name")
-
+        # Validate that field is alphanumeric
         if alphanumeric_validator(current.request.vars.name)[1] is not None:
             form.errors.name = alphanumeric_validator(current.request.vars.name)[1]
-
+        # Validate that description is not empty
         if (current.request.vars.short_description == "") or (current.request.vars.short_description is None):
             form.errors.short_description = "Description must not be empty"
-
+        # Validate that field name is not empty
         if (current.request.vars.name == "") or(current.request.vars.name is None):
             form.errors.name = "Name must not be empty"
 
-        print form.errors
-
 
     def attach_number_of_transcriptions(self, documents):
+        # Attach the number of transcriptions each document has to a list of documents
         for document in documents:
             print document
             document.number_of_transcriptions = len(self.database.get_pending_transcriptions_for_document(document.id))
         return documents
 
     def attach_number_of_transcriptions_to_lists_of_documents(self, all_lists):
+        # Attach the number of transcriptions each document has to all lists of documents
         for single_list in all_lists:
             single_list = self.attach_number_of_transcriptions(single_list)
         return all_lists
 
 
     def if_none_convert_to_empty_list(self, array):
+        # If array is none convert to an empty list else return the original array
         if array is None:
             return []
         else:
             return array
 
-    def construct_project_timestring(self, project):
-        if project.time_period_start_date:
-            timestring = '('+self.general_module.convert_integer_to_date_string(project.time_period_start_date) + " - " +\
-                         self.general_module.convert_integer_to_date_string(project.time_period_end_date)+')'
-            return timestring
-        return ''
-
-
     def set_up_project_page_based_on_user(self, project, auth):
+        # Return correct documents on a project page based on if user is owner or not
         open_documents_with_transcription = open_documents_without_transcription = closed_documents = open_documents\
         = done_documents = []
 
@@ -198,6 +189,7 @@ class ProjectFunctions:
         closed_documents)
 
     def check_if_step1_was_skipped_and_redirect_if_so(self, session):
+        # Redirect to step one of project wizard if no project is being created
         if session.project_being_created is not None:
             project_id = session.project_being_created
             project_being_edited = self.database.get_project(project_id)
@@ -206,6 +198,7 @@ class ProjectFunctions:
             redirect(URL('projects', 'create_step1'))
 
     def check_if_come_back_from_future_step(self, session):
+        # Check if during create project wizard user has returned to one of the previous steps.
         project_id = None
         project_being_edited = None
         if session.project_being_created is not None:
@@ -215,23 +208,29 @@ class ProjectFunctions:
 
 
     def create_clear_project_form(self):
+        # Returns a form which will clear the current project being created in the wizard.
         return FORM(DIV(BUTTON("Clear Project ", I(_class='icon-trash icon-white'), _type='submit', _class='btn btn-danger btn-block',
                                     _onclick="return confirm('Clearing a project will wipe all of your progress."
                                              " Continue?');")))
 
     def create_next_step_form(self, message):
+        # Returns a form which will allow the user to progress to the next step in the create project wizard.
         return FORM(BUTTON(message, I(_class='icon-arrow-right icon-white'),
                                         _type='submit', _class='btn btn-success btn-block btn-large'))
 
     def create_previous_step_form(self, message):
+        # Returns a form which will allow the user to go back to the previous in the create project wizard.
         return FORM(BUTTON(message, I(_class='icon-arrow-left icon-white'),
                                         _type='submit', _class='btn btn-info btn-block btn-large btn-left'))
 
     def process_start_and_end_dates(self):
+        # Process the start and end dates of a project time period to the correct format.
         if current.request.vars.unknown == "yes":
+            # If dates are unknown set to None.
             start_date = None
             end_date = None
         else:
+            # If dates are known convert to integer
             start_date = self.general_module.convert_date_to_integer(current.request.vars.time_period_start_date, current.request.vars.start_era)
             end_date = self.general_module.convert_date_to_integer(current.request.vars.time_period_end_date, current.request.vars.end_era)
 
@@ -239,6 +238,7 @@ class ProjectFunctions:
 
 
     def build_transcription_list(self, project, transcriptions):
+        # Build a list containing a dictionary of transcription information
         i=1
         transcriptions_list = []
         for transcription in transcriptions:
