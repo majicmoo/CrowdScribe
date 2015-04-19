@@ -131,6 +131,10 @@
         position:absolute;
         top:100% - $height;
 
+        label{
+          margin-top:15px;
+        }
+
         text-align:center;
         color:white;
 
@@ -139,6 +143,9 @@
         	overflow: hidden;
         	margin: 10px;
           width:100px;
+          &:focus, &:hover{
+            opacity:.5;
+          }
         }
         .fileUpload input.upload {
         	position: absolute;
@@ -147,9 +154,13 @@
         	margin: 0;
         	padding: 0;
         	font-size: 20px;
-        	cursor: pointer;
         	opacity: 0;
         	filter: alpha(opacity=0);
+
+          &:focus, &:hover{
+            opacity:.5;
+            background:black;
+          }
         }
       }
 

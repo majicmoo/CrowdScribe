@@ -449,14 +449,18 @@ $seperator-margin:20px;
 
 		.clickable{
 			opacity:1;
+			background: -webkit-linear-gradient($light_grey, #B5B5B5);
+
+			&:hover{
+				opacity:.5;
+			}
 		}
 
 		.highlighted{
 			opacity:1;
 			font-weight:bold;
-			background:$logo_color;
+			background: -webkit-linear-gradient($logo_color, $logo_color_dark);
 			color:white;
-			//rgb(70, 70, 70);
 
 			&:hover{
 				opacity:.5;

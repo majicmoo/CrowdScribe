@@ -79,7 +79,7 @@ def login():
     form.custom.widget.username["_placeholder"] = "Username"
     form.custom.widget.password["_placeholder"] = "Password"
 
-    return dict(form=form, after_login = request.vars.page_after_login)
+    return dict(form=form, after_login_controller = request.vars.page_after_login)
 
 def remove_projects_being_created(form):
     # Function to remove any projects that were previously being by user when re-logging in

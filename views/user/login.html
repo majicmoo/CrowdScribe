@@ -20,7 +20,7 @@
     </div>
 
     <button type="submit" class="btn btn-success btn-large" value="Submit">
-         Log In {{= "and go to Create Project" if after_login else ""}}
+         Log In {{= "and go to Create Project" if after_login_controller  == 'create_step1' else ""}} {{= "and go to Document" if after_login_controller  == 'view_document' else ""}}
     </button>
 
     {{=form.custom.end}}

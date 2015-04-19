@@ -84,11 +84,15 @@
         top: 70%;
         text-align: center;
         color: white; }
+        .add_new_document_form .document_image_upload_form .document_image_upload_form_content #image_upload_overlay label {
+          margin-top: 15px; }
         .add_new_document_form .document_image_upload_form .document_image_upload_form_content #image_upload_overlay .fileUpload {
           position: relative;
           overflow: hidden;
           margin: 10px;
           width: 100px; }
+          .add_new_document_form .document_image_upload_form .document_image_upload_form_content #image_upload_overlay .fileUpload:focus, .add_new_document_form .document_image_upload_form .document_image_upload_form_content #image_upload_overlay .fileUpload:hover {
+            opacity: .5; }
         .add_new_document_form .document_image_upload_form .document_image_upload_form_content #image_upload_overlay .fileUpload input.upload {
           position: absolute;
           top: 0;
@@ -96,9 +100,11 @@
           margin: 0;
           padding: 0;
           font-size: 20px;
-          cursor: pointer;
           opacity: 0;
           filter: alpha(opacity=0); }
+          .add_new_document_form .document_image_upload_form .document_image_upload_form_content #image_upload_overlay .fileUpload input.upload:focus, .add_new_document_form .document_image_upload_form .document_image_upload_form_content #image_upload_overlay .fileUpload input.upload:hover {
+            opacity: .5;
+            background: black; }
   .add_new_document_form .document_desc_upload_form {
     margin-top: 10px;
     float: left;
