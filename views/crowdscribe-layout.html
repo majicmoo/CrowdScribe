@@ -57,7 +57,7 @@
         <!-- <li class="{{= 'selected' if request.function == 'index' else ''}}">
           <a href="{{=URL('default','index')}}">Home</a>
         </li> -->
-        <li class="{{= 'selected' if request.controller == 'browse' else ''}}">
+        <li class="{{= 'selected leftline' if request.controller == 'browse' else 'leftline'}}">
           <a href="{{=URL('browse','all')}}">Browse</a>
         </li>
 
@@ -67,8 +67,8 @@
           <label for="search_input">Search</label>
           <form id = "search" class = "search_form" action="{{=URL('search','search_results')}}" method="GET">
             <input  aria-label="Type Search Term" id = "search_input" type="search" name="quicksearch" class="search-query" placeholder="Search Projects">
-            <button aria-label="Begin Search" type="submit" class = "search_button">
-              <i class="icon-search"></i>
+            <button aria-label="Begin Search" type="submit" class = "border-box-sizing">
+              Submit
             </button>
           </form>
 

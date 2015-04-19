@@ -69,99 +69,107 @@ form {
   margin: 0 !important; }
 
 /* Global navigation bar - at the top of all pages */
-.navbar .navbar-inner {
-  /* Used to space inner content */
-  padding: 0 40px 0 40px;
-  /* Slight gradient to highlight features */
-  background-image: linear-gradient(to bottom, #FFF, #f0f0f0);
-  /* Some Bootstrap Overwrites */
-  border: 0;
-  border-bottom: 1px solid #e6e6e6;
-  height: 55px;
-  /* Hides right hand content if the window size is too small */
-  overflow: hidden; }
-  .navbar .navbar-inner .right {
-    /* Right-side content */
-    float: right;
-    margin-right: 0; }
-  .navbar .navbar-inner .nav {
-    /* List(ul) of navigation items */
-    height: 55px; }
-    .navbar .navbar-inner .nav .logo {
-      /* Logo and Home Redirect */
-      width: 160px; }
-      .navbar .navbar-inner .nav .logo a {
-        /* Produces square tabbing area on TAB key press */
-        width: 140px;
-        height: 55px;
-        /* Centralises logo within container */
-        margin: 0 auto 0 auto; }
-      .navbar .navbar-inner .nav .logo img {
-        /* Image position is slightly adjusted to bring it in line with navigation items */
-        height: 25px;
-        margin: 12px 0 15px 0; }
-    .navbar .navbar-inner .nav .create_project {
-      /* List object widths are set manually for consistency and readability */
-      width: 150px; }
-    .navbar .navbar-inner .nav a:hover, .navbar .navbar-inner .nav a:focus {
-      opacity: .4; }
-    .navbar .navbar-inner .nav .selected a {
-      /* A button is highlighted in green and bolded to signify it is the element associated with the current page */
-      color: #5cb3d9;
-      font-weight: bold; }
-    .navbar .navbar-inner .nav .noline a {
-      /* Used to more visually seperate items */
-      border-right: none; }
-    .navbar .navbar-inner .nav li {
-      /* Generic list item with modifiers */
-      text-align: center;
-      /* Standard width is 100px */
-      width: 100px; }
-      .navbar .navbar-inner .nav li a {
-        /* Vertically centers text */
-        margin: 12.5px 0 12.5px 0;
-        padding: 0 10px 0 10px;
-        /* Set a{} height to 30px */
+.navbar {
+  /* Prevents right hand side overflowing */
+  min-width: 1100px; }
+  .navbar .navbar-inner {
+    /* Used to space inner content */
+    padding: 0 40px 0 40px;
+    /* Slight gradient to highlight features */
+    background-image: linear-gradient(to bottom, #FFF, #f0f0f0);
+    /* Some Bootstrap Overwrites */
+    border: 0;
+    border-bottom: 1px solid #e6e6e6;
+    height: 55px;
+    /* Hides right hand content if the window size is too small */
+    overflow: hidden; }
+    .navbar .navbar-inner .right {
+      /* Right-side content */
+      float: right;
+      margin-right: 0; }
+    .navbar .navbar-inner .nav {
+      /* List(ul) of navigation items */
+      height: 55px; }
+      .navbar .navbar-inner .nav .logo {
+        /* Logo and Home Redirect */
+        display: block;
+        width: auto; }
+        .navbar .navbar-inner .nav .logo a {
+          /* Produces square tabbing area on TAB key press */
+          width: 140px;
+          height: 55px;
+          /* Centralises logo within container */
+          margin: 0 auto 0 auto; }
+        .navbar .navbar-inner .nav .logo img {
+          /* Image position is slightly adjusted to bring it in line with navigation items */
+          height: 29px;
+          margin: 13px 0 13px 0; }
+      .navbar .navbar-inner .nav .create_project {
+        /* List object widths are set manually for consistency and readability */
+        width: 150px; }
+      .navbar .navbar-inner .nav a:hover, .navbar .navbar-inner .nav a:focus {
+        opacity: .4; }
+      .navbar .navbar-inner .nav .selected a {
+        /* A button is highlighted in green and bolded to signify it is the element associated with the current page */
+        color: #5cb3d9;
+        font-weight: bold; }
+      .navbar .navbar-inner .nav .noline a {
+        /* Used to more visually seperate items */
+        border-right: none; }
+      .navbar .navbar-inner .nav .leftline a {
+        border-left: thin solid #c8c8c8; }
+      .navbar .navbar-inner .nav li {
+        /* Generic list item with modifiers */
+        text-align: center;
+        /* Standard width is 100px */
+        width: 100px; }
+        .navbar .navbar-inner .nav li a {
+          /* Vertically centers text */
+          margin: 12.5px 0 12.5px 0;
+          padding: 0 10px 0 10px;
+          /* Set a{} height to 30px */
+          height: 30px;
+          line-height: 30px;
+          /* Removes bootstrap styling */
+          text-shadow: none;
+          color: black;
+          font-weight: normal;
+          font-size: 16px;
+          font-family: "Myriad Pro", "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
+          border-right: thin solid #c8c8c8; }
+      .navbar .navbar-inner .nav .search {
+        width: 375px;
+        display: block;
+        height: 50px;
+        position: relative;
+        background: #e6e6e6;
+        text-align: left;
+        margin: 7.5px 0 7.5px 0;
+        padding: 5px 5px 5px 5px;
         height: 30px;
-        line-height: 30px;
-        /* Removes bootstrap styling */
-        text-shadow: none;
-        color: black;
-        font-weight: normal;
-        font-size: 16px;
-        font-family: "Myriad Pro", "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
-        border-right: thin solid #c8c8c8; }
-    .navbar .navbar-inner .nav .search {
-      width: 330px;
-      height: 50px;
-      position: relative;
-      text-align: left; }
-      .navbar .navbar-inner .nav .search label {
-        line-height: 30px;
-        font-size: 16px;
-        font-family: "Myriad Pro", "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
-        margin: 12.5px 0 12.5px 10px;
-        display: inline-block; }
-      .navbar .navbar-inner .nav .search .search_form {
-        display: inline-block;
-        position: absolute;
-        width: 200px;
-        margin: 0; }
-        .navbar .navbar-inner .nav .search .search_form .search-query {
-          /* Search Bar */
-          margin: 12.5px 10px 12.5px 10px;
-          width: 200px; }
-        .navbar .navbar-inner .nav .search .search_form .search_button {
-          box-shadow: none;
-          position: absolute;
-          top: 8px;
-          right: -75px;
-          background-color: Transparent;
-          background-repeat: no-repeat;
-          background-image: none;
-          border: none;
-          cursor: pointer;
-          overflow: hidden; }
+        border-radius: 7px;
+        margin-left: 10px; }
+        .navbar .navbar-inner .nav .search label {
+          line-height: 30px;
+          font-size: 16px;
+          font-family: "Myriad Pro", "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
+          margin: 0 10px 0 10px;
+          width: auto;
+          float: left;
+          display: block; }
+        .navbar .navbar-inner .nav .search .search_form {
+          display: block;
+          float: left;
+          margin: 0; }
+          .navbar .navbar-inner .nav .search .search_form .search-query {
+            /* Search Bar */
+            border-radius: 3.5px;
+            float: left;
+            display: block; }
+          .navbar .navbar-inner .nav .search .search_form button {
+            margin-top: 0 !important;
+            float: left;
+            display: block; }
 
 /* Site-wide Layout Formatting */
 .alert-danger, .alert-error {
@@ -343,6 +351,8 @@ form {
 .transcription_viewer {
   list-style-type: none;
   margin: 0; }
+  .transcription_viewer .margin_bottom {
+    margin-bottom: 15px; }
   .transcription_viewer .transcription pre {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     margin: 0; }
