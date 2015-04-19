@@ -10,6 +10,7 @@ class SearchFunctions:
         self.general_module = general_functions.GeneralFunctions(database, db)
 
     def empty_date_field(self, date):
+        # Return False if data field has content else return true
         if (date is not None or date == "") and (date is None or date != ""):
             #Date field has content
             return False
@@ -36,9 +37,8 @@ class SearchFunctions:
 
 
     def search_project_for_keywords(self, keywords, project):
-        exclude = True
-
         # Search project for keywords. If word is found, project is not excluded
+        exclude = True
         for word in keywords:
             if (word.upper() in project.name.upper()) or (word.upper() in project.description.upper()):
                 exclude = False
