@@ -82,9 +82,11 @@
         <div class = "desc_field">
           <label for="document_image_description">Document Description</label>
           {{=add_image_form.custom.widget.description}}
-          <label for="use_previous_description">
-          <input type="checkbox" name="use_previous_description" value="use_previous_description"
-                  id="use_previous_description"> Keep description for next document </label>
+          <div id = "prev_description_container">
+            <label for="use_previous_description">
+            <input type="checkbox" name="use_previous_description" value="use_previous_description"
+                    id="use_previous_description" class = "no_margin"> Retain description for next document </label>
+          </div>
         </div>
 
         <div class = "submit_btn">
@@ -130,4 +132,3 @@
 <div class="line_seperator"></div>
 
 <!-- This simple script allows the user to prepopulate the field with their previous document text. Means users do not have to repeat redundent data. -->
-

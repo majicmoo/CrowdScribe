@@ -190,12 +190,18 @@
 
       textarea{
         margin-bottom:10px;
-        height:185px;
+        height:200px;
       }
 
       .btn{
         padding-left:0;
         padding-right:0;
+      }
+
+      #prev_description_container{
+        label{
+          font-size:15px;
+        }
       }
 
     }

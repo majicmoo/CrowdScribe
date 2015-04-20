@@ -127,10 +127,12 @@
       border: 1px solid #c8c8c8; }
       .add_new_document_form .document_desc_upload_form .desc_field textarea {
         margin-bottom: 10px;
-        height: 185px; }
+        height: 200px; }
       .add_new_document_form .document_desc_upload_form .desc_field .btn {
         padding-left: 0;
         padding-right: 0; }
+      .add_new_document_form .document_desc_upload_form .desc_field #prev_description_container label {
+        font-size: 15px; }
     .add_new_document_form .document_desc_upload_form .submit_btn {
       border: 1px solid #c8c8c8;
       border-top: none;
