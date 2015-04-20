@@ -77,12 +77,14 @@
     <h3>{{=len(fields_added)}} Fields For Project</h3>
     <p>Created fields can be viewed and deleted below.</p>
 
-    <div class="fields">
-      {{for field in fields_added:}}
-        {{include "subviews/field-display-delete.html"}}
-      {{pass}}
-    </div>
-
+    {{if fields_added:}}
+      <div class="fields">
+        {{for field in fields_added:}}
+          {{include "subviews/field-display-delete.html"}}
+        {{pass}}
+      </div>
+      {{=delete_all_fields_form}}
+    {{pass}}
   </div>
 
   <div class="border-box-sizing rounded_bordered_container">
@@ -93,9 +95,10 @@
     {{if documents_added:}}
       <div class="documents no_left_right_padding">
         {{for document in documents_added:}}
-          {{include "subviews/document-display-delete.html"}}
+          {{include "subviews/document-create-display.html"}}
         {{pass}}
       </div>
+
     {{pass}}
 
   </div>

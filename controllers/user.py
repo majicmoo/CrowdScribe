@@ -61,7 +61,6 @@ def login():
     response.title = 'CrowdScribe | Login'
 
     if request.vars.page_after_login == 'create_step1' :
-        # response.messagecolour = "#F7EC4F"
         response.message = 'Please login or register before creating a project.'
 
     # Redirects based on request arguments

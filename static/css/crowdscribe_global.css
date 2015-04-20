@@ -110,7 +110,7 @@ form {
           margin: 13px 0 13px 0; }
       .navbar .navbar-inner .nav .create_project {
         /* List object widths are set manually for consistency and readability */
-        width: 150px; }
+        width: 160px; }
       .navbar .navbar-inner .nav a:hover, .navbar .navbar-inner .nav a:focus {
         opacity: .4; }
       .navbar .navbar-inner .nav .selected a {
@@ -227,6 +227,8 @@ form {
   font-size: 12px; }
 .form_container .btn {
   width: 100%; }
+.form_container .back_button {
+  margin-bottom: 15px; }
 .form_container .string, .form_container .text, .form_container select, .form_container .password {
   margin: 10px 5px 15px 0;
   width: 100%;
@@ -289,13 +291,13 @@ form {
       opacity: .5; }
     .form_nav .inner .clickable {
       opacity: 1;
-      background: -webkit-linear-gradient(#c8c8c8, #b5b5b5); }
+      background: -moz-linear-gradient(#c8c8c8, #b5b5b5); }
       .form_nav .inner .clickable:hover {
         opacity: .5; }
     .form_nav .inner .highlighted {
       opacity: 1;
       font-weight: bold;
-      background: -webkit-linear-gradient(#5cb3d9, #559dbd);
+      background: -moz-linear-gradient(#5cb3d9, #559dbd);
       color: white; }
       .form_nav .inner .highlighted:hover {
         opacity: .5; }
@@ -370,35 +372,37 @@ form {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     margin: 0; }
 
-.fields .field {
-  width: 100%;
-  background: #c8c8c8;
-  overflow: hidden;
-  margin-top: 10px;
-  display: block;
-  position: relative;
-  border-radius: 10px; }
-  .fields .field .field_left {
-    float: left;
-    width: 90%;
-    height: 100%;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-    padding: 10px; }
-    .fields .field .field_left h4 {
-      margin: 0; }
-  .fields .field .field_right {
-    width: 10%;
-    height: 100%;
-    position: absolute;
-    left: 90%; }
-    .fields .field .field_right .btn {
-      border-radius: 0;
+.fields {
+  padding: 10px 0 0 0; }
+  .fields .field {
+    width: 100%;
+    background: #c8c8c8;
+    overflow: hidden;
+    margin-bottom: 10px;
+    display: block;
+    position: relative;
+    border-radius: 10px; }
+    .fields .field .field_left {
+      float: left;
+      width: 90%;
       height: 100%;
-      line-height: 100%;
-      vertical-align: middle;
-      padding-top: 20px; }
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+      padding: 10px; }
+      .fields .field .field_left h4 {
+        margin: 0; }
+    .fields .field .field_right {
+      width: 10%;
+      height: 100%;
+      position: absolute;
+      left: 90%; }
+      .fields .field .field_right .btn {
+        border-radius: 0;
+        height: 100%;
+        line-height: 100%;
+        vertical-align: middle;
+        padding-top: 20px; }
 
 .message {
   /* The message tag is used across all pages, and shows a message at the top when desired by the controller */

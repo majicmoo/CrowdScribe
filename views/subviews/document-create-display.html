@@ -1,14 +1,19 @@
-<div class="document">
+<div class="document border-box-sizing">
 
-    <div class="content">
+		<div class="content border-box-sizing">
 
-      <div class="crop">
-        <img src="{{=URL('default','download',args = document.image)}}" alt="{{=document.description}}"/>
-      </div>
+			<div class="img_container_crop">
+				<img src="{{=URL('default','download',args = document.image)}}" alt = "Document Image"/>
+			</div>
 
-      <div class="doc_desc">
-        {{=document.description}}
-      </div>
-  	</div>
+			<div class = "overlay">
+				<div class="text_description border-box-sizing">
 
+          <h4>Document Description</h4>
+					<p>{{=document.description}}</p>
+
+				</div>
+			</div>
+
+		</div>
 </div>

@@ -232,7 +232,7 @@ class ProjectFunctions:
         # Returns a form which will allow the user to progress to the next step in the create project wizard.
         return FORM(BUTTON(message, I(_class='icon-arrow-right icon-white'),
                            _type='submit', _class='btn btn-success btn-block btn-large',
-                           _onclick="return confirm('Are you sure you want to publish this Project? You will not be able to make any more modifications." " Publish?');"))
+                           _onclick="return confirm('Are you sure you want to publish this Project? You will not be able to make any more modifications. Publish?');"))
 
     def create_previous_step_form(self, message):
         # Returns a form which will allow the user to go back to the previous in the create project wizard.

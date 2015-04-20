@@ -41,7 +41,7 @@
       <ul>
         {{for error in form.errors:}}
           <li>
-            <a href="#project_{{=error}}" alt="Error, {{=form.errors[error]}}">{{=form.errors[error]}}</a>
+            <a href="#label_for_project_{{=error}}" alt="Error, {{=form.errors[error]}}">{{=form.errors[error]}}</a>
           </li>
         {{pass}}
       </ul>
@@ -53,20 +53,20 @@
   <div class="border-box-sizing rounded_bordered_container no_bottom_padding">
 
         <!-- <h4> Project Title</h4> -->
-        <label for="project_name">Project Title</label>
+        <label id = "label_for_project_name" for="project_name">Project Title</label>
         <p>
           This is what your project will be known as across CrowdScribe.
         </p>
         {{=form.custom.widget.name}}
 
-        <label aria-label="Project Description"  for="project_description">Project Description</label>
+        <label id = "label_for_project_description" aria-label="Project Description" for="project_description">Project Description</label>
         <p>
           Please enter a brief description of the project you are creating. This could include the intended use of the transcriptions and the style of transcription you are looking for to aid transcribers. 500 characters maximum.
         </p>
         {{=form.custom.widget.description}}
         <div id="textarea_feedback"></div>
 
-        <label for="project_tag">Category</label>
+        <label id = "label_for_project_tag" for="project_tag">Category</label>
         <div>{{=form.custom.widget.tag}}</div>
 
         <h4>Time Period</h4>
@@ -83,11 +83,11 @@
 
           <div class="date">
 
-            <label for="project_time_period_start_date"> Start Date:</label>
+            <label for="project_time_period_start_date" id = "label_for_project_time_period_start_date" > Start Date:</label>
             <div class="no_margin">
               {{=form.custom.widget.time_period_start_date}}
             </div>
-            <label for="start_date_adbc">Start Era:</label>
+            <label for="start_date_adbc" id = "label_for_project_start_date_adbc">Start Era:</label>
             <select id = "start_date_adbc" class="no_margin input-small" name="start_era">
                 <option {{if pd:}}{{if pd['start_era'] == "AD":}} selected{{pass}}{{pass}}>AD</option>
                 <option {{if pd:}}{{if pd['start_era'] == "BC":}} selected{{pass}}{{pass}}>BC</option>
@@ -97,11 +97,11 @@
 
           <div class="date">
 
-            <label for="project_time_period_end_date"> End Date:</label>
+            <label for="project_time_period_end_date" id = "label_for_project_time_period_end_date"> End Date:</label>
             <div class="no_margin">
               {{=form.custom.widget.time_period_end_date}}
             </div>
-            <label for="end_date_adbc">End Era:</label>
+            <label for="end_date_adbc" id = "label_for_project_start_end_adbc">End Era:</label>
             <select id = "end_date_adbc" class="no_margin input-small" name="end_era">
                 <option {{if pd:}}{{if pd['end_era'] == "AD":}} selected{{pass}}{{pass}}>AD</option>
                 <option {{if pd:}}{{if pd['end_era'] == "BC":}} selected{{pass}}{{pass}}>BC</option>

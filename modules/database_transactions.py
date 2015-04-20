@@ -284,7 +284,7 @@ class DatabaseTransactions:
         transcription = self.get_transcription(transcription_id)
         result = transcription.author_id.username
         return result
-        
+
     def get_transcription(self, transcription_id):
         # Get a transcription by its id
         result = self.db((self.db.transcription.id == transcription_id)).select().first()
@@ -298,7 +298,8 @@ class DatabaseTransactions:
     def get_transcriptions_for_user_and_document(self, document_id, user_id):
         # Get all transcriptions by a document and the user who is the auther of the transcriptions
         result = self.db((self.db.transcription.document_id == document_id)
-                         & (self.db.transcription.author_id == user_id)).select().first()
+                         & (self.db.transcription.author_id == user_id)
+                         & (self.db.transcription.status != "Rejected")).select().first()
         return result
 
     def get_pending_transcriptions_for_document(self, document_id):
@@ -336,3 +337,9 @@ class DatabaseTransactions:
         if len(open_documents_with_transcription) > 0:
             return True
         return False
+
+    def  delete_all_documents_for_project(self, project_id):
+        self.db(self.db.document_image.project_id == project_id).delete()
+
+    def  delete_all_fields_for_project(self, project_id):
+        self.db(self.db.data_field.project_id == project_id).delete()

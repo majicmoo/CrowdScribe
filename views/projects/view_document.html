@@ -8,6 +8,8 @@
     <li class="active">Document</li>
   </ul>
 
+  <a href = "{{=URL('projects','project', args=[project.id])}}" class="back_button btn btn-info">Go Back to Project Page</a>
+
   <h1>{{=project.name}}</h1>
   <h3>{{=project.tag}} {{=timestring}}</h3>
 

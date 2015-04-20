@@ -81,9 +81,7 @@
 
         <div class = "desc_field">
           <label for="document_image_description">Document Description</label>
-          <div>
-            {{=add_image_form.custom.widget.description}}
-          </div>
+          {{=add_image_form.custom.widget.description}}
           {{=A('Use Description from Preceding Document', _class="btn btn-info", _id="prepopulate")}}
         </div>
 
@@ -110,7 +108,8 @@
           {{include "subviews/document-display-delete.html"}}
         {{pass}}
       </div>
-    {{pass}}
+      {{=delete_all_documents_form}}
+    {{pass}}    
 
     </div>
 

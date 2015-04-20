@@ -141,7 +141,7 @@
   <!-- It is used in the project display/edit pages to show the status and options a user has -->
   <!-- A background colour can be dynamically set from the controller -->
   {{if response.message:}}
-    <div class="message" style="background-color:{{=response.messagecolour if response.messagecolour else "#5cb3d9"}}">
+    <div class="message" style="background-color:{{=response.messagecolour if response.messagecolour else "#5cb3d9"}}" tabindex="0">
         <div class="centeredmessage">
             {{=response.message}}
         </div>
@@ -149,7 +149,7 @@
   {{pass}}
 
   {{if response.flash:}}
-    <div class="message" style="background-color:{{=response.flashcolour if response.flashcolour else "#5cb3d9"}}">
+    <div class="message" style="background-color:{{=session.flashcolour if session.flashcolour else "#5cb3d9"}}" tabindex="0">
       <div class="centeredmessage">
         <!-- <button type="button" class="close" data-dismiss="alert">&times;</button> -->
         {{=response.flash}}
