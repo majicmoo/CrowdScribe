@@ -67,14 +67,14 @@ class ProjectFunctions:
     def validate_create_step1(self, form):
         # Validator for step one of the create project wizard
         if (current.request.vars.name == "") or (current.request.vars.name is None):
-            form.errors.name = "Name must be entered"
+            form.errors.name = "Project Title must be entered"
 
         if (current.request.vars.description == "") or (current.request.vars.description is None):
-            form.errors.description = "Description must be entered"
-            print "ERROR ERROR ERROR"
+            form.errors.description = "Project Description must be entered"
+
 
         if (current.request.vars.tag == "") or (current.request.vars.tag is None):
-            form.errors.tag = "Tag must be chosen"
+            form.errors.tag = "Category must be chosen"
 
         start_date = None
         end_date = None
