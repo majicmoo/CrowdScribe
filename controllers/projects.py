@@ -246,6 +246,7 @@ def create_step4():
     documents_added = database.get_documents_for_project(project_id)
 
     clear_project = projects_module.create_clear_project_form()
+    go_to_step_3_form = projects_module.create_previous_step_form("Go Back to Step 3")
     publish_project_form = projects_module.create_publish_form("Publish and View Project")
 
     if publish_project_form.process(formname="form_one").accepted:
@@ -260,6 +261,11 @@ def create_step4():
         session.project_being_created = None
         db((db.project.author_id == auth._get_user_id()) &(db.project.status == "Being Created")).delete()
         redirect(URL('projects', 'create_step1'))
+
+    # Go back to step 2 when button clicked
+    if go_to_step_3_form.process(formname="form_three").accepted:
+        session.project_being_created = project_id
+        redirect(URL('projects', 'create_step3'))
 
     # Time String
     project = database.get_project(project_id)
@@ -277,7 +283,7 @@ def create_step4():
                 publish_project_form=publish_project_form, clear_project=clear_project, header_image=header_image,
                 done_documents=done_documents, open_documents_with_transcription=open_documents_with_transcription,
                 open_documents_without_transcription=open_documents_without_transcription,
-                closed_documents=closed_documents, open_documents=open_documents, data_fields_for_project=data_fields_for_project)
+                closed_documents=closed_documents, open_documents=open_documents, data_fields_for_project=data_fields_for_project, go_to_step_3_form = go_to_step_3_form)
 
 
 def project():

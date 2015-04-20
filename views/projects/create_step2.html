@@ -95,7 +95,7 @@
 
   </div>
 
-  <div class="border-box-sizing rounded_bordered_container">
+  <div class="border-box-sizing rounded_bordered_container no_margin">
 
     <h3>{{=len(documents_added)}} Documents For Project</h3>
     <p>Created documents can be viewed and deleted below.</p>
@@ -109,27 +109,23 @@
         {{pass}}
       </div>
       {{=delete_all_documents_form}}
-    {{pass}}    
+    {{pass}}
 
     </div>
 
 </div>
 
-<!-- {{=add_image_form.errors}} -->
-<!-- {{=go_to_step_3_form.errors}} -->
+<div class="line_seperator"></div>
 
-<div class="padded_container form_container less_top_padding">
-
-  <div class="forward_back_buttons">
-
+<div class="padded_container form_container no_vertical_padding">
+  <div class="forward_back_buttons no_top_margin">
     {{=go_to_step_1_form}}
     {{=go_to_step_3_form}}
-
   </div>
-
   {{=clear_project}}
-
 </div>
+
+<div class="line_seperator"></div>
 
 <!-- This simple script allows the user to prepopulate the field with their previous document text. Means users do not have to repeat redundent data. -->
 
