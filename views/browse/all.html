@@ -9,7 +9,7 @@
     {{for category in categories:}}
 
         <div class = "category_button border-box-sizing">
-          <a href = "{{=URL('browse','category',args = categories.index(category))}}" class="content">
+          <a href = "{{=URL('browse','all',args = category)}}" class="content">
             {{=category}}
           </a>
         </div>
@@ -18,7 +18,7 @@
 
   <div class="line_seperator"></div>
 
-  <h2>All Projects</h2>
+  <h2>{{=category_name.replace('_', ' ')}}</h2>
 
   <div class=" no-left-right-padding projects">
     {{for project in allprojects:}}

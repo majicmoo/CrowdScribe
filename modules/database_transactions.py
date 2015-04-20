@@ -123,6 +123,12 @@ class DatabaseTransactions:
 
         return result
 
+    def get_all_projects_for_category(self, category):
+        category = category.replace('_', ' ')
+        result = self.db((self.db.project.status == "Open")
+                        & (self.db.project.tag == category)).select()
+        return result
+
     # Get Documents
     def get_document(self, document_id):
         # Get a document by its id

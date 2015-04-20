@@ -129,7 +129,7 @@ class ProjectFunctions:
         # Validate the add field form in step 3 of the create project wizard.
         alphanumeric_validator = IS_ALPHANUMERIC(error_message="Only letters, numbers and spaces allowed in field name")
 
-        #Validate that field name only contains alphanumeric or spaces 
+        #Validate that field name only contains alphanumeric or spaces
         field_name_split = current.request.vars.name.split()
         for word in field_name_split:
             if alphanumeric_validator(word)[1] is not None:
