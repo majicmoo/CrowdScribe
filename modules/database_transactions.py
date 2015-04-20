@@ -38,6 +38,12 @@ class DatabaseTransactions:
         result = self.db(self.db.project.author_id == user_id).select()
         return result
 
+    def get_projects_not_being_created_for_user(self, user_id):
+        # Get all projects belonging to a user that have been created
+        result = self.db((self.db.project.author_id == user_id)
+                         & (self.db.project.status != "Being Created")).select()
+        return result
+
     def get_open_projects_for_user(self, user_id):
         # Get all open projects for a user
         result = self.db((self.db.project.author_id == user_id) & (self.db.project.status == "Open")).select()

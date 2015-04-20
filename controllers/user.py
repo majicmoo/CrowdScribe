@@ -116,7 +116,7 @@ def profile():
             for i in transcriptions:
                 no_of_transcriptions_awaiting_approval += 1
 
-    num_user_projects = len(database.get_projects_for_user(user_id))
+    num_user_projects = len(database.get_projects_not_being_created_for_user(user_id))
 
     manager_strings = [str(no_of_under_review_projects)+' are currently under review.', str(no_of_transcriptions_awaiting_approval)+' transcriptions awaiting review across '+str(len(open_projects_with_transcriptions))+' projects.', str(no_of_closed_projects)+' have had transcriptions accepted for all their documents.']
     num_projects_string = 'Click here to manage your '+str(num_user_projects)+' projects.'
