@@ -127,10 +127,14 @@ class ProjectFunctions:
 
     def validate_add_field_form(self, form):
         # Validate the add field form in step 3 of the create project wizard.
-        alphanumeric_validator = IS_ALPHANUMERIC(error_message="Only letters and numbers allowed in field name")
-        # Validate that field is alphanumeric
-        if alphanumeric_validator(current.request.vars.name)[1] is not None:
-            form.errors.name = alphanumeric_validator(current.request.vars.name)[1]
+        alphanumeric_validator = IS_ALPHANUMERIC(error_message="Only letters, numbers and spaces allowed in field name")
+
+        #Validate that field name only contains alphanumeric or spaces 
+        field_name_split = current.request.vars.name.split()
+        for word in field_name_split:
+            if alphanumeric_validator(word)[1] is not None:
+                form.errors.name = alphanumeric_validator(word)[1]
+
         # Validate that description is not empty
         if (current.request.vars.short_description == "") or (current.request.vars.short_description is None):
             form.errors.short_description = "Description must not be empty"
