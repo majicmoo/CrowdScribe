@@ -44,7 +44,7 @@
 
 .add_new_document_form {
   width: 100%;
-  height: 465px;
+  height: 505px;
   background-color: #e6e6e6;
   margin-bottom: 10px; }
   .add_new_document_form .document_image_upload_form {
@@ -94,7 +94,8 @@
           margin: 10px;
           width: 100px; }
           .add_new_document_form .document_image_upload_form .document_image_upload_form_content #image_upload_overlay .fileUpload:focus, .add_new_document_form .document_image_upload_form .document_image_upload_form_content #image_upload_overlay .fileUpload:hover {
-            opacity: .5; }
+            opacity: .5;
+            background: black; }
         .add_new_document_form .document_image_upload_form .document_image_upload_form_content #image_upload_overlay .fileUpload input.upload {
           position: absolute;
           top: 0;

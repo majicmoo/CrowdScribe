@@ -21,12 +21,17 @@ def search_results():
 
     # Creates advanced search form
     advanced = FORM(
+        LABEL("Search Text", _for="advancetext"),
         INPUT(_name='advance', _id="advancetext"),
         LABEL("Category", SELECT(current.tags, _name='tag', requires=IS_IN_SET(current.tags))),
-        LABEL("Start Date", INPUT(_name='start_date', _class='integer', requires=IS_EMPTY_OR(IS_INT_IN_RANGE(0,2016)))), #doesn't work atm
-        SELECT(eras, _name='start_era', requires=IS_IN_SET(eras)),
-        LABEL("End Date", INPUT(_name='end_date', _class='integer', requires=IS_EMPTY_OR(IS_INT_IN_RANGE(0,2016)))), #doesn't work atm
-        SELECT(eras, _name='end_era', requires=IS_IN_SET(eras)),
+        LABEL("Start Date", _for="start_date"), #doesn't work atm
+        INPUT(_id = "start_date", _name='start_date', _class='integer', requires=IS_EMPTY_OR(IS_INT_IN_RANGE(0,2016))),
+        LABEL("Start Era", _for="start_era"), #doesn't work atm
+        SELECT(eras, _name='start_era', requires=IS_IN_SET(eras), _id = "start_era"),
+        LABEL("End Date", _for="end_date"), #doesn't work atm
+        INPUT(_id = "end_date", _name='end_date', _class='integer', requires=IS_EMPTY_OR(IS_INT_IN_RANGE(0,2016))),
+        LABEL("End Era", _for="end_era"),
+        SELECT(eras, _name='end_era', requires=IS_IN_SET(eras), _id = "end_era"),
         LABEL("Include Unknown dates?", INPUT(_name='include_unknown_date', _type='checkbox')),
         LABEL("Sort by", SELECT(orders, _name='order', requires=IS_IN_SET(orders))),
         INPUT(_value='Refine search', _type='submit', _id="advancesubmit"), _method='GET'

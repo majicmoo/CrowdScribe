@@ -73,7 +73,7 @@
 
 .add_new_document_form{
 
-  $containerformheight:465px;
+  $containerformheight:505px;
   $formheight:420px;
   $headerheight:90px;
 
@@ -149,6 +149,7 @@
           width:100px;
           &:focus, &:hover{
             opacity:.5;
+            background:black;
           }
         }
         .fileUpload input.upload {

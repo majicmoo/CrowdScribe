@@ -100,7 +100,7 @@ def get_database(request):
     if request.args and request.args[0] in databases:
         return eval_in_global_env(request.args[0])
     else:
-        session.flash = T('invalid request')
+        response.flash = T('invalid request')
         redirect(URL('index'))
 
 def get_table(request):
@@ -108,7 +108,7 @@ def get_table(request):
     if len(request.args) > 1 and request.args[1] in db.tables:
         return (db, request.args[1])
     else:
-        session.flash = T('invalid request')
+        response.flash = T('invalid request')
         redirect(URL('index'))
 
 
@@ -325,7 +325,7 @@ def update():
 
     if not record:
         qry = query_by_table_type(table, db)
-        session.flash = T('record does not exist')
+        response.flash = T('record does not exist')
         redirect(URL('select', args=request.args[:1],
                      vars=dict(query=qry)))
 
@@ -341,7 +341,7 @@ def update():
                                                       f='download', args=request.args[:1]))
 
     if form.accepts(request.vars, session):
-        session.flash = T('done!')
+        response.flash = T('done!')
         qry = query_by_table_type(table, db)
         redirect(URL('select', args=request.args[:1],
                  vars=dict(query=qry)))
@@ -375,11 +375,11 @@ def ccache():
         )
 
     if form.accepts(request.vars, session):
-        session.flash = ""
+        response.flash = ""
         if is_gae:
             if request.vars.yes:
                 cache.ram.clear()
-                session.flash += T("Cache Cleared")
+                response.flash += T("Cache Cleared")
         else:
             clear_ram = False
             clear_disk = False
@@ -391,10 +391,10 @@ def ccache():
                 clear_disk = True
             if clear_ram:
                 cache.ram.clear()
-                session.flash += T("Ram Cleared")
+                response.flash += T("Ram Cleared")
             if clear_disk:
                 cache.disk.clear()
-                session.flash += T("Disk Cleared")
+                response.flash += T("Disk Cleared")
         redirect(URL(r=request))
 
     try:

@@ -28,7 +28,7 @@ h1, p, h3, h4 {
   margin-bottom: 5px; }
 
 p {
-  font-size: 1em; }
+  font-size: 16px; }
 
 body, html {
   padding: 0;
@@ -226,8 +226,7 @@ form {
   padding-bottom: 0 !important; }
 
 .form_container #textarea_feedback {
-  margin-bottom: 10px;
-  font-size: 12px; }
+  margin-bottom: 10px; }
 .form_container .btn {
   width: 100%; }
 .form_container .back_button {
@@ -329,6 +328,7 @@ form {
       .projects .project a:hover, .projects .project a:focus {
         opacity: .75; }
     .projects .project .content {
+      display: block;
       border-radius: 10px;
       position: relative;
       background-color: white;
@@ -346,12 +346,21 @@ form {
       .projects .project .content .tag {
         color: rgba(0, 0, 0, 0.7); }
       .projects .project .content .overlay {
+        margin-top: 40px;
         width: 100%;
         color: black; }
         .projects .project .content .overlay .text_container {
           padding: 5px 10px 10px 10px; }
           .projects .project .content .overlay .text_container h3 {
-            line-height: 35px; }
+            display: inline-block;
+            position: absolute;
+            bottom: 200px;
+            background: white;
+            padding: 10px 20px 0 20px;
+            left: 0;
+            width: 260px; }
+          .projects .project .content .overlay .text_container .extra_button {
+            bottom: 230px; }
           .projects .project .content .overlay .text_container h3, .projects .project .content .overlay .text_container h5 {
             margin: 0; }
           .projects .project .content .overlay .text_container .btn {
