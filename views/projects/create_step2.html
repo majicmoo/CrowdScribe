@@ -82,7 +82,9 @@
         <div class = "desc_field">
           <label for="document_image_description">Document Description</label>
           {{=add_image_form.custom.widget.description}}
-          {{=A('Use Description from Preceding Document', _class="btn btn-info", _id="prepopulate")}}
+          <label for="use_previous_description">
+          <input type="checkbox" name="use_previous_description" value="use_previous_description"
+                  id="use_previous_description"> Keep description for next document </label>
         </div>
 
         <div class = "submit_btn">
@@ -133,12 +135,3 @@
 
 <!-- This simple script allows the user to prepopulate the field with their previous document text. Means users do not have to repeat redundent data. -->
 
-<script>
-  $('#prepopulate').click(function(){
-   // Remove line breaks for population
-   var string = '{{=session.last_description}}'
-   var populate = string.replace("--","\n");
-   $('#document_image_description').val(populate);
-
-  })
-</script>

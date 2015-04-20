@@ -98,18 +98,34 @@ def create_step2():
     # This form allows for the wizard to progress to step 3
     go_to_step_3_form = projects_module.create_next_step_form("Continue to Step 3")
 
+    # if session.last_description:
+    #     print "Inputting"
+    #     print "session.last_description = " + session.last_description
+    #     add_image_form.vars.description = session.last_description
+    #     print add_image_form.vars.description
+    #     #session.last_description = None
+    if session.last_description:
+        add_image_form.vars.description = session.last_description
+        session.last_description = None
+
     # Process add image form
     if add_image_form.validate(formname="form_one", onvalidation=projects_module.validate_add_image_form):
+
         db.document_image.insert(description=request.vars.description, status="Open", project_id=project_id,
                                  image=add_image_form.vars.image)
-        session.project_being_created = project_id
+
 
         # As this is succesful, show a green message
         response.flashcolour = "rgb(98, 196, 98)"
         response.flash = "Succesfully Added Document!"
 
-        # Store the description so the user can use it again
-        session.last_description = request.vars.description.replace('\n', '--').replace('\r', '')
+        ##.replace('\n', '--').replace('\r', '')
+        if request.vars.use_previous_description == "use_previous_description":
+            # Store the description so the user can use it again
+            session.last_description = request.vars.description
+
+        redirect(URL('projects', 'create_step2'))
+
 
     elif add_image_form.errors:
         projects_module.validate_add_image_form(add_image_form)
@@ -150,6 +166,7 @@ def create_step2():
 
     # Retrieve documents that project already has.
     documents_added = database.get_documents_for_project(project_id)
+
 
     return dict(add_image_form=add_image_form, go_to_step_3_form=go_to_step_3_form,
                 go_to_step_1_form=go_to_step_1_form, documents_added=documents_added, clear_project=clear_project,
