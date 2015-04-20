@@ -5,7 +5,6 @@ database = database_transactions.DatabaseTransactions(db)
 projects_module = projects_functions.ProjectFunctions(database, db)
 general_module = general_functions.GeneralFunctions(database, db)
 
-
 @auth.requires_login(otherwise=URL('user', 'login',
                      vars=dict(controller_after_login='projects', page_after_login='create_step1')))
 def create_step1():
@@ -99,16 +98,23 @@ def create_step2():
     # This form allows for the wizard to progress to step 3
     go_to_step_3_form = projects_module.create_next_step_form("Continue to Step 3")
 
-
     # Process add image form
     if add_image_form.validate(formname="form_one", onvalidation=projects_module.validate_add_image_form):
         db.document_image.insert(description=request.vars.description, status="Open", project_id=project_id,
                                  image=add_image_form.vars.image)
         session.project_being_created = project_id
-        session.flash_class = "alert-success"
+
+        # As this is succesful, show a green message
+        response.flashcolour = "rgb(98, 196, 98)"
         response.flash = "Succesfully Added Document!"
+
+        # Store the description so the user can use it again
+        session.last_description = request.vars.description.replace('\n', '--').replace('\r', '')
+        print session.last_description
+
     elif add_image_form.errors:
         projects_module.validate_add_image_form(add_image_form)
+        # As this is an error, show a red message
         response.flashcolour = "rgba(255, 0, 0, 0.7)"
         response.flash = str(len(add_image_form.errors)) + " Errors in Form. Please correct these before submitting."
 
@@ -116,7 +122,8 @@ def create_step2():
     if go_to_step_3_form.process(formname="form_two").accepted:
         documents_added = database.get_documents_for_project(project_id)
         if len(documents_added) < 1:
-            response.flash = DIV("At least one image must be added", _class="alert alert-error")
+            response.flashcolour = "rgba(255, 0, 0, 0.7)"
+            response.flash = "At least one document must be added before you can continue."
         else:
             session.project_being_created = project_id
             redirect(URL('projects', 'create_step3'))
@@ -139,8 +146,6 @@ def create_step2():
     return dict(add_image_form=add_image_form, go_to_step_3_form=go_to_step_3_form,
                 go_to_step_1_form=go_to_step_1_form, documents_added=documents_added, clear_project=clear_project,
                 step_available=step_available, project_name=project_being_edited.name)
-
-
 
 
 @auth.requires_login(otherwise=URL('user', 'login',
@@ -175,6 +180,14 @@ def create_step3():
         db.commit()
         session.project_being_created = project_id
 
+        # As this is succesful, show a green message
+        response.flashcolour = "rgb(98, 196, 98)"
+        response.flash = "Succesfully Added Field!"
+    elif add_fields_form.errors:
+        # As this is an error, show a red message
+        response.flashcolour = "rgba(255, 0, 0, 0.7)"
+        response.flash = str(len(add_fields_form.errors)) + " Errors in Form. Please correct these before submitting."
+
     # Move project forward to review when button clicked
     if review_project_form.process(formname="form_two").accepted:
         fields_added = database.get_data_fields_for_project(project_id)
@@ -203,7 +216,6 @@ def create_step3():
                 review_project_form=review_project_form, go_to_step_2_form=go_to_step_2_form,
                 clear_project=clear_project, step_available=step_available, project_name=project_being_edited.name)
 
-
 @auth.requires_login(otherwise=URL('user', 'login',
                      vars=dict(controller_after_login='projects', page_after_login='create_step1')))
 def create_step4():
@@ -215,7 +227,7 @@ def create_step4():
     documents_added = database.get_documents_for_project(project_id)
 
     clear_project = projects_module.create_clear_project_form()
-    publish_project_form = projects_module.create_next_step_form("Publish Project")
+    publish_project_form = projects_module.create_publish_form("Publish and View Project")
 
     if publish_project_form.process(formname="form_one").accepted:
         project = database.get_project(project_id)

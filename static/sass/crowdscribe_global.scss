@@ -93,6 +93,11 @@ $seperator-margin:20px;
 	margin:0 !important;
 }
 
+.no_vertical_padding{
+	padding-top:0 !important;
+	padding-bottom:0 !important;
+}
+
 /* Global navigation bar - at the top of all pages */
 
 .navbar{
@@ -101,7 +106,7 @@ $seperator-margin:20px;
 	$navmargin : 15px;
 
 	/* Prevents right hand side overflowing */
-	min-width:1100px;
+	min-width:1120px;
 
 	.navbar-inner{
 
@@ -214,7 +219,7 @@ $seperator-margin:20px;
 			$searchwidth : 270px;
 
 			.search{
-				width:375px;
+				width:385px;
 				display:block;
 				height:50px;
 				position:relative;
@@ -381,6 +386,13 @@ $seperator-margin:20px;
 			width:49%;
 			float:left;
 			margin-left:2%;
+		}
+
+		&.publish{
+			button{
+				width:100%;
+				margin:0;
+			}
 		}
 
 		.full_btn{
@@ -648,6 +660,9 @@ $seperator-margin:20px;
 			.btn{
 				border-radius:0;
 				height:100%;
+				line-height:100%;
+				vertical-align: middle;
+				padding-top:20px;
 			}
 		}
 	}

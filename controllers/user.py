@@ -119,9 +119,19 @@ def profile():
     num_user_projects = len(database.get_projects_for_user(user_id))
 
     manager_strings = [str(no_of_under_review_projects)+' are currently under review.', str(no_of_transcriptions_awaiting_approval)+' transcriptions awaiting review across '+str(len(open_projects_with_transcriptions))+' projects.', str(no_of_closed_projects)+' have had transcriptions accepted for all their documents.']
-    num_projects_string = 'You have created '+str(num_user_projects)+' projects.'
+    num_projects_string = 'Click here to manage your '+str(num_user_projects)+' projects.'
 
-    return dict(manager_strings = manager_strings, num_projects_string = num_projects_string)
+    # Transcription Viewer
+
+    pending_transcriptions = database.get_pending_transcriptions_for_user(user_id)
+    accepted_transcriptions = database.get_accepted_transcriptions_for_user(user_id)
+    rejected_transcriptions = database.get_rejected_transcriptions_for_user(user_id)
+    num_transcriptions = len(pending_transcriptions) + len(accepted_transcriptions) + len(rejected_transcriptions)
+
+    transcription_strings = [str(len(pending_transcriptions))+' are pending review.', str(len(accepted_transcriptions))+' have been accepted.', str(len(rejected_transcriptions))+' have been rejected.']
+    num_transcription_string = 'Click here to view your '+str(num_transcriptions)+' transcriptions.'
+
+    return dict(manager_strings = manager_strings, num_projects_string = num_projects_string, transcription_strings = transcription_strings, num_transcription_string = num_transcription_string)
 
 @auth.requires_login(otherwise=URL('user', 'login'))
 def view_own_transcriptions():

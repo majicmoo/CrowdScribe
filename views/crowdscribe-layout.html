@@ -66,7 +66,7 @@
         <li class="noline search">
           <label for="search_input">Search</label>
           <form id = "search" class = "search_form" action="{{=URL('search','search_results')}}" method="GET">
-            <input  aria-label="Type Search Term" id = "search_input" type="search" name="quicksearch" class="search-query" placeholder="Search Projects">
+            <input  aria-label="Type Search Term" id = "search_input" type="search" name="quicksearch" class="search-query">
             <button aria-label="Begin Search" type="submit" class = "border-box-sizing">
               Submit
             </button>
@@ -156,14 +156,6 @@
       </div>
     </div>
   {{pass}}
-
-  <!-- This small script (not worth externally linking) just checks to see if a message exists, if it doesnt, hide the message bar -->
-  <script>
-      var string = "{{=response.message}}";
-      if(!string || string == "None"){
-          $("#message").remove();
-      }
-  </script>
 
 	<div class="content_container" role="main" id="maincontent">
       {{include}}

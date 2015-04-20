@@ -10,8 +10,20 @@
   </p>
 
   <div id="button_container" class="rounded_bordered_container">
+
+    <a href="{{=URL('projects','create_step1')}}">
+      <div class="create_project profile_button border-box-sizing">
+        <div class="content">
+          <h2 class="no_margin">Create Project</h2>
+          <h4>
+            Click here to create a new CrowdScribe Project.
+          </h4>
+        </div>
+      </div>
+    </a>
+
     <a href="{{=URL('user','manage_projects')}}">
-      <div class="manage_projects border-box-sizing">
+      <div class="manage_projects profile_button border-box-sizing">
         <div class="content">
           <h2 class="no_margin">Manage Projects</h2>
           <h4 class="no_margin">{{=num_projects_string}}</h4>
@@ -32,15 +44,26 @@
     <div class="spacer"></div>
 
     <a href="{{=URL('user','view_own_transcriptions')}}">
-      <div class="manage_projects border-box-sizing">
+      <div class="view_transcriptions profile_button border-box-sizing">
         <div class="content">
-          <h2>View Transcriptions</h2>
+          <h2 class="no_margin">View Transcriptions</h2>
+          <h4 class="no_margin">{{=num_transcription_string}}</h4>
           <p>
-            View transcriptions you have made to projects, and their status.
+            <ul>
+              {{for string in transcription_strings:}}
+                <li>
+                  {{=string}}
+                </li>
+              {{pass}}
+            </ul>
+
           </p>
+
         </div>
       </div>
     </a>
+
+
 
   </div>
 

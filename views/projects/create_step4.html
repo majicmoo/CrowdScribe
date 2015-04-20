@@ -13,10 +13,23 @@
 
 <div class="padded_container form_container less_top_padding no_bottom_padding">
 
-  <h1>Review Project (Step 4 of 4)</h1>
+  <h1>Preview Project (Step 4 of 4)</h1>
   <p>
-    Your project is displayed below <b>as it would appear to a member of the public</b>. Please review the project and publish it using the 'Publish Project' underneath the preview once you are satisfied. You can use the above navigation bar to edit your project before publication.
+    Your project is displayed below <b>as it would appear to a member of the public</b>. Please review the project and publish it using one of the 'Publish Project' buttons once you are satisfied. You can use the above navigation bar to edit your project before publication.
   </p>
+
+</div>
+
+<div class="line_seperator"></div>
+
+<div class="padded_container form_container no_vertical_padding">
+
+  <div class="forward_back_buttons publish no_margin">
+
+    {{=publish_project_form}}
+
+  </div>
+
 
 </div>
 
@@ -24,5 +37,15 @@
 
 {{include "subviews/project-page-view.html"}}
 
-{{=publish_project_form}}
-{{=clear_project}}
+
+<div class="padded_container form_container no_top_padding">
+
+  <div class="forward_back_buttons publish">
+
+    {{=publish_project_form}}
+
+  </div>
+
+  {{=clear_project}}
+
+</div>

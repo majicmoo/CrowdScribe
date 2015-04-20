@@ -7,6 +7,7 @@ general_module = general_functions.GeneralFunctions(database, db)
 
 
 def index():
+
     # Controller for the homepage of Crowdscribe
     # Max number of projects to be displayed on homepage per section
     number_of_projects_for_each_section = 6

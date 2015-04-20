@@ -84,6 +84,7 @@
           <div>
             {{=add_image_form.custom.widget.description}}
           </div>
+          {{=A('Use Description from Preceding Document', _class="btn btn-info", _id="prepopulate")}}
         </div>
 
         <div class = "submit_btn">
@@ -98,7 +99,7 @@
 
   <div class="border-box-sizing rounded_bordered_container">
 
-    <h3>Current Documents ({{=len(documents_added)}})</h3>
+    <h3>{{=len(documents_added)}} Documents For Project</h3>
     <p>Created documents can be viewed and deleted below.</p>
 
 
@@ -130,3 +131,15 @@
   {{=clear_project}}
 
 </div>
+
+<!-- This simple script allows the user to prepopulate the field with their previous document text. Means users do not have to repeat redundent data. -->
+
+<script>
+  $('#prepopulate').click(function(){
+   // Remove line breaks for population
+   var string = '{{=session.last_description}}'
+   var populate = string.replace("--","\n");
+   $('#document_image_description').val(populate);
+
+  })
+</script>

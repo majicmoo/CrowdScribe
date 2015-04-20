@@ -66,7 +66,7 @@
       {{=add_fields_form.custom.widget.short_description}}
     </div>
 
-    {{=add_fields_form.custom.submit}}
+    <input type="submit" value="Add Transcription Field" class="btn  btn btn-success">
 
     {{=add_fields_form.custom.end}}
 
@@ -74,7 +74,7 @@
 
   <div class="border-box-sizing rounded_bordered_container">
 
-    <h3>Current Fields ({{=len(fields_added)}})</h3>
+    <h3>{{=len(fields_added)}} Fields For Project</h3>
     <p>Created fields can be viewed and deleted below.</p>
 
     <div class="fields">
@@ -87,18 +87,16 @@
 
   <div class="border-box-sizing rounded_bordered_container">
 
-    <h3>Current Documents ({{=len(documents_added)}})</h3>
+    <h3>{{=len(documents_added)}} Documents For Project</h3>
     <p>The the documents you have added to your project.</p>
 
-
-
-  {{if documents_added:}}
-    <div class="documents no_left_right_padding">
-      {{for document in documents_added:}}
-        {{include "subviews/document-display-delete.html"}}
-      {{pass}}
-    </div>
-  {{pass}}
+    {{if documents_added:}}
+      <div class="documents no_left_right_padding">
+        {{for document in documents_added:}}
+          {{include "subviews/document-display-delete.html"}}
+        {{pass}}
+      </div>
+    {{pass}}
 
   </div>
 

@@ -106,7 +106,8 @@
         .documents .document .content .text_description .btn {
           box-sizing: border-box;
           width: 100%;
-          margin-top: 5px; }
+          margin-top: 5px;
+          color: white; }
         .documents .document .content .text_description p {
           overflow: hidden;
           height: 100px; }

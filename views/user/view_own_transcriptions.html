@@ -16,7 +16,13 @@
 
 <div class="line_seperator"></div>
 
-<!-- {{=pending_transcriptions}} -->
+{{if not accepted_transcriptions and not pending_transcriptions and not rejected_transcriptions:}}
+  <div class="padded_container form_container no_bottom_padding no_top_padding">
+    <p>
+      You have not yet transcribed any documents.
+    </p>
+  </div>
+{{pass}}
 
 {{if pending_transcriptions:}}
 
@@ -42,12 +48,31 @@
   <div class="padded_container form_container no_bottom_padding no_top_padding">
     <h2>{{=len(accepted_transcriptions)}} Accepted Transcriptions</h2>
     <p>
-      These transcriptions have been accepted by the project author. 
+      These transcriptions have been accepted by the project author.
     </p>
   </div>
 
   <div class="transcriptions">
     {{for transcription in accepted_transcriptions:}}
+      {{include "subviews/transcription-display.html"}}
+    {{pass}}
+  </div>
+
+  <div class="line_seperator"></div>
+
+{{pass}}
+
+{{if rejected_transcriptions:}}
+
+  <div class="padded_container form_container no_bottom_padding no_top_padding">
+    <h2>{{=len(rejected_transcriptions)}} Rejected Transcriptions</h2>
+    <p>
+      These transcriptions have been rejected by the project author.
+    </p>
+  </div>
+
+  <div class="transcriptions">
+    {{for transcription in rejected_transcriptions:}}
       {{include "subviews/transcription-display.html"}}
     {{pass}}
   </div>

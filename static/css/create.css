@@ -102,7 +102,8 @@
           font-size: 20px;
           opacity: 0;
           cursor: pointer;
-          filter: alpha(opacity=0); }
+          filter: alpha(opacity=0);
+          color: transparent; }
           .add_new_document_form .document_image_upload_form .document_image_upload_form_content #image_upload_overlay .fileUpload input.upload:focus, .add_new_document_form .document_image_upload_form .document_image_upload_form_content #image_upload_overlay .fileUpload input.upload:hover {
             opacity: .5;
             background: black; }
@@ -122,6 +123,12 @@
       box-sizing: border-box;
       /* Safari 5.1+, Chrome 10+, Firefox 29+, Opera 7+, IE 8+*/
       border: 1px solid #c8c8c8; }
+      .add_new_document_form .document_desc_upload_form .desc_field textarea {
+        margin-bottom: 10px;
+        height: 185px; }
+      .add_new_document_form .document_desc_upload_form .desc_field .btn {
+        padding-left: 0;
+        padding-right: 0; }
     .add_new_document_form .document_desc_upload_form .submit_btn {
       border: 1px solid #c8c8c8;
       border-top: none;

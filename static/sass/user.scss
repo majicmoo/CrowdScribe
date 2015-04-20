@@ -73,16 +73,15 @@
 		float:left;
 	}
 
-	.manage_projects{
-		width: $btnwidth;
-	  height: $btnheight;
-	  // display: block;
-	  background: $logo_color;
+	.profile_button{
+		background: $logo_color;
+		float:left;
+		border-radius:10px;
 		text-align:center;
 
-		float:left;
-
-		border-radius:10px;
+		h2{
+			color:white;
+		}
 
 		&:before{
       content: '';
@@ -105,12 +104,19 @@
 				text-align:center;
 			}
 
-			h2{
-				color:white;
-			}
 		}
+	}
 
+	.create_project{
+		margin-bottom:20px;
+		width:100%;
+		padding:10px;
+		background:#51A351;
+	}
 
+	.manage_projects, .view_transcriptions{
+		width: $btnwidth;
+	  height: $btnheight;
 	}
 
 }
