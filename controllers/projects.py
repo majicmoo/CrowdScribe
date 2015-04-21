@@ -95,12 +95,6 @@ def create_step2():
     # This form allows for the wizard to progress to step 3
     go_to_step_3_form = projects_module.create_next_step_form("Continue to Step 3")
 
-    # if session.last_description:
-    #     print "Inputting"
-    #     print "session.last_description = " + session.last_description
-    #     add_image_form.vars.description = session.last_description
-    #     print add_image_form.vars.description
-    #     #session.last_description = None
     if session.last_description:
         add_image_form.vars.description = session.last_description
         session.last_description = None
@@ -527,11 +521,7 @@ def review_document():
     transcriptions = projects_module.build_transcription_list(project, transcriptions)
 
     # # If there are no transriptions available for review, redirect to view_document
-    # if not transcriptions:
-    #     response.flashcolour = "rgba(255, 0, 0, 0.7)"
-    #     session.flash = "This document currently has zero transcriptions for review. You are now viewing the document."
-    #     redirect(URL('projects', 'view_document', args=[project_id, document_id]))
-
+    
     response_message = None
     if not transcriptions:
         response_message = "This document currently has zero transcriptions for review."
@@ -554,12 +544,16 @@ def delete_field():
     # Controller for button to delete field on create project page
     db((db.data_field.id == request.vars.field_id)).delete()
     current.db.commit()
+    session.flashcolour = "rgba(255, 0, 0, 0.7)"
+    session.flash = "Succesfully Deleted Transcription Field!"
     redirect(URL('projects', 'create_step3'), client_side=True)
 
 def delete_document():
     # Controller for button to delete document on create project page
     db((db.document_image.id == request.vars.document_id)).delete()
     db.commit()
+    session.flashcolour = "rgba(255, 0, 0, 0.7)"
+    session.flash = "Succesfully Deleted Document!"
     redirect(URL('projects', 'create_step2'), client_side=True)
 
 
