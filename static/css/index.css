@@ -21,9 +21,12 @@
       -moz-box-sizing: border-box;
       box-sizing: border-box;
       padding: 20px;
-      height: 150px;
+      display: block;
       width: 100%;
-      top: 150px;
+      bottom: 0px;
       color: white; }
+      .featured_project .overlay .text .btn {
+        width: 200px;
+        margin-top: 10px; }
 
 /*# sourceMappingURL=index.css.map */

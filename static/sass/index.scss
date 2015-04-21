@@ -29,18 +29,25 @@
     $textheight : 150px;
 
     .text{
+      // text-align:center;
       position:absolute;
       background:rgba(0,0,0,.7);
       -webkit-box-sizing: border-box;
 		  -moz-box-sizing: border-box;
 		  box-sizing: border-box;
       padding:20px;
+      display:block;
 
-      height:$textheight;
+      // height:$textheight;
       width:100%;
-      top : $featuredheight - $textheight;
+      bottom :0px;
 
       color:white;
+
+      .btn{
+        width:200px;
+        margin-top:10px;
+      }
     }
   }
 }

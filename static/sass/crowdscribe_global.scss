@@ -591,9 +591,10 @@ $seperator-margin:20px;
 						position:absolute;
 						bottom:$imgheight;
 						background:white;
-						padding:10px 20px 0 20px;
-						left:0;
-						width:$boxwidth + 30px;
+						padding:10px 10px 0 10px;
+						left:10px;
+						right:10px;
+						width:$boxwidth + 40px;
 					}
 
 					.extra_button{
