@@ -3,10 +3,14 @@
 
 <div class="padded_container form_container no_bottom_padding">
 
+  <!-- Breadcrumbs so user can go back to project -->
+
   <ul class="breadcrumb">
     <li><a href="{{=URL('projects','project', args=[project.id])}}">{{=project.name}}</a> <span class="divider">/</span></li>
     <li class="active">Reviewing Document</li>
   </ul>
+
+  <!-- We found through testing that this wasn't obvious enough, so added a second button to allow users to go back to the project -->
 
   <a href = "{{=URL('projects','project', args=[project.id])}}" class="back_button btn btn-info">Go Back to Project Page</a>
 
@@ -46,59 +50,61 @@
     <p>The transcriptions that have been made for this document are shown below. You can either accept a transcription and mark the document as 'Done', or reject all of them using the button at the bottom of the page and reopen the document for transcription.</p>
     <p>To view the document in a larger format press the 'Toggle View' button to switch between portrait and landscape mode.</p>
 
+    <!-- The user can toggle the page view to better see the document -->
     <button id="toggle_button" class="btn">Toggle Document View Layout</button>
   </div>
 
   <div id="doc_display" class="border-box-sizing">
+
     <!-- Maybe highlight that image can be opened in new tab for zooming etc -->
     <div id="document_viewer" class="landscape">
           <img src="{{=URL('default','download',args = document.image)}}" alt="document"/>
     </div>
 
+    <div id="transcription_form_holder" class="{{="disabled" if response.message else ""}} landscape">
 
-      <div id="transcription_form_holder" class="{{="disabled" if response.message else ""}} landscape">
+      <ul class = "transcription_viewer">
 
-        <ul class = "transcription_viewer">
+      <!-- Submitted transcriptions are coded as a list for screen reader accesibility -->
+
         {{for transcription in transcriptions:}}
-                <div>
-                <h3> Transcription {{=transcription['number']}} by {{=transcription['user']}}</h3>
-                {{for index, field in enumerate(transcription['transcription']): }}
-                    <li class = "transcription margin_bottom">
+          <div>
+            <h3> Transcription {{=transcription['number']}} by {{=transcription['user']}}</h3>
+            {{for index, field in enumerate(transcription['transcription']): }}
+                <li class = "transcription margin_bottom">
 
-                          <h4>Field {{=index+1}} : {{=field.data_field.name}}</h4>
-                          <p>Description : {{=field.data_field.short_description}}</p>
-                          <pre>{{=field.transcribed_field.information}}</pre>
+                      <h4>Field {{=index+1}} : {{=field.data_field.name}}</h4>
+                      <p>Description : {{=field.data_field.short_description}}</p>
+                      <pre>{{=field.transcribed_field.information}}</pre>
 
 
-                    </li>
-                {{pass}}
-                {{=transcription['button']}}
-                <div class="line_seperator"></div>
-                </div>
+                </li>
+            {{pass}}
+            {{=transcription['button']}}
+            <div class="line_seperator"></div>
+          </div>
         {{pass}}
-        </ul>
+      </ul>
 
-
-    {{if response_message:}}
-        <div class="unavailable_overlay">
-          <div class="notice">{{=response_message}}</div>
-        </div>
-
-    {{pass}}
+      <!-- If the transcriptions are unavailable for whatever reason, display a message -->
+      {{if response_message:}}
+          <div class="unavailable_overlay">
+            <div class="notice">{{=response_message}}</div>
+          </div>
+      {{pass}}
     </div>
 
 </div>
 
 <div id="doc_submit">
-
+  <!-- Show a reject all transcriptions button -->
   {{=reject_all_form}}
-gi
 </div>
 
 <script>
+  // Simple script for toggling the view. If the user has no JS then they are in landscape mode
   $("#toggle_button").click(function(){
     $("#document_viewer")          .toggleClass('portrait').toggleClass('landscape');
     $("#transcription_form_holder").toggleClass('portrait').toggleClass('landscape');
   })
-
 </script>

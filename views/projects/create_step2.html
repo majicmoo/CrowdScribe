@@ -2,6 +2,8 @@
 {{response.files.append(URL(r=request,c='static/css',f='project.css'))}}
 {{extend 'crowdscribe-layout.html'}}
 
+<!-- This navigation bar lets the user jump to different steps and ammend their project. It updates to show what pages can be visited, and which is currently active -->
+
 <div class="form_nav">
   <div class="inner">
 
@@ -33,6 +35,9 @@
   <h1>Create Project (Step 2 of 4)</h1>
   <h3>Add Documents to {{=project_name}}</h3>
 
+  <!-- Form errors are displayed right at the top of the page so screen reader users can easily see them -->
+  <!-- This loops through all errors and provides links to the relevant labels -->
+
   {{if add_image_form.errors:}}
     <div class="border-box-sizing rounded_bordered_container no_bottom_padding error_container">
       <h4>{{=len(add_image_form.errors)}} Form Errors</h4>
@@ -55,6 +60,9 @@
 
     <p>Only images with a height larger than 400px and width larger than 450px may be uploaded.</p>
 
+    <!-- The document upload form is split into three sections, upload image, enter description, and submit -->
+    <!-- This provides a clear top left -> Bottom right flow for users to follows -->
+
     {{=add_image_form.custom.begin}}
       <div class = "document_image_upload_form">
 
@@ -68,6 +76,7 @@
 
           <!-- Overlay Text -->
           <div id = "image_upload_overlay">
+            <!-- We wanted to customise the image upload form to be more accesible, but it is strictly controller by the browser -->
             <label for="document_image_image">Upload Image (Min 400x450px)</label>
             <input id="document_image_image" name="image" type="file">
           </div>
@@ -76,6 +85,8 @@
       </div>
 
       <div class = "document_desc_upload_form">
+
+        <!-- The user can retain their typed description for the next document. This fulfills design rationale as specified in the report -->
 
         <div class = "desc_field">
           <label for="document_image_description">Document Description</label>
@@ -99,6 +110,8 @@
 
   <div class="border-box-sizing rounded_bordered_container no_margin">
 
+    <!-- Shows the user all the documents they have added -->
+
     <h3>{{=len(documents_added)}} Documents For Project</h3>
     <p>Created documents can be viewed and deleted below.</p>
 
@@ -118,6 +131,8 @@
 
 <div class="line_seperator"></div>
 
+<!-- Project creation navigation -->
+
 <div class="padded_container form_container no_vertical_padding">
   <div class="forward_back_buttons no_top_margin">
     {{=go_to_step_1_form}}
@@ -127,5 +142,3 @@
 </div>
 
 <div class="line_seperator"></div>
-
-<!-- This simple script allows the user to prepopulate the field with their previous document text. Means users do not have to repeat redundent data. -->

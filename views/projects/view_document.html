@@ -120,6 +120,8 @@
 
       {{pass}}
 
+      <!-- If a transcription cannot be made, or there is an error (such as user not logged in), display a message -->
+
       {{if overlay_message and not accepted_transcription_with_fields:}}
           <div class="unavailable_overlay">
             <div class="notice">
@@ -133,6 +135,8 @@
   </div>
 
   <div id="doc_submit">
+
+    <!-- This displays either a submit button, or shows a message about the state of the document -->
 
     {{if form and not response.message and not accepted_transcription_with_fields:}}
         <input class="btn btn-success" type="submit" value="Submit Transcription" onClick="return confirm('Are you sure you want to submit this transcription? You can only transcribe a project once.');">

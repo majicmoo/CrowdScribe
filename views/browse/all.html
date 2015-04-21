@@ -4,10 +4,9 @@
 <div class="padded_container form_container no_bottom_padding">
   <h2>Categories</h2>
 
-  <!-- Loop through all categories numerically. Need the index for the link redirect -->
+  <!-- Loop through all categories. -->
   <div class = "category_holder">
     {{for category in categories:}}
-
         <div class = "category_button border-box-sizing">
           <a href = "{{=URL('browse','all',args = category)}}" class="content">
             {{=category}}
@@ -18,17 +17,20 @@
 
   <div class="line_seperator"></div>
 
+  <!-- Show breadcrumbs to let user navigate back to all projects -->
   <ul class="breadcrumb no_margin">
     <li><a href="{{=URL('browse','all')}}">All Projects</a> </li>
     {{if category_name:}}<li class="active"><span class="divider">/</span>{{=category_name}}</li>{{pass}}
   </ul>
 
+  <!-- Show message if no projects for this category -->
   {{if not allprojects:}}
     <h4 class="top_margin" tab-index=0>{{="No Projects for "+category_name}}</h4>
   {{pass}}
 
 </div>
 
+<!-- Loop through and display all projects for this category -->
 <div class=" no-left-right-padding projects">
   <div class="projects no_margin">
     {{for project in allprojects:}}

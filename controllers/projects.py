@@ -152,15 +152,16 @@ def create_step2():
         redirect(URL('projects', 'create_step1'))
 
     # Delete all Documents
-    delete_all_documents_form =  FORM(BUTTON("Remove all Documents",
+    delete_all_documents_form =  FORM(BUTTON("Delete all Documents",
                                         _type='submit',
                                         _class='btn btn-danger btn-block',
                                         _onclick="return confirm('Are you sure you want to remove all documents for this project?');"))
 
     if delete_all_documents_form.process(formname="remove_all_form").accepted:
-        response.flashcolour = "rgb(98, 196, 98)"
-        response.flash = "All documents for this project removed."
+        session.flashcolour = "rgb(98, 196, 98)"
+        session.flash = "All documents for this project deleted."
         database.delete_all_documents_for_project(project_id)
+        redirect(URL('projects', 'create_step3'), client_side=True)
 
     # Retrieve documents that project already has.
     documents_added = database.get_documents_for_project(project_id)
@@ -221,6 +222,7 @@ def create_step3():
         else:
             session.project_being_created = project_id
             redirect(URL('projects', 'create_step4'))
+
     # Go back to step 2 when button clicked
     if go_to_step_2_form.process(formname="form_three").accepted:
         session.project_being_created = project_id
@@ -233,14 +235,14 @@ def create_step3():
         redirect(URL('projects', 'create_step1'))
 
     # Delete all Documents
-    delete_all_fields_form =  FORM(BUTTON("Remove all Fields",
+    delete_all_fields_form =  FORM(BUTTON("Delete all Fields",
                                         _type='submit',
                                         _class='btn btn-danger btn-block',
                                         _onclick="return confirm('Are you sure you want to remove all transcription fields for this project?');"))
 
     if delete_all_fields_form.process(formname="remove_all_form").accepted:
         session.flashcolour = "rgb(98, 196, 98)"
-        session.flash = "All fields for this project removed."
+        session.flash = "All fields for this project deleted."
         database.delete_all_fields_for_project(project_id)
         redirect(URL('projects', 'create_step3'), client_side=True)
 

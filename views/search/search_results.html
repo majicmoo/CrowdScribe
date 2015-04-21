@@ -6,14 +6,19 @@
   <h1>Search</h1>
   <h3>You Searched : "{{=searchstr}}"</h3>
 
+  <!-- Search can be modified with these advanced forms -->
+
   <div class="border-box-sizing rounded_bordered_container  search_input_form">
     <h3 class="no_margin">Advanced Search Fields</h3>
+    <!-- This is not the most elegant search form, but it is highly accesible and serves its function -->
     {{=advanced}}
   </div>
 
   <h3>{{=str(len(projects))}} Results:</h3>
 
 </div>
+
+<!-- Show searched projects -->
 
 <div class="projects">
   {{for project in projects:}}

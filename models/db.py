@@ -27,8 +27,8 @@ if not request.env.web2py_runtime_gae:
 
     db.define_table('data_field',
                     Field('project_id', 'reference project'),
-                    Field('name', length=55, requires=IS_NOT_EMPTY()),
-                    Field('short_description', type='text', requires=IS_NOT_EMPTY()))
+                    Field('name', length=55),
+                    Field('short_description', type='text'))
 
     db.define_table('transcription',
                     Field('document_id', 'reference document_image'),

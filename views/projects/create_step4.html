@@ -2,6 +2,8 @@
 {{response.files.append(URL(r=request,c='static/css',f='project.css'))}}
 {{extend 'crowdscribe-layout.html'}}
 
+<!-- This navigation bar lets the user jump to different steps and ammend their project. It updates to show what pages can be visited, and which is currently active -->
+
 <div class="form_nav">
   <div class="inner">
     <a href="{{=URL('projects','create_step1')}}"><div class="stage clickable">1. Basic Details</div></a>
@@ -20,6 +22,8 @@
 
 </div>
 
+<!-- For preview a button is displayed at the top as it was found through testing that when the project was sufficiently large, users had trouble findng this button after reviewing their project  -->
+
 <div class="line_seperator"></div>
 
 <div class="padded_container form_container no_vertical_padding">
@@ -35,6 +39,8 @@
 <div class="line_seperator"></div>
 
 {{include "subviews/project-page-view.html"}}
+
+<!-- Create Project navigation -->
 
 <div class="padded_container form_container no_vertical_padding">
   <div class="forward_back_buttons no_top_margin">

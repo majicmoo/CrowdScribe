@@ -1,6 +1,8 @@
 {{response.files.append(URL(r=request,c='static/css',f='create.css'))}}
 {{extend 'crowdscribe-layout.html'}}
 
+<!-- This navigation bar lets the user jump to different steps and ammend their project. It updates to show what pages can be visited, and which is currently active -->
+
 <div class="form_nav">
   <div class="inner">
 
@@ -27,6 +29,7 @@
   </div>
 </div>
 
+<!-- A padded container gives a buffer to the inner content -->
 
 <div class="padded_container form_container less_top_padding">
   <h1>Create Project (Step 1 of 4)</h1>
@@ -34,6 +37,9 @@
   <p>
     This wizard will guide you through creating a CrowdScribe project. Your project is saved unless you clear it with the button below, or log out of your account. You can use the above navigation bar to revisit steps and modify previously entered data. Firstly, please enter some basic details.
   </p>
+
+	<!-- Form errors are displayed right at the top of the page so screen reader users can easily see them -->
+	<!-- This loops through all errors and provides links to the relevant labels -->
 
   {{if form.errors:}}
     <div class="border-box-sizing rounded_bordered_container no_bottom_padding error_container" tabindex="0">
@@ -52,7 +58,8 @@
 
   <div class="border-box-sizing rounded_bordered_container no_bottom_padding">
 
-        <!-- <h4> Project Title</h4> -->
+        <!-- Each form element has a respective clear label which allows screen readers to hear "Label, description, edit data".  -->
+
         <label id = "label_for_project_name" for="project_name">Project Title</label>
         <p>
           This is what your project will be known as across CrowdScribe.
@@ -122,9 +129,13 @@
 
   {{=form.custom.end}}
 
+	<!-- Users can clear the project at any point and wipe their data -->
+
   {{=clear_project}}
 
 </div>
+
+<!-- The only way to provide a live character count is through jQuery. This char count is tabbable so it can be read by screen readers -->
 
 <script>
 	// This jQuery checks the character count for elements that have a specific requirement and displays them

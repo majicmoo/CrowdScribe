@@ -1,6 +1,7 @@
 {{response.files.append(URL(r=request,c='static/css',f='index.css'))}}
 {{extend 'crowdscribe-layout.html'}}
 
+<!-- The featured project gives users a central focus point and provides a feature that occurs on a lot of sites -->
 {{if featured_project:}}
   <a href={{=URL('projects','project', args=[featured_project.id])}} class = "featured_project">
       <img src="{{=URL('default','download',args = featured_project_image)}}" alt="Featured Project Image for {{=featured_project.name}}"/>
@@ -16,6 +17,7 @@
   </a>
 {{pass}}
 
+<!-- Show latest projects for crowdscribe -->
 {{if latest_projects:}}
   <div class="padded_container form_container no_bottom_padding">
     <h1>Latest Projects</h1>
@@ -31,6 +33,7 @@
   </div>
 {{pass}}
 
+<!-- Show projects that have had the most transcriptions made on them -->
 {{if most_transcribed_projects:}}
   <div class="line_seperator"></div>
 
@@ -48,6 +51,7 @@
   </div>
 {{pass}}
 
+<!-- If there are no projects display a message -->
 {{if not latest_projects and not most_transcribed_projects:}}
   <div class="padded_container form_container no_bottom_padding">
     <h1>Currently No Projects</h1>
