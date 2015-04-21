@@ -597,7 +597,7 @@ def close_project_for_review_from_view_document():
     db((db.project.id == request.vars.project_id)).update(status="Under Review")
     db.commit()
     session.flash = "Project Closed for Transcription Review"
-    redirect(URL('projects', 'review_document', args=[request.vars.project_id, request.vars.document_id]), client_side=True)
+    redirect(URL('projects', 'view_document', args=[request.vars.project_id, request.vars.document_id]), client_side=True)
 
 def open_project_from_view_document():
     # Function for button which will close a project for review and redirect to a document
