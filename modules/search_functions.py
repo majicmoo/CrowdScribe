@@ -8,10 +8,10 @@ class SearchFunctions:
         self.db = db
         self.general_module = general_functions.GeneralFunctions(database, db)
 
-    def empty_date_field(self, date):
+    def empty_field(self, field):
         # Return False if data field has content else return true
-        if (date is not None or date == "") and (date is None or date != ""):
-            # Date field has content
+        if (field is not None or field == "") and (field is None or field != ""):
+            # Field has content
             return False
         else:
             return True
