@@ -1,4 +1,6 @@
-<!-- This is used throughout the site to display projects in an adaptive frame -->
+
+<!-- This is used in the project manager for viewing and opening/closing projects  -->
+
 <div class="project border-box-sizing">
 
 		<div class="content border-box-sizing">
@@ -23,12 +25,12 @@
 					<!-- You can also place the project under review, or reopen it -->
 					{{if project.status == "Under Review":}}
 
-						{{=A('Reopen Project',_class="btn btn-info", callback= URL('reopen_project_for_transcriptions',
+						{{=A('Open Project For Transcriptions',_class="btn btn-info", callback= URL('reopen_project_for_transcriptions',
 								vars= dict(project_id=project.id)))}}
 
 					{{elif project.status == "Open":}}
 
-						{{=A('Place under Review',_class="btn btn-info", callback= URL('place_project_under_review',
+						{{=A('Place this Project under Review',_class="btn btn-danger", callback= URL('place_project_under_review',
 								vars= dict(project_id=project.id)))}}
 
 					{{pass}}

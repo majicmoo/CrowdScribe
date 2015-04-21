@@ -47,7 +47,7 @@
       <ul>
         {{for error in form.errors:}}
           <li>
-            <a href="#label_for_project_{{=error}}" alt="Error, {{=form.errors[error]}}">{{=form.errors[error]}}</a>
+            <a href="#label_for_project_{{=error}}">{{=form.errors[error]}}</a>
           </li>
         {{pass}}
       </ul>
