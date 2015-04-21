@@ -79,6 +79,16 @@ class ProjectFunctions:
         end_date = None
         date_validator = IS_INT_IN_RANGE(-2016, 2016,
                                          error_message="Date must be whole number between 2015 BC and 2015 AD")
+        name_length_validator = IS_LENGTH(55, error_message="Project Title must be less than 55 characters long")
+        project_description_length_validator = \
+            IS_LENGTH(500, error_message="Project Description must be less than 500 characters long")
+
+        if name_length_validator(current.request.vars.name)[1] is not None:
+            form.errors.name = name_length_validator(current.request.vars.name)[1]
+
+        if project_description_length_validator(current.request.vars.description)[1] is not None:
+            form.errors.description = project_description_length_validator(current.request.vars.description)[1]
+
 
         if current.request.vars.unknown != "yes":
             if (current.request.vars.time_period_start_date != "")\
@@ -126,7 +136,11 @@ class ProjectFunctions:
 
     def validate_add_field_form(self, form):
         # Validate the add field form in step 3 of the create project wizard.
-        alphanumeric_validator = IS_ALPHANUMERIC(error_message="Only letters, numbers and spaces allowed in field name")
+        alphanumeric_validator = IS_ALPHANUMERIC(error_message="Only letters, numbers and spaces allowed in Field Name")
+        name_length_validator = IS_LENGTH(55, error_message="Field Name must be less than 55 characters long")
+
+        if name_length_validator(current.request.vars.name)[1] is not None:
+            form.errors.name = name_length_validator(current.request.vars.name)[1]
 
         # Validate that field name only contains alphanumeric or spaces
         field_name_split = current.request.vars.name.split()
