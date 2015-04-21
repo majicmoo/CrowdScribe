@@ -20,35 +20,35 @@ if not request.env.web2py_runtime_gae:
     db = DAL('sqlite://crowdscribe.db', pool_size=1, check_reserved=['all'], lazy_tables=True)
 
     db.define_table('project',
-                    Field('name'),
-                    Field('author_id', 'reference auth_user', writable=False, readable=False),
-                    Field('status'),
-                    Field('description', type='text', length=500),
+                    Field('name', requires=IS_NOT_EMPTY()),
+                    Field('author_id', 'reference auth_user', writable=False, readable=False, requires=IS_NOT_EMPTY()),
+                    Field('status', requires=IS_NOT_EMPTY()),
+                    Field('description', type='text', length=500, requires=IS_NOT_EMPTY()),
                     Field('tag', requires=IS_IN_SET(options)),
                     Field('time_period_start_date', 'integer'),
                     Field('time_period_end_date', 'integer'),
-                    Field('date_created', 'datetime'))
+                    Field('date_created', 'datetime', requires=[IS_NOT_EMPTY(), IS_DATETIME]))
 
     db.define_table('document_image',
-                    Field('description', type='text'),
-                    Field('image', 'upload'),
-                    Field('project_id', 'reference project'),
-                    Field('status'))
+                    Field('description', type='text', requires=IS_NOT_EMPTY()),
+                    Field('image', 'upload', requires=IS_NOT_EMPTY()),
+                    Field('project_id', 'reference project', requires=IS_NOT_EMPTY()),
+                    Field('status', requires=IS_NOT_EMPTY()))
 
     db.define_table('data_field',
-                    Field('project_id', 'reference project'),
-                    Field('name'),
-                    Field('short_description', type='text'))
+                    Field('project_id', 'reference project', requires=IS_NOT_EMPTY()),
+                    Field('name', requires=IS_NOT_EMPTY()),
+                    Field('short_description', type='text', requires=IS_NOT_EMPTY()))
 
     db.define_table('transcription',
-                    Field('document_id', 'reference document_image'),
-                    Field('author_id', 'reference auth_user'),
-                    Field('status'),
-                    Field('date_created', 'datetime'))
+                    Field('document_id', 'reference document_image', requires=IS_NOT_EMPTY()),
+                    Field('author_id', 'reference auth_user', requires=IS_NOT_EMPTY()),
+                    Field('status', requires=IS_NOT_EMPTY()),
+                    Field('date_created', 'datetime', requires=[IS_NOT_EMPTY(), IS_DATETIME()]))
 
     db.define_table('transcribed_field',
-                    Field('data_field_id', 'reference data_field'),
-                    Field('transcription_id', 'reference transcription'),
+                    Field('data_field_id', 'reference data_field', requires=IS_NOT_EMPTY()),
+                    Field('transcription_id', 'reference transcription', requires=IS_NOT_EMPTY()),
                     Field('information', type='text'))
 
 else:
