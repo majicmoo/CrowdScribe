@@ -23,10 +23,16 @@
     {{if category_name:}}<li class="active"><span class="divider">/</span>{{=category_name}}</li>{{pass}}
   </ul>
 
-  <div class=" no-left-right-padding projects">
+  {{if not allprojects:}}
+    <h4 class="top_margin" tab-index=0>{{="No Projects for "+category_name}}</h4>
+  {{pass}}
+
+</div>
+
+<div class=" no-left-right-padding projects">
+  <div class="projects no_margin">
     {{for project in allprojects:}}
       {{include "subviews/project-display.html"}}
     {{pass}}
   </div>
-
 </div>
