@@ -2,7 +2,6 @@ import os
 
 from gluon.custom_import import track_changes; track_changes(True)
 
-
 options = ["Sport", "Theatre", "Military", "Journal Entries", "Architecture", "Citizen Information",
            "Religion", "Art", "Literature", "Finance", "Scientific", "Media", "Music", "Other"]
 
@@ -71,3 +70,12 @@ auth.settings.registration_requires_approval = False
 auth.settings.reset_password_requires_verification = True
 auth.messages.logged_in = 'You are now Logged In'
 auth.messages.logged_out = 'You are now Logged Out'
+
+# Create a test database that's laid out just like the "real" database
+import copy
+test_db = DAL('sqlite://testing.db', pool_size=1, check_reserved=['all'], lazy_tables=True)  # Name and location of the test DB file
+for tablename in db.tables:  # Copy tables!
+    table_copy = [copy.copy(f) for f in db[tablename]]
+    test_db.define_table(tablename, *table_copy)
+
+current.test_db = test_db
