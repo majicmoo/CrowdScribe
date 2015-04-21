@@ -18,6 +18,12 @@ $(document).ready(function(){
         readURL(this);
     });
 
+    $('#advanced').hide()
+
+    $('#hide_advanced').click(function(){
+         $('#advanced').toggle();
+    });
+
    //var pledge_count = 6;
 
    $(".tip").tooltip();
