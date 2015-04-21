@@ -279,13 +279,11 @@ class ProjectFunctions:
             transcription_dictionary['transcription'] =\
                 self.database.get_transcribed_fields_for_transcription(transcription.id)
             transcription_dictionary['button'] = \
-                A(BUTTON('Accept '+transcription_dictionary['user']+'\'s Transcription and View Document',
-                         _class="btn btn-success"), callback=URL('accept_transcription',
+                A('Accept '+transcription_dictionary['user']+'\'s Transcription and View Document',
+                         _class="btn btn-success border-box-sizing", callback=URL('accept_transcription',
                                                                  vars=dict(document_id=transcription.document_id,
                                                                            transcription_id=transcription.id,
-                                                                           project_id=project.id)),
-                  _onclick="return confirm('Are you sure you want to accept this transcription and reject all "
-                           "others?');")
+                                                                           project_id=project.id)))
             transcriptions_list.append(transcription_dictionary)
             i += 1
 

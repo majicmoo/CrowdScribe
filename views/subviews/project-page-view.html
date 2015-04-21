@@ -30,7 +30,7 @@
       <!-- If the project is under review show an option to reopen it -->
       {{if project.status == "Open":}}
         <p>You are the owner of this project : It is currently <b>Open</b>. It is viewable by the public and its documents can receive transcriptions. You cannot review transcriptions whilst a project is open.</p>
-        {{=A(BUTTON('Place this Project under Review',_class="btn btn-danger"),
+        {{=A('Place this Project under Review',_class="btn btn-danger border-box-sizing",
             callback= URL('close_project_for_review',
             vars= dict(project_id=project.id)))}}
       {{pass}}
@@ -38,9 +38,9 @@
       <!-- If the project is under review show an option to reopen it -->
       {{if project.status == "Under Review":}}
         <p>You are the owner of this project : It is currently <b>Under Review</b>. It is unavailable to the public and documents can not currently receive transcriptions. You can review transcriptions for a document below.</p>
-        {{=A(BUTTON('Open Project For Transcriptions',_class="btn btn-success"),
+        {{=A('Open Project For Transcriptions',_class="btn btn-success border-box-sizing",
             callback= URL('reopen_project',
-            vars= dict(project_id=project.id)), _class="split")}}
+            vars= dict(project_id=project.id)))}}
       {{pass}}
 
       <!-- If the project is closed -->

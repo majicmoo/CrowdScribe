@@ -65,13 +65,13 @@
 
     <div id="transcription_form_holder" class="{{="disabled" if response.message else ""}} landscape">
 
-      <ul class = "transcription_viewer">
+
 
       <!-- Submitted transcriptions are coded as a list for screen reader accesibility -->
 
         {{for transcription in transcriptions:}}
-          <div>
             <h3> Transcription {{=transcription['number']}} by {{=transcription['user']}}</h3>
+            <ul class = "transcription_viewer">
             {{for index, field in enumerate(transcription['transcription']): }}
                 <li class = "transcription margin_bottom">
 
@@ -82,9 +82,10 @@
 
                 </li>
             {{pass}}
-            {{=transcription['button']}}
-            <div class="line_seperator"></div>
-          </div>
+            <li>
+              {{=transcription['button']}}
+              <div class="line_seperator"></div>
+            </li>
         {{pass}}
       </ul>
 
@@ -95,6 +96,8 @@
           </div>
       {{pass}}
     </div>
+
+  </div>
 
 </div>
 
