@@ -585,6 +585,13 @@ def close_project_for_review():
     session.flash = "Project Closed for Transcription Review"
     redirect(URL('projects', 'project', args=request.vars.project_id), client_side=True)
 
+def close_project_for_review_from_view_document():
+    # Function for button which will close a project for review and redirect to a document
+    db((db.project.id == request.vars.project_id)).update(status="Under Review")
+    db.commit()
+    session.flash = "Project Closed for Transcription Review"
+    redirect(URL('projects', 'review_document', args=[request.vars.project_id, request.vars.document_id]), client_side=True)
+
 def reopen_project():
     # Function for button which will reopen a project
     db((db.project.id == request.vars.project_id)).update(status="Open")
