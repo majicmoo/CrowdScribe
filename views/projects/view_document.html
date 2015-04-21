@@ -3,12 +3,18 @@
 
 <div class="padded_container form_container no_bottom_padding">
 
+  <!-- Breadcrumbs so user can go back to project -->
+
   <ul class="breadcrumb">
     <li><a href="{{=URL('projects','project', args=[project.id])}}">{{=project.name}}</a> <span class="divider">/</span></li>
     <li class="active">Document</li>
   </ul>
 
-  <a href = "{{=URL('projects','project', args=[project.id])}}" class="back_button btn btn-info">Go Back to Project Page</a>
+  <!-- We found through testing that this wasn't obvious enough, so added a second button to allow users to go back to the project -->
+
+  <a href = "{{=URL('projects','project', args=[project.id])}}"><div  class="back_button btn btn-info border-box-sizing">
+    Go Back to Project Page
+  </div></a>
 
   <!-- Display controls for owner -->
 
@@ -19,16 +25,16 @@
         <p><b>You are the owner of this document and can :</b></p>
 
         {{if project.status == "Open":}}
-          {{=A(BUTTON('Place this Project under Review',_class="btn btn-danger"),
+          {{=A(DIV('Place this Project under Review',_class="btn btn-danger border-box-sizing"),
               callback= URL('close_project_for_review_from_view_document', vars= dict(project_id=project.id, document_id=document.id)))}}
         {{pass}}
 
         <!-- If the project is under review show an option to reopen it -->
         {{if project.status == "Under Review":}}
-          {{=A(BUTTON('Open Project For Transcriptions',_class="btn btn-success"),
+          {{=A(DIV('Open Project For Transcriptions',_class="btn btn-success border-box-sizing"),
               callback= URL('open_project_from_view_document'
               , vars= dict(project_id=project.id, document_id=document.id)))}}
-          {{=A(BUTTON('Review Document',_class="btn btn-info top_margin_small"), _href= URL('projects','review_document', args=[project.id, document.id]))}}
+          {{=A(DIV('Review Document',_class="btn btn-info top_margin_small border-box-sizing"), _href= URL('projects','review_document', args=[project.id, document.id]))}}
         {{pass}}
 
 

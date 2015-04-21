@@ -91,7 +91,7 @@ form {
     /* Used to space inner content */
     padding: 0 40px 0 40px;
     /* Slight gradient to highlight features */
-    background-image: linear-gradient(to bottom, #FFF, #f0f0f0);
+    background-image: linear-gradient(to bottom, white, #f0f0f0);
     /* Some Bootstrap Overwrites */
     border: 0;
     border-bottom: 1px solid #e6e6e6;
@@ -301,13 +301,13 @@ form {
       opacity: .5; }
     .form_nav .inner .clickable {
       opacity: 1;
-      background: -moz-linear-gradient(#c8c8c8, #B5B5B5); }
+      background: -moz-linear-gradient(#c8c8c8, #b5b5b5); }
       .form_nav .inner .clickable:hover {
         opacity: .5; }
     .form_nav .inner .highlighted {
       opacity: 1;
       font-weight: bold;
-      background: -moz-linear-gradient(#5cb3d9, #559DBD);
+      background: -moz-linear-gradient(#5cb3d9, #559dbd);
       color: white; }
       .form_nav .inner .highlighted:hover {
         opacity: .5; }
@@ -430,7 +430,7 @@ form {
   min-width: 1000px;
   width: 100%;
   height: 30px;
-  background-color: #64B58B; }
+  background-color: #5cb3d9; }
   .message .centeredmessage {
     height: 30px;
     margin-left: auto;
@@ -450,5 +450,3 @@ form {
 .alert {
   border-radius: 0;
   margin: 0; }
-
-/*# sourceMappingURL=crowdscribe_global.css.map */

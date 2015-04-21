@@ -129,6 +129,15 @@
         <div class="line_seperator"></div>
       {{pass}}
 
+      <!-- If there are no projects available to the public -->
+
+      {{if not closed_documents and not open_documents:}}
+        <h4>No Public Documents</h4>
+        <p>
+          All projects are currently unavailable to the public.
+        </p>
+      {{pass}}
+
     {{pass}}
 
     <!-- Everyone -->
@@ -145,6 +154,7 @@
       {{pass}}
       <div class="line_seperator"></div>
     {{pass}}
+
 
 
 </div>

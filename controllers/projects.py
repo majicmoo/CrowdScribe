@@ -155,7 +155,7 @@ def create_step2():
         session.flashcolour = "rgb(98, 196, 98)"
         session.flash = "All documents for this project deleted."
         database.delete_all_documents_for_project(project_id)
-        redirect(URL('projects', 'create_step3'), client_side=True)
+        redirect(URL('projects', 'create_step2'), client_side=True)
 
     # Retrieve documents that project already has.
     documents_added = database.get_documents_for_project(project_id)
@@ -310,6 +310,8 @@ def project():
         redirect(URL('default', 'index'))
 
     if (project.status == "Closed") and (project.author_id != auth._get_user_id()):
+        session.flashcolour = "rgba(255, 0, 0, 0.7)"
+        session.flash = "This project is currently closed to the public."
         redirect(URL('default', 'index'))
 
     # Initialise Variables
@@ -391,7 +393,6 @@ def view_document():
     if project.author_id == auth._get_user_id() and not transcriptions and not accepted_transcription:
         response_message = 'You are the owner of this project and cannot transcribe its documents. It currently has' \
                            ' 0 transcriptions available for review.'
-        response.message = response_message
 
     elif project.author_id == auth._get_user_id() and transcriptions and not accepted_transcription:
         msgstring = 'You are the owner of this project and cannot transcribe its documents. It currently has ' \
@@ -521,7 +522,7 @@ def review_document():
     transcriptions = projects_module.build_transcription_list(project, transcriptions)
 
     # # If there are no transriptions available for review, redirect to view_document
-    
+
     response_message = None
     if not transcriptions:
         response_message = "This document currently has zero transcriptions for review."
@@ -569,7 +570,7 @@ def accept_transcription():
         db(db.project.id == request.vars.project_id).update(status="Closed")
         db.commit()
 
-    session.flashcolour = "rgba(255, 0, 0, 0.7)"
+    session.flashcolour = "rgb(98, 196, 98)"
     session.flash = "Succesfully Accepted Transcription!"
 
     redirect(URL('projects', 'view_document', args=[request.vars.project_id, request.vars.document_id]),
@@ -602,7 +603,7 @@ def open_project_from_view_document():
     # Function for button which will close a project for review and redirect to a document
     db((db.project.id == request.vars.project_id)).update(status="Open")
     db.commit()
-    session.flash = "Project Closed for Transcription Review"
+    session.flash = "Project Opened to the Public"
     redirect(URL('projects', 'view_document', args=[request.vars.project_id, request.vars.document_id]), client_side=True)
 
 def reopen_project():
