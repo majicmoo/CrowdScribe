@@ -170,7 +170,8 @@
     background: #999999;
     width: 50%;
     height: auto;
-    float: left; }
+    float: left;
+    min-height: 600px; }
   #document_viewer.portrait {
     background: #999999;
     width: 100%;

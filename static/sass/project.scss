@@ -286,6 +286,7 @@ $borderradius:15px;
     width:$landscapewidth;
     height:$landscapeheight;
     float:left;
+    min-height:600px;
   }
 
   &.portrait{
@@ -293,6 +294,7 @@ $borderradius:15px;
     width:$portraitwidth;
     height:$portraitheight;
     clear:both;
+
   }
 
 
