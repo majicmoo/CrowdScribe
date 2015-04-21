@@ -586,6 +586,9 @@ def accept_transcription():
         db(db.project.id == request.vars.project_id).update(status="Closed")
         db.commit()
 
+    session.flashcolour = "rgba(255, 0, 0, 0.7)"
+    session.flash = "Succesfully Accepted Transcription!"
+
     redirect(URL('projects', 'view_document', args=[request.vars.project_id, request.vars.document_id]),
              client_side=True)
 
