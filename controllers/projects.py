@@ -159,7 +159,7 @@ def create_step2():
         session.flashcolour = "rgb(98, 196, 98)"
         session.flash = "All documents for this project deleted."
         database.delete_all_documents_for_project(project_id)
-        redirect(URL('projects', 'create_step3'), client_side=True)
+        redirect(URL('projects', 'create_step2'), client_side=True)
 
     # Retrieve documents that project already has.
     documents_added = database.get_documents_for_project(project_id)
@@ -563,7 +563,9 @@ def review_document():
 def delete_field():
     # Controller for button to delete field on create project page
     db((db.data_field.id == request.vars.field_id)).delete()
-    current.db.commit()
+    db.commit()
+    session.flashcolour = "rgb(98, 196, 98)"
+    session.flash = "Field deleted."
     redirect(URL('projects', 'create_step3'), client_side=True)
 
 
@@ -571,6 +573,8 @@ def delete_document():
     # Controller for button to delete document on create project page
     db((db.document_image.id == request.vars.document_id)).delete()
     db.commit()
+    session.flashcolour = "rgb(98, 196, 98)"
+    session.flash = "Document deleted."
     redirect(URL('projects', 'create_step2'), client_side=True)
 
 
