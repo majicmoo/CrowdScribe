@@ -1,7 +1,5 @@
-from gluon import *
 import database_transactions as database_transactions
 database = database_transactions.DatabaseTransactions(db)
-import search_functions as search_functions
 import general_functions as general_functions
 general_module = general_functions.GeneralFunctions(database, db)
 
@@ -28,16 +26,19 @@ def index():
         featured_project_image = database.get_document_for_project_header(featured_project.id).image
         latest_projects = general_module.limit_list_of_projects(latest_projects, number_of_projects_for_each_section)
 
-    most_transcribed_projects = general_module.limit_list_of_projects(most_transcribed_projects, number_of_projects_for_each_section)
+    most_transcribed_projects = general_module.limit_list_of_projects(most_transcribed_projects,
+                                                                      number_of_projects_for_each_section)
 
     latest_projects = general_module.attach_all_information_to_projects(latest_projects)
     most_transcribed_projects = general_module.attach_all_information_to_projects(most_transcribed_projects)
 
-    return dict(latest_projects = latest_projects, featured_project = featured_project,
-                featured_project_image = featured_project_image, most_transcribed_projects=most_transcribed_projects)
+    return dict(latest_projects=latest_projects, featured_project=featured_project,
+                featured_project_image=featured_project_image, most_transcribed_projects=most_transcribed_projects)
+
 
 def user():
     return dict(form=auth())
+
 
 @cache.action()
 def download():
@@ -52,6 +53,6 @@ def call():
 def api():
     from gluon.contrib.hypermedia import Collection
     rules = {
-        '<tablename>': {'GET':{},'POST':{},'PUT':{},'DELETE':{}},
+        '<tablename>': {'GET': {}, 'POST': {}, 'PUT': {}, 'DELETE': {}},
         }
-    return Collection(db).process(request,response,rules)
+    return Collection(db).process(request, response, rules)

@@ -5,6 +5,7 @@ database = database_transactions.DatabaseTransactions(db)
 projects_module = projects_functions.ProjectFunctions(database, db)
 general_module = general_functions.GeneralFunctions(database, db)
 
+
 @auth.requires_login(otherwise=URL('user', 'login',
                      vars=dict(controller_after_login='projects', page_after_login='create_step1')))
 def create_step1():
@@ -111,18 +112,16 @@ def create_step2():
         db.document_image.insert(description=request.vars.description, status="Open", project_id=project_id,
                                  image=add_image_form.vars.image)
 
-
         # As this is succesful, show a green message
         session.flashcolour = "rgb(98, 196, 98)"
         session.flash = "Succesfully Added Document!"
 
-        ##.replace('\n', '--').replace('\r', '')
+        # .replace('\n', '--').replace('\r', '')
         if request.vars.use_previous_description == "use_previous_description":
             # Store the description so the user can use it again
             session.last_description = request.vars.description
 
         redirect(URL('projects', 'create_step2'))
-
 
     elif add_image_form.errors:
         projects_module.validate_add_image_form(add_image_form)
@@ -148,14 +147,13 @@ def create_step2():
     # If clear project button is pressed, reset project wizard
     if clear_project.validate(formname="form_four"):
         session.project_being_created = None
-        db((db.project.author_id == auth._get_user_id()) &(db.project.status == "Being Created")).delete()
+        db((db.project.author_id == auth._get_user_id()) & (db.project.status == "Being Created")).delete()
         redirect(URL('projects', 'create_step1'))
 
     # Delete all Documents
-    delete_all_documents_form =  FORM(BUTTON("Delete all Documents",
-                                        _type='submit',
-                                        _class='btn btn-danger btn-block',
-                                        _onclick="return confirm('Are you sure you want to remove all documents for this project?');"))
+    delete_all_documents_form =\
+        FORM(BUTTON("Delete all Documents", _type='submit', _class='btn btn-danger btn-block',
+                    _onclick="return confirm('Are you sure you want to remove all documents for this project?');"))
 
     if delete_all_documents_form.process(formname="remove_all_form").accepted:
         session.flashcolour = "rgb(98, 196, 98)"
@@ -166,11 +164,10 @@ def create_step2():
     # Retrieve documents that project already has.
     documents_added = database.get_documents_for_project(project_id)
 
-
     return dict(add_image_form=add_image_form, go_to_step_3_form=go_to_step_3_form,
                 go_to_step_1_form=go_to_step_1_form, documents_added=documents_added, clear_project=clear_project,
                 step_available=step_available, project_name=project_being_edited.name,
-                delete_all_documents_form = delete_all_documents_form)
+                delete_all_documents_form=delete_all_documents_form)
 
 
 @auth.requires_login(otherwise=URL('user', 'login',
@@ -188,7 +185,6 @@ def create_step3():
 
     # Creates form that allows fields to be added
     add_fields_form = SQLFORM.factory(db.data_field, submit_button="Add field")
-
 
     # Form that allows you to move back to step 2
     go_to_step_2_form = projects_module.create_previous_step_form("Go Back to Step 2")
@@ -231,14 +227,14 @@ def create_step3():
     # Reset Project wizard when button clicked.
     if clear_project.validate(formname="form_four"):
         session.project_being_created = None
-        db((db.project.author_id == auth._get_user_id()) &(db.project.status == "Being Created")).delete()
+        db((db.project.author_id == auth._get_user_id()) & (db.project.status == "Being Created")).delete()
         redirect(URL('projects', 'create_step1'))
 
     # Delete all Documents
-    delete_all_fields_form =  FORM(BUTTON("Delete all Fields",
-                                        _type='submit',
-                                        _class='btn btn-danger btn-block',
-                                        _onclick="return confirm('Are you sure you want to remove all transcription fields for this project?');"))
+    delete_all_fields_form = \
+        FORM(BUTTON("Delete all Fields", _type='submit', _class='btn btn-danger btn-block',
+                    _onclick="return confirm('Are you sure you want to remove all transcription"
+                             " fields for this project?');"))
 
     if delete_all_fields_form.process(formname="remove_all_form").accepted:
         session.flashcolour = "rgb(98, 196, 98)"
@@ -253,7 +249,8 @@ def create_step3():
     return dict(documents_added=documents_added, add_fields_form=add_fields_form, fields_added=fields_added,
                 review_project_form=review_project_form, go_to_step_2_form=go_to_step_2_form,
                 clear_project=clear_project, step_available=step_available, project_name=project_being_edited.name,
-                delete_all_fields_form = delete_all_fields_form)
+                delete_all_fields_form=delete_all_fields_form)
+
 
 @auth.requires_login(otherwise=URL('user', 'login',
                      vars=dict(controller_after_login='projects', page_after_login='create_step1')))
@@ -274,7 +271,8 @@ def create_step4():
         project.update_record(status="Open", date_created=request.now)
         session.project_being_created = None
         session.flashcolour = "rgb(98, 196, 98)"
-        session.flash = project.name+" has been succesfully published! Its documents are now available for the public to transcribe."
+        session.flash = project.name + " has been succesfully published! Its documents are now available" \
+                                       " for the public to transcribe."
         redirect(URL('projects', 'project', args=[project.id]))
 
     if clear_project.validate(formname="form_two"):
@@ -295,7 +293,8 @@ def create_step4():
     open_documents, open_documents_with_transcription, open_documents_without_transcription, done_documents, \
     closed_documents = projects_module.set_up_project_page_based_on_user(project, auth)
 
-    project_being_edited.fraction_transcribed_string = general_module.construct_number_of_transcribed_documents_string(project.id)
+    project_being_edited.fraction_transcribed_string = \
+        general_module.construct_number_of_transcribed_documents_string(project.id)
 
     data_fields_for_project = database.get_data_fields_for_project(project.id)
 
@@ -303,7 +302,8 @@ def create_step4():
                 publish_project_form=publish_project_form, clear_project=clear_project, header_image=header_image,
                 done_documents=done_documents, open_documents_with_transcription=open_documents_with_transcription,
                 open_documents_without_transcription=open_documents_without_transcription,
-                closed_documents=closed_documents, open_documents=open_documents, data_fields_for_project=data_fields_for_project, go_to_step_3_form = go_to_step_3_form)
+                closed_documents=closed_documents, open_documents=open_documents,
+                data_fields_for_project=data_fields_for_project, go_to_step_3_form=go_to_step_3_form)
 
 
 def project():
@@ -319,8 +319,8 @@ def project():
         redirect(URL('default', 'index'))
 
     # Initialise Variables
-    open_documents, open_documents_with_transcription, open_documents_without_transcription, done_documents, \
-    closed_documents = projects_module.set_up_project_page_based_on_user(project, auth)
+    open_documents, open_documents_with_transcription, open_documents_without_transcription, done_documents,\
+        closed_documents = projects_module.set_up_project_page_based_on_user(project, auth)
 
     # Page Title
     response.title = "CrowdScribe | " + project.name
@@ -340,8 +340,8 @@ def project():
     all_documents = [documents_transcribed_by_user, done_documents, open_documents_with_transcription,
                      open_documents_without_transcription, open_documents]
 
-    documents_transcribed_by_user, done_documents, open_documents_with_transcription, \
-    open_documents_without_transcription, open_documents = \
+    documents_transcribed_by_user, done_documents, open_documents_with_transcription,\
+        open_documents_without_transcription, open_documents = \
         projects_module.attach_number_of_transcriptions_to_lists_of_documents(all_documents)
 
     project.fraction_transcribed_string = general_module.construct_number_of_transcribed_documents_string(project.id)
@@ -372,15 +372,15 @@ def view_document():
     # Get Doc from URL args
     document_id = request.args(1)
     document = database.get_document(document_id)
-    accepted_transcription_with_fields = accepted_transcription =  None
+    accepted_transcription_with_fields = accepted_transcription = None
 
     # If null doc, go back to the project
     if document is None:
         redirect(URL('projects', 'project', args=[project_id]))
-    elif (document.status == "Closed") and (project.author_id == auth._get_user_id()) :
+    elif (document.status == "Closed") and (project.author_id == auth._get_user_id()):
         accepted_transcription = database.get_accepted_transcription_for_document(document.id)
-        accepted_transcription_with_fields = database.get_transcribed_fields_for_transcription(accepted_transcription.id)
-
+        accepted_transcription_with_fields =\
+            database.get_transcribed_fields_for_transcription(accepted_transcription.id)
 
     document.number_of_transcriptions = len(database.get_pending_transcriptions_for_document(document.id))
 
@@ -412,13 +412,16 @@ def view_document():
     # Need an account to login
     elif auth._get_user_id() is None and project.status == 'Open':
         args = str(project_id) + '-' + str(document_id)
-        response_message = A("An account is required to transcribe a document. Click here to login.", _href=URL('user', 'login', vars=dict(controller_after_login='projects',
-                                                                                    page_after_login='view_document',
-                                                                                    args_after_login=args)))
+        response_message = A("An account is required to transcribe a document. Click here to login.",
+                             _href=URL('user', 'login', vars=dict(controller_after_login='projects',
+                                                                  page_after_login='view_document',
+                                                                  args_after_login=args)))
 
     # If user has already provided a transcription
     elif database.document_has_already_been_transcribed_by_user(document_id, auth._get_user_id()):
-        response.message = "You have already transcribed this document. Only 1 transcription can be added per user. Your transcription is shown below."
+        response.message =\
+            "You have already transcribed this document. Only 1 transcription can be added per user." \
+            " Your transcription is shown below."
 
     # If doc is no longer accepting transcriptions
     elif document.status == 'Done':
@@ -429,7 +432,7 @@ def view_document():
         response_message = "This project and document are closed for review."
         # Session.flash used to carry message over page
         session.flash = response_message
-        redirect(URL('default','index'))
+        redirect(URL('default', 'index'))
 
     # Display transcription submission form if document image is open for transcriptions and
     # user is authorised to make a submission (ie registered user, not project creator and has not already made
@@ -452,7 +455,7 @@ def view_document():
                 field_entry_exists = True
                 break
 
-        if field_entry_exists == True:
+        if field_entry_exists:
             # Check if document currently has 2 transcriptions or more and if so mark document as done before adding
             # new transcription
             if len(database.get_pending_transcriptions_for_document(document_id)) >= 2:
@@ -492,12 +495,15 @@ def view_document():
     user_submitted_transcription = database.get_transcriptions_for_user_and_document(document.id, auth._get_user_id())
     user_submitted_transcription_with_fields = None
     if user_submitted_transcription:
-        user_submitted_transcription_with_fields = database.get_transcribed_fields_for_transcription(user_submitted_transcription.id)
+        user_submitted_transcription_with_fields =\
+            database.get_transcribed_fields_for_transcription(user_submitted_transcription.id)
 
     return dict(project=project, document=document, image=image, form=form, transcription=transcription,
-                accepted_transcription_with_fields = accepted_transcription_with_fields, response_message = response_message,
-                timestring = timestring, overlay_message = response_message, data_fields = data_fields,
-                user_submitted_transcription_with_fields = user_submitted_transcription_with_fields)
+                accepted_transcription_with_fields=accepted_transcription_with_fields,
+                response_message=response_message, timestring=timestring, overlay_message=response_message,
+                data_fields=data_fields,
+                user_submitted_transcription_with_fields=user_submitted_transcription_with_fields)
+
 
 @auth.requires_login(otherwise=URL('user', 'login'))
 def review_document():
@@ -516,7 +522,9 @@ def review_document():
         # Redirect if project is none
         redirect(URL('default', 'index'))
     if project.status != 'Under Review':
-        response.flash = "A project must be 'Closed for Review' before you can assess it's transcriptions. You can close them in your Project Manager."
+        response.flash =\
+            "A project must be 'Closed for Review' before you can assess it's transcriptions." \
+            " You can close them in your Project Manager."
         redirect(URL('projects', 'project', args=[project_id]))
     # Check Project Belongs to Current User
     if project.author_id != auth._get_user_id():
@@ -529,7 +537,8 @@ def review_document():
     # # If there are no transriptions available for review, redirect to view_document
     # if not transcriptions:
     #     response.flashcolour = "rgba(255, 0, 0, 0.7)"
-    #     session.flash = "This document currently has zero transcriptions for review. You are now viewing the document."
+    #     session.flash = "This document currently has zero transcriptions for review. You are now viewing the document
+    # ."
     #     redirect(URL('projects', 'view_document', args=[project_id, document_id]))
 
     response_message = None
@@ -539,7 +548,8 @@ def review_document():
     reject_all_form =  FORM(BUTTON("Reject All Transcriptions and Return to Project",
                             _type='submit',
                             _class='btn btn-danger btn-block',
-                            _onclick="return confirm('Are you sure you want to reject all transcriptions available for this document?');"))
+                            _onclick="return confirm('Are you sure you want to reject all transcriptions "
+                                     "available for this document?');"))
 
     if reject_all_form.process().accepted:
         session.flash = "All Transcriptions Rejected"
@@ -555,6 +565,7 @@ def delete_field():
     db((db.data_field.id == request.vars.field_id)).delete()
     current.db.commit()
     redirect(URL('projects', 'create_step3'), client_side=True)
+
 
 def delete_document():
     # Controller for button to delete document on create project page
@@ -584,7 +595,7 @@ def reject_all_transcriptions(document_id, project_id):
     db((db.transcription.document_id == document_id)).update(status="Rejected")
     db(db.document_image.id == document_id).update(status='Open')
     db.commit()
-    redirect(URL('projects', 'project',args=project_id ), client_side=True)
+    redirect(URL('projects', 'project', args=project_id ), client_side=True)
 
 
 def close_project_for_review():
@@ -594,19 +605,24 @@ def close_project_for_review():
     session.flash = "Project Closed for Transcription Review"
     redirect(URL('projects', 'project', args=request.vars.project_id), client_side=True)
 
+
 def close_project_for_review_from_view_document():
     # Function for button which will close a project for review and redirect to a document
     db((db.project.id == request.vars.project_id)).update(status="Under Review")
     db.commit()
     session.flash = "Project Closed for Transcription Review"
-    redirect(URL('projects', 'view_document', args=[request.vars.project_id, request.vars.document_id]), client_side=True)
+    redirect(URL('projects', 'view_document', args=[request.vars.project_id, request.vars.document_id]),
+             client_side=True)
+
 
 def open_project_from_view_document():
     # Function for button which will close a project for review and redirect to a document
     db((db.project.id == request.vars.project_id)).update(status="Open")
     db.commit()
     session.flash = "Project Closed for Transcription Review"
-    redirect(URL('projects', 'view_document', args=[request.vars.project_id, request.vars.document_id]), client_side=True)
+    redirect(URL('projects', 'view_document', args=[request.vars.project_id, request.vars.document_id]),
+             client_side=True)
+
 
 def reopen_project():
     # Function for button which will reopen a project
