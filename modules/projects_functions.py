@@ -78,7 +78,7 @@ class ProjectFunctions:
 
         start_date = None
         end_date = None
-        date_validator = IS_INT_IN_RANGE(-2015, 2015,
+        date_validator = IS_INT_IN_RANGE(-2016, 2016,
                                          error_message="Date must be whole number between 2015 BC and 2015 AD")
 
         if current.request.vars.unknown != "yes":

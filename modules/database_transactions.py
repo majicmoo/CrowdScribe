@@ -140,6 +140,13 @@ class DatabaseTransactions:
         result = self.db(self.db.document_image.project_id == project_id).select()
         return result
 
+    def get_documents_for_project_excluding_closed_document(self, project_id):
+        # Get all documents for a project excluding closed documents
+        result = self.db((self.db.document_image.project_id == project_id)
+                    & (self.db.document_image.status != "Closed")).select()
+        return result
+
+
     def get_open_documents_for_project(self, project_id):
         # Get all open documents for a project
         result = self.db((self.db.document_image.project_id == project_id)
