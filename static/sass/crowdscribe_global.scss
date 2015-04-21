@@ -39,7 +39,7 @@ h1, p, h3, h4{
 }
 
 p{
-	font-size:1em;
+	font-size:16px;
 }
 
 body, html{
@@ -93,10 +93,16 @@ $seperator-margin:20px;
 	margin:0 !important;
 }
 
+.no_top_margin{
+	margin-top:0 !important;
+}
+
 .no_vertical_padding{
 	padding-top:0 !important;
 	padding-bottom:0 !important;
 }
+
+
 
 /* Global navigation bar - at the top of all pages */
 
@@ -352,7 +358,7 @@ $seperator-margin:20px;
 	#textarea_feedback{
 		// font-weight:bold;
 		margin-bottom:10px;
-		font-size:12px;
+		// font-size:12px;
 	}
 
 	.btn{
@@ -543,6 +549,7 @@ $seperator-margin:20px;
 		}
 
 		.content{
+			display:block;
 			border-radius:10px;
 			position:relative;
 			// height:$totalheight;
@@ -570,6 +577,7 @@ $seperator-margin:20px;
 
 			.overlay{
 				// position:relative;
+				margin-top:40px;
 				width:100%;
 				// height:$txtheight;
 				color:black;
@@ -578,10 +586,18 @@ $seperator-margin:20px;
 
 					padding:5px 10px 10px 10px;
 
-					// height:$txtheight;
-
 					h3{
-						line-height:35px;
+						display:inline-block;
+						position:absolute;
+						bottom:$imgheight;
+						background:white;
+						padding:10px 20px 0 20px;
+						left:0;
+						width:$boxwidth + 30px;
+					}
+
+					.extra_button{
+						bottom:$imgheight + 30px;
 					}
 
 					h3,h5{

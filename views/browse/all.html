@@ -18,7 +18,10 @@
 
   <div class="line_seperator"></div>
 
-  <h2>{{=category_name.replace('_', ' ')}}</h2>
+  <ul class="breadcrumb no_margin">
+    <li><a href="{{=URL('browse','all')}}">All Projects</a> </li>
+    {{if category_name:}}<li class="active"><span class="divider">/</span>{{=category_name}}</li>{{pass}}
+  </ul>
 
   <div class=" no-left-right-padding projects">
     {{for project in allprojects:}}

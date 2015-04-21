@@ -26,6 +26,7 @@ def register():
 
     elif form.errors:
         validate_register_form(form)
+        response.flashcolour = "rgba(255, 0, 0, 0.7)"
         response.flash = 'One or more of your form fields has an error. Please see below for more information'
 
     return dict(form = form)

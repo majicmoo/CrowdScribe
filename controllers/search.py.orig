@@ -24,6 +24,13 @@ def search_results():
         LABEL("Search Text", _for="advancetext"),
         INPUT(_name='advance', _id="advancetext"),
         LABEL("Category", SELECT(current.tags, _name='tag', requires=IS_IN_SET(current.tags))),
+<<<<<<< HEAD
+        LABEL("Start Date", INPUT(_name='start_date', _class='integer', requires=IS_EMPTY_OR(IS_INT_IN_RANGE(0,2016)))), #doesn't work atm
+        SELECT(eras, _name='start_era', requires=IS_IN_SET(eras)),
+        LABEL("End Date", INPUT(_name='end_date', _class='integer', requires=IS_EMPTY_OR(IS_INT_IN_RANGE(0,2016)))), #doesn't work atm
+        SELECT(eras, _name='end_era', requires=IS_IN_SET(eras)),
+        LABEL("Include Unspecified Eras?", INPUT(_name='unknown_era', _type='checkbox')),
+=======
         LABEL("Start Date", _for="start_date"), #doesn't work atm
         INPUT(_id = "start_date", _name='start_date', _class='integer', requires=IS_EMPTY_OR(IS_INT_IN_RANGE(0,2016))),
         LABEL("Start Era", _for="start_era"), #doesn't work atm
@@ -32,7 +39,8 @@ def search_results():
         INPUT(_id = "end_date", _name='end_date', _class='integer', requires=IS_EMPTY_OR(IS_INT_IN_RANGE(0,2016))),
         LABEL("End Era", _for="end_era"),
         SELECT(eras, _name='end_era', requires=IS_IN_SET(eras), _id = "end_era"),
-        LABEL("Include Unspecified Eras?", INPUT(_name='unknown_era', _type='checkbox')),
+        LABEL("Include Unknown dates?", INPUT(_name='include_unknown_date', _type='checkbox')),
+>>>>>>> ali
         LABEL("Sort by", SELECT(orders, _name='order', requires=IS_IN_SET(orders))),
         INPUT(_value='Refine search', _type='submit', _id="advancesubmit"), _method='GET'
     )
@@ -44,10 +52,8 @@ def search_results():
     # Gets keywords
     if request.vars.quicksearch is not None:
         searchstr = request.vars.quicksearch
-        advanced.vars.advance = request.vars.quicksearch
     elif request.vars.advance is not None:
         searchstr = request.vars.advance
-        advanced.vars.advance = request.vars.advance
     else:
         searchstr = None
 
@@ -63,15 +69,12 @@ def search_results():
     ###Filter by date###
     if not search_module.empty_field(request.vars.start_date):
         start_date = general_module.convert_date_to_integer(request.vars.start_date, request.vars.start_era)
-        advanced.vars.start_date = request.vars.start_date
-        advanced.vars.start_era = request.vars.start_era
     else:
         # Ensures all dates pass (if validation is fixed)
         start_date = -2016
 
     if not search_module.empty_field(request.vars.end_date):
         end_date = general_module.convert_date_to_integer(request.vars.end_date, request.vars.end_era)
-        
     else:
         # Ensures all dates pass (if validation is fixed)
         end_date = 2016
@@ -102,11 +105,10 @@ def search_results():
     else:
         # Order alphabetically (default)
         projects = projects.sort(lambda project: project.name)
-	advanced.vars = request.vars
+
+    advanced.vars = request.vars
     if request.vars.quicksearch is not None:
         advanced.vars.advance = request.vars.quicksearch
-    
-    
     
     #Does not validate
     if advanced.process(onvalidation=search_module.date_validator).accepted:

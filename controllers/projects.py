@@ -12,9 +12,6 @@ def create_step1():
     # Set Page Title
     response.title = "CrowdScribe | Create Project Step 1"
 
-    # Set response flash display to error
-    session.flash_class = "alert-error"
-
     # Retrieve project and set session project variable to allow for prepopulating.
     project_id, project_being_edited = projects_module.check_if_come_back_from_future_step(session)
 
@@ -161,6 +158,7 @@ def create_step2():
                                         _onclick="return confirm('Are you sure you want to remove all documents for this project?');"))
 
     if delete_all_documents_form.process(formname="remove_all_form").accepted:
+        response.flashcolour = "rgb(98, 196, 98)"
         response.flash = "All documents for this project removed."
         database.delete_all_documents_for_project(project_id)
 
@@ -207,18 +205,19 @@ def create_step3():
         session.project_being_created = project_id
 
         # As this is succesful, show a green message
-        session.flashcolour = "rgb(98, 196, 98)"
+        response.flashcolour = "rgb(98, 196, 98)"
         response.flash = "Succesfully Added Field!"
     elif add_fields_form.errors:
         # As this is an error, show a red message
-        session.flashcolour = "rgba(255, 0, 0, 0.7)"
+        response.flashcolour = "rgba(255, 0, 0, 0.7)"
         response.flash = str(len(add_fields_form.errors)) + " Errors in Form. Please correct these before submitting."
 
     # Move project forward to review when button clicked
     if review_project_form.process(formname="form_two").accepted:
         fields_added = database.get_data_fields_for_project(project_id)
         if len(fields_added) < 1:
-            response.flash = DIV("At least one field must be added", _class="alert alert-error")
+            response.flashcolour = "rgba(255, 0, 0, 0.7)"
+            response.flash = "At least one field must be added"
         else:
             session.project_being_created = project_id
             redirect(URL('projects', 'create_step4'))
@@ -240,6 +239,7 @@ def create_step3():
                                         _onclick="return confirm('Are you sure you want to remove all transcription fields for this project?');"))
 
     if delete_all_fields_form.process(formname="remove_all_form").accepted:
+        response.flashcolour = "rgb(98, 196, 98)"
         response.flash = "All fields for this project removed."
         database.delete_all_fields_for_project(project_id)
 
@@ -263,20 +263,26 @@ def create_step4():
     documents_added = database.get_documents_for_project(project_id)
 
     clear_project = projects_module.create_clear_project_form()
+    go_to_step_3_form = projects_module.create_previous_step_form("Go Back to Step 3")
     publish_project_form = projects_module.create_publish_form("Publish and View Project")
 
     if publish_project_form.process(formname="form_one").accepted:
         project = database.get_project(project_id)
         project.update_record(status="Open", date_created=request.now)
         session.project_being_created = None
-        session.flashcolour = "rgb(98, 196, 98)"
-        session.flash = project.name+" has been succesfully published! Its documents are now available for the public to transcribe."
+        response.flashcolour = "rgb(98, 196, 98)"
+        response.flash = project.name+" has been succesfully published! Its documents are now available for the public to transcribe."
         redirect(URL('projects', 'project', args=[project.id]))
 
     if clear_project.validate(formname="form_two"):
         session.project_being_created = None
         db((db.project.author_id == auth._get_user_id()) &(db.project.status == "Being Created")).delete()
         redirect(URL('projects', 'create_step1'))
+
+    # Go back to step 2 when button clicked
+    if go_to_step_3_form.process(formname="form_three").accepted:
+        session.project_being_created = project_id
+        redirect(URL('projects', 'create_step3'))
 
     # Time String
     project = database.get_project(project_id)
@@ -294,7 +300,7 @@ def create_step4():
                 publish_project_form=publish_project_form, clear_project=clear_project, header_image=header_image,
                 done_documents=done_documents, open_documents_with_transcription=open_documents_with_transcription,
                 open_documents_without_transcription=open_documents_without_transcription,
-                closed_documents=closed_documents, open_documents=open_documents, data_fields_for_project=data_fields_for_project)
+                closed_documents=closed_documents, open_documents=open_documents, data_fields_for_project=data_fields_for_project, go_to_step_3_form = go_to_step_3_form)
 
 
 def project():
@@ -395,15 +401,13 @@ def view_document():
                     + str(len(transcriptions)) + ' transcription' + ('s' if len(transcriptions) > 1 else '') +\
                     ' available for review. You must put a project under review before transcriptions can be accepted.'
         response_message = msgstring
-        response.message = msgstring
-        # A(msgstring, _href=URL('projects', 'review_document', args=[project.id, document.id]))
 
     elif project.author_id == auth._get_user_id() and accepted_transcription:
         response.message = 'You are the owner of this project and have accepted a transcription for this document. ' \
                            'This document is now closed and its transcription is available below.'
 
     # Need an account to login
-    elif auth._get_user_id() is None:
+    elif auth._get_user_id() is None and project.status == 'Open':
         args = str(project_id) + '-' + str(document_id)
         response_message = A("An account is required to transcribe a document. Click here to login.", _href=URL('user', 'login', vars=dict(controller_after_login='projects',
                                                                                     page_after_login='view_document',
@@ -420,6 +424,7 @@ def view_document():
 
     elif project.status != 'Open':
         response_message = "This project and document are closed for review."
+        # Session.flash used to carry message over page
         session.flash = response_message
         redirect(URL('default','index'))
 
@@ -465,11 +470,11 @@ def view_document():
                 db.transcribed_field.insert(data_field_id=data_field.id, transcription_id=transcription_id,
                                             information=field_entry)
 
-            session.flash = "Transcription submitted successfully"
-            session.flash_class = "alert-success"
+            response.flash = "Transcription submitted successfully"
+            response.flash_class = "alert-success"
         else:
-            session.flash = "Please fill in at least one field."
-            session.flash_class = "alert-error"
+            response.flash = "Please fill in at least one field."
+            response.flash_class = "alert-error"
 
         redirect(URL('projects','view_document', args=[project.id, document.id]))
 
@@ -506,7 +511,7 @@ def review_document():
         # Redirect if project is none
         redirect(URL('default', 'index'))
     if project.status != 'Under Review':
-        session.flash = "A project must be 'Closed for Review' before you can assess it's transcriptions. You can close them in your Project Manager."
+        response.flash = "A project must be 'Closed for Review' before you can assess it's transcriptions. You can close them in your Project Manager."
         redirect(URL('projects', 'project', args=[project_id]))
     # Check Project Belongs to Current User
     if project.author_id != auth._get_user_id():
@@ -518,8 +523,8 @@ def review_document():
 
     # If there are no transriptions available for review, redirect to view_document
     if not transcriptions:
-        session.flashcolour = "rgba(255, 0, 0, 0.7)"
-        session.flash = "This document currently has zero transcriptions for review. You are now viewing the document."
+        response.flashcolour = "rgba(255, 0, 0, 0.7)"
+        response.flash = "This document currently has zero transcriptions for review. You are now viewing the document."
         redirect(URL('projects', 'view_document', args=[project_id, document_id]))
 
     reject_all_form =  FORM(BUTTON("Reject All and Return to Project",

@@ -1,4 +1,4 @@
-<div id = "project_header">
+<div id = "project_header" tabindex="0">
 
   <img src="{{=header_image}}" alt = "Header image for {{=project.name}}"/>
 
@@ -24,7 +24,7 @@
 
 {{if auth._get_user_id() == project.author_id and project.status != "Being Created":}}
   <div class="padded_container form_container no_bottom_padding">
-    <div class="rounded_bordered_container no_margin">
+    <div class="rounded_bordered_container no_margin"  tabindex="0">
       <h4>Project Management</h4>
 
       <!-- If the project is under review show an option to reopen it -->

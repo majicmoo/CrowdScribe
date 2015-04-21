@@ -9,10 +9,10 @@ def all():
     response.title = "CrowdScribe | Browse"
     if request.args(0):
         all_projects = general_module.attach_all_information_to_projects(database.get_all_projects_for_category(request.args(0)))
-        category_name = request.args(0)
+        category_name = request.args(0).replace('_', ' ')
     else:
         all_projects = general_module.attach_all_information_to_projects(database.get_open_projects())
-        category_name = "All Projects"
+        category_name = None
 
     categories = current.tags
     return dict(allprojects = all_projects, categories = categories, category_name = category_name)

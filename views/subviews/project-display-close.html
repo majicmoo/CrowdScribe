@@ -4,18 +4,19 @@
 		<div class="content border-box-sizing">
 
 			<div class="img_container_crop">
-				<img src="{{=URL('default','download',args = project.header_image)}}"/>
+				<img src="{{=URL('default','download',args = project.header_image)}}" alt = "{{=project.name}} Image"/>
 			</div>
 
 			<div class = "overlay">
 				<div class="text_container border-box-sizing">
-					<h3>{{=project.name[0:18]}}</h3>
+					<h3 class="extra_button">{{=project.name}}</h3>
 					<h4>{{=project.fraction_transcribed_string}} Documents Transcribed</h4>
 					<h5>{{=project.timestring if project.timestring else "No Era Specified"}}</h5>
 					<div class="tag">
 						{{=project.tag}}
 					</div>
-					<p>{{=project.description[0:100]}}...</p>
+					<!-- Shows 90 characters max of the project description and adds ellipsis to indicate to user there is more available. -->
+					<p>{{=project.description[0:90]}}{{="..." if len(project.description) >= 90 else ""}}</p>
 
 					{{=A('View Project', _class="btn btn-success", _href= URL('projects','project', args=[project.id]))}}
 

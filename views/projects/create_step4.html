@@ -36,15 +36,12 @@
 
 {{include "subviews/project-page-view.html"}}
 
-
-<div class="padded_container form_container no_top_padding">
-
-  <div class="forward_back_buttons publish">
-
+<div class="padded_container form_container no_vertical_padding">
+  <div class="forward_back_buttons no_top_margin">
+    {{=go_to_step_3_form}}
     {{=publish_project_form}}
-
   </div>
-
   {{=clear_project}}
-
 </div>
+
+<div class="line_seperator"></div>

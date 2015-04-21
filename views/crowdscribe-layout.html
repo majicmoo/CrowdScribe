@@ -135,12 +135,11 @@
     </div>
   </nav>
 
-  <!-- {{=response.flash}} -->
-
   <!-- This is a centered message to be displayed permanently across certain pages if set in the controller -->
   <!-- It is used in the project display/edit pages to show the status and options a user has -->
   <!-- A background colour can be dynamically set from the controller -->
   {{if response.message:}}
+  <!-- Allows for dynamic colour styling -->
     <div class="message" style="background-color:{{=response.messagecolour if response.messagecolour else "#5cb3d9"}}" tabindex="0">
         <div class="centeredmessage">
             {{=response.message}}
@@ -149,9 +148,9 @@
   {{pass}}
 
   {{if response.flash:}}
-    <div class="message" style="background-color:{{=session.flashcolour if session.flashcolour else "#5cb3d9"}}" tabindex="0">
+    <!-- Allows for dynamic colour styling -->
+    <div class="message" style="background-color:{{=response.flashcolour if response.flashcolour else "#5cb3d9"}}" tabindex="0">
       <div class="centeredmessage">
-        <!-- <button type="button" class="close" data-dismiss="alert">&times;</button> -->
         {{=response.flash}}
       </div>
     </div>
@@ -161,6 +160,6 @@
       {{include}}
   </div>
 
-
 </body>
+
 </html>
