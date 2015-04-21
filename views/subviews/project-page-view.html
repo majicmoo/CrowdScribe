@@ -130,7 +130,6 @@
 
     {{pass}}
 
-<<<<<<< HEAD
     <!-- Everyone -->
 
     <!--Closed Documents: Project owner -->
@@ -141,14 +140,6 @@
       </p>
 
       {{for document in closed_documents:}}
-=======
-    {{if done_documents:}}
-      <!-- <div class="line_seperator"></div> -->
-      <!--Done Documents : Everyone-->
-      <h4>Documents Under Review</h4>
-      <p>These documents currently have the maximum number of transcriptions and need to be reviewed by the project owner.</p>
-      {{for document in done_documents:}}
->>>>>>> 4a273db095b997a7370b730ed93a858492c8d7d5
           {{include "subviews/document-display.html"}}
       {{pass}}
       <div class="line_seperator"></div>

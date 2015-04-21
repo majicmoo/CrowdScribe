@@ -12,34 +12,33 @@ if not request.env.web2py_runtime_gae:
     db.define_table('project',
                     Field('name', requires=IS_NOT_EMPTY(), length=55),
                     Field('author_id', 'reference auth_user', writable=False, readable=False, requires=IS_NOT_EMPTY()),
-                    Field('status', requires=IS_NOT_EMPTY()),
+                    Field('status', writable=False, readable=False,),
                     Field('description', type='text', length=500, requires=IS_NOT_EMPTY()),
-
                     Field('tag', requires=IS_IN_SET(options)),
                     Field('time_period_start_date', 'integer'),
                     Field('time_period_end_date', 'integer'),
-                    Field('date_created', 'datetime', requires=[IS_NOT_EMPTY(), IS_DATETIME]))
+                    Field('date_created', 'datetime', writable=False, readable=False, requires=IS_DATETIME()))
 
     db.define_table('document_image',
                     Field('description', type='text', requires=IS_NOT_EMPTY()),
                     Field('image', 'upload', requires=IS_NOT_EMPTY()),
-                    Field('project_id', 'reference project', requires=IS_NOT_EMPTY()),
-                    Field('status', requires=IS_NOT_EMPTY()))
+                    Field('project_id', 'reference project'),
+                    Field('status', writable=False, readable=False))
 
     db.define_table('data_field',
-                    Field('project_id', 'reference project', requires=IS_NOT_EMPTY()),
+                    Field('project_id', 'reference project'),
                     Field('name', length=55, requires=IS_NOT_EMPTY()),
                     Field('short_description', type='text', requires=IS_NOT_EMPTY()))
 
     db.define_table('transcription',
-                    Field('document_id', 'reference document_image', requires=IS_NOT_EMPTY()),
-                    Field('author_id', 'reference auth_user', requires=IS_NOT_EMPTY()),
-                    Field('status', requires=IS_NOT_EMPTY()),
-                    Field('date_created', 'datetime', requires=[IS_NOT_EMPTY(), IS_DATETIME()]))
+                    Field('document_id', 'reference document_image'),
+                    Field('author_id', 'reference auth_user'),
+                    Field('status'),
+                    Field('date_created', 'datetime', requires=IS_DATETIME()))
 
     db.define_table('transcribed_field',
-                    Field('data_field_id', 'reference data_field', requires=IS_NOT_EMPTY()),
-                    Field('transcription_id', 'reference transcription', requires=IS_NOT_EMPTY()),
+                    Field('data_field_id', 'reference data_field'),
+                    Field('transcription_id', 'reference transcription'),
                     Field('information', type='text'))
 
 else:
