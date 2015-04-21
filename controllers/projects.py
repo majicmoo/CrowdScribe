@@ -561,7 +561,7 @@ def accept_transcription():
     db(db.transcription.id == request.vars.transcription_id).update(status='Accepted')
     db.commit()
 
-    if len(database.get_open_documents_for_project(request.vars.project_id)) == 0:
+    if len(database.get_documents_for_project_excluding_closed_document(request.vars.project_id)) == 0:
         db(db.project.id == request.vars.project_id).update(status="Closed")
         db.commit()
 
