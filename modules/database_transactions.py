@@ -126,7 +126,7 @@ class DatabaseTransactions:
     def get_all_projects_for_category(self, category):
         category = category.replace('_', ' ')
         result = self.db((self.db.project.status == "Open")
-                        & (self.db.project.tag == category)).select()
+                         & (self.db.project.tag == category)).select()
         return result
 
     # Get Documents
@@ -143,9 +143,8 @@ class DatabaseTransactions:
     def get_documents_for_project_excluding_closed_document(self, project_id):
         # Get all documents for a project excluding closed documents
         result = self.db((self.db.document_image.project_id == project_id)
-                    & (self.db.document_image.status != "Closed")).select()
+                         & (self.db.document_image.status != "Closed")).select()
         return result
-
 
     def get_open_documents_for_project(self, project_id):
         # Get all open documents for a project
@@ -345,8 +344,8 @@ class DatabaseTransactions:
             return True
         return False
 
-    def  delete_all_documents_for_project(self, project_id):
+    def delete_all_documents_for_project(self, project_id):
         self.db(self.db.document_image.project_id == project_id).delete()
 
-    def  delete_all_fields_for_project(self, project_id):
+    def delete_all_fields_for_project(self, project_id):
         self.db(self.db.data_field.project_id == project_id).delete()

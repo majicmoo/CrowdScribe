@@ -18,17 +18,17 @@ class SearchFunctions:
 
     def date_validator(self, advanced):
         # Checks start date is after 2015 BC
-        if not self.empty_date_field(advanced.vars.start_date):
+        if not self.empty_field(advanced.vars.start_date):
             if self.general_module.convert_date_to_integer(advanced.vars.start_date, advanced.vars.start_era) < -2015:
                 advanced.errors.start_date = 'Start date must be after 2015 BC'
 
         # Checks end date is before 2015 AD
-        if not self.empty_date_field(advanced.vars.end_date):
+        if not self.empty_field(advanced.vars.end_date):
             if self.general_module.convert_date_to_integer(advanced.vars.end_date, advanced.vars.end_era) > 2015:
                 advanced.errors.end_date = 'End date must be before 2015 AD'
 
         # Check that start date is before end date if there are entries for both dates
-        if not self.empty_date_field(advanced.vars.start_date) and not self.empty_date_field(advanced.vars.end_date):
+        if not self.empty_field(advanced.vars.start_date) and not self.empty_field(advanced.vars.end_date):
             start = self.general_module.convert_date_to_integer(advanced.vars.start_date, advanced.vars.start_era)
             end = self.general_module.convert_date_to_integer(advanced.vars.end_date, advanced.vars.end_era)
             if start > end:

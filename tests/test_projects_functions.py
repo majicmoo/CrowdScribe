@@ -7,6 +7,7 @@ database = database_transactions.DatabaseTransactions(db)
 general_function = general_functions.GeneralFunctions(database, db)
 functions = projects_functions.ProjectFunctions(database, db)
 
+
 class TestDatabaseTransactions(unittest.TestCase):
     def setUp(self):
         # Clear test_db
@@ -45,10 +46,10 @@ class TestDatabaseTransactions(unittest.TestCase):
         # Projects
         self.project_one = test_db.project.insert(name="project_one", author_id=self.user_one, status=self.open_status,
                                                   description="description_one", tag=self.tag_one,
-                                                  time_period_start_date = 1900, time_period_end_date = 2000)
+                                                  time_period_start_date=1900, time_period_end_date=2000)
         self.project_two = test_db.project.insert(name="project_two", author_id=self.user_one, status=self.open_status,
                                                   description="description_two", tag=self.tag_one,
-                                                  time_period_start_date = 1800, time_period_end_date = 1850)
+                                                  time_period_start_date=1800, time_period_end_date=1850)
         self.projects = [self.project_one, self.project_two]
 
         # Documents
@@ -58,19 +59,15 @@ class TestDatabaseTransactions(unittest.TestCase):
                                                           project_id=self.project_one, status=self.closed_status)
         self.documents = [self.document_one, self.document_two]
 
-
         self.data_field_one = test_db.data_field.insert(project_id=self.project_one, name="name one",
                                                         short_description="short description")
 
         self.transcription_one = test_db.transcription.insert(document_id=self.document_one, author_id=self.user_two,
-                                                     status=self.pending_status)
+                                                              status=self.pending_status)
 
         self.transcribed_field_one = test_db.transcribed_field.insert(data_field_id=self.data_field_one,
-                                                                     transcription_id=self.transcription_one,
-                                                                     information="information")
-
-
-
+                                                                      transcription_id=self.transcription_one,
+                                                                      information="information")
 
     def test_check_if_steps_available(self):
         steps_available = functions.check_if_steps_available(self.project_one)
@@ -83,14 +80,12 @@ class TestDatabaseTransactions(unittest.TestCase):
         steps_available[3] = False
         steps_available[4] = False
 
-
     def test_retrieve_prepopulated_data_for_create_step_1(self):
         data = functions.retrieve_prepopulated_data_for_create_step_1(self.project_one)
         self.assertEquals(data['name'], self.project_one.name)
         self.assertEquals(data['description'], self.project_one.description)
         self.assertEquals(data['start_date'], self.project_one.time_period_start_date)
         self.assertEquals(data['end_date'], self.project_one.time_period_end_date)
-
 
     def test_validate_create_step1(self):
         # These were manually tested
@@ -111,14 +106,14 @@ class TestDatabaseTransactions(unittest.TestCase):
 
     def test_attach_number_of_transcriptions_to_lists_of_documents(self):
         document_a = test_db.document_image.insert(description="description_two", image="temp",
-                                                          project_id=self.project_one, status=self.closed_status)
+                                                   project_id=self.project_one, status=self.closed_status)
         document_b = test_db.document_image.insert(description="description_two", image="temp",
-                                                          project_id=self.project_one, status=self.closed_status)
+                                                   project_id=self.project_one, status=self.closed_status)
         document_c = test_db.document_image.insert(description="description_two", image="temp",
-                                                          project_id=self.project_one, status=self.closed_status)
+                                                   project_id=self.project_one, status=self.closed_status)
         document_d = test_db.document_image.insert(description="description_two", image="temp",
-                                                          project_id=self.project_one, status=self.closed_status)
-        list_of_lists = [[self.document_one, self.document_two],[document_b, document_c], [document_a, document_d]]
+                                                   project_id=self.project_one, status=self.closed_status)
+        list_of_lists = [[self.document_one, self.document_two], [document_b, document_c], [document_a, document_d]]
         functions.attach_number_of_transcriptions_to_lists_of_documents(list_of_lists)
         self.assertEquals(list_of_lists[0][0].number_of_transcriptions, 1)
         self.assertEquals(list_of_lists[0][1].number_of_transcriptions, 0)
@@ -129,19 +124,19 @@ class TestDatabaseTransactions(unittest.TestCase):
 
     def test_if_none_convert_to_empty_list(self):
         test = functions.if_none_convert_to_empty_list(None)
-        self.assertEquals(test,[])
+        self.assertEquals(test, [])
         test = functions.if_none_convert_to_empty_list("test")
-        self.assertEquals(test,"test")
+        self.assertEquals(test, "test")
 
     def test_set_up_project_page_based_on_user(self):
         document_a = test_db.document_image.insert(description="description_two", image="temp",
-                                                          project_id=self.project_one, status=self.open_status)
+                                                   project_id=self.project_one, status=self.open_status)
         document_b = test_db.document_image.insert(description="description_two", image="temp",
-                                                          project_id=self.project_one, status=self.open_status)
+                                                   project_id=self.project_one, status=self.open_status)
         document_c = test_db.document_image.insert(description="description_two", image="temp",
-                                                          project_id=self.project_one, status=self.done_status)
+                                                   project_id=self.project_one, status=self.done_status)
         document_d = test_db.document_image.insert(description="description_two", image="temp",
-                                                          project_id=self.project_one, status=self.closed_status)
+                                                   project_id=self.project_one, status=self.closed_status)
         auth.user = self.user_one
         (open_documents, open_documents_with_transcription, open_documents_without_transcription, done_documents,
          closed_documents) = functions.set_up_project_page_based_on_user(self.project_one, auth)
@@ -205,7 +200,6 @@ class TestDatabaseTransactions(unittest.TestCase):
         start_date, end_date = functions.process_start_and_end_dates()
         self.assertEquals(start_date, -1900)
         self.assertEquals(end_date, -2000)
-
 
     def test_build_transcription_list(self):
         # These were manually tested

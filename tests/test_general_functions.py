@@ -43,10 +43,10 @@ class TestDatabaseTransactions(unittest.TestCase):
         # Projects
         self.project_one = test_db.project.insert(name="project_one", author_id=self.user_one, status=self.open_status,
                                                   description="description_one", tag=self.tag_one,
-                                                  time_period_start_date = 1900, time_period_end_date = 2000)
+                                                  time_period_start_date=1900, time_period_end_date=2000)
         self.project_two = test_db.project.insert(name="project_two", author_id=self.user_one, status=self.open_status,
                                                   description="description_two", tag=self.tag_one,
-                                                  time_period_start_date = 1800, time_period_end_date = 1850)
+                                                  time_period_start_date=1800, time_period_end_date=1850)
         self.projects = [self.project_one, self.project_two]
 
         # Documents
@@ -55,11 +55,7 @@ class TestDatabaseTransactions(unittest.TestCase):
         self.document_two = test_db.document_image.insert(description="description_two", image="temp",
                                                           project_id=self.project_two, status=self.closed_status)
 
-
-
-
-     # TESTS GENERAL FUNCTIONS ####################################################################
-
+    # TESTS GENERAL FUNCTIONS
     def test_attach_all_information_to_projects(self):
         functions.attach_all_information_to_projects(self.projects)
         self.assertEquals(self.projects[0].header_image, 'temp')
@@ -73,7 +69,7 @@ class TestDatabaseTransactions(unittest.TestCase):
     def test_attach_header_image_to_projects(self):
         functions.attach_header_image_to_projects(self.projects)
         for project in self.projects:
-            self.assertEquals(project.header_image,"temp")
+            self.assertEquals(project.header_image, "temp")
 
     def test_attach_time_string_to_projects(self):
         functions.attach_time_string_to_projects(self.projects)
@@ -86,9 +82,9 @@ class TestDatabaseTransactions(unittest.TestCase):
         self.assertEquals(self.projects[1].fraction_transcribed_string, '1/1')
 
     def test_convert_date_to_integer(self):
-        date = functions.convert_date_to_integer('1900','AD')
+        date = functions.convert_date_to_integer('1900', 'AD')
         self.assertEquals(date, 1900)
-        date = functions.convert_date_to_integer('1900','BC')
+        date = functions.convert_date_to_integer('1900', 'BC')
         self.assertEquals(date, -1900)
 
     def test_convert_integer_to_date_string(self):
@@ -98,14 +94,13 @@ class TestDatabaseTransactions(unittest.TestCase):
         self.assertEquals(date, '1900BC')
 
     def test_limit_list_of_projects(self):
-        temp_projects = [1,2,3,4,5,6,7,8,9,10]
+        temp_projects = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
         new_projects = functions.limit_list_of_projects(temp_projects, 6)
         self.assertEquals(len(new_projects), 6)
 
-        temp_projects = [1,2,3,4,5]
+        temp_projects = [1, 2, 3, 4, 5]
         new_projects = functions.limit_list_of_projects(temp_projects, 6)
         self.assertEquals(len(new_projects), 5)
-
 
     def test_construct_project_timestring(self):
         timestring = functions.construct_project_timestring(self.project_one)
@@ -122,4 +117,3 @@ class TestDatabaseTransactions(unittest.TestCase):
 suite = unittest.TestSuite()
 suite.addTest(unittest.makeSuite(TestDatabaseTransactions))
 unittest.TextTestRunner(verbosity=2).run(suite)
-
