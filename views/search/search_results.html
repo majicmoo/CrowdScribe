@@ -1,13 +1,17 @@
+{{response.files.append(URL(r=request,c='static/css',f='search.css'))}}
 {{extend 'crowdscribe-layout.html'}}
 
 <div class="padded_container form_container no_bottom_padding">
 
-<h1>Search</h1>
-<h4>You Searched : "{{=searchstr}}"</h4>
+  <h1>Search</h1>
+  <h3>You Searched : "{{=searchstr}}"</h3>
 
-<div class="border-box-sizing rounded_bordered_container no_margin">
-  {{=advanced}}
-</div>
+  <div class="border-box-sizing rounded_bordered_container  search_input_form">
+    <h3 class="no_margin">Advanced Search Fields</h3>
+    {{=advanced}}
+  </div>
+
+  <h3>{{=str(len(projects))}} Results:</h3>
 
 </div>
 

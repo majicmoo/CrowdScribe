@@ -1,0 +1,10 @@
+.search_input_form input[type="text"] {
+  width: 100%;
+  display: block;
+  padding: 0 10px 0 10px;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  height: 30px !important; }
+
+/*# sourceMappingURL=search.css.map */
