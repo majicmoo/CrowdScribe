@@ -22,7 +22,7 @@
 
 </div>
 
-{{if auth._get_user_id() == project.author_id and project.status != "Being Created":}}
+{{if auth._get_user_id() == project.author_id and project.status != "Being Created" and project.status != "Closed":}}
   <div class="padded_container form_container no_bottom_padding">
     <div class="rounded_bordered_container no_margin"  tabindex="0">
       <h4>Project Management</h4>
@@ -78,6 +78,16 @@
     <!--Project Owner-->
     {{if auth._get_user_id() == project.author_id:}}
 
+        {{if done_documents:}}
+          <!-- <div class="line_seperator"></div> -->
+          <!--Done Documents : Everyone-->
+          <h4>Documents Under Review</h4>
+          <p>These documents currently have the maximum number of transcriptions or are Under Review.</p>
+          {{for document in done_documents:}}
+              {{include "subviews/document-display.html"}}
+          {{pass}}
+        {{pass}}
+
         <!--Open Documents With Transcription: Project owner -->
         {{if open_documents_with_transcription:}}
           <h4>Open Documents With Transcriptions</h4>
@@ -103,19 +113,6 @@
           <div class="line_seperator"></div>
         {{pass}}
 
-        <!--Closed Documents: Project owner -->
-        {{if closed_documents:}}
-          <h4>Closed Documents</h4>
-          <p>
-            These documents have accepted transcriptions and cannot be viewed by the public, or have any more transcriptions made on them.
-          </p>
-
-          {{for document in closed_documents:}}
-              {{include "subviews/document-display.html"}}
-          {{pass}}
-          <div class="line_seperator"></div>
-        {{pass}}
-
     <!--Not Project Owner-->
     {{else:}}
 
@@ -133,14 +130,20 @@
 
     {{pass}}
 
-    {{if done_documents:}}
-      <!-- <div class="line_seperator"></div> -->
-      <!--Done Documents : Everyone-->
-      <h4>Documents Under Review</h4>
-      <p>These documents currently have the maximum number of transcriptions or are Under Review.</p>
-      {{for document in done_documents:}}
+    <!-- Everyone -->
+
+    <!--Closed Documents: Project owner -->
+    {{if closed_documents:}}
+      <h4>Closed Documents</h4>
+      <p>
+        These documents have accepted transcriptions and cannot be viewed by the public, or have any more transcriptions made on them.
+      </p>
+
+      {{for document in closed_documents:}}
           {{include "subviews/document-display.html"}}
       {{pass}}
+      <div class="line_seperator"></div>
     {{pass}}
+
 
 </div>

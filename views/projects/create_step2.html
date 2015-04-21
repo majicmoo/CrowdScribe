@@ -66,7 +66,7 @@
 
           <!-- Overlay Text -->
           <div id = "image_upload_overlay">
-            <label for="document_image_image">Upload Image</label>
+            <label for="document_image_image">Upload Image (Min 400x450px)</label>
             <input id="document_image_image" name="image" type="file">
           </div>
         </div>
@@ -99,7 +99,7 @@
 
     <h3>{{=len(documents_added)}} Documents For Project</h3>
     <p>Created documents can be viewed and deleted below.</p>
-    
+
     {{if documents_added:}}
     {{=delete_all_documents_form}}
       <div class="documents no_left_right_padding">

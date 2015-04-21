@@ -14,21 +14,21 @@
 
   {{if auth._get_user_id() == project.author_id and project.status != "Being Created":}}
 
-      <div class="rounded_bordered_container no_margin"  tabindex="0">
+      <div class="rounded_bordered_container no_margin">
 
         <p><b>You are the owner of this document and can :</b></p>
 
         {{if project.status == "Open":}}
-          {{=A('Place this Project under Review',_class="btn btn-danger",
-              callback= URL('close_project_for_review_from_view_document', vars= dict(project_id=project.id)))}}
+          {{=A(BUTTON('Place this Project under Review',_class="btn btn-danger"),
+              callback= URL('close_project_for_review_from_view_document', vars= dict(project_id=project.id, document_id=document.id)))}}
         {{pass}}
 
         <!-- If the project is under review show an option to reopen it -->
         {{if project.status == "Under Review":}}
-          {{=A('Open Project For Transcriptions',_class="btn btn-success",
-              callback= URL('reopen_project',
-              vars= dict(project_id=project.id)))}}
-          {{=A('Review Document',_class="btn btn-info", href= URL('projects','review_document', args=[project.id, document.id]))}}
+          {{=A(BUTTON('Open Project For Transcriptions',_class="btn btn-success"),
+              callback= URL('open_project_from_view_document'
+              , vars= dict(project_id=project.id, document_id=document.id)))}}
+          {{=A(BUTTON('Review Document',_class="btn btn-info top_margin_small"), _href= URL('projects','review_document', args=[project.id, document.id]))}}
         {{pass}}
 
 

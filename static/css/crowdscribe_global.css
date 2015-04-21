@@ -70,6 +70,9 @@ form {
 .top_margin {
   margin-top: 20px; }
 
+.top_margin_small {
+  margin-top: 5px; }
+
 .no_margin {
   margin: 0 !important; }
 

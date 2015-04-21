@@ -113,8 +113,8 @@ def create_step2():
 
 
         # As this is succesful, show a green message
-        response.flashcolour = "rgb(98, 196, 98)"
-        response.flash = "Succesfully Added Document!"
+        session.flashcolour = "rgb(98, 196, 98)"
+        session.flash = "Succesfully Added Document!"
 
         ##.replace('\n', '--').replace('\r', '')
         if request.vars.use_previous_description == "use_previous_description":
@@ -421,7 +421,7 @@ def view_document():
     # If doc is no longer accepting transcriptions
     elif document.status == 'Done':
         response_message = "This document has already received the maximum number of transcriptions allowed"
-        response.message = response_message
+        session.flash = response_message
 
     elif project.status != 'Open':
         response_message = "This project and document are closed for review."
@@ -471,11 +471,12 @@ def view_document():
                 db.transcribed_field.insert(data_field_id=data_field.id, transcription_id=transcription_id,
                                             information=field_entry)
 
-            response.flash = "Transcription submitted successfully"
-            response.flash_class = "alert-success"
+            # As this is succesful, show a green message
+            session.flashcolour = "rgb(98, 196, 98)"
+            session.flash = "Succesfully Submitted Transcription!"
         else:
-            response.flash = "Please fill in at least one field."
-            response.flash_class = "alert-error"
+            response.flashcolour = "rgba(255, 0, 0, 0.7)"
+            response.flash = "Succesfully Submitted Transcription!"
 
         redirect(URL('projects','view_document', args=[project.id, document.id]))
 
@@ -493,7 +494,8 @@ def view_document():
 
     return dict(project=project, document=document, image=image, form=form, transcription=transcription,
                 accepted_transcription_with_fields = accepted_transcription_with_fields, response_message = response_message,
-                timestring = timestring, overlay_message = response_message, data_fields = data_fields, user_submitted_transcription_with_fields = user_submitted_transcription_with_fields)
+                timestring = timestring, overlay_message = response_message, data_fields = data_fields,
+                user_submitted_transcription_with_fields = user_submitted_transcription_with_fields)
 
 @auth.requires_login(otherwise=URL('user', 'login'))
 def review_document():
@@ -522,13 +524,17 @@ def review_document():
     transcriptions = database.get_pending_transcriptions_for_document(document_id)
     transcriptions = projects_module.build_transcription_list(project, transcriptions)
 
-    # If there are no transriptions available for review, redirect to view_document
-    if not transcriptions:
-        response.flashcolour = "rgba(255, 0, 0, 0.7)"
-        response.flash = "This document currently has zero transcriptions for review. You are now viewing the document."
-        redirect(URL('projects', 'view_document', args=[project_id, document_id]))
+    # # If there are no transriptions available for review, redirect to view_document
+    # if not transcriptions:
+    #     response.flashcolour = "rgba(255, 0, 0, 0.7)"
+    #     session.flash = "This document currently has zero transcriptions for review. You are now viewing the document."
+    #     redirect(URL('projects', 'view_document', args=[project_id, document_id]))
 
-    reject_all_form =  FORM(BUTTON("Reject All and Return to Project",
+    response_message = None
+    if not transcriptions:
+        response_message = "This document currently has zero transcriptions for review."
+
+    reject_all_form =  FORM(BUTTON("Reject All Transcriptions and Return to Project",
                             _type='submit',
                             _class='btn btn-danger btn-block',
                             _onclick="return confirm('Are you sure you want to reject all transcriptions available for this document?');"))
@@ -538,7 +544,8 @@ def review_document():
         reject_all_transcriptions(document.id, project.id)
 
     return dict(project=project, document=document, transcriptions=transcriptions,
-                timestring = general_module.construct_project_timestring(project), reject_all_form = reject_all_form)
+                timestring = general_module.construct_project_timestring(project), reject_all_form = reject_all_form,
+                response_message = response_message)
 
 
 def delete_field():
@@ -590,7 +597,14 @@ def close_project_for_review_from_view_document():
     db((db.project.id == request.vars.project_id)).update(status="Under Review")
     db.commit()
     session.flash = "Project Closed for Transcription Review"
-    redirect(URL('projects', 'review_document', args=[request.vars.project_id, request.vars.document_id]), client_side=True)
+    redirect(URL('projects', 'view_document', args=[request.vars.project_id, request.vars.document_id]), client_side=True)
+
+def open_project_from_view_document():
+    # Function for button which will close a project for review and redirect to a document
+    db((db.project.id == request.vars.project_id)).update(status="Open")
+    db.commit()
+    session.flash = "Project Closed for Transcription Review"
+    redirect(URL('projects', 'view_document', args=[request.vars.project_id, request.vars.document_id]), client_side=True)
 
 def reopen_project():
     # Function for button which will reopen a project

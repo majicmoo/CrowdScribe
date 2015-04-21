@@ -149,7 +149,7 @@
 
   {{if response.flash:}}
     <!-- Allows for dynamic colour styling -->
-    <div class="message" style="background-color:{{=response.flashcolour if response.flashcolour else "#5cb3d9"}}" tabindex="0">
+    <div class="message" style="background-color:{{=response.flashcolour if response.flashcolour else session.flashcolour}}" tabindex="0">
       <div class="centeredmessage">
         {{=response.flash}}
       </div>

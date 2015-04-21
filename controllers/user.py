@@ -185,10 +185,12 @@ def place_project_under_review():
     # Controller for button to place a project under review
     db((db.project.id==request.vars.project_id)).update(status="Under Review")
     db.commit()
+    session.flash = "Project placed under review."
     redirect(URL('user','manage_projects'), client_side=True)
 
 def reopen_project_for_transcriptions():
     # Controller for button to reopen a project for transcriptions
     db((db.project.id==request.vars.project_id)).update(status="Open")
     db.commit()
+    session.flash = "Project reopened to Public."
     redirect(URL('user','manage_projects'), client_side=True)

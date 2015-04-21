@@ -10,6 +10,31 @@
 
   <a href = "{{=URL('projects','project', args=[project.id])}}" class="back_button btn btn-info">Go Back to Project Page</a>
 
+  <!-- Display controls for owner -->
+
+  {{if auth._get_user_id() == project.author_id and project.status != "Being Created":}}
+
+      <div class="rounded_bordered_container no_margin">
+
+        <p><b>You are the owner of this document and can :</b></p>
+
+        {{if project.status == "Open":}}
+          {{=A(BUTTON('Place this Project under Review',_class="btn btn-danger"),
+              callback= URL('close_project_for_review_from_view_document', vars= dict(project_id=project.id, document_id=document.id)))}}
+        {{pass}}
+
+        <!-- If the project is under review show an option to reopen it -->
+        {{if project.status == "Under Review":}}
+          {{=A(BUTTON('Open Project For Transcriptions',_class="btn btn-success"),
+              callback= URL('open_project_from_view_document'
+              , vars= dict(project_id=project.id, document_id=document.id)))}}
+        {{pass}}
+
+
+      </div>
+
+  {{pass}}
+
   <h1>Reviewing Document for {{=project.name}}</h1>
   <h3>{{=project.tag}} {{=timestring}}</h3>
 
@@ -54,9 +79,9 @@
         </ul>
 
 
-    {{if response.message:}}
+    {{if response_message:}}
         <div class="unavailable_overlay">
-          <div class="notice">{{=response.message}}</div>
+          <div class="notice">{{=response_message}}</div>
         </div>
 
     {{pass}}
