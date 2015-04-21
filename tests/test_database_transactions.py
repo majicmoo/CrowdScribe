@@ -66,17 +66,19 @@ class TestDatabaseTransactions(unittest.TestCase):
                                              description='nothing', tag=self.tag_two)
         # Create Document Image
         self.document_one = self.add_document(description='test', project_id=self.project_one, status=self.open_status)
-        self.document_two = self.add_document(description='test', project_id=self.project_one, status=self.closed_status)
-        self.document_three = self.add_document(description='test', project_id=self.project_one, status=self.done_status)
+        self.document_two = self.add_document(description='test', project_id=self.project_one,
+                                              status=self.closed_status)
+        self.document_three = self.add_document(description='test', project_id=self.project_one,
+                                                status=self.done_status)
         # Create Data Field
         self.data_field_one = self.add_field(project_id=self.project_one, name='test', short_description='test')
         # Create transcription
         self.transcription_one = self.add_transcription(document_id=self.document_one, author_id=self.user_two,
                                                         status=self.pending_status)
-        self.transcription_two =  self.add_transcription(document_id=self.document_one, author_id=self.user_two,
-                                                         status=self.accepted_status)
-        self.transcription_three =  self.add_transcription(document_id=self.document_one, author_id=self.user_two,
-                                                         status=self.rejected_status)
+        self.transcription_two = self.add_transcription(document_id=self.document_one, author_id=self.user_two,
+                                                        status=self.accepted_status)
+        self.transcription_three = self.add_transcription(document_id=self.document_one, author_id=self.user_two,
+                                                          status=self.rejected_status)
         # Create transcription field
         self.transcription_field_one = self.add_transcription_field(data_field_id=self.data_field_one,
                                                                     transcription_id=self.transcription_one,
@@ -174,15 +176,16 @@ class TestDatabaseTransactions(unittest.TestCase):
         self.assertEquals(len(open_projects_without_transcriptions_for_user), 0)
 
         # Should Return Two Projects
-        open_projects_without_transcriptions_for_user = database.get_open_projects_without_transcriptions_for_user(self.user_one)
-        self.assertEquals(len(open_projects_without_transcriptions_for_user),2)
+        open_projects_without_transcriptions_for_user = \
+            database.get_open_projects_without_transcriptions_for_user(self.user_one)
+        self.assertEquals(len(open_projects_without_transcriptions_for_user), 2)
         for project in open_projects_without_transcriptions_for_user:
             self.assertEquals(project.status, self.open_status)
 
     def test_get_under_review_projects_for_user(self):
         under_review_projects = database.get_under_review_projects_for_user(self.user_one)
         # Should Return One Project
-        self.assertEquals(len(under_review_projects),1)
+        self.assertEquals(len(under_review_projects), 1)
         for i in under_review_projects:
             self.assertEquals(i.status, self.under_review_status)
             self.assertEquals(i.author_id, self.user_one)
@@ -211,7 +214,6 @@ class TestDatabaseTransactions(unittest.TestCase):
         projects = database.get_projects_for_tag(self.tag_two)
         self.assertEquals(len(projects), 2)
 
-
     def test_get_projects_for_keyword(self):
         total_number_of_open_projects_found_by_a = 0
         total_number_of_open_projects_found_by_b = 0
@@ -230,7 +232,6 @@ class TestDatabaseTransactions(unittest.TestCase):
             if i.status == self.open_status:
                 total_number_of_open_projects_found_by_b += 1
         self.assertEquals(total_number_of_open_projects_found_by_a, total_number_of_open_projects_found_by_b)
-
 
     def test_get_random_open_project(self):
         project = database.get_random_open_project()
@@ -256,11 +257,10 @@ class TestDatabaseTransactions(unittest.TestCase):
         number_of_transcribed_documents = database.get_number_of_transcribed_documents_for_project(self.project_three)
         self.assertEquals(0, number_of_transcribed_documents)
 
-
     def test_get_document(self):
         number_of_documents = 0
         for document in self.documents:
-            temp_document =database.get_document(document)
+            temp_document = database.get_document(document)
             self.assertEquals(temp_document, document)
             number_of_documents += 1
         self.assertEquals(number_of_documents, len(self.documents))
@@ -294,23 +294,25 @@ class TestDatabaseTransactions(unittest.TestCase):
     def test_get_open_documents_with_transcription_for_project(self):
         open_documents_with_transcription = database.get_open_documents_with_transcription_for_project(self.project_one)
         # Should Return 1 document
-        self.assertEquals(len(open_documents_with_transcription),1)
+        self.assertEquals(len(open_documents_with_transcription), 1)
         for i in open_documents_with_transcription:
             self.assertEquals(i.status, self.open_status)
             self.assertEquals(i.project_id, self.project_one.id)
 
         open_documents_with_transcription = database.get_open_documents_with_transcription_for_project(self.project_two)
         # Should Return 0 documents
-        self.assertEquals(len(open_documents_with_transcription),0)
+        self.assertEquals(len(open_documents_with_transcription), 0)
 
     def test_get_open_documents_without_transcription_for_project(self):
-        open_documents_without_transcription = database.get_open_documents_without_transcription_for_project(self.project_one)
+        open_documents_without_transcription = \
+            database.get_open_documents_without_transcription_for_project(self.project_one)
         # Should Return 0 documents
-        self.assertEquals(len(open_documents_without_transcription),0)
+        self.assertEquals(len(open_documents_without_transcription), 0)
 
-        open_documents_without_transcription = database.get_open_documents_without_transcription_for_project(self.project_two)
+        open_documents_without_transcription = \
+            database.get_open_documents_without_transcription_for_project(self.project_two)
         # Should Return 0 documents
-        self.assertEquals(len(open_documents_without_transcription),0)
+        self.assertEquals(len(open_documents_without_transcription), 0)
 
     def test_get_closed_documents_for_project(self):
         total_number_of_closed_documents_found_by_a = 0
@@ -369,13 +371,15 @@ class TestDatabaseTransactions(unittest.TestCase):
         self.assertEquals(len(documents_with_transcription_2), 0)
 
     def test_get_successfully_transcribed_documents_for_project(self):
-        successfully_transcribed_documents = database.get_successfully_transcribed_documents_for_project(self.project_one)
+        successfully_transcribed_documents =\
+            database.get_successfully_transcribed_documents_for_project(self.project_one)
         # Should return 1 document
-        self.assertEquals(len(successfully_transcribed_documents),1)
+        self.assertEquals(len(successfully_transcribed_documents), 1)
 
-        successfully_transcribed_documents = database.get_successfully_transcribed_documents_for_project(self.project_two)
+        successfully_transcribed_documents =\
+            database.get_successfully_transcribed_documents_for_project(self.project_two)
         # Should return 0 documents
-        self.assertEquals(len(successfully_transcribed_documents),0)
+        self.assertEquals(len(successfully_transcribed_documents), 0)
 
     def test_get_documents_with_transcription_for_user(self):
         # Documents user own and have a transcription
@@ -392,23 +396,22 @@ class TestDatabaseTransactions(unittest.TestCase):
         transcribed = database.document_has_already_been_transcribed_by_user(self.document_two, self.user_two)
         self.assertFalse(transcribed)
 
-    #FIXME: ...
-    def test_document_transcribed_by_user(self):
-        pass
-
     def test_get_documents_with_transcription_for_project_and_transcription_author(self):
-        documents = database.get_documents_with_transcription_for_project_and_transcription_author(self.project_one, self.user_two)
+        documents = database.get_documents_with_transcription_for_project_and_transcription_author(self.project_one,
+                                                                                                   self.user_two)
         self.assertEquals(len(documents), 1)
 
-        documents = database.get_documents_with_transcription_for_project_and_transcription_author(self.project_two, self.user_two)
+        documents = database.get_documents_with_transcription_for_project_and_transcription_author(self.project_two,
+                                                                                                   self.user_two)
         self.assertEquals(len(documents), 0)
 
-        documents = database.get_documents_with_transcription_for_project_and_transcription_author(self.project_two, self.user_one)
+        documents = database.get_documents_with_transcription_for_project_and_transcription_author(self.project_two,
+                                                                                                   self.user_one)
         self.assertEquals(len(documents), 0)
 
     def test_get_document_for_project_header(self):
         document = database.get_document_for_project_header(self.project_one)
-        self.assertEquals(document,self.document_one)
+        self.assertEquals(document, self.document_one)
 
         document = database.get_document_for_project_header(self.project_two)
         self.assertEquals(document, None)
@@ -492,47 +495,22 @@ class TestDatabaseTransactions(unittest.TestCase):
         close_project = database.project_can_be_closed_for_review(self.project_two)
         self.assertFalse(close_project)
 
-
-    # FIXME
-    def test_get_transcriptions_by_user(self):
-        pass
-        # total_number_of_transcriptions = 0
-        # for user in self.users:
-        #     transcriptions = database.get_transcriptions_by_user(user)
-        #     for transcription in transcriptions:
-        #         total_number_of_transcriptions += 1
-        #         self.assertEquals(transcription.author_id, user)
-        #
-        # self.assertEquals(total_number_of_transcriptions, len(self.transcriptions))
-
-
-    def test_get_documents_for_a_project_that_have_transcription(self):
-        # FIXME: Not sure if the database transaction works for this one
-        pass
-        # documents = database.get_documents_for_a_project_that_have_transcription(self.project_open_id)
-        # for i in documents:
-        #     print i
-        #     self.assertEquals(i.document_image.project_id, self.project_open_id)
-        #     self.assertTrue(self.exists(i.transcription.id))
-
-
-    # SETUP #######################################################################################
+    # SETUP
     def add_user(self, username):
         user = test_db.auth_user.insert(username=username)
         self.users.append(user)
         return user
 
-    def add_project(self, name, author_id,status, description, tag):
+    def add_project(self, name, author_id, status, description, tag):
         project = test_db.project.insert(name=name, author_id=author_id, status=status, description=description,
                                          tag=tag)
         self.projects.append(project)
         return project
 
     def add_document(self, description, project_id, status):
-        document = test_db.document_image.insert(description=description,project_id=project_id, status=status)
+        document = test_db.document_image.insert(description=description, project_id=project_id, status=status)
         self.documents.append(document)
-        return  document
-
+        return document
 
     def add_field(self, project_id, name, short_description):
         field = test_db.data_field.insert(project_id=project_id, name=name, short_description=short_description)
