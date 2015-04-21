@@ -72,7 +72,6 @@ class ProjectFunctions:
         if (current.request.vars.description == "") or (current.request.vars.description is None):
             form.errors.description = "Project Description must be entered"
 
-
         if (current.request.vars.tag == "") or (current.request.vars.tag is None):
             form.errors.tag = "Category must be chosen"
 
@@ -129,7 +128,7 @@ class ProjectFunctions:
         # Validate the add field form in step 3 of the create project wizard.
         alphanumeric_validator = IS_ALPHANUMERIC(error_message="Only letters, numbers and spaces allowed in field name")
 
-        #Validate that field name only contains alphanumeric or spaces
+        # Validate that field name only contains alphanumeric or spaces
         field_name_split = current.request.vars.name.split()
         for word in field_name_split:
             if alphanumeric_validator(word)[1] is not None:
@@ -232,7 +231,8 @@ class ProjectFunctions:
         # Returns a form which will allow the user to progress to the next step in the create project wizard.
         return FORM(BUTTON(message, I(_class='icon-arrow-right icon-white'),
                            _type='submit', _class='btn btn-success btn-block btn-large',
-                           _onclick="return confirm('Are you sure you want to publish this Project? You will not be able to make any more modifications. Publish?');"))
+                           _onclick="return confirm('Are you sure you want to publish this Project? "
+                                    "You will not be able to make any more modifications. Publish?');"))
 
     def create_previous_step_form(self, message):
         # Returns a form which will allow the user to go back to the previous in the create project wizard.
@@ -262,10 +262,16 @@ class ProjectFunctions:
             transcription_dictionary = {}
             transcription_dictionary['number'] = i
             transcription_dictionary['user'] = self.database.get_username_for_transcription(transcription.id)
-            transcription_dictionary['transcription'] = self.database.get_transcribed_fields_for_transcription(transcription.id)
-            transcription_dictionary['button'] = A(BUTTON('Accept '+transcription_dictionary['user']+'\'s Transcription and View Document',_class="btn btn-success"), callback= URL('accept_transcription',
-                    vars= dict(document_id=transcription.document_id, transcription_id=transcription.id,
-                        project_id=project.id)), _onclick = "return confirm('Are you sure you want to accept this transcription and reject all others?');")
+            transcription_dictionary['transcription'] =\
+                self.database.get_transcribed_fields_for_transcription(transcription.id)
+            transcription_dictionary['button'] = \
+                A(BUTTON('Accept '+transcription_dictionary['user']+'\'s Transcription and View Document',
+                         _class="btn btn-success"), callback=URL('accept_transcription',
+                                                                 vars=dict(document_id=transcription.document_id,
+                                                                           transcription_id=transcription.id,
+                                                                           project_id=project.id)),
+                  _onclick="return confirm('Are you sure you want to accept this transcription and reject all "
+                           "others?');")
             transcriptions_list.append(transcription_dictionary)
             i += 1
 

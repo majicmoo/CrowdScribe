@@ -4,6 +4,7 @@ import search_functions as search_functions
 import general_functions as general_functions
 general_module = general_functions.GeneralFunctions(database, db)
 
+
 def register():
     # Controller which allows a user to register on Crowdscribe
     # Window Title
@@ -11,7 +12,7 @@ def register():
 
     # Allow registered users to create accounts in debug mode for quicker testing
     if auth.is_logged_in():
-        redirect(URL(c='user',f='profile'))
+        redirect(URL(c='user', f='profile'))
 
     # Register form
     form = SQLFORM(db.auth_user, formstyle="divs")
@@ -22,14 +23,15 @@ def register():
     if form.validate(formname="form_one", onvalidation=validate_register_form):
         userid = auth.get_or_create_user(form.vars)
         auth.login_bare(request.vars.username, request.vars.password)
-        redirect(URL('user','profile'))
+        redirect(URL('user', 'profile'))
 
     elif form.errors:
         validate_register_form(form)
         response.flashcolour = "rgba(255, 0, 0, 0.7)"
         response.flash = 'One or more of your form fields has an error. Please see below for more information'
 
-    return dict(form = form)
+    return dict(form=form)
+
 
 def validate_register_form(form):
     # Validate register form based on conditions below
@@ -37,7 +39,8 @@ def validate_register_form(form):
     empty_validator = IS_NOT_EMPTY(error_message=T("must not be empty"))
 
     # Validates if password is the same as confirm password
-    confirm_password_validator = IS_EQUAL_TO(request.vars.password, error_message="Password is not the same as confirm password")
+    confirm_password_validator = IS_EQUAL_TO(request.vars.password,
+                                             error_message="Password is not the same as confirm password")
 
     # Validates if username already exists
     username_validator = IS_NOT_IN_DB(db, 'auth_user.username', error_message="Username has already been taken")
@@ -61,7 +64,7 @@ def login():
     # Window Title
     response.title = 'CrowdScribe | Login'
 
-    if request.vars.page_after_login == 'create_step1' :
+    if request.vars.page_after_login == 'create_step1':
         response.message = 'Please login or register before creating a project.'
 
     # Redirects based on request arguments
@@ -79,12 +82,14 @@ def login():
     form.custom.widget.username["_placeholder"] = "Username"
     form.custom.widget.password["_placeholder"] = "Password"
 
-    return dict(form=form, after_login_controller = request.vars.page_after_login)
+    return dict(form=form, after_login_controller=request.vars.page_after_login)
+
 
 def remove_projects_being_created(form):
     # Function to remove any projects that were previously being by user when re-logging in
     if auth._get_user_id():
-        db((db.project.author_id == auth._get_user_id()) &(db.project.status == "Being Created")).delete()
+        db((db.project.author_id == auth._get_user_id()) & (db.project.status == "Being Created")).delete()
+
 
 @auth.requires_login(otherwise=URL('user', 'login'))
 def profile():
@@ -92,7 +97,7 @@ def profile():
     # Current users ID
     user_id = auth._get_user_id()
     if user_id is None:
-        redirect(URL('default','index'))
+        redirect(URL('default', 'index'))
     # Current user
     user = database.get_user(user_id)
     response.title = 'CrowdScribe | ' + user.username
@@ -118,7 +123,10 @@ def profile():
 
     num_user_projects = len(database.get_projects_not_being_created_for_user(user_id))
 
-    manager_strings = [str(no_of_under_review_projects)+' are currently under review.', str(no_of_transcriptions_awaiting_approval)+' transcriptions awaiting review across '+str(len(open_projects_with_transcriptions))+' projects.', str(no_of_closed_projects)+' have had transcriptions accepted for all their documents.']
+    manager_strings = [str(no_of_under_review_projects)+' are currently under review.',
+                       str(no_of_transcriptions_awaiting_approval)+' transcriptions awaiting review across ' +
+                       str(len(open_projects_with_transcriptions))+' projects.', str(no_of_closed_projects) +
+                       ' have had transcriptions accepted for all their documents.']
     num_projects_string = 'Click here to manage your '+str(num_user_projects)+' projects.'
 
     # Transcription Viewer
@@ -128,10 +136,13 @@ def profile():
     rejected_transcriptions = database.get_rejected_transcriptions_for_user(user_id)
     num_transcriptions = len(pending_transcriptions) + len(accepted_transcriptions) + len(rejected_transcriptions)
 
-    transcription_strings = [str(len(pending_transcriptions))+' are pending review.', str(len(accepted_transcriptions))+' have been accepted.', str(len(rejected_transcriptions))+' have been rejected.']
+    transcription_strings = [str(len(pending_transcriptions))+' are pending review.', str(len(accepted_transcriptions))
+                             + ' have been accepted.', str(len(rejected_transcriptions))+' have been rejected.']
     num_transcription_string = 'Click here to view your '+str(num_transcriptions)+' transcriptions.'
 
-    return dict(manager_strings = manager_strings, num_projects_string = num_projects_string, transcription_strings = transcription_strings, num_transcription_string = num_transcription_string)
+    return dict(manager_strings=manager_strings, num_projects_string=num_projects_string,
+                transcription_strings=transcription_strings, num_transcription_string=num_transcription_string)
+
 
 @auth.requires_login(otherwise=URL('user', 'login'))
 def view_own_transcriptions():
@@ -144,6 +155,7 @@ def view_own_transcriptions():
     return dict(pending_transcriptions=pending_transcriptions, accepted_transcriptions=accepted_transcriptions,
                 rejected_transcriptions=rejected_transcriptions)
 
+
 @auth.requires_login(otherwise=URL('user', 'login'))
 def view_transcription():
     # Controller to view a transcription made by the current user
@@ -153,8 +165,9 @@ def view_transcription():
     document_for_transcription = database.get_document_for_transcription(transcription_id)
     project_for_transcription = database.get_project(document_for_transcription.project_id)
     return dict(transcription=transcription, transcribed_fields=transcribed_fields,
-                document_for_transcription = document_for_transcription,
-                project_for_transcription = project_for_transcription)
+                document_for_transcription=document_for_transcription,
+                project_for_transcription=project_for_transcription)
+
 
 @auth.requires_login(otherwise=URL('user', 'login'))
 def manage_projects():
@@ -167,7 +180,8 @@ def manage_projects():
 
     # Have Transcriptions and open Projects
     open_projects_with_transcriptions = database.get_open_projects_with_transcriptions_for_user(user_id)
-    open_projects_with_transcriptions = general_module.attach_header_image_to_projects(open_projects_with_transcriptions)
+    open_projects_with_transcriptions =\
+        general_module.attach_header_image_to_projects(open_projects_with_transcriptions)
 
     # No Transcriptions and open Projects
     open_projects_without_transcriptions = database.get_open_projects_without_transcriptions_for_user(user_id)
@@ -176,21 +190,24 @@ def manage_projects():
     closed_projects = database.get_closed_projects_for_user(user_id)
 
     return dict(under_review_projects=general_module.attach_all_information_to_projects(under_review_projects),
-                open_projects_with_transcriptions=general_module.attach_all_information_to_projects(open_projects_with_transcriptions),
-                open_projects_without_transcriptions=general_module.attach_all_information_to_projects(open_projects_without_transcriptions),
+                open_projects_with_transcriptions=general_module.attach_all_information_to_projects(
+                    open_projects_with_transcriptions),
+                open_projects_without_transcriptions=general_module.attach_all_information_to_projects(
+                    open_projects_without_transcriptions),
                 closed_projects=general_module.attach_all_information_to_projects(closed_projects))
 
 
 def place_project_under_review():
     # Controller for button to place a project under review
-    db((db.project.id==request.vars.project_id)).update(status="Under Review")
+    db((db.project.id == request.vars.project_id)).update(status="Under Review")
     db.commit()
     session.flash = "Project placed under review."
-    redirect(URL('user','manage_projects'), client_side=True)
+    redirect(URL('user', 'manage_projects'), client_side=True)
+
 
 def reopen_project_for_transcriptions():
     # Controller for button to reopen a project for transcriptions
-    db((db.project.id==request.vars.project_id)).update(status="Open")
+    db((db.project.id == request.vars.project_id)).update(status="Open")
     db.commit()
     session.flash = "Project reopened to Public."
-    redirect(URL('user','manage_projects'), client_side=True)
+    redirect(URL('user', 'manage_projects'), client_side=True)

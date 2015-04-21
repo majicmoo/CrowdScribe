@@ -4,8 +4,6 @@ db = test_db
 database = database_transactions.DatabaseTransactions(db)
 
 
-
-
 class TestDatabaseTransactions(unittest.TestCase):
     def setUp(self):
         # Clear test_db
@@ -43,7 +41,6 @@ class TestDatabaseTransactions(unittest.TestCase):
         self.accepted_status = 'Accepted'
         self.rejected_status = 'Rejected'
 
-
         # Setup tags
         self.tag_one = self.add_tag('Sports')
         self.tag_two = self.add_tag('Literature')
@@ -57,15 +54,16 @@ class TestDatabaseTransactions(unittest.TestCase):
 
         # Create Project
         self.project_one = self.add_project(name='testproject1', author_id=self.user_one,
-                                                      status=self.open_status, description='test', tag=self.tag_one)
+                                            status=self.open_status, description='test', tag=self.tag_one)
         self.project_two = self.add_project(name='testproject2', author_id=self.user_two,
-                                                        status=self.closed_status, description='test', tag=self.tag_one)
+                                            status=self.closed_status, description='test', tag=self.tag_one)
         self.project_three = self.add_project(name='project1', author_id=self.user_one, status=self.open_status,
-                                                      description='test', tag=self.tag_two)
+                                              description='test', tag=self.tag_two)
         self.project_four = self.add_project(name='testproject4', author_id=self.user_one, status=self.open_status,
-                                                      description='nothing', tag=self.tag_two)
-        self.project_five = self.add_project(name='testproject5', author_id=self.user_one, status=self.under_review_status,
-                                                      description='nothing', tag=self.tag_two)
+                                             description='nothing', tag=self.tag_two)
+        self.project_five = self.add_project(name='testproject5', author_id=self.user_one,
+                                             status=self.under_review_status,
+                                             description='nothing', tag=self.tag_two)
         # Create Document Image
         self.document_one = self.add_document(description='test', project_id=self.project_one, status=self.open_status)
         self.document_two = self.add_document(description='test', project_id=self.project_one, status=self.closed_status)
@@ -157,20 +155,23 @@ class TestDatabaseTransactions(unittest.TestCase):
 
     def test_get_open_projects_with_transcriptions_for_user(self):
         # Should Return only project 1
-        open_projects_with_transcriptions_for_user = database.get_open_projects_with_transcriptions_for_user(self.user_one)
-        self.assertEquals(len(open_projects_with_transcriptions_for_user),1)
+        open_projects_with_transcriptions_for_user =\
+            database.get_open_projects_with_transcriptions_for_user(self.user_one)
+        self.assertEquals(len(open_projects_with_transcriptions_for_user), 1)
 
         for project in open_projects_with_transcriptions_for_user:
             self.assertEquals(project.status, self.open_status)
 
         # Should Return No Projects
-        open_projects_with_transcriptions_for_user = database.get_open_projects_with_transcriptions_for_user(self.user_two)
-        self.assertEquals(len(open_projects_with_transcriptions_for_user),0)
+        open_projects_with_transcriptions_for_user =\
+            database.get_open_projects_with_transcriptions_for_user(self.user_two)
+        self.assertEquals(len(open_projects_with_transcriptions_for_user), 0)
 
     def test_get_open_projects_without_transcriptions_for_user(self):
         # Should Return No Projects
-        open_projects_without_transcriptions_for_user = database.get_open_projects_without_transcriptions_for_user(self.user_two)
-        self.assertEquals(len(open_projects_without_transcriptions_for_user),0)
+        open_projects_without_transcriptions_for_user = \
+            database.get_open_projects_without_transcriptions_for_user(self.user_two)
+        self.assertEquals(len(open_projects_without_transcriptions_for_user), 0)
 
         # Should Return Two Projects
         open_projects_without_transcriptions_for_user = database.get_open_projects_without_transcriptions_for_user(self.user_one)

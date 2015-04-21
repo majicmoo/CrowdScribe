@@ -65,7 +65,7 @@ def create_step1():
     if clear_project.validate(formname="form_two"):
         # If clear project button is pressed, reset project wizard
         session.project_being_created = None
-        db((db.project.author_id == auth._get_user_id()) &(db.project.status == "Being Created")).delete()
+        db((db.project.author_id == auth._get_user_id()) & (db.project.status == "Being Created")).delete()
         redirect(URL('projects', 'create_step1'))
 
     return dict(form=form, clear_project=clear_project, project_being_edited=project_being_edited,
@@ -291,7 +291,7 @@ def create_step4():
     header_image = URL('default', 'download', args=database.get_document_for_project_header(project.id).image)
 
     open_documents, open_documents_with_transcription, open_documents_without_transcription, done_documents, \
-    closed_documents = projects_module.set_up_project_page_based_on_user(project, auth)
+        closed_documents = projects_module.set_up_project_page_based_on_user(project, auth)
 
     project_being_edited.fraction_transcribed_string = \
         general_module.construct_number_of_transcribed_documents_string(project.id)
@@ -483,7 +483,7 @@ def view_document():
             response.flashcolour = "rgba(255, 0, 0, 0.7)"
             response.flash = "Succesfully Submitted Transcription!"
 
-        redirect(URL('projects','view_document', args=[project.id, document.id]))
+        redirect(URL('projects', 'view_document', args=[project.id, document.id]))
 
     image = URL('default', 'download', args=document.image)
 
@@ -545,19 +545,19 @@ def review_document():
     if not transcriptions:
         response_message = "This document currently has zero transcriptions for review."
 
-    reject_all_form =  FORM(BUTTON("Reject All Transcriptions and Return to Project",
-                            _type='submit',
-                            _class='btn btn-danger btn-block',
-                            _onclick="return confirm('Are you sure you want to reject all transcriptions "
-                                     "available for this document?');"))
+    reject_all_form = FORM(BUTTON("Reject All Transcriptions and Return to Project",
+                                  _type='submit',
+                                  _class='btn btn-danger btn-block',
+                                  _onclick="return confirm('Are you sure you want to reject all transcriptions "
+                                           "available for this document?');"))
 
     if reject_all_form.process().accepted:
         session.flash = "All Transcriptions Rejected"
         reject_all_transcriptions(document.id, project.id)
 
     return dict(project=project, document=document, transcriptions=transcriptions,
-                timestring = general_module.construct_project_timestring(project), reject_all_form = reject_all_form,
-                response_message = response_message)
+                timestring=general_module.construct_project_timestring(project), reject_all_form=reject_all_form,
+                response_message=response_message)
 
 
 def delete_field():
@@ -595,7 +595,7 @@ def reject_all_transcriptions(document_id, project_id):
     db((db.transcription.document_id == document_id)).update(status="Rejected")
     db(db.document_image.id == document_id).update(status='Open')
     db.commit()
-    redirect(URL('projects', 'project', args=project_id ), client_side=True)
+    redirect(URL('projects', 'project', args=project_id), client_side=True)
 
 
 def close_project_for_review():
