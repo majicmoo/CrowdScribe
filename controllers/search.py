@@ -44,10 +44,8 @@ def search_results():
     # Gets keywords
     if request.vars.quicksearch is not None:
         searchstr = request.vars.quicksearch
-        advanced.vars.advance = request.vars.quicksearch
     elif request.vars.advance is not None:
         searchstr = request.vars.advance
-        advanced.vars.advance = request.vars.advance
     else:
         searchstr = None
 
@@ -57,29 +55,25 @@ def search_results():
         projects.exclude(lambda project: search_module.search_project_for_keywords(keywords, project))
 
     ###Filter by category###
-    if (request.vars.category != 'All') and (request.vars.category is not None):
+    if (request.vars.tag != "All") and not search_module.empty_field(request.vars.tag):
         projects.exclude(lambda project: str(request.vars.tag) != str(project.tag))
 
     ###Filter by date###
-    if not search_module.empty_date_field(request.vars.start_date):
+    if not search_module.empty_field(request.vars.start_date):
         start_date = general_module.convert_date_to_integer(request.vars.start_date, request.vars.start_era)
-        advanced.vars.start_date = request.vars.start_date
-        advanced.vars.start_era = request.vars.start_era
     else:
         # Ensures all dates pass (if validation is fixed)
         start_date = -2016
 
-    if not search_module.empty_date_field(request.vars.end_date):
+    if not search_module.empty_field(request.vars.end_date):
         end_date = general_module.convert_date_to_integer(request.vars.end_date, request.vars.end_era)
-        advanced.vars.end_date = request.vars.end_date
-        advanced.vars.end_era = request.vars.end_era
     else:
         # Ensures all dates pass (if validation is fixed)
         end_date = 2016
 
-    if not search_module.empty_date_field(request.vars.start_date) or not search_module.empty_date_field(request.vars.end_date):
+    if not search_module.empty_field(request.vars.start_date) or not search_module.empty_field(request.vars.end_date):
         # Excludes unknown dates
-        if request.vars.include_unknown_date != "on":
+        if request.vars.unknown_era != "on":
             # Exclude if end_date is before project's start date, start_date after project's end date or if project dates are none
             projects.exclude(lambda project: (project.time_period_start_date is None) or
                 (project.time_period_end_date < start_date) or (end_date < project.time_period_start_date))
@@ -89,6 +83,9 @@ def search_results():
             # Exclude if end_date is before project's start date or start_date after project's end date
             projects.exclude(lambda project: (project.time_period_end_date < start_date) or
                 (end_date < project.time_period_start_date))
+    else:
+        if request.vars.unknown_era != "on":
+            projects.exclude(lambda project: project.time_period_start_date is None)
 
     ###Order results###
     if request.vars.order == 'Earliest':
@@ -101,12 +98,9 @@ def search_results():
         # Order alphabetically (default)
         projects = projects.sort(lambda project: project.name)
 
-    """
-    Have to clear request.vars before processing otherwise consecutive
-    searches accumulate into lists rather than individual elements
     advanced.vars = request.vars
-    """
-    request.vars = {}
+    if request.vars.quicksearch is not None:
+        advanced.vars.advance = request.vars.quicksearch
 
     #Does not validate
     if advanced.process(onvalidation=search_module.date_validator).accepted:
@@ -117,4 +111,4 @@ def search_results():
 
     projects = general_module.attach_all_information_to_projects(projects)
 
-    return dict(advanced=advanced, projects=projects)
+    return dict(advanced=advanced, projects=projects, searchstr = searchstr)

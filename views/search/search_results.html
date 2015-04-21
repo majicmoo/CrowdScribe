@@ -1,7 +1,14 @@
 {{extend 'crowdscribe-layout.html'}}
 
-<div class="padded_container form_container search">
+<div class="padded_container form_container no_bottom_padding">
+
+<h1>Search</h1>
+<h4>You Searched : "{{=searchstr}}"</h4>
+
+<div class="border-box-sizing rounded_bordered_container no_margin">
   {{=advanced}}
+</div>
+
 </div>
 
 <div class="projects">
