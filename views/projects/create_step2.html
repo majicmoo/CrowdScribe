@@ -99,16 +99,15 @@
 
     <h3>{{=len(documents_added)}} Documents For Project</h3>
     <p>Created documents can be viewed and deleted below.</p>
-
-
-
+    
     {{if documents_added:}}
+    {{=delete_all_documents_form}}
       <div class="documents no_left_right_padding">
         {{for document in documents_added:}}
           {{include "subviews/document-display-delete.html"}}
         {{pass}}
       </div>
-      {{=delete_all_documents_form}}
+
     {{pass}}
 
     </div>

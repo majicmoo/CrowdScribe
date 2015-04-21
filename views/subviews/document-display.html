@@ -1,8 +1,13 @@
 <!-- This is used throughout the site to display projects in an adaptive frame -->
 <div class="document border-box-sizing">
 
-		<a href="{{=(URL('projects','view_document', args=[project.id, document.id]) if (project.status == 'Open' or project.status == 'Closed')
-						 else URL('projects','review_document', args=[project.id, document.id]))}}" class="content border-box-sizing">
+		<!-- This redirects the user to the appropriate page (and removes the link if it's being created) -->
+		{{if project.status != 'Being Created':}}
+			<a href="{{=(URL('projects','view_document', args=[project.id, document.id]) if (project.status == 'Open' or project.status == 'Closed')
+							 else URL('projects','review_document', args=[project.id, document.id]))}}" class="content border-box-sizing">
+		{{else:}}
+			<a class="content border-box-sizing">
+		{{pass}}
 
 			<!-- Show transcription count if the project owner is viewing, the document isn't closed, and the project isnt being created -->
 			{{if auth._get_user_id() == project.author_id and document.status != "Closed" and project.status != "Being Created":}}

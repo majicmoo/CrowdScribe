@@ -239,9 +239,10 @@ def create_step3():
                                         _onclick="return confirm('Are you sure you want to remove all transcription fields for this project?');"))
 
     if delete_all_fields_form.process(formname="remove_all_form").accepted:
-        response.flashcolour = "rgb(98, 196, 98)"
-        response.flash = "All fields for this project removed."
+        session.flashcolour = "rgb(98, 196, 98)"
+        session.flash = "All fields for this project removed."
         database.delete_all_fields_for_project(project_id)
+        redirect(URL('projects', 'create_step3'), client_side=True)
 
     # Retrieve document and fields added to project
     documents_added = database.get_documents_for_project(project_id)
@@ -270,13 +271,13 @@ def create_step4():
         project = database.get_project(project_id)
         project.update_record(status="Open", date_created=request.now)
         session.project_being_created = None
-        response.flashcolour = "rgb(98, 196, 98)"
-        response.flash = project.name+" has been succesfully published! Its documents are now available for the public to transcribe."
+        session.flashcolour = "rgb(98, 196, 98)"
+        session.flash = project.name+" has been succesfully published! Its documents are now available for the public to transcribe."
         redirect(URL('projects', 'project', args=[project.id]))
 
     if clear_project.validate(formname="form_two"):
         session.project_being_created = None
-        db((db.project.author_id == auth._get_user_id()) &(db.project.status == "Being Created")).delete()
+        db((db.project.author_id == auth._get_user_id()) & (db.project.status == "Being Created")).delete()
         redirect(URL('projects', 'create_step1'))
 
     # Go back to step 2 when button clicked

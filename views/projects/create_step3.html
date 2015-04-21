@@ -78,12 +78,13 @@
     <p>Created fields can be viewed and deleted below.</p>
 
     {{if fields_added:}}
+    {{=delete_all_fields_form}}
       <div class="fields">
         {{for field in fields_added:}}
           {{include "subviews/field-display-delete.html"}}
         {{pass}}
       </div>
-      {{=delete_all_fields_form}}
+
     {{pass}}
   </div>
 
