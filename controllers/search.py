@@ -74,8 +74,7 @@ def search_results():
     # Filter by date
     if not search_module.empty_field(request.vars.start_date):
         start_date = general_module.convert_date_to_integer(request.vars.start_date, request.vars.start_era)
-        advanced.vars.start_date = request.vars.start_date
-        advanced.vars.start_era = request.vars.start_era
+
     else:
         # Ensures all dates pass (if validation is fixed)
         start_date = -2016
@@ -99,8 +98,10 @@ def search_results():
         # Includes unknown dates
         else:
             # Exclude if end_date is before project's start date or start_date after project's end date
-            projects.exclude(lambda project: (project.time_period_end_date < start_date) or
-                                             (end_date < project.time_period_start_date))
+            projects.exclude(lambda project: (project.time_period_start_date is not None) and
+                                             ((project.time_period_end_date < start_date) or
+                                             (end_date < project.time_period_start_date)))
+
     else:
         if check == "off":
             projects.exclude(lambda project: project.time_period_start_date is None)
